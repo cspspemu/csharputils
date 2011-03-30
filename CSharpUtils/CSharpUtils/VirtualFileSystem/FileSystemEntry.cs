@@ -104,12 +104,12 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 		}
 
-		public Stream Open(String Path)
+		public Stream Open(String Path, FileMode Mode)
 		{
-			return Access(Path, true).ImplOpen();
+			return Access(Path, true).ImplOpen(Mode);
 		}
 
-		virtual protected Stream ImplOpen()
+		virtual protected Stream ImplOpen(FileMode Mode)
 		{
 			throw (new NotImplementedException());
 		}
@@ -123,7 +123,26 @@ namespace CSharpUtils.VirtualFileSystem
 				case "/": return Root;
 			}
 			// Case sensitive?
-			return List()[ChildName];
+			if (Create)
+			{
+				try
+				{
+					return List()[ChildName];
+				}
+				catch (KeyNotFoundException)
+				{
+					return CreateItem(ChildName);
+				}
+			}
+			else
+			{
+				return List()[ChildName];
+			}
+		}
+
+		virtual protected FileSystemEntry CreateItem(String ChildName)
+		{
+			throw(new NotImplementedException());
 		}
 
 		public String FullName

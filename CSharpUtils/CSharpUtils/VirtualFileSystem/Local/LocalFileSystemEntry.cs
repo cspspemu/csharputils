@@ -54,6 +54,16 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return List;
 		}
 
+		override protected FileSystemEntry CreateItem(String ChildName)
+		{
+			return new LocalFileSystemEntry(this.LocalFileSystem, new FileInfo(this.FullName + @"\" + ChildName), this);
+		}
+
+		override protected Stream ImplOpen(FileMode Mode)
+		{
+			return File.Open(FileSystemInfo.FullName, Mode);
+		}
+
 		override public String Name
 		{
 			get

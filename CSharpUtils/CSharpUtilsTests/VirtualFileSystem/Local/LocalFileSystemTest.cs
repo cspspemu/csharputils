@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using CSharpUtils.VirtualFileSystem;
+using System.IO;
 
 namespace CSharpUtilsTests
 {
@@ -14,6 +15,7 @@ namespace CSharpUtilsTests
 	[TestClass()]
 	public class LocalFileSystemTest
 	{
+		String TestInputDirectory;
 		LocalFileSystem LocalFileSystem;
 
 		// 
@@ -35,7 +37,8 @@ namespace CSharpUtilsTests
 		[TestInitialize()]
 		public void MyTestInitialize()
 		{
-			LocalFileSystem = new LocalFileSystem(@"C:\");
+			TestInputDirectory = Directory.GetCurrentDirectory() + @"\..\..\..\TestInput";
+			LocalFileSystem = new LocalFileSystem(TestInputDirectory);
 		}
 		//
 		//Use TestCleanup to run code after each test has run
@@ -56,11 +59,19 @@ namespace CSharpUtilsTests
 		[TestMethod()]
 		public void ListTest()
 		{
-			var Root = LocalFileSystem.Root;
-			foreach (var Item in Root)
+			foreach (var Item in LocalFileSystem.Root)
 			{
 				Console.WriteLine(Item);
 			}
+		}
+
+		[TestMethod()]
+		public void OpenFile()
+		{
+			var sw = new StreamWriter(LocalFileSystem.Root.Open("test.txt", System.IO.FileMode.Create));
+			sw.WriteLine("Hello World from C#!");
+			sw.Close();
+			Assert.IsTrue(File.Exists(TestInputDirectory + "/test.txt"));
 		}
 	}
 }
