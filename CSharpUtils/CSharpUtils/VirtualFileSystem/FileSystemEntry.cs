@@ -2,161 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections.Generic;
 using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
 {
-	public class FileSystemEntry : System.Collections.IEnumerable
+	public class FileSystemEntry
 	{
-		public FileSystemEntry Parent;
-		public FileSystemEntry Root {
-			get
-			{
-				if (Parent == null)
-				{
-					return this;
-				}
-				else
-				{
-					return Parent.Root;
-				}
-			}
-		}
-		public SortedDictionary<String, FileSystemEntry> VirtualChildren = new SortedDictionary<String, FileSystemEntry>();
-
-		public enum EntryType
+		public struct FileTime
 		{
-			Unknown,
-			Directory,
-			File,
+			public DateTime CreationTime, LastAccessTime, LastWriteTime;
 		}
 
-		virtual protected SortedDictionary<String, FileSystemEntry> ImplList()
+		public FileSystem FileSystem;
+		public String Path;
+		public FileTime Time;
+
+		public FileSystemEntry(FileSystem FileSystem, String Path)
 		{
-			throw(new NotImplementedException());
+			this.FileSystem = FileSystem;
+			this.Path = Path;
 		}
 
-		public SortedDictionary<String, FileSystemEntry> List()
+		virtual public Stream Open(FileMode FileMode)
 		{
-			var List = new SortedDictionary<String, FileSystemEntry>();
-			foreach (var Item in ImplList()) List.Add(Item.Key, Item.Value);
-			foreach (var Item in VirtualChildren) List.Add(Item.Key, Item.Value);
-			return List;
-		}
-
-		virtual public EntryType Type
-		{
-			get
-			{
-				return EntryType.Unknown;
-			}
-		}
-
-		virtual public long Size
-		{
-			get
-			{
-				return -1;
-			}
-		}
-
-		virtual public String Name
-		{
-			get
-			{
-				return "<Unknown>";
-			}
-		}
-
-		public System.Collections.IEnumerator GetEnumerator()
-		{
-			foreach (var Item in List()) {
-				yield return Item;
-			}
-		}
-
-		public FileSystemEntry this[String Path]
-		{
-			get
-			{
-				return Access(Path);
-			}
-		}
-
-		// Case sensitive
-		public FileSystemEntry Access(String Path, bool Create = false)
-		{
-			int index = Path.IndexOf("/");
-			// Direct
-			if (index == -1)
-			{
-				// Case sensitive?
-				return ComponentAccess(Path, Create);
-			}
-			else if (index == 0)
-			{
-				return Root.Access(Path.Substring(1), Create);
-			}
-			else
-			{
-				return this.ComponentAccess(Path.Substring(0, index), false).Access(Path.Substring(index + 1), Create);
-			}
-		}
-
-		public Stream Open(String Path, FileMode Mode)
-		{
-			return Access(Path, true).ImplOpen(Mode);
-		}
-
-		virtual protected Stream ImplOpen(FileMode Mode)
-		{
-			throw (new NotImplementedException());
-		}
-
-		protected FileSystemEntry ComponentAccess(String ChildName, bool Create = false)
-		{
-			switch (ChildName)
-			{
-				case ".": return this;
-				case "..": return Parent;
-				case "/": return Root;
-			}
-			// Case sensitive?
-			if (Create)
-			{
-				try
-				{
-					return List()[ChildName];
-				}
-				catch (KeyNotFoundException)
-				{
-					return CreateItem(ChildName);
-				}
-			}
-			else
-			{
-				return List()[ChildName];
-			}
-		}
-
-		virtual protected FileSystemEntry CreateItem(String ChildName)
-		{
-			throw(new NotImplementedException());
-		}
-
-		public String FullName
-		{
-			get
-			{
-				if (Parent != null) return Parent.FullName + "/" + Name;
-				return Name;
-			}
+			return FileSystem.OpenFile(Path, FileMode);
 		}
 
 		public override string ToString()
 		{
-			return "FileSystemEntry(Name='" + FullName + "', Type=" + Type + ", Size=" + Size + ")";
+			return "FileSystemEntry(Name=" + Path + ")";
 		}
 	}
 }

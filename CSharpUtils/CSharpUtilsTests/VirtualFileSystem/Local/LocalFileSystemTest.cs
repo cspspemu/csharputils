@@ -1,13 +1,11 @@
 ﻿using CSharpUtils.VirtualFileSystem.Local;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using CSharpUtils.VirtualFileSystem;
 using System.IO;
+using CSharpUtils.VirtualFileSystem;
 
 namespace CSharpUtilsTests
 {
-    
-    
     /// <summary>
     ///This is a test class for LocalFileSystemTest and is intended
     ///to contain all LocalFileSystemTest Unit Tests
@@ -15,7 +13,6 @@ namespace CSharpUtilsTests
 	[TestClass()]
 	public class LocalFileSystemTest
 	{
-		String TestInputDirectory;
 		LocalFileSystem LocalFileSystem;
 
 		// 
@@ -37,8 +34,8 @@ namespace CSharpUtilsTests
 		[TestInitialize()]
 		public void MyTestInitialize()
 		{
-			TestInputDirectory = Directory.GetCurrentDirectory() + @"\..\..\..\TestInput";
-			LocalFileSystem = new LocalFileSystem(TestInputDirectory);
+			LocalFileSystem = new LocalFileSystem(Directory.GetCurrentDirectory() + @"\..\..\..\TestInput");
+			LocalFileSystem.Mount("/Mounted", new LocalFileSystem(Directory.GetCurrentDirectory() + @"\..\..\..\TestInputMounted"));
 		}
 		//
 		//Use TestCleanup to run code after each test has run
@@ -48,30 +45,55 @@ namespace CSharpUtilsTests
 		//}
 		//
 
-
-		[TestMethod()]
-		public void RootTest()
+		[TestMethod]
+		public void TestGetFileTimeExists()
 		{
-			var Root = LocalFileSystem.Root;
-			Assert.AreEqual(Root.Name, "");
+			var FileTime = LocalFileSystem.GetFileTime("ExistentFolder");
+			Assert.IsTrue(FileTime.CreationTime   >= DateTime.Parse("01/01/2011"));
+			Assert.IsTrue(FileTime.LastAccessTime >= DateTime.Parse("01/01/2011"));
+			Assert.IsTrue(FileTime.LastWriteTime  >= DateTime.Parse("01/01/2011"));
 		}
 
-		[TestMethod()]
-		public void ListTest()
+		[ExpectedException(typeof(FileNotFoundException))]
+		[TestMethod]
+		public void TestGetFileTimeNotExists()
 		{
-			foreach (var Item in LocalFileSystem.Root)
+			LocalFileSystem.GetFileTime("ThisFilesDoesNotExists");
+		}
+
+		[TestMethod]
+		public void TestMounted()
+		{
+			var FileTime = LocalFileSystem.GetFileTime("/Mounted/FileInMountedFileSystem.txt");
+		}
+
+		[TestMethod]
+		public void TestFindFiles()
+		{
+			foreach (var Item in LocalFileSystem.FindFiles("/Mounted"))
 			{
 				Console.WriteLine(Item);
 			}
 		}
 
-		[TestMethod()]
-		public void OpenFile()
+		[TestMethod]
+		public void TestMountedOpenFile()
 		{
-			var sw = new StreamWriter(LocalFileSystem.Root.Open("test.txt", System.IO.FileMode.Create));
-			sw.WriteLine("Hello World from C#!");
-			sw.Close();
-			Assert.IsTrue(File.Exists(TestInputDirectory + "/test.txt"));
+			var Stream = LocalFileSystem.OpenFile("/Mounted/FileInMountedFileSystem.txt", FileMode.Open);
+			var StreamReader = new StreamReader(Stream);
+			Assert.AreEqual("Hello World", StreamReader.ReadToEnd());
+			StreamReader.Close();
+			Stream.Close();
+		}
+
+		[TestMethod]
+		public void TestMountedRecursive()
+		{
+			var FileSystem1 = new FileSystem();
+			var FileSystem2 = new FileSystem();
+			FileSystem1.Mount("/Mounted1", FileSystem2);
+			FileSystem2.Mount("/Mounted2/Mounted/test", LocalFileSystem);
+			FileSystem1.GetFileTime("/Mounted1/Mounted2/Mounted/test/Mounted/../../test/Mounted/FileInMountedFileSystem.txt");
 		}
 	}
 }

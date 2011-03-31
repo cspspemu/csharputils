@@ -5,9 +5,9 @@ using System.Text;
 
 namespace CSharpUtils.VirtualFileSystem.Ftp
 {
-	class FtpFileSystem : RemoteFileSystem
+	class FtpFileSystem
 	{
-		public override void Connect(string Host, int Port, string Username, string Password)
+		public void Connect(string Host, int Port, string Username, string Password)
 		{
 			throw new NotImplementedException();
 		}
