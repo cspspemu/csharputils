@@ -75,7 +75,7 @@ namespace CSharpUtils.VirtualFileSystem
 		public override void Close()
 		{
 			this.FileSystem.CloseFile(this);
+			base.Close();
 		}
-
 	}
 }

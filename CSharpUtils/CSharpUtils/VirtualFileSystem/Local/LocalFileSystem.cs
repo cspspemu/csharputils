@@ -14,12 +14,12 @@ namespace CSharpUtils.VirtualFileSystem.Local
 
 		public LocalFileSystem(String RootPath)
 		{
-			this.RootPath = NormalizePath(RootPath).Substring(1);
+			this.RootPath = AbsoluteNormalizePath(RootPath);
 		}
 
 		protected String RealPath(String Path)
 		{
-			return (RootPath.TrimEnd('/') + "/" + Path.TrimStart('/')).Replace('/', '\\');
+			return (RootPath + "/" + Path).Replace('/', '\\');
 		}
 
 		override protected FileSystemEntry.FileTime ImplGetFileTime(String Path)

@@ -14,7 +14,16 @@ namespace CSharpUtils.VirtualFileSystem
 		String CurrentWorkingPath = "";
 		virtual protected bool CaseInsensitiveFileSystem { get { return false; } }
 
-		static public String NormalizePath(String Path, String CurrentWorkingPath = "")
+		~FileSystem()
+		{
+			Shutdown();
+		}
+
+		virtual public void Shutdown()
+		{
+		}
+
+		static public String AbsoluteNormalizePath(String Path, String CurrentWorkingPath = "")
 		{
 			var Components = new LinkedList<String>();
 
@@ -38,8 +47,7 @@ namespace CSharpUtils.VirtualFileSystem
 				}
 			}
 
-			String ReturnPath = String.Join("/", Components);
-			return (ReturnPath.Length > 0) ? ("/" + ReturnPath) : "";
+			return String.Join("/", Components);
 		}
 
 		private void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
@@ -47,7 +55,7 @@ namespace CSharpUtils.VirtualFileSystem
 			String ComparePath;
 
 			// Normalize Components
-			Path = NormalizePath(Path, CurrentWorkingPath);
+			Path = AbsoluteNormalizePath(Path, CurrentWorkingPath);
 
 			ComparePath = Path;
 			if (CaseInsensitiveFileSystem)
@@ -83,7 +91,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public void Mount(String Path, FileSystem FileSystemToMount)
 		{
-			MountedFileSystems[NormalizePath(Path, CurrentWorkingPath)] = FileSystemToMount;
+			MountedFileSystems[AbsoluteNormalizePath(Path, CurrentWorkingPath)] = FileSystemToMount;
 		}
 
 		public void UnMount(String Path)
@@ -212,7 +220,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		virtual protected void ImplCloseFile(FileSystemFileStream FileStream)
 		{
-			throw (new NotImplementedException());
+			//throw (new NotImplementedException());
 		}
 
 		#endregion

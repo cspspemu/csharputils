@@ -44,12 +44,14 @@
     <Compile Include="Net\FtpClient.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystem.cs" />
     <Compile Include="VirtualFileSystem\FileSystem.cs" />
     <Compile Include="VirtualFileSystem\FileSystemEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystemEntry.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFileStreamStream.cs" />
+    <Compile Include="VirtualFileSystem\Zip\ZipFileSystem.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -17,6 +17,14 @@ namespace CSharpUtils.VirtualFileSystem
 		public String Path;
 		public FileTime Time;
 
+		public String FullName { get {
+			return Path;
+		} }
+
+		public String Name { get {
+			return Path.Substring(Path.LastIndexOf('/') + 1);
+		} }
+
 		public FileSystemEntry(FileSystem FileSystem, String Path)
 		{
 			this.FileSystem = FileSystem;
@@ -30,7 +38,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public override string ToString()
 		{
-			return "FileSystemEntry(Name=" + Path + ")";
+			return "FileSystemEntry(FullName=" + FullName + ", Name=" + Name + ")";
 		}
 	}
 }
