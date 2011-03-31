@@ -72,7 +72,7 @@ namespace CSharpUtilsTests
 		{
 			foreach (var Item in LocalFileSystem.FindFiles("/Mounted"))
 			{
-				Console.WriteLine(Item);
+				//Console.WriteLine(Item);
 			}
 		}
 

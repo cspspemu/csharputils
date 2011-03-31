@@ -85,6 +85,18 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 				FileSystemEntry.Size = FtpEntry.Size;
 				FileSystemEntry.UserId = FtpEntry.UserId;
 				FileSystemEntry.GroupId = FtpEntry.GroupId;
+				switch (FtpEntry.Type) {
+					case FTPEntry.FileType.Directory:
+						FileSystemEntry.Type = FileSystemEntry.EntryType.Directory;
+					break;
+					case FTPEntry.FileType.Link:
+						FileSystemEntry.Type = FileSystemEntry.EntryType.Link;
+					break;
+					default:
+					case FTPEntry.FileType.File:
+						FileSystemEntry.Type = FileSystemEntry.EntryType.File;
+					break;
+				}
 				Entries.AddLast(FileSystemEntry);
 			}
 			return Entries;

@@ -8,6 +8,14 @@ namespace CSharpUtils.VirtualFileSystem
 {
 	public class FileSystemEntry
 	{
+		public enum EntryType
+		{
+			Unknown   = 0,
+			File      = 1,
+			Directory = 2,
+			Link      = 3,
+		}
+
 		public struct FileTime
 		{
 			public DateTime CreationTime, LastAccessTime, LastWriteTime;
@@ -19,6 +27,7 @@ namespace CSharpUtils.VirtualFileSystem
 		public long Size;
 		public int UserId;
 		public int GroupId;
+		public EntryType Type = EntryType.Unknown;
 
 		public String FullName { get {
 			return Path;
@@ -41,7 +50,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public override string ToString()
 		{
-			return "FileSystemEntry(FullName=" + FullName + ", Name=" + Name + ", Size=" + Size + ")";
+			return "FileSystemEntry(FullName=" + FullName + ", Name=" + Name + ", Size=" + Size + ", Type=" + Type + ")";
 		}
 	}
 }

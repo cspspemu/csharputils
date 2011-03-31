@@ -55,6 +55,15 @@ namespace CSharpUtils.VirtualFileSystem.Local
 				}
 
 				var FileSystemEntry = new LocalFileSystemEntry(this, Path + "/" + Item.Name, Item);
+				if (Item.Attributes.HasFlag(FileAttributes.Directory))
+				{
+					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
+				}
+				else
+				{
+					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.File;
+				}
+				
 				//FileSystemEntry.Time = Item.
 				Items.AddLast(FileSystemEntry);
 				//yield return FileSystemEntry;
