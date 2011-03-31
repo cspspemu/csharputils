@@ -7,6 +7,9 @@ using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem.Ftp
 {
+	/**
+	 * http://www.networksorcery.com/enp/protocol/ftp.htm
+	 */
 	public class FtpFileSystem : FileSystem
 	{
 		public FTP Ftp = new FTP();
@@ -105,6 +108,12 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
 		{
 			return new FtpFileSystemFileStream(this, FileName, FileMode);
+		}
+
+		override protected void ImplCreateDirectory(String Path, int Mode = 0777)
+		{
+			Ftp.MakeDir(Path);
+			//Directory.CreateDirectory(Path);
 		}
 	}
 }

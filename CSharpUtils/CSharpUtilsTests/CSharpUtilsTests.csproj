@@ -50,6 +50,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Paths.cs" />
+    <Compile Include="VirtualFileSystem\Utils\SynchronizerTest.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemTest.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

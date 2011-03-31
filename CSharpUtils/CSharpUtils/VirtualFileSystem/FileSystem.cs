@@ -146,6 +146,12 @@ namespace CSharpUtils.VirtualFileSystem
 			NewFileSystem.ImplDeleteDirectory(NewPath);
 		}
 
+		public void CreateDirectory(String Path, int Mode = 0777)
+		{
+			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
+			NewFileSystem.ImplCreateDirectory(NewPath, Mode);
+		}
+
 
 		public void MoveFile(String ExistingFileName, String NewFileName, bool ReplaceExisiting) {
 			FileSystem NewFileSystem1; String NewPath1;
@@ -221,6 +227,11 @@ namespace CSharpUtils.VirtualFileSystem
 		virtual protected void ImplCloseFile(FileSystemFileStream FileStream)
 		{
 			//throw (new NotImplementedException());
+		}
+
+		virtual protected void ImplCreateDirectory(String Path, int Mode = 0777)
+		{
+			throw (new NotImplementedException());
 		}
 
 		#endregion

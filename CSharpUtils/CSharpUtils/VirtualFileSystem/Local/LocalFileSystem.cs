@@ -54,6 +54,11 @@ namespace CSharpUtils.VirtualFileSystem.Local
 					throw(new Exception("Unexpected FullName"));
 				}
 
+				if (Item.Attributes.HasFlag(FileAttributes.Hidden))
+				{
+					continue;
+				}
+
 				var FileSystemEntry = new LocalFileSystemEntry(this, Path + "/" + Item.Name, Item);
 				if (Item.Attributes.HasFlag(FileAttributes.Directory))
 				{
@@ -70,6 +75,11 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			}
 
 			return Items;
+		}
+
+		override protected void ImplCreateDirectory(String Path, int Mode = 0777)
+		{
+			Directory.CreateDirectory(RealPath(Path));
 		}
 
 		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)

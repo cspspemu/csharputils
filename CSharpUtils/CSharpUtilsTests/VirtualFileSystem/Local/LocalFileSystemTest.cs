@@ -34,8 +34,8 @@ namespace CSharpUtilsTests
 		[TestInitialize()]
 		public void MyTestInitialize()
 		{
-			LocalFileSystem = new LocalFileSystem(Directory.GetCurrentDirectory() + @"\..\..\..\TestInput");
-			LocalFileSystem.Mount("/Mounted", new LocalFileSystem(Directory.GetCurrentDirectory() + @"\..\..\..\TestInputMounted"));
+			LocalFileSystem = new LocalFileSystem(Paths.ProjectTestInputPath);
+			LocalFileSystem.Mount("/Mounted", new LocalFileSystem(Paths.ProjectTestInputMountedPath));
 		}
 		//
 		//Use TestCleanup to run code after each test has run
