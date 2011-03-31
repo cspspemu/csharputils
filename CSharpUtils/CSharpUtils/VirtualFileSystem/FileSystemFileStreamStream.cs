@@ -8,14 +8,20 @@ namespace CSharpUtils.VirtualFileSystem.Local
 {
 	public class FileSystemFileStreamStream : FileSystemFileStream
 	{
-		public Stream Stream;
-		private string FileName;
-		private FileStream Stream_2;
+		protected Stream _Stream;
 
 		public FileSystemFileStreamStream(FileSystem FileSystem, Stream Stream)
 			: base(FileSystem)
 		{
-			this.Stream = Stream;
+			this._Stream = Stream;
+		}
+
+		virtual public Stream Stream
+		{
+			get
+			{
+				return _Stream;
+			}
 		}
 
 		public override bool CanRead
@@ -73,6 +79,12 @@ namespace CSharpUtils.VirtualFileSystem.Local
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			this.Stream.Write(buffer, offset, count);
+		}
+
+		public override void Close()
+		{
+			base.Close();
+			Stream.Close();
 		}
 	}
 }

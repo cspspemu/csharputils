@@ -16,6 +16,9 @@ namespace CSharpUtils.VirtualFileSystem
 		public FileSystem FileSystem;
 		public String Path;
 		public FileTime Time;
+		public long Size;
+		public int UserId;
+		public int GroupId;
 
 		public String FullName { get {
 			return Path;
@@ -38,7 +41,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public override string ToString()
 		{
-			return "FileSystemEntry(FullName=" + FullName + ", Name=" + Name + ")";
+			return "FileSystemEntry(FullName=" + FullName + ", Name=" + Name + ", Size=" + Size + ")";
 		}
 	}
 }
