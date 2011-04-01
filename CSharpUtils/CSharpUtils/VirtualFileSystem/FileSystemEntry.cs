@@ -18,7 +18,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public struct FileTime
 		{
-			public DateTime CreationTime, LastAccessTime, LastWriteTime;
+			public DateTimeRange CreationTime, LastAccessTime, LastWriteTime;
 		}
 
 		public FileSystem FileSystem;

@@ -6,15 +6,26 @@ using CSharpUtils.VirtualFileSystem.Local;
 
 namespace CSharpUtilsTests
 {
-    
-    
-    /// <summary>
-    ///This is a test class for SynchronizerTest and is intended
-    ///to contain all SynchronizerTest Unit Tests
-    ///</summary>
-	[TestClass()]
+	[TestClass]
 	public class SynchronizerTest
 	{
+		[TestInitialize]
+		public void TestInitialize()
+		{
+			RestoreFileSystem();
+		}
+
+		[TestCleanup]
+		public void TestCleanup()
+		{
+			RestoreFileSystem();
+		}
+
+		void RestoreFileSystem()
+		{
+
+		}
+
 		[TestMethod]
 		public void SynchronizeTest()
 		{
@@ -22,7 +33,7 @@ namespace CSharpUtilsTests
 			string SourcePath = "/";
 			FileSystem DestinationFileSystem = new LocalFileSystem(Paths.ProjectTestOutputPath);
 			string DestinationPath = "/";
-			Synchronizer.SynchronizationMode _SynchronizationMode = Synchronizer.SynchronizationMode.CopyNewFiles;
+			Synchronizer.SynchronizationMode _SynchronizationMode = Synchronizer.SynchronizationMode.CopyNewAndUpdateOldFiles;
 			Synchronizer.ReferenceMode _ReferenceMode = new Synchronizer.ReferenceMode();
 			Synchronizer.Synchronize(SourceFileSystem, SourcePath, DestinationFileSystem, DestinationPath, _SynchronizationMode, _ReferenceMode);
 			DestinationFileSystem.GetFileTime("ExistentFolder/2/AnotherFile.txt");

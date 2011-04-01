@@ -99,7 +99,7 @@ namespace CSharpUtils.Net
 		public int Unknown;
 		public int UserId, GroupId;
 		public long Size;
-		public DateTime ModifiedTime;
+		public DateTimeRange ModifiedTime;
 
 		public override string ToString()
 		{
@@ -249,17 +249,21 @@ namespace CSharpUtils.Net
 				month = months[matches.Groups["Month"].Value.ToLower()];
 				day = Convert.ToInt32(matches.Groups["Day"].Value);
 
+				DateTimeRange.PrecisionType Precision;
+
 				// Hour
 				if (year_or_hour.IndexOf(":") >= 0)
 				{
 					var c = year_or_hour.Split(':');
 					hour = Convert.ToInt32(c[0]);
 					minute = Convert.ToInt32(c[1]);
+					Precision = DateTimeRange.PrecisionType.Minutes;
 				}
 				// Year
 				else
 				{
 					year = Convert.ToInt32(year_or_hour);
+					Precision = DateTimeRange.PrecisionType.Days;
 				}
 
 				var entry = new FTPEntry();
@@ -269,7 +273,7 @@ namespace CSharpUtils.Net
 				entry.UserId = Convert.ToInt32(matches.Groups["Uid"].Value);
 				entry.GroupId = Convert.ToInt32(matches.Groups["Gid"].Value);
 				entry.Size = Convert.ToInt64(matches.Groups["Size"].Value);
-				entry.ModifiedTime = new DateTime(year, month, day, hour, minute, second);
+				entry.ModifiedTime = new DateTimeRange(new DateTime(year, month, day, hour, minute, second), Precision);
 
 				switch (entry.RawInfo[0])
 				{
