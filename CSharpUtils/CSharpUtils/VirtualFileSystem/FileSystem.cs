@@ -7,6 +7,7 @@ using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
 {
+	// http://msdn.microsoft.com/en-us/library/system.io.isolatedstorage.isolatedstoragefile.aspx
 	public class FileSystem
 	{
 		protected SortedDictionary<String, FileSystem> MountedFileSystems = new SortedDictionary<string, FileSystem>();
