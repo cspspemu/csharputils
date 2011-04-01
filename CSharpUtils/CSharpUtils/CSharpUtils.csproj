@@ -44,8 +44,9 @@
     <Compile Include="Net\FTP.cs" />
     <Compile Include="Net\FtpClient.cs" />
     <Compile Include="Process\Process.cs" />
-    <Compile Include="SpaceAssigner\BiDimensionalSpaceAssigner.cs" />
-    <Compile Include="SpaceAssigner\OneDimensionalSpaceAssigner.cs" />
+    <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
+    <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />
+    <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemFileStream.cs" />
