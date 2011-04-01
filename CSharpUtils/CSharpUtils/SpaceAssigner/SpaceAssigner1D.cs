@@ -7,7 +7,7 @@ namespace CSharpUtils.SpaceAssigner
 {
 	// http://www.yoda.arachsys.com/csharp/genericoperators.html
 	// http://www.lambda-computing.com/publications/articles/generics2/
-	public class OneDimensionalSpaceAssigner
+	public class SpaceAssigner1D
 	{
 		public class Space
 		{
@@ -31,7 +31,7 @@ namespace CSharpUtils.SpaceAssigner
 
 		protected LinkedList<Space> AvailableChunks;
 
-		public OneDimensionalSpaceAssigner()
+		public SpaceAssigner1D()
 		{
 			AvailableChunks = new LinkedList<Space>();
 		}
@@ -48,6 +48,10 @@ namespace CSharpUtils.SpaceAssigner
 			//AvailableChunks.AddLast(Space);
 		}
 
+		/**
+		 * Finds an Available Space Chunk that has a length greater or equals to
+		 * the specified one.
+		 */
 		public Space Allocate(long Length)
 		{
 			throw(new NotImplementedException());

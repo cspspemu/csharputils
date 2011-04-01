@@ -50,6 +50,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OneDimensionalSpaceAssignerTest.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="VirtualFileSystem\Utils\SynchronizerTest.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemTest.cs" />

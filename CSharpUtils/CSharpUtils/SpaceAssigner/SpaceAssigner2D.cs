@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSharpUtils.SpaceAssigner
 {
-	public class BiDimensionalSpaceAssigner
+	public class SpaceAssigner2D
 	{
 		public class Space
 		{
@@ -38,7 +38,7 @@ namespace CSharpUtils.SpaceAssigner
 
 		protected LinkedList<Space> AvailableChunks;
 
-		public BiDimensionalSpaceAssigner()
+		public SpaceAssigner2D()
 		{
 			AvailableChunks = new LinkedList<Space>();
 		}
