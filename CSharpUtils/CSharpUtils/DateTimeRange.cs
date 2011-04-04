@@ -77,7 +77,7 @@ namespace CSharpUtils
 
 		public bool Contains(DateTimeRange that)
 		{
-			return Contains(that.TimeStart) && Contains(that.TimeEnd);
+			return Contains(that.TimeStart) && Contains(that.TimeEnd - new TimeSpan(1));
 		}
 
 		public PrecisionType Precision
@@ -105,7 +105,7 @@ namespace CSharpUtils
 
 		public static bool operator ==(DateTimeRange a, DateTimeRange b)
 		{
-			return a.Contains(b);
+			return a.Contains(b) || b.Contains(a);
 		}
 
 		public static bool operator !=(DateTimeRange a, DateTimeRange b)
@@ -182,7 +182,7 @@ namespace CSharpUtils
 
 		public override string ToString()
 		{
-			return "DateTimeRange(Time=" + this.TimeStart + ", Precision=" + this.Precision + ")";
+			return "DateTimeRange(TimeStart=" + this.TimeStart + ", TimeEnd=" + this.TimeEnd + ", Time=" + this.Time + ", Precision=" + this.Precision + ")";
 		}
 	}
 }

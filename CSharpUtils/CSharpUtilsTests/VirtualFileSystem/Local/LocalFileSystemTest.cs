@@ -6,47 +6,19 @@ using CSharpUtils.VirtualFileSystem;
 
 namespace CSharpUtilsTests
 {
-    /// <summary>
-    ///This is a test class for LocalFileSystemTest and is intended
-    ///to contain all LocalFileSystemTest Unit Tests
-    ///</summary>
-	[TestClass()]
+	[TestClass]
 	public class LocalFileSystemTest
 	{
 		LocalFileSystem LocalFileSystem;
 
-		// 
-		//You can use the following additional attributes as you write your tests:
-		//
-		//Use ClassInitialize to run code before running the first test in the class
-		//[ClassInitialize()]
-		//public static void MyClassInitialize(TestContext testContext)
-		//{
-		//}
-		//
-		//Use ClassCleanup to run code after all tests in a class have run
-		//[ClassCleanup()]
-		//public static void MyClassCleanup()
-		//{
-		//}
-		//
-		//Use TestInitialize to run code before running each test
-		[TestInitialize()]
-		public void MyTestInitialize()
+		[TestInitialize]
+		public void InitializeTest()
 		{
 			LocalFileSystem = new LocalFileSystem(Paths.ProjectTestInputPath);
 			LocalFileSystem.Mount("/Mounted", new LocalFileSystem(Paths.ProjectTestInputMountedPath));
 		}
-		//
-		//Use TestCleanup to run code after each test has run
-		//[TestCleanup()]
-		//public void MyTestCleanup()
-		//{
-		//}
-		//
-
 		[TestMethod]
-		public void TestGetFileTimeExists()
+		public void GetFileTimeExistsTest()
 		{
 			var FileTime = LocalFileSystem.GetFileTime("ExistentFolder");
 			Assert.IsTrue(FileTime.CreationTime   >= DateTime.Parse("01/01/2011"));
@@ -56,19 +28,19 @@ namespace CSharpUtilsTests
 
 		[ExpectedException(typeof(FileNotFoundException))]
 		[TestMethod]
-		public void TestGetFileTimeNotExists()
+		public void GetFileTimeNotExistsTest()
 		{
 			LocalFileSystem.GetFileTime("ThisFilesDoesNotExists");
 		}
 
 		[TestMethod]
-		public void TestMounted()
+		public void MountedTest()
 		{
 			var FileTime = LocalFileSystem.GetFileTime("/Mounted/FileInMountedFileSystem.txt");
 		}
 
 		[TestMethod]
-		public void TestFindFiles()
+		public void FindFilesTest()
 		{
 			foreach (var Item in LocalFileSystem.FindFiles("/Mounted"))
 			{
@@ -77,7 +49,7 @@ namespace CSharpUtilsTests
 		}
 
 		[TestMethod]
-		public void TestMountedOpenFile()
+		public void MountedOpenFileTest()
 		{
 			var Stream = LocalFileSystem.OpenFile("/Mounted/FileInMountedFileSystem.txt", FileMode.Open);
 			var StreamReader = new StreamReader(Stream);
@@ -87,7 +59,7 @@ namespace CSharpUtilsTests
 		}
 
 		[TestMethod]
-		public void TestMountedRecursive()
+		public void MountedRecursiveTest()
 		{
 			var FileSystem1 = new FileSystem();
 			var FileSystem2 = new FileSystem();

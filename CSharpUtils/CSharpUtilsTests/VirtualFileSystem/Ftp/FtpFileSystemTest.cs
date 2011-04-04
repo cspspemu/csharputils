@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.IO;
+using System.Threading;
 
 namespace CSharpUtilsTests
 {
@@ -21,7 +22,7 @@ namespace CSharpUtilsTests
 		public static void Initialize(TestContext testContext)
 		{
 			FtpFileSystem = new FtpFileSystem();
-			FtpFileSystem.Connect("192.168.1.36", 21, "ubuntu", "ubuntu");
+			FtpFileSystem.Connect("192.168.1.36", 21, "ubuntu", "ubuntu", 1000);
 		}
 
 		[ClassCleanup]

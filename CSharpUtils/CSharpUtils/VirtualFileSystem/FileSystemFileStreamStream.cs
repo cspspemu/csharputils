@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace CSharpUtils.VirtualFileSystem.Local
+namespace CSharpUtils.VirtualFileSystem
 {
 	public class FileSystemFileStreamStream : FileSystemFileStream
 	{

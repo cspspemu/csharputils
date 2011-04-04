@@ -51,8 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Process\ProcessTest.cs" />
+    <Compile Include="DateTimeRangeTest.cs" />
+    <Compile Include="FileSystemEntryTest.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DTest.cs" />
     <Compile Include="Paths.cs" />
+    <Compile Include="VirtualFileSystem\Ssh\SftpFileSystemTest.cs" />
     <Compile Include="VirtualFileSystem\Utils\SynchronizerTest.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemTest.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystemTest.cs" />

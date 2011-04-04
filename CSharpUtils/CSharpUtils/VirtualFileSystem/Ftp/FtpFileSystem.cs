@@ -10,14 +10,15 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 	/**
 	 * http://www.networksorcery.com/enp/protocol/ftp.htm
 	 */
-	public class FtpFileSystem : FileSystem
+	public class FtpFileSystem : RemoteFileSystem
 	{
 		public FTP Ftp = new FTP();
 		public String RootPath;
 
-		public void Connect(string Host, int Port, string Username, string Password)
+		override public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000)
 		{
 			Ftp.Connect(Host, Port, Username, Password);
+			Ftp.timeout = timeout;
 			RootPath = Ftp.GetWorkingDirectory();
 		}
 
