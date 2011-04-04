@@ -22,7 +22,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			RootPath = Ftp.GetWorkingDirectory();
 		}
 
-		protected String RealPath(String Path)
+		override protected String RealPath(String Path)
 		{
 			return RootPath + "/" + Path;
 		}
@@ -32,12 +32,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			Ftp.Disconnect();
 		}
 
-		public String GetTempFile()
-		{
-			return Path.GetTempPath() + Guid.NewGuid().ToString() + ".tmp";
-		}
-
-		public String DownloadFile(String RemoteFile, String LocalFile = null)
+		override public String DownloadFile(String RemoteFile, String LocalFile = null)
 		{
 			try
 			{
@@ -52,7 +47,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			}
 		}
 
-		public void UploadFile(String RemoteFile, String LocalFile)
+		override public void UploadFile(String RemoteFile, String LocalFile)
 		{
 			try
 			{
@@ -104,11 +99,6 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 				Entries.AddLast(FileSystemEntry);
 			}
 			return Entries;
-		}
-
-		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
-		{
-			return new FtpFileSystemFileStream(this, FileName, FileMode);
 		}
 
 		override protected void ImplCreateDirectory(String Path, int Mode = 0777)

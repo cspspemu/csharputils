@@ -258,9 +258,9 @@
     <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
+    <Compile Include="StreamExtensions.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystem.cs" />
-    <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystem.cs" />
     <Compile Include="VirtualFileSystem\FileSystem.cs" />
     <Compile Include="VirtualFileSystem\FileSystemEntry.cs" />
@@ -268,6 +268,7 @@
     <Compile Include="VirtualFileSystem\Local\LocalFileSystemEntry.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFileStreamStream.cs" />
     <Compile Include="VirtualFileSystem\RemoteFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\RemoteFileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\Ssh\SftpFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Utils\Synchronizer.cs" />
     <Compile Include="VirtualFileSystem\Zip\ZipFileSystem.cs" />

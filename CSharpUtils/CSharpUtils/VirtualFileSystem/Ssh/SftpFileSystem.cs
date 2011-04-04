@@ -17,8 +17,6 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 
 		override public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000)
 		{
-			RootPath = "";
-
 			jsch = new JSch();
 			//session.setConfig();
 			session = jsch.getSession(Username, Host, Port);
@@ -28,9 +26,12 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 
 			csftp = (ChannelSftp)session.openChannel("sftp");
 			csftp.connect();
+
+			//RootPath = csftp.getHome();
+			RootPath = "";
 		}
 
-		protected String RealPath(String Path)
+		override protected String RealPath(String Path)
 		{
 			return RootPath + "/" + Path;
 		}
@@ -40,6 +41,16 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			csftp.disconnect(); csftp = null;
 			session.disconnect(); session = null;
 			jsch = null;
+		}
+
+		override protected FileSystemEntry.FileTime ImplGetFileTime(String Path)
+		{
+			FileSystemEntry.FileTime Time = new FileSystemEntry.FileTime();
+			var stat = csftp.lstat(RealPath(Path));
+			Time.LastAccessTime = stat.getATime();
+			Time.CreationTime = stat.getMTime();
+			Time.LastWriteTime = stat.getMTime();
+			return Time;
 		}
 
 		override protected LinkedList<FileSystemEntry> ImplFindFiles(String Path)
@@ -66,16 +77,31 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			return Items;
 		}
 
-		protected override FileSystemFileStream ImplOpenFile(string FileName, System.IO.FileMode FileMode)
+		override public String DownloadFile(String RemoteFile, String LocalFile = null)
 		{
-			return new FileSystemFileStreamStream(this, csftp.get(FileName));
-			//new FileSystemFileStreamStream();
-			//return base.ImplOpenFile(FileName, FileMode);
+			try
+			{
+				if (LocalFile == null) LocalFile = GetTempFile();
+				csftp.get(RemoteFile, LocalFile);
+				return LocalFile;
+			}
+			catch (Exception e)
+			{
+				throw (new Exception("Can't download sftp file '" + RemoteFile + "' : " + e.Message, e));
+			}
 		}
 
-		//csftp.get(
-
-
+		override public void UploadFile(String RemoteFile, String LocalFile)
+		{
+			try
+			{
+				csftp.put(LocalFile, RemoteFile);
+			}
+			catch (Exception e)
+			{
+				throw (new Exception("Can't upload sftp file '" + RemoteFile + "' : " + e.Message, e));
+			}
+		}
 	}
 
 	class DirectPasswordUserInfo : UserInfo

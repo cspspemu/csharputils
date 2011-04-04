@@ -5,6 +5,8 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpUtils.VirtualFileSystem.Ssh;
 using System.Net;
+using System.IO;
+using CSharpUtils;
 
 namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 {
@@ -27,14 +29,31 @@ namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 		}
 
 		[TestMethod]
-		public void ConnectTest()
+		public void FindFilesTest()
 		{
-			foreach (var Item in SftpFileSystem.FindFiles("/home/ubuntu"))
-			{
-				Console.WriteLine(Item);
-			}
-			//SftpFileSystem.OpenFile
-			//Dns.GetHostEntry();
+			var FilesQuery =
+				from File in SftpFileSystem.FindFiles("/home/ubuntu")
+				where File.Name == "Desktop"
+				select File
+			;
+
+			Assert.AreEqual(
+				1,
+				FilesQuery.Count()
+			);
+		}
+
+		[TestMethod]
+		public void GetFileTimeTest()
+		{
+			var time = SftpFileSystem.GetFileTime("/home/ubuntu/this is a test.txt");
+			Console.WriteLine(time);
+		}
+
+		[TestMethod]
+		public void DownloadFileTest()
+		{
+			Assert.AreEqual("Hello World\n", SftpFileSystem.OpenFile("/home/ubuntu/this is a test.txt", FileMode.Open).ReadAllContentsAsString(Encoding.UTF8));
 		}
 	}
 }

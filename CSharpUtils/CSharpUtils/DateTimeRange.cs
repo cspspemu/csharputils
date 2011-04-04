@@ -30,6 +30,16 @@ namespace CSharpUtils
 		private DateTime _Time, _TimeStart, _TimeEnd;
 		private PrecisionType _Precision;
 
+		static DateTimeRange FromUnixTimestamp(long UnixTimestamp, PrecisionType Precision = PrecisionType.Seconds)
+		{
+			return new DateTimeRange(ConvertFromUnixTimestamp(UnixTimestamp), Precision);
+		}
+
+		public static implicit operator DateTimeRange(long UnixTimestamp)
+		{
+			return FromUnixTimestamp(UnixTimestamp, PrecisionType.Seconds);
+		}
+
 		public DateTimeRange(DateTime Time, PrecisionType Precision = PrecisionType.Ticks)
 		{
 			this._Time = Time;
@@ -68,6 +78,27 @@ namespace CSharpUtils
 				CheckUpdateTimeStartEnd();
 				return _TimeEnd;
 			}
+		}
+
+		public long UnixTimestamp
+		{
+			get
+			{
+				return ConvertToUnixTimestamp(Time);
+			}
+		}
+
+		static DateTime ConvertFromUnixTimestamp(long timestamp)
+		{
+			DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+			return origin.AddSeconds(timestamp);
+		}
+
+		static long ConvertToUnixTimestamp(DateTime date)
+		{
+			DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+			TimeSpan diff = date - origin;
+			return (long)Math.Floor(diff.TotalSeconds);
 		}
 
 		public bool Contains(DateTime PreciseTime)

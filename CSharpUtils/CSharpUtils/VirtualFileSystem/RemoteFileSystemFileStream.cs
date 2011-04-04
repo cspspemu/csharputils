@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CSharpUtils.VirtualFileSystem.Local;
 using System.IO;
 
-namespace CSharpUtils.VirtualFileSystem.Ftp
+namespace CSharpUtils.VirtualFileSystem
 {
-	public class FtpFileSystemFileStream : FileSystemFileStreamStream
+	public class RemoteFileSystemFileStream : FileSystemFileStreamStream
 	{
 		protected bool Modified = false;
 		public String TempFileName;
 		public String FileName;
 		public FileMode FileMode;
-		protected FtpFileSystem FtpFileSystem;
+		protected RemoteFileSystem RemoteFileSystem;
 
-		public FtpFileSystemFileStream(FtpFileSystem FtpFileSystem, String FileName, FileMode FileMode)
-			: base(FtpFileSystem, null)
+		public RemoteFileSystemFileStream(RemoteFileSystem RemoteFileSystem, String FileName, FileMode FileMode)
+			: base(RemoteFileSystem, null)
 		{
-			this.FtpFileSystem = FtpFileSystem;
+			this.RemoteFileSystem = RemoteFileSystem;
 			this.FileName = FileName;
 			this.FileMode = FileMode;
 		}
@@ -29,33 +28,33 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			{
 				if (_Stream == null)
 				{
-					TempFileName = FtpFileSystem.GetTempFile();
+					TempFileName = RemoteFileSystem.GetTempFile();
 					switch (FileMode)
 					{
 						case FileMode.CreateNew:
 							try
 							{
-								FtpFileSystem.GetFileTime(FileName);
-								throw(new Exception("File '" + FileName + "' already exists can't open using FileMode.CreateNew"));
+								RemoteFileSystem.GetFileTime(FileName);
+								throw (new Exception("File '" + FileName + "' already exists can't open using FileMode.CreateNew"));
 							}
 							catch
 							{
 							}
 							Modified = true;
-						break;
+							break;
 						case FileMode.Create:
 							Modified = true;
-						break;
+							break;
 						case FileMode.Truncate:
 							Modified = true;
-						break;
+							break;
 						case FileMode.OpenOrCreate:
 						case FileMode.Append:
 						case FileMode.Open:
-							FtpFileSystem.DownloadFile(FileName, TempFileName);
-						break;
+							RemoteFileSystem.DownloadFile(FileName, TempFileName);
+							break;
 					}
-					
+
 					_Stream = new FileStream(TempFileName, FileMode);
 				}
 				return _Stream;
@@ -82,10 +81,11 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			{
 				if (Modified)
 				{
-					FtpFileSystem.UploadFile(FileName, TempFileName);
+					RemoteFileSystem.UploadFile(FileName, TempFileName);
 				}
 				File.Delete(TempFileName);
 			}
 		}
 	}
+
 }
