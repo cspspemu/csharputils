@@ -79,6 +79,7 @@ namespace CSharpUtils.VirtualFileSystem
 			// Has to reupload.
 			if (_Stream != null)
 			{
+				_Stream = null;
 				if (Modified)
 				{
 					RemoteFileSystem.UploadFile(FileName, TempFileName);

@@ -5,15 +5,16 @@ using System.Text;
 using Tamir.SharpSsh.jsch;
 using System.Windows.Forms;
 using CSharpUtils.VirtualFileSystem.Local;
+using System.Threading;
 
 namespace CSharpUtils.VirtualFileSystem.Ssh
 {
 	public class SftpFileSystem : RemoteFileSystem
 	{
-		JSch jsch;
-		Session session;
-		ChannelSftp csftp;
-		String RootPath;
+		JSch jsch = null;
+		Session session = null;
+		ChannelSftp csftp = null;
+		String RootPath = "";
 
 		override public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000)
 		{
@@ -38,9 +39,22 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 
 		public override void Shutdown()
 		{
-			csftp.disconnect(); csftp = null;
-			session.disconnect(); session = null;
-			jsch = null;
+			if (csftp != null)
+			{
+				csftp.disconnect();
+				csftp = null;
+			}
+
+			if (session != null)
+			{
+				session.disconnect();
+				session = null;
+			}
+
+			if (jsch != null)
+			{
+				jsch = null;
+			}
 		}
 
 		override protected FileSystemEntry.FileTime ImplGetFileTime(String Path)

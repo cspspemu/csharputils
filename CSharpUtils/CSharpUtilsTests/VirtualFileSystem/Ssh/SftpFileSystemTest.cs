@@ -55,5 +55,20 @@ namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 		{
 			Assert.AreEqual("Hello World\n", SftpFileSystem.OpenFile("/home/ubuntu/this is a test.txt", FileMode.Open).ReadAllContentsAsString(Encoding.UTF8));
 		}
+
+		[TestMethod]
+		public void ModifyFileTest()
+		{
+			//var fs = new FileStream(@"C:\projects\csharputils\temp.bin", FileMode.Create);
+			//fs.Close();
+
+			Stream Stream = SftpFileSystem.OpenFile("/home/ubuntu/myfile.txt", FileMode.Create);
+			var StreamWriter = new StreamWriter(Stream);
+			StreamWriter.Write("This is a string writed");
+			StreamWriter.Close();
+			//Stream.Close();
+
+			Assert.AreEqual("This is a string writed", SftpFileSystem.OpenFile("/home/ubuntu/myfile.txt", FileMode.Open).ReadAllContentsAsString(Encoding.UTF8));
+		}
 	}
 }

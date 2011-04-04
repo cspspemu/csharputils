@@ -11,7 +11,7 @@ namespace CSharpUtils
 		static public String ReadAllContentsAsString(this Stream Stream, Encoding Encoding = null)
 		{
 			if (Encoding == null) Encoding = Encoding.UTF8;
-			return new StreamReader(Stream, Encoding).ReadToEnd();
+			return Encoding.GetString(Stream.ReadAll());
 		}
 
 		static public byte[] ReadAll(this Stream Stream)
