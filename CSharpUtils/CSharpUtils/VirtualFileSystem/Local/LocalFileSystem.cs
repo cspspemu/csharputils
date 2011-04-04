@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem.Local
 {
-	class LocalFileSystem : FileSystem
+	public class LocalFileSystem : FileSystem
 	{
 		String RootPath;
 
@@ -40,9 +40,8 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return FileTime;
 		}
 
-		override protected LinkedList<FileSystemEntry> ImplFindFiles(String Path)
+		override protected void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
 		{
-			var Items = new LinkedList<FileSystemEntry>();
 			String CachedRealPath = RealPath(Path);
 
 			DirectoryInfo DirectoryInfo = new DirectoryInfo(CachedRealPath);
@@ -68,13 +67,21 @@ namespace CSharpUtils.VirtualFileSystem.Local
 				{
 					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.File;
 				}
+
+				if (Item is FileInfo)
+				{
+					var ItemFile = (FileInfo)Item;
+					FileSystemEntry.Size = ItemFile.Length;
+				}
+
+				//FileSystemEntry.Size = File.get
+				//Item.Attributes == FileAttributes.
+				//
 				
 				//FileSystemEntry.Time = Item.
 				Items.AddLast(FileSystemEntry);
 				//yield return FileSystemEntry;
 			}
-
-			return Items;
 		}
 
 		override protected void ImplCreateDirectory(String Path, int Mode = 0777)

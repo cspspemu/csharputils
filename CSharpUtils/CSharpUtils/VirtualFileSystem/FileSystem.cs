@@ -170,10 +170,73 @@ namespace CSharpUtils.VirtualFileSystem
 			NewFileSystem1.ImplMoveFile(NewPath1, NewPath2, ReplaceExisiting);
 		}
 
+		public void FindFilesAddMounted(String NewPath, LinkedList<FileSystemEntry> List)
+		{
+			foreach (var MountedFileSystemPath in MountedFileSystems.Keys)
+			{
+				if (MountedFileSystemPath.StartsWith(NewPath))
+				{
+					var Components = MountedFileSystemPath.Substring(NewPath.Length).TrimStart('/').Split('/');
+					/*
+					 * ::MountedFolder/sftp
+					::MountedFolder
+					::
+					::System.String[]
+					*/
+					Console.WriteLine("::" + MountedFileSystemPath);
+					Console.WriteLine("::" + NewPath);
+					Console.WriteLine("::" + Components[0]);
+					Console.WriteLine("::" + String.Join("##", Components));
+					FileSystemEntry FileSystemEntry = new FileSystemEntry(this, Components[0]);
+					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
+					List.AddLast(FileSystemEntry);
+				}
+			}
+			/*
+			foreach (var MountedFileSystemPath in MountedFileSystems.Keys)
+			{
+				String ParentName = "";
+				String FileName = "";
+				int index = MountedFileSystemPath.LastIndexOf("/");
+				if (index == -1)
+				{
+					ParentName = "";
+					FileName = MountedFileSystemPath;
+				}
+				else
+				{
+					ParentName = MountedFileSystemPath.Substring(0, index);
+					FileName = MountedFileSystemPath.Substring(index + 1);
+				}
+				Console.WriteLine(":::(1)" + MountedFileSystemPath);
+				Console.WriteLine(":::(2)" + NewPath);
+				Console.WriteLine(":::(3)" + ParentName);
+				Console.WriteLine(":::(3)" + FileName);
+				if (NewPath == ParentName)
+				{
+					FileSystemEntry FileSystemEntry = new FileSystemEntry(this, FileName);
+					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
+					List.AddLast(FileSystemEntry);
+				}
+				//MountedFileSystem.
+			}
+			*/
+		}
+
 		public LinkedList<FileSystemEntry> FindFiles(String Path)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
-			return NewFileSystem.ImplFindFiles(NewPath);
+			LinkedList<FileSystemEntry> List = new LinkedList<FileSystemEntry>();
+			try
+			{
+				NewFileSystem.FindFilesAddMounted(NewPath, List);
+				NewFileSystem.ImplFindFiles(NewPath, List);
+			}
+			catch (Exception e)
+			{
+				if (List.Count == 0) throw (e);
+			}
+			return new LinkedList<FileSystemEntry>(List.Distinct(new FileSystemEntryNameComparer()));
 		}
 		
 		#endregion
@@ -205,7 +268,7 @@ namespace CSharpUtils.VirtualFileSystem
 			throw (new NotImplementedException());
 		}
 
-		virtual protected LinkedList<FileSystemEntry> ImplFindFiles(String Path)
+		virtual protected void ImplFindFiles(String Path, LinkedList<FileSystemEntry> List)
 		{
 			throw (new NotImplementedException());
 		}

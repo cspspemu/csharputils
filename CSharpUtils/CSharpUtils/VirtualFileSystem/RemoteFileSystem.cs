@@ -8,6 +8,25 @@ namespace CSharpUtils.VirtualFileSystem
 {
 	abstract public class RemoteFileSystem : FileSystem
 	{
+		protected string Host;
+		protected int Port;
+		protected string Username;
+		protected string Password;
+		protected int timeout = 10000;
+
+		public RemoteFileSystem()
+		{
+		}
+
+		public RemoteFileSystem(string Host, int Port, string Username, string Password, int timeout = 10000)
+		{
+			this.Host = Host;
+			this.Port = Port;
+			this.Username = Username;
+			this.Password = Password;
+			this.timeout = timeout;
+		}
+
 		public String GetTempFile()
 		{
 			return Path.GetTempPath() + Guid.NewGuid().ToString() + ".tmp";

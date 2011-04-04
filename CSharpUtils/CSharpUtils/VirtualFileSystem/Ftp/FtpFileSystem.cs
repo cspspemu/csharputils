@@ -72,9 +72,8 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			Ftp.RemoveFile(Path);
 		}
 
-		protected override LinkedList<FileSystemEntry> ImplFindFiles(string Path)
+		protected override void ImplFindFiles(string Path, LinkedList<FileSystemEntry> Entries)
 		{
-			var Entries = new LinkedList<FileSystemEntry>();
 			Ftp.ChangeDir(RealPath(Path));
 			foreach (var FtpEntry in Ftp.ListEntries())
 			{
@@ -98,7 +97,6 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 				}
 				Entries.AddLast(FileSystemEntry);
 			}
-			return Entries;
 		}
 
 		override protected void ImplCreateDirectory(String Path, int Mode = 0777)

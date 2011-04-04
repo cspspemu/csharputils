@@ -11,26 +11,57 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 {
 	public class SftpFileSystem : RemoteFileSystem
 	{
-		JSch jsch = null;
-		Session session = null;
-		ChannelSftp csftp = null;
+		JSch _jsch = null;
+		Session _session = null;
+		private ChannelSftp _csftp = null;
 		String RootPath = "";
+
+		public SftpFileSystem()
+			:base()
+		{
+		}
+
+		public SftpFileSystem(string Host, int Port, string Username, string Password, int timeout = 10000)
+			:base (Host, Port, Username, Password, timeout)
+		{
+		}
+
 
 		override public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000)
 		{
-			jsch = new JSch();
+			_jsch = new JSch();
 			//session.setConfig();
-			session = jsch.getSession(Username, Host, Port);
+			_session = _jsch.getSession(Username, Host, Port);
 			UserInfo ui = new DirectPasswordUserInfo(Password);
-			session.setUserInfo(ui);
-			session.connect();
+			_session.setUserInfo(ui);
+			_session.connect();
 
-			csftp = (ChannelSftp)session.openChannel("sftp");
-			csftp.connect();
+			_csftp = (ChannelSftp)_session.openChannel("sftp");
+			_csftp.connect();
 
 			//RootPath = csftp.getHome();
 			RootPath = "";
 		}
+
+		ChannelSftp csftp
+		{
+			get
+			{
+				// Try reconnect.
+				if ((_csftp != null) && !_csftp.connected)
+				{
+					_csftp = null;
+				}
+
+				if (_csftp == null)
+				{
+					Connect(this.Host, this.Port, this.Username, this.Password, this.timeout);
+				}
+				return _csftp;
+			}
+		}
+
+
 
 		override protected String RealPath(String Path)
 		{
@@ -39,21 +70,21 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 
 		public override void Shutdown()
 		{
-			if (csftp != null)
+			if (_csftp != null)
 			{
-				csftp.disconnect();
-				csftp = null;
+				_csftp.disconnect();
+				_csftp = null;
 			}
 
-			if (session != null)
+			if (_session != null)
 			{
-				session.disconnect();
-				session = null;
+				_session.disconnect();
+				_session = null;
 			}
 
-			if (jsch != null)
+			if (_jsch != null)
 			{
-				jsch = null;
+				_jsch = null;
 			}
 		}
 
@@ -67,10 +98,8 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			return Time;
 		}
 
-		override protected LinkedList<FileSystemEntry> ImplFindFiles(String Path)
+		override protected void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
 		{
-			var Items = new LinkedList<FileSystemEntry>();
-
 			foreach (var i in csftp.ls(RealPath(Path)))
 			{
 				var LsEntry = (Tamir.SharpSsh.jsch.ChannelSftp.LsEntry)i;
@@ -87,8 +116,6 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 				}
 				Items.AddLast(FileSystemEntry);
 			}
-
-			return Items;
 		}
 
 		override public String DownloadFile(String RemoteFile, String LocalFile = null)
