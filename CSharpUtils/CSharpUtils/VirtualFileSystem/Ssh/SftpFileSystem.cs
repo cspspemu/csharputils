@@ -26,13 +26,22 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 		{
 		}
 
-
 		override public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000)
+		{
+			this.Host = Host;
+			this.Port = Port;
+			this.Username = Username;
+			this.Password = Password;
+			this.timeout = timeout;
+			_jsch = null;
+		}
+
+		protected void _Connect()
 		{
 			_jsch = new JSch();
 			//session.setConfig();
-			_session = _jsch.getSession(Username, Host, Port);
-			UserInfo ui = new DirectPasswordUserInfo(Password);
+			_session = _jsch.getSession(this.Username, this.Host, this.Port);
+			UserInfo ui = new DirectPasswordUserInfo(this.Password);
 			_session.setUserInfo(ui);
 			_session.connect();
 
@@ -55,7 +64,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 
 				if (_csftp == null)
 				{
-					Connect(this.Host, this.Port, this.Username, this.Password, this.timeout);
+					_Connect();
 				}
 				return _csftp;
 			}
@@ -88,14 +97,15 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			}
 		}
 
-		override protected FileSystemEntry.FileTime ImplGetFileTime(String Path)
+		override protected FileSystemEntry ImplGetFileInfo(String Path)
 		{
-			FileSystemEntry.FileTime Time = new FileSystemEntry.FileTime();
+			var FileSystemEntry = new FileSystemEntry(this, Path);
 			var stat = csftp.lstat(RealPath(Path));
-			Time.LastAccessTime = stat.getATime();
-			Time.CreationTime = stat.getMTime();
-			Time.LastWriteTime = stat.getMTime();
-			return Time;
+			FileSystemEntry.Size = stat.Length();
+			FileSystemEntry.Time.LastAccessTime = stat.getATime();
+			FileSystemEntry.Time.CreationTime = stat.getMTime();
+			FileSystemEntry.Time.LastWriteTime = stat.getMTime();
+			return FileSystemEntry;
 		}
 
 		override protected void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
@@ -113,6 +123,19 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Link;
 				} else {
 					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.File;
+				}
+				FileSystemEntry.Time.CreationTime = LsEntry.getAttrs().getMTime();
+				FileSystemEntry.Time.LastWriteTime = LsEntry.getAttrs().getMTime();
+				FileSystemEntry.Time.LastAccessTime = LsEntry.getAttrs().getATime();
+				//Console.WriteLine("FILE(" + LsEntry.getFilename() + ") : (" + LsEntry.getAttrs().getPermissions() + ") (" + String.Join(",", LsEntry.getAttrs().getExtended()) + ")");
+				//Console.WriteLine(String.Format("FILE({}) : ({})", LsEntry.getFilename(), Convert.ToString(LsEntry.getAttrs().getPermissions(), 2)));
+				//Console.WriteLine("FILE(" + LsEntry.getFilename() + ") : (" + Convert.ToString(LsEntry.getAttrs().getPermissions(), 2) + ")");
+
+				// Version 3 supported.
+				// http://tools.ietf.org/wg/secsh/draft-ietf-secsh-filexfer/
+				if (FileSystemEntry.Name.Substring(0, 1) == ".")
+				{
+					FileSystemEntry.ExtendedFlags |= VirtualFileSystem.FileSystemEntry.ExtendedFlagsTypes.Hidden;
 				}
 				Items.AddLast(FileSystemEntry);
 			}

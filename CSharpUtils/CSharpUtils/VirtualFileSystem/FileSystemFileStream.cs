@@ -9,10 +9,12 @@ namespace CSharpUtils.VirtualFileSystem
 	public class FileSystemFileStream : Stream
 	{
 		FileSystem FileSystem;
+		FileSystemEntry FileSystemEntry;
 
-		public FileSystemFileStream(FileSystem FileSystem)
+		public FileSystemFileStream(FileSystem FileSystem, FileSystemEntry FileSystemEntry = null)
 		{
 			this.FileSystem = FileSystem;
+			this.FileSystemEntry = FileSystemEntry;
 		}
 
 		public override bool CanRead

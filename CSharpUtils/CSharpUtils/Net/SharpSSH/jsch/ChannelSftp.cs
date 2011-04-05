@@ -2013,6 +2013,7 @@ namespace Tamir.SharpSsh.jsch
 		{ //throws Exception{
 			packet.reset();
 			putHEAD(SSH_FXP_INIT, 5);
+			// http://tools.ietf.org/html/draft-ietf-secsh-filexfer-02
 			buf.putInt(3);                // version 3
 			session.write(packet, this, 5+4);
 		}

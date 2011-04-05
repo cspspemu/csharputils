@@ -266,10 +266,10 @@
     <Compile Include="VirtualFileSystem\Dokan\DokanNet.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanOperations.cs" />
     <Compile Include="VirtualFileSystem\Dokan\Proxy.cs" />
-    <Compile Include="VirtualFileSystem\FileSystemEntryNameComparer.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\FileSystemProxyDokanOperations.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemEntry.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystem.cs" />
     <Compile Include="VirtualFileSystem\FileSystem.cs" />
     <Compile Include="VirtualFileSystem\FileSystemEntry.cs" />

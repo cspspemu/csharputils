@@ -72,7 +72,11 @@ namespace Tamir.SharpSsh.jsch
 			putInt(length);
 			putByte(foo, begin, length);
 		}
-		public void putInt(int v) 
+		public void putInt(int v)
+		{
+			putInt((uint)v);
+		}
+		public void putInt(uint v) 
 		{
 			uint val = (uint)v;
 			tmp[0]=(byte)(val >> 24);

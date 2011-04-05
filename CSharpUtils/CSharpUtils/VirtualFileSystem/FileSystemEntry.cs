@@ -16,18 +16,83 @@ namespace CSharpUtils.VirtualFileSystem
 			Link      = 3,
 		}
 
-		public struct FileTime
+		public enum ExtendedFlagsTypes
 		{
-			public DateTimeRange CreationTime, LastAccessTime, LastWriteTime;
+			None       = 0,
+			Hidden     = 1,
+			Compressed = 2,
+			Encrypted  = 4,
+			System     = 8,
+			Archive    = 16,
+			Device     = 32,
+		}
+
+		public class FileTime
+		{
+			protected DateTimeRange _CreationTime;
+			protected DateTimeRange _LastAccessTime;
+			protected DateTimeRange _LastWriteTime;
+
+			public FileTime()
+			{
+				var MinDateTime = new DateTime(1970, 1, 1, 0, 0, 0);
+				_CreationTime = MinDateTime;
+				_LastAccessTime = MinDateTime;
+				_LastWriteTime = MinDateTime;
+			}
+
+
+			static protected DateTimeRange Normalize(DateTimeRange value)
+			{
+				var MinDateTime = new DateTime(1970, 1, 1, 0, 0, 0);
+				if (value < MinDateTime)
+				{
+					return MinDateTime;
+				}
+				return value;
+			}
+
+			public DateTimeRange CreationTime {
+				get
+				{
+					return _CreationTime;
+				}
+				set
+				{
+					_CreationTime = Normalize(value);
+				}
+			}
+			public DateTimeRange LastAccessTime {
+				get
+				{
+					return _LastAccessTime;
+				}
+				set
+				{
+					_LastAccessTime = Normalize(value);
+				}
+			}
+			public DateTimeRange LastWriteTime
+			{
+				get
+				{
+					return _LastWriteTime;
+				}
+				set
+				{
+					_LastWriteTime = Normalize(value);
+				}
+			}
 		}
 
 		public FileSystem FileSystem;
 		public String Path;
-		public FileTime Time;
+		public FileTime Time = new FileTime();
 		public long Size;
 		public int UserId;
 		public int GroupId;
 		public EntryType Type = EntryType.Unknown;
+		public ExtendedFlagsTypes ExtendedFlags;
 
 		public String FullName { get {
 			return Path;

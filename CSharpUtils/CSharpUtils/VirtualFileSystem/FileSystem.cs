@@ -93,12 +93,14 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public void Mount(String Path, FileSystem FileSystemToMount)
 		{
-			MountedFileSystems[AbsoluteNormalizePath(Path, CurrentWorkingPath)] = FileSystemToMount;
+			String FinalPath = AbsoluteNormalizePath(Path, CurrentWorkingPath);
+			MountedFileSystems[FinalPath] = FileSystemToMount;
 		}
 
 		public void UnMount(String Path)
 		{
-			MountedFileSystems.Remove(Path);
+			String FinalPath = AbsoluteNormalizePath(Path, CurrentWorkingPath);
+			MountedFileSystems.Remove(FinalPath);
 		}
 
 		#region Public Methods
@@ -130,10 +132,15 @@ namespace CSharpUtils.VirtualFileSystem
 			NewFileSystem.ImplSetFileTime(NewPath, FileTime);
 		}
 
-		public FileSystemEntry.FileTime GetFileTime(String Path)
+		public FileSystemEntry GetFileInfo(String Path)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
-			return NewFileSystem.ImplGetFileTime(NewPath);
+			return NewFileSystem.ImplGetFileInfo(NewPath);
+		}
+
+		public FileSystemEntry.FileTime GetFileTime(String Path)
+		{
+			return this.GetFileInfo(Path).Time;
 		}
 
 		public void DeleteFile(String Path)
@@ -177,50 +184,14 @@ namespace CSharpUtils.VirtualFileSystem
 				if (MountedFileSystemPath.StartsWith(NewPath))
 				{
 					var Components = MountedFileSystemPath.Substring(NewPath.Length).TrimStart('/').Split('/');
-					/*
-					 * ::MountedFolder/sftp
-					::MountedFolder
-					::
-					::System.String[]
-					*/
-					Console.WriteLine("::" + MountedFileSystemPath);
-					Console.WriteLine("::" + NewPath);
-					Console.WriteLine("::" + Components[0]);
-					Console.WriteLine("::" + String.Join("##", Components));
 					FileSystemEntry FileSystemEntry = new FileSystemEntry(this, Components[0]);
 					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
-					List.AddLast(FileSystemEntry);
+					if (0 == List.Where((Item) => Item.Name == FileSystemEntry.Name).Count())
+					{
+						List.AddLast(FileSystemEntry);
+					}
 				}
 			}
-			/*
-			foreach (var MountedFileSystemPath in MountedFileSystems.Keys)
-			{
-				String ParentName = "";
-				String FileName = "";
-				int index = MountedFileSystemPath.LastIndexOf("/");
-				if (index == -1)
-				{
-					ParentName = "";
-					FileName = MountedFileSystemPath;
-				}
-				else
-				{
-					ParentName = MountedFileSystemPath.Substring(0, index);
-					FileName = MountedFileSystemPath.Substring(index + 1);
-				}
-				Console.WriteLine(":::(1)" + MountedFileSystemPath);
-				Console.WriteLine(":::(2)" + NewPath);
-				Console.WriteLine(":::(3)" + ParentName);
-				Console.WriteLine(":::(3)" + FileName);
-				if (NewPath == ParentName)
-				{
-					FileSystemEntry FileSystemEntry = new FileSystemEntry(this, FileName);
-					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
-					List.AddLast(FileSystemEntry);
-				}
-				//MountedFileSystem.
-			}
-			*/
 		}
 
 		public LinkedList<FileSystemEntry> FindFiles(String Path)
@@ -234,7 +205,7 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 			catch (Exception e)
 			{
-				if (List.Count == 0) throw (e);
+				if (List.Count == 0) throw (new Exception("Not a normal directory nor a virtual one", e));
 			}
 			return new LinkedList<FileSystemEntry>(List.Distinct(new FileSystemEntryNameComparer()));
 		}
@@ -248,7 +219,12 @@ namespace CSharpUtils.VirtualFileSystem
 			throw (new NotImplementedException());
 		}
 
-		virtual protected FileSystemEntry.FileTime ImplGetFileTime(String Path)
+		/*virtual protected FileSystemEntry.FileTime ImplGetFileTime(String Path)
+		{
+			throw (new NotImplementedException());
+		}*/
+
+		virtual protected FileSystemEntry ImplGetFileInfo(String Path)
 		{
 			throw (new NotImplementedException());
 		}
@@ -300,5 +276,18 @@ namespace CSharpUtils.VirtualFileSystem
 		}
 
 		#endregion
+	}
+
+	class FileSystemEntryNameComparer : IEqualityComparer<FileSystemEntry>
+	{
+		public bool Equals(FileSystemEntry x, FileSystemEntry y)
+		{
+			return x.Name == y.Name;
+		}
+
+		public int GetHashCode(FileSystemEntry obj)
+		{
+			return obj.GetHashCode();
+		}
 	}
 }

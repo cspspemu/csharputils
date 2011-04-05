@@ -12,14 +12,53 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 	 */
 	public class FtpFileSystem : RemoteFileSystem
 	{
-		public FTP Ftp = new FTP();
+		public FTP _Ftp = null;
 		public String RootPath;
+
+		public FtpFileSystem()
+			:base()
+		{
+		}
+
+		public FTP Ftp
+		{
+			get
+			{
+				// Reconnect if disconnected.
+				if ((_Ftp != null) && !(_Ftp.IsConnected))
+				{
+					_Ftp = null;
+				}
+
+				if (_Ftp == null)
+				{
+					_Ftp = new FTP();
+					_Connect();
+				}
+				return _Ftp;
+			}
+		}
+
+		public FtpFileSystem(string Host, int Port, string Username, string Password, int timeout = 10000)
+			:base (Host, Port, Username, Password, timeout)
+		{
+		}
 
 		override public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000)
 		{
-			Ftp.Connect(Host, Port, Username, Password);
-			Ftp.timeout = timeout;
-			RootPath = Ftp.GetWorkingDirectory();
+			this.Host = Host;
+			this.Port = Port;
+			this.Username = Username;
+			this.Password = Password;
+			this.timeout = timeout;
+			_Ftp = null;
+		}
+
+		protected void _Connect()
+		{
+			_Ftp.Connect(this.Host, this.Port, this.Username, this.Password);
+			_Ftp.timeout = this.timeout;
+			RootPath = _Ftp.GetWorkingDirectory();
 		}
 
 		override protected String RealPath(String Path)
@@ -37,13 +76,13 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			try
 			{
 				if (LocalFile == null) LocalFile = GetTempFile();
-				Ftp.OpenDownload(RealPath(RemoteFile), LocalFile, false);
+				Ftp.OpenDownload(RemoteFile, LocalFile, false);
 				while (Ftp.DoDownload() > 0) ;
 				return LocalFile;
 			}
 			catch (Exception e)
 			{
-				throw(new Exception("Can't download ftp file '" + RemoteFile + "' : " + e.Message, e));
+				throw (new Exception("Can't download ftp file '" + RemoteFile + "' to '" + LocalFile + "' : " + e.Message, e));
 			}
 		}
 
@@ -51,7 +90,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 		{
 			try
 			{
-				Ftp.OpenUpload(LocalFile, RealPath(RemoteFile), false);
+				Ftp.OpenUpload(LocalFile, RemoteFile, false);
 				while (Ftp.DoUpload() > 0) ;
 			}
 			catch (Exception e)
@@ -60,41 +99,28 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			}
 		}
 
-		override protected FileSystemEntry.FileTime ImplGetFileTime(String Path)
+		override protected FileSystemEntry ImplGetFileInfo(String Path)
 		{
-			FileSystemEntry.FileTime Time = new FileSystemEntry.FileTime();
-			Time.LastWriteTime = Ftp.GetFileDate(RealPath(Path));
-			return Time;
+			String CachedRealPath = RealPath(Path);
+			var Info = new FileSystemEntry(this, Path);
+			Info.Size = Ftp.GetFileSize(CachedRealPath);
+			Info.Time.LastWriteTime = Ftp.GetFileDate(CachedRealPath);
+			return Info;
 		}
 
 		protected override void ImplDeleteFile(string Path)
 		{
-			Ftp.RemoveFile(Path);
+			String CachedRealPath = RealPath(Path);
+			Ftp.RemoveFile(CachedRealPath);
 		}
 
 		protected override void ImplFindFiles(string Path, LinkedList<FileSystemEntry> Entries)
 		{
 			Ftp.ChangeDir(RealPath(Path));
-			foreach (var FtpEntry in Ftp.ListEntries())
+			foreach (var FTPEntry in Ftp.ListEntries())
 			{
-				var FileSystemEntry = new FileSystemEntry(this, Path + "/" + FtpEntry.Name);
-				//FtpEntry.
-				FileSystemEntry.Time.LastWriteTime = FtpEntry.ModifiedTime;
-				FileSystemEntry.Size = FtpEntry.Size;
-				FileSystemEntry.UserId = FtpEntry.UserId;
-				FileSystemEntry.GroupId = FtpEntry.GroupId;
-				switch (FtpEntry.Type) {
-					case FTPEntry.FileType.Directory:
-						FileSystemEntry.Type = FileSystemEntry.EntryType.Directory;
-					break;
-					case FTPEntry.FileType.Link:
-						FileSystemEntry.Type = FileSystemEntry.EntryType.Link;
-					break;
-					default:
-					case FTPEntry.FileType.File:
-						FileSystemEntry.Type = FileSystemEntry.EntryType.File;
-					break;
-				}
+				var FileSystemEntry = new FtpFileSystemEntry(this, Path + "/" + FTPEntry.Name, FTPEntry);
+
 				Entries.AddLast(FileSystemEntry);
 			}
 		}

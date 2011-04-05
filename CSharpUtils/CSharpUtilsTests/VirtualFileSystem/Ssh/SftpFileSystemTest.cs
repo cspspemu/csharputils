@@ -18,8 +18,7 @@ namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 		[ClassInitialize]
 		public static void Initialize(TestContext testContext)
 		{
-			SftpFileSystem = new SftpFileSystem();
-			SftpFileSystem.Connect("192.168.1.36", 22, "ubuntu", "ubuntu", 1000);
+			SftpFileSystem = new SftpFileSystem("192.168.1.36", 22, "ubuntu", "ubuntu", 1000);
 		}
 
 		[ClassCleanup]

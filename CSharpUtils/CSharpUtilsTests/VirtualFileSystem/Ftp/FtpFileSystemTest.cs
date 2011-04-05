@@ -21,8 +21,7 @@ namespace CSharpUtilsTests
 		[ClassInitialize]
 		public static void Initialize(TestContext testContext)
 		{
-			FtpFileSystem = new FtpFileSystem();
-			FtpFileSystem.Connect("192.168.1.36", 21, "ubuntu", "ubuntu", 1000);
+			FtpFileSystem = new FtpFileSystem("192.168.1.36", 21, "ubuntu", "ubuntu", 1000);
 		}
 
 		[ClassCleanup]

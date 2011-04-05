@@ -18,11 +18,11 @@ namespace CSharpUtils.VirtualFileSystem
 			this.FileSystem = FileSystem;
 		}
 
-		void NotImplemented()
+		void NotImplemented(string extra = "<unknown>", object info = null)
 		{
 			StackTrace stackTrace = new StackTrace();           // get call stack
 			StackFrame[] stackFrames = stackTrace.GetFrames();  // get method calls (frames)
-			Console.WriteLine("Not Implemented : " + stackFrames[1].GetMethod().Name);
+			Console.WriteLine("Not Implemented : " + stackFrames[1].GetMethod().Name + "('" + extra + "')('" + ((info != null) ? info.GetHashCode() : 0) + "')");
 		}
 
 		public static implicit operator FileSystemProxyDokanOperations(FileSystem FileSystem)
@@ -32,46 +32,88 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public int CreateFile(string filename, System.IO.FileAccess access, System.IO.FileShare share, System.IO.FileMode mode, System.IO.FileOptions options, Dokan.DokanFileInfo info)
 		{
+			try
+			{
+				info.Context = FileSystem.OpenFile(filename, mode);
+				return 0;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(" -- CreateFile Error: " + e.Message);
+				info.Context = null;
+				//return -1;
+				return 0;
+			}
+			finally
+			{
+				NotImplemented(filename, info.Context);
+			}
 			//info.Context = FileSystem.OpenFile(filename, mode);
-			NotImplemented();
-			return 0;
 		}
 
 		public int OpenDirectory(string filename, Dokan.DokanFileInfo info)
 		{
-			NotImplemented();
+			NotImplemented(filename);
 			return 0;
 		}
 
 		public int CreateDirectory(string filename, Dokan.DokanFileInfo info)
 		{
-			NotImplemented();
+			NotImplemented(filename, info.Context);
 			return -1;
 		}
 
 		public int Cleanup(string filename, Dokan.DokanFileInfo info)
 		{
-			NotImplemented();
+			info.Context = null;
+			//NotImplemented();
 			return 0;
 		}
 
 		public int CloseFile(string filename, Dokan.DokanFileInfo info)
 		{
-			NotImplemented();
+			try
+			{
+				((FileSystemFileStream)info.Context).Close();
+				return 0;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(" -- CloseFile Error: " + e.Message);
+				return 0;
+			}
+			finally
+			{
+				NotImplemented(filename, info.Context);
+			}
 			//((FileSystemFileStream)info.Context).Close();
-			return 0;
+			//return 0;
 			//NotImplemented();
 		}
 
 		public int ReadFile(string filename, byte[] buffer, ref uint readBytes, long offset, Dokan.DokanFileInfo info)
 		{
-			NotImplemented();
-			return -1;
+			try
+			{
+				var FileSystemFileStream = (FileSystemFileStream)info.Context;
+				FileSystemFileStream.Position = offset;
+				readBytes = (uint)FileSystemFileStream.Read(buffer, 0, (int)readBytes);
+				return 0;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(" -- ReadFile Error: " + e.Message);
+				return -1;
+			}
+			finally
+			{
+				NotImplemented(filename, info);
+			}
 		}
 
 		public int WriteFile(string filename, byte[] buffer, ref uint writtenBytes, long offset, Dokan.DokanFileInfo info)
 		{
-			NotImplemented();
+			NotImplemented(filename, info);
 			return -1;
 		}
 
@@ -81,18 +123,65 @@ namespace CSharpUtils.VirtualFileSystem
 			return -1;
 		}
 
+		void FillFileInformationFromFileSystemEntry(FileInformation FileInformation, FileSystemEntry FileSystemEntry)
+		{
+			FileInformation.Attributes = System.IO.FileAttributes.Normal;
+			if (FileSystemEntry.Type.HasFlag(FileSystemEntry.EntryType.Directory))
+			{
+				FileInformation.Attributes |= FileAttributes.Directory;
+			}
+
+			if (FileSystemEntry.ExtendedFlags.HasFlag(FileSystemEntry.ExtendedFlagsTypes.Compressed))
+			{
+				FileInformation.Attributes |= FileAttributes.Compressed;
+			}
+
+			if (FileSystemEntry.ExtendedFlags.HasFlag(FileSystemEntry.ExtendedFlagsTypes.Hidden))
+			{
+				FileInformation.Attributes |= FileAttributes.Hidden;
+			}
+
+			if (FileSystemEntry.ExtendedFlags.HasFlag(FileSystemEntry.ExtendedFlagsTypes.Encrypted))
+			{
+				FileInformation.Attributes |= FileAttributes.Encrypted;
+			}
+
+			if (FileSystemEntry.ExtendedFlags.HasFlag(FileSystemEntry.ExtendedFlagsTypes.System))
+			{
+				FileInformation.Attributes |= FileAttributes.System;
+			}
+
+			if (FileSystemEntry.ExtendedFlags.HasFlag(FileSystemEntry.ExtendedFlagsTypes.Archive))
+			{
+				FileInformation.Attributes |= FileAttributes.Archive;
+			}
+
+			if (FileSystemEntry.ExtendedFlags.HasFlag(FileSystemEntry.ExtendedFlagsTypes.Device))
+			{
+				FileInformation.Attributes |= FileAttributes.Device;
+			}
+
+			FileInformation.Length = FileSystemEntry.Size;
+			FileInformation.FileName = FileSystemEntry.Name;
+			FileInformation.CreationTime = FileSystemEntry.Time.CreationTime;
+			FileInformation.LastWriteTime = FileSystemEntry.Time.LastWriteTime;
+			FileInformation.LastAccessTime = FileSystemEntry.Time.LastAccessTime;
+		}
+
 		public int GetFileInformation(string filename, Dokan.FileInformation fileinfo, Dokan.DokanFileInfo info)
 		{
-			/*
-			fileinfo.Length = 1000;
-			fileinfo.Attributes = FileAttributes.Normal;
-			fileinfo.CreationTime = DateTime.Now;
-			fileinfo.LastWriteTime = DateTime.Now;
-			fileinfo.LastAccessTime = DateTime.Now;
-			NotImplemented();
-			return 0;
-			*/
-			return -1;
+			NotImplemented(filename, info.Context);
+			try
+			{
+				var FileSystemEntry = FileSystem.GetFileInfo(filename);
+				FillFileInformationFromFileSystemEntry(fileinfo, FileSystemEntry);
+				return 0;
+			}
+			catch (Exception e)
+			{
+				return -1;
+				//return 0;
+			}
 		}
 
 		public int FindFiles(string filename, LinkedList<FileInformation> files, Dokan.DokanFileInfo info)
@@ -102,19 +191,25 @@ namespace CSharpUtils.VirtualFileSystem
 			foreach (var Item in FileSystem.FindFiles(filename))
 			{
 				var FileInformation = new FileInformation();
-				FileInformation.Attributes = FileAttributes.Normal;
-				if (Item.Type.HasFlag(FileSystemEntry.EntryType.Directory))
-				{
-					FileInformation.Attributes |= FileAttributes.Directory;
-				}
-				//FileInformation.CreationTime = Item.Time.CreationTime;
-				//FileInformation.LastAccessTime = Item.Time.LastAccessTime;
-				//FileInformation.LastWriteTime = Item.Time.LastWriteTime;
+				FillFileInformationFromFileSystemEntry(FileInformation, Item);
+
+				//FileInformation.CreationTime.
+
+				/*
+				Console.WriteLine("------------------------------------------------");
+				Console.WriteLine("CreationTime  : " + FileInformation.CreationTime);
+				Console.WriteLine("LastWriteTime : " + FileInformation.LastWriteTime);
+				Console.WriteLine("LastAccessTime: " + FileInformation.LastAccessTime);
+				Console.WriteLine("------------------------------------------------");
+				*/
+
+				//var AvailableDate = Item.Time.CreationTime ?? Item.Time.LastWriteTime ?? Item.Time.LastAccessTime;
+
+				/*
 				FileInformation.CreationTime = DateTime.Now;
 				FileInformation.LastAccessTime = DateTime.Now;
 				FileInformation.LastWriteTime = DateTime.Now;
-				FileInformation.FileName = Item.Name;
-				FileInformation.Length = Item.Size;
+				*/
 				//FileInformation.Length = 10001;
 				//Console.WriteLine(Item);
 				files.AddLast(FileInformation);

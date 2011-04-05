@@ -14,6 +14,25 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			: base(FileSystem, Path)
 		{
 			this.FileSystemInfo = FileSystemInfo;
+
+			if (FileSystemInfo.Attributes.HasFlag(FileAttributes.Directory))
+			{
+				this.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
+			}
+			else
+			{
+				this.Type = VirtualFileSystem.FileSystemEntry.EntryType.File;
+			}
+
+			this.Time.CreationTime = FileSystemInfo.CreationTime;
+			this.Time.LastWriteTime = FileSystemInfo.LastWriteTime;
+			this.Time.LastAccessTime = FileSystemInfo.LastAccessTime;
+
+			if (FileSystemInfo is FileInfo)
+			{
+				var ItemFile = (FileInfo)FileSystemInfo;
+				this.Size = ItemFile.Length;
+			}
 		}
 	}
 }

@@ -1,8 +1,13 @@
 using System;
 using Org.Mentalis.Security.Cryptography;
+using System.Security.Cryptography;
 
-internal class TestApp {	
+public class TestApp {	
 	public static void Main(string[] args) {
+		ECDiffieHellmanCng alice = new ECDiffieHellmanCng();
+		//alice.DeriveKeyMaterial(
+		//CngKey.Import(
+
 		// create a new DH instance
 		DiffieHellman dh1 = new DiffieHellmanManaged();
 		// export the public parameters of the first DH instance

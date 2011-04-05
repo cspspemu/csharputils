@@ -22,22 +22,17 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return (RootPath + "/" + Path).Replace('/', '\\');
 		}
 
-		override protected FileSystemEntry.FileTime ImplGetFileTime(String Path)
+		override protected FileSystemEntry ImplGetFileInfo(String Path)
 		{
 			String CachedRealPath = RealPath(Path);
-			FileSystemEntry.FileTime FileTime;
-			FileSystemInfo FileInfo = new FileInfo(CachedRealPath);
-			if (!FileInfo.Exists)
-			{
-				if (!Directory.Exists(CachedRealPath))
-				{
-					throw (new FileNotFoundException("File '" + CachedRealPath + "' doesn't exists", Path));
-				}
+			FileSystemInfo FileSystemInfo;
+			if (Directory.Exists(CachedRealPath)) {
+				FileSystemInfo = new DirectoryInfo(CachedRealPath);
+			} else {
+				FileSystemInfo = new FileInfo(CachedRealPath);
 			}
-			FileTime.CreationTime   = FileInfo.CreationTime;
-			FileTime.LastAccessTime = FileInfo.LastAccessTime;
-			FileTime.LastWriteTime  = FileInfo.LastWriteTime;
-			return FileTime;
+			
+			return new LocalFileSystemEntry(this, Path, FileSystemInfo);
 		}
 
 		override protected void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
@@ -59,20 +54,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 				}
 
 				var FileSystemEntry = new LocalFileSystemEntry(this, Path + "/" + Item.Name, Item);
-				if (Item.Attributes.HasFlag(FileAttributes.Directory))
-				{
-					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
-				}
-				else
-				{
-					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.File;
-				}
 
-				if (Item is FileInfo)
-				{
-					var ItemFile = (FileInfo)Item;
-					FileSystemEntry.Size = ItemFile.Length;
-				}
 
 				//FileSystemEntry.Size = File.get
 				//Item.Attributes == FileAttributes.
@@ -91,7 +73,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 
 		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
 		{
-			var Stream = File.Open(RealPath(FileName), FileMode);
+			var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.Read, FileShare.ReadWrite);
 			return new FileSystemFileStreamStream(this, Stream);
 		}
 
