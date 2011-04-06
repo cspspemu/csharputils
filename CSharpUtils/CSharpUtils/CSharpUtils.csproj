@@ -281,6 +281,7 @@
     <Compile Include="VirtualFileSystem\Ssh\SftpFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Utils\Synchronizer.cs" />
     <Compile Include="VirtualFileSystem\Zip\ZipFileSystem.cs" />
+    <Compile Include="Wildcard.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Net\DiffieHellman\license.txt" />

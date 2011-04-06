@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using CSharpUtils.VirtualFileSystem;
+using System.Linq;
 
 namespace CSharpUtilsTests
 {
@@ -42,10 +43,16 @@ namespace CSharpUtilsTests
 		[TestMethod]
 		public void FindFilesTest()
 		{
-			foreach (var Item in LocalFileSystem.FindFiles("/Mounted"))
-			{
-				//Console.WriteLine(Item);
-			}
+			Assert.IsTrue(LocalFileSystem.FindFiles("/Mounted").ContainsFileName("DirectoryOnMountedFileSystem"));
+		}
+
+		[TestMethod]
+		public void FindFilesWildcardTest()
+		{
+			var FoundFiles = LocalFileSystem.FindFiles("/Mounted/DirectoryOnMountedFileSystem", "*.dat");
+			Assert.IsTrue(FoundFiles.ContainsFileName("3.dat"));
+			Assert.IsTrue(FoundFiles.ContainsFileName("4.dat"));
+			Assert.IsFalse(FoundFiles.ContainsFileName("1.txt"));
 		}
 
 		[TestMethod]

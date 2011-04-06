@@ -209,7 +209,12 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 			return new LinkedList<FileSystemEntry>(List.Distinct(new FileSystemEntryNameComparer()));
 		}
-		
+
+		public LinkedList<FileSystemEntry> FindFiles(String Path, Wildcard Wildcard)
+		{
+			return new LinkedList<FileSystemEntry>(FindFiles(Path).Where((Entry) => Wildcard.IsMatch(Entry.Name)));
+		}
+
 		#endregion
 
 		#region Implementations
@@ -278,7 +283,7 @@ namespace CSharpUtils.VirtualFileSystem
 		#endregion
 	}
 
-	class FileSystemEntryNameComparer : IEqualityComparer<FileSystemEntry>
+	public class FileSystemEntryNameComparer : IEqualityComparer<FileSystemEntry>
 	{
 		public bool Equals(FileSystemEntry x, FileSystemEntry y)
 		{
@@ -288,6 +293,18 @@ namespace CSharpUtils.VirtualFileSystem
 		public int GetHashCode(FileSystemEntry obj)
 		{
 			return obj.GetHashCode();
+		}
+	}
+
+	static public class FileSystemUtils
+	{
+		static public bool ContainsFileName(this IEnumerable<FileSystemEntry> FileSystemEntry, String FileName)
+		{
+			foreach (var Item in FileSystemEntry)
+			{
+				if (Item.Name == FileName) return true;
+			}
+			return false;
 		}
 	}
 }
