@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace CSharpUtils.VirtualFileSystem
 {
@@ -210,9 +211,14 @@ namespace CSharpUtils.VirtualFileSystem
 			return new LinkedList<FileSystemEntry>(List.Distinct(new FileSystemEntryNameComparer()));
 		}
 
+		public LinkedList<FileSystemEntry> FindFiles(String Path, Regex Regex)
+		{
+			return new LinkedList<FileSystemEntry>(FindFiles(Path).Where((Entry) => Regex.IsMatch(Entry.Name)));
+		}
+
 		public LinkedList<FileSystemEntry> FindFiles(String Path, Wildcard Wildcard)
 		{
-			return new LinkedList<FileSystemEntry>(FindFiles(Path).Where((Entry) => Wildcard.IsMatch(Entry.Name)));
+			return FindFiles(Path, (Regex)Wildcard);
 		}
 
 		#endregion
