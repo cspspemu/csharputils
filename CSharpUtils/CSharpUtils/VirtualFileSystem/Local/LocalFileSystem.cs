@@ -71,9 +71,16 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			Directory.CreateDirectory(RealPath(Path));
 		}
 
+		protected override void ImplDeleteFile(string Path)
+		{
+			File.Delete(RealPath(Path));
+		}
+
+
 		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
 		{
-			var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.Read, FileShare.ReadWrite);
+			//var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.Read, FileShare.ReadWrite);
+			var Stream = File.Open(RealPath(FileName), FileMode);
 			return new FileSystemFileStreamStream(this, Stream);
 		}
 

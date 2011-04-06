@@ -312,5 +312,16 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 			return false;
 		}
+
+		static public void CopyFile(this FileSystem FileSystem, String SourcePath, String DestinationPath)
+		{
+			var SourceStream = FileSystem.OpenFile(SourcePath, FileMode.Open);
+			var DestinationStream = FileSystem.OpenFile(DestinationPath, FileMode.Create);
+
+			SourceStream.CopyTo(DestinationStream);
+
+			DestinationStream.Close();
+			SourceStream.Close();
+		}
 	}
 }

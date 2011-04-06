@@ -56,6 +56,32 @@ namespace CSharpUtilsTests
 		}
 
 		[TestMethod]
+		public void CopyFileTest()
+		{
+			var FoundFiles = LocalFileSystem.FindFiles("/Mounted/DirectoryOnMountedFileSystem", "*.dat");
+
+			var SourcePath = "/Mounted/DirectoryOnMountedFileSystem/1.txt";
+			var DestinationPath = "/Mounted/DirectoryOnMountedFileSystem/10.bin";
+
+			try
+			{
+				LocalFileSystem.DeleteFile(DestinationPath);
+			}
+			catch
+			{
+			}
+
+			LocalFileSystem.CopyFile(SourcePath, DestinationPath);
+
+			Assert.AreEqual(
+				LocalFileSystem.GetFileInfo(SourcePath).Size,
+				LocalFileSystem.GetFileInfo(DestinationPath).Size
+			);
+
+			LocalFileSystem.DeleteFile(DestinationPath);
+		}
+
+		[TestMethod]
 		public void MountedOpenFileTest()
 		{
 			var Stream = LocalFileSystem.OpenFile("/Mounted/FileInMountedFileSystem.txt", FileMode.Open);
