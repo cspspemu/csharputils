@@ -106,6 +106,8 @@ namespace CSharpUtils.VirtualFileSystem
 
 		#region Public Methods
 		//public FileSystemFileStream CreateFile(String FileName, uint DesiredAccess, uint ShareMode, uint CreationDisposition, uint FlagsAndAttributes) {
+
+		// http://docs.python.org/whatsnew/2.6.html#pep-343-the-with-statement
 		public FileSystemFileStream OpenFile(String FileName, FileMode FileMode)
 		{
 			FileSystem NewFileSystem; String NewFileName; Access(FileName, out NewFileSystem, out NewFileName);
@@ -313,15 +315,44 @@ namespace CSharpUtils.VirtualFileSystem
 			return false;
 		}
 
+		static public bool ExistsFile(this FileSystem FileSystem, String Path)
+		{
+			try
+			{
+				FileSystem.GetFileInfo(Path);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		static public void CopyFile(this FileSystem FileSystem, String SourcePath, String DestinationPath)
 		{
-			var SourceStream = FileSystem.OpenFile(SourcePath, FileMode.Open);
-			var DestinationStream = FileSystem.OpenFile(DestinationPath, FileMode.Create);
+			using (var SourceStream = FileSystem.OpenFile(SourcePath, FileMode.Open))
+			{
+				using (var DestinationStream = FileSystem.OpenFile(DestinationPath, FileMode.Create))
+				{
+					SourceStream.CopyTo(DestinationStream);
+				}
+			}
+		}
 
-			SourceStream.CopyTo(DestinationStream);
+		static public void WriteFile(this FileSystem FileSystem, String Path, byte[] Data)
+		{
+			using (var FileStream = FileSystem.OpenFile(Path, FileMode.Create))
+			{
+				FileStream.Write(Data, 0, Data.Length);
+			}
+		}
 
-			DestinationStream.Close();
-			SourceStream.Close();
+		static public byte[] ReadFile(this FileSystem FileSystem, String Path)
+		{
+			using (var FileStream = FileSystem.OpenFile(Path, FileMode.Open))
+			{
+				return FileStream.ReadAll();
+			}
 		}
 	}
 }

@@ -6,9 +6,9 @@ using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem.Local
 {
-	public class LocalFileSystem : FileSystem
+	public class LocalFileSystem : FileSystem, IDisposable
 	{
-		String RootPath;
+		protected String RootPath;
 
 		override protected bool CaseInsensitiveFileSystem { get { return true; } }
 
@@ -101,5 +101,10 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			base.ImplCloseFile(FileStream);
 		}
 		 * */
+
+		public void Dispose()
+		{
+			Shutdown();
+		}
 	}
 }

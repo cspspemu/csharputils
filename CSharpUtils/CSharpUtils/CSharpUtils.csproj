@@ -276,6 +276,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystemEntry.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFileStreamStream.cs" />
+    <Compile Include="VirtualFileSystem\Local\LocalTemporalFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\Memory\MemoryFileSystem.cs" />
     <Compile Include="VirtualFileSystem\RemoteFileSystem.cs" />
     <Compile Include="VirtualFileSystem\RemoteFileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\Ssh\SftpFileSystem.cs" />
