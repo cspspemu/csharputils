@@ -17,7 +17,7 @@ namespace CSharpUtils.Process.Impl
 	///		<li>http://en.wikipedia.org/wiki/Setcontext</li>
 	///	</ul>
 	/// </see>
-	unsafe public class ProcessBaseImplPcontext
+	unsafe public class ProcessBaseImplUcontext
 	{
 		struct ucontext_t {
 			fixed int ContextSize[100];

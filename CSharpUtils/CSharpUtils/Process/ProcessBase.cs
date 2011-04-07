@@ -12,12 +12,42 @@ namespace CSharpUtils.Process
 		IProcessBaseImpl Impl;
 		private bool Removed;
 
+		/*static {
+			OperatingSystem os = Environment.OSVersion;
+			PlatformID pid = os.Platform;
+		}*/
+
+		static Type ProcessBaseImplType;
+
+		static ProcessBase()
+		{
+			OperatingSystem os = Environment.OSVersion;
+			PlatformID pid = os.Platform;
+			//Console.WriteLine(pid);
+			switch (pid)
+			{
+				case PlatformID.Unix:
+				case PlatformID.MacOSX:
+					//GetType
+					ProcessBaseImplType = typeof(ProcessBaseImplUcontext);
+				break;
+				case PlatformID.Win32Windows:
+				case PlatformID.Win32S:
+				case PlatformID.Win32NT:
+					ProcessBaseImplType = typeof(ProcessBaseImplFibers);
+				break;
+				case PlatformID.Xbox:
+				default:
+					ProcessBaseImplType = typeof(ProcessBaseImplThreads);
+				break;
+			}
+		}
+
 		public ProcessBase()
 		{
 			//Console.WriteLine(this + " : " + parent);
 
-			Impl = new ProcessBaseImplFibers();
-			//Impl = new ProcessBaseImplThreads(this);
+			Impl = (IProcessBaseImpl)Activator.CreateInstance(ProcessBaseImplType);
 			State = State.Started;
 
 			Impl.Init(() =>

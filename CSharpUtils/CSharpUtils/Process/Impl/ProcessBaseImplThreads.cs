@@ -12,12 +12,12 @@ namespace CSharpUtils.Process.Impl
 		static public Thread mainThread;
 		Semaphore Semaphore;
 		Thread currentThread;
-		Object Parent;
+		/*Object Parent;
 
 		public ProcessBaseImplThreads(Object Parent)
 		{
 			this.Parent = Parent;
-		}
+		}*/
 
 		public void Init(RunDelegate Delegate)
 		{
