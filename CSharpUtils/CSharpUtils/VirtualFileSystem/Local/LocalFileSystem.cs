@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem.Local
 {
-	public class LocalFileSystem : FileSystem, IDisposable
+	public class LocalFileSystem : ImplFileSystem
 	{
 		protected String RootPath;
 
@@ -22,7 +22,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return (RootPath + "/" + Path).Replace('/', '\\');
 		}
 
-		override protected FileSystemEntry ImplGetFileInfo(String Path)
+		override internal FileSystemEntry ImplGetFileInfo(String Path)
 		{
 			String CachedRealPath = RealPath(Path);
 			FileSystemInfo FileSystemInfo;
@@ -35,7 +35,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return new LocalFileSystemEntry(this, Path, FileSystemInfo);
 		}
 
-		override protected void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
+		override internal void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
 		{
 			String CachedRealPath = RealPath(Path);
 
@@ -66,18 +66,18 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			}
 		}
 
-		override protected void ImplCreateDirectory(String Path, int Mode = 0777)
+		override internal void ImplCreateDirectory(String Path, int Mode = 0777)
 		{
 			Directory.CreateDirectory(RealPath(Path));
 		}
 
-		protected override void ImplDeleteFile(string Path)
+		override internal void ImplDeleteFile(string Path)
 		{
 			File.Delete(RealPath(Path));
 		}
 
 
-		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
+		override internal FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
 		{
 			//var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.Read, FileShare.ReadWrite);
 			var Stream = File.Open(RealPath(FileName), FileMode);
@@ -101,10 +101,5 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			base.ImplCloseFile(FileStream);
 		}
 		 * */
-
-		public void Dispose()
-		{
-			Shutdown();
-		}
 	}
 }

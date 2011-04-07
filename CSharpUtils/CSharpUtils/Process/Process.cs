@@ -8,41 +8,14 @@ using System.Runtime.InteropServices;
 
 namespace CSharpUtils.Process
 {
-    abstract class Process
+	abstract public class Process : ProcessBase
     {
-        [DllImport("kernel32.dll")]
-        extern static IntPtr ConvertThreadToFiber(int fiberData);
-
-        [DllImport("kernel32.dll")]
-        extern static IntPtr CreateFiber(int size, System.Delegate function, int handle);
-
-        [DllImport("kernel32.dll")]
-        extern static IntPtr SwitchToFiber(IntPtr fiberAddress);
-
-        [DllImport("kernel32.dll")]
-        extern static void DeleteFiber(IntPtr fiberAddress);
-
-        [DllImport("kernel32.dll")]
-        extern static int GetLastError();
-
-        public enum State
-        {
-            Started,
-            Running,
-            Ended,
-        }
-
         static protected Process currentExecutingProcess = null;
 
         protected int priority = 0;
         protected double x = 0, y = 0, z = 0;
         protected Process parent = null;
         protected LinkedList<Process> childs;
-
-        public State state { private set; get; }
-        private static IntPtr mainFiberHandle = IntPtr.Zero;
-        private IntPtr fiberHandle;
-        private delegate void RunDelegate();
 
         static private LinkedList<Process> _allProcesses = new LinkedList<Process>();
 
@@ -58,7 +31,7 @@ namespace CSharpUtils.Process
         {
             foreach (var process in allProcesses)
             {
-                if (process.state == State.Ended) process._remove();
+                if (process.State == State.Ended) process._Remove();
             }
         }
 
@@ -74,13 +47,15 @@ namespace CSharpUtils.Process
 
         public void _ExecuteProcess()
         {
-            if (state == State.Ended) return;
+            if (State == State.Ended) return;
 
             currentExecutingProcess = this;
 
             this._ExecuteProcessBefore();
-            this.SwitchTo();
-            this._ExecuteProcessAfter();
+			//Console.WriteLine("<Execute " + this + ">");
+			this.SwitchTo();
+			//Console.WriteLine("</Execute " + this + ">");
+			this._ExecuteProcessAfter();
         }
 
         protected void _DrawProcessBefore()
@@ -105,7 +80,7 @@ namespace CSharpUtils.Process
             //Console.WriteLine(this);
         }
 
-        public Process()
+        public Process() : base()
         {
             _allProcesses.AddLast(this);
             childs = new LinkedList<Process>();
@@ -114,54 +89,21 @@ namespace CSharpUtils.Process
             {
                 parent.childs.AddLast(this);
             }
-            //Console.WriteLine(this + " : " + parent);
-            state = State.Started;
-            if (mainFiberHandle == IntPtr.Zero)
-            {
-                mainFiberHandle = ConvertThreadToFiber(0);
-            }
-            fiberHandle = CreateFiber(500, new RunDelegate(() =>
-            {
-                state = State.Running;
-                main();
-                state = State.Ended;
-                Yield();
-            }), 0);
         }
 
-        ~Process()
-        {
-            _remove();
-        }
+		~Process()
+		{
+			_Remove();
+		}
 
-        private void _remove()
-        {
-            state = State.Ended;
-            if (parent != null)
-            {
-                parent.childs.Remove(this);
-            }
-            _allProcesses.Remove(this);
-            if (fiberHandle != IntPtr.Zero)
-            {
-                DeleteFiber(fiberHandle);
-                fiberHandle = IntPtr.Zero;
-            }
-        }
-
-        public void SwitchTo()
-        {
-            if (state != State.Ended)
-            {
-                SwitchToFiber(fiberHandle);
-            }
-        }
-
-        protected void Yield(int count = 1)
-        {
-            for (int n = 0; n < count; n++) SwitchToFiber(mainFiberHandle);
-        }
-
-        abstract protected void main();
+		override protected void _Remove()
+		{
+			if (parent != null)
+			{
+				parent.childs.Remove(this);
+			}
+			_allProcesses.Remove(this);
+			base._Remove();
+		}
     }
 }

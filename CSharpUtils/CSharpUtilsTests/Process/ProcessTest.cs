@@ -20,12 +20,13 @@ namespace CSharpUtilsTests
             MyProcess.DrawedHandler OnDrawed = delegate(object sender, EventArgs e)
             {
                 var de = ((DrawedEventArgs)e);
+				//Console.WriteLine(Output);
                 Output.AddLast(Convert.ToString(de.n));
             };
 
             f1.Drawed += new MyProcess.DrawedHandler(OnDrawed);
             f2.Drawed += new MyProcess.DrawedHandler(OnDrawed);
-            while (mainProcess.Alive)
+			while (mainProcess.State != State.Ended)
             {
                 Output.AddLast("[");
                 //Output.AddLast(String.Join(",", Process.allProcesses));
@@ -36,7 +37,7 @@ namespace CSharpUtilsTests
                 Output.AddLast("]");
             }
             Assert.AreEqual(
-                "[,1,-1,],[,2,-2,],[,3,-3,],[,4,-4,],[,3,-3,],[,2,-2,],[,1,-1,],[,0,0,],[,-1,1,],[,-2,2,],[,-3,3,],[,-4,4,],[,-4,4,]",
+                "[,1,-1,],[,2,-2,],[,3,-3,],[,4,-4,],[,3,-3,],[,2,-2,],[,1,-1,],[,0,0,],[,-1,1,],[,-2,2,],[,-3,3,],[,-4,4,],[,-4,4,],[,]",
                 String.Join(",", Output)
             );
             //Console.ReadKey();

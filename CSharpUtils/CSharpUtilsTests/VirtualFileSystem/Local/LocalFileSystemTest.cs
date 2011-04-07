@@ -94,8 +94,8 @@ namespace CSharpUtilsTests
 		[TestMethod]
 		public void MountedRecursiveTest()
 		{
-			var FileSystem1 = new FileSystem();
-			var FileSystem2 = new FileSystem();
+			var FileSystem1 = new ImplFileSystem();
+			var FileSystem2 = new ImplFileSystem();
 			FileSystem1.Mount("/Mounted1", FileSystem2);
 			FileSystem2.Mount("/Mounted2/Mounted/test", LocalFileSystem);
 			FileSystem1.GetFileTime("/Mounted1/Mounted2/Mounted/test/Mounted/../../test/Mounted/FileInMountedFileSystem.txt");

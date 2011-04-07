@@ -97,7 +97,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			}
 		}
 
-		override protected FileSystemEntry ImplGetFileInfo(String Path)
+		override internal FileSystemEntry ImplGetFileInfo(String Path)
 		{
 			var FileSystemEntry = new FileSystemEntry(this, Path);
 			var stat = csftp.lstat(RealPath(Path));
@@ -108,7 +108,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			return FileSystemEntry;
 		}
 
-		override protected void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
+		override internal void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
 		{
 			foreach (var i in csftp.ls(RealPath(Path)))
 			{

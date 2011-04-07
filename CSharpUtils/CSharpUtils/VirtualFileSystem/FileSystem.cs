@@ -10,7 +10,7 @@ namespace CSharpUtils.VirtualFileSystem
 {
 	// http://msdn.microsoft.com/en-us/library/system.io.isolatedstorage.isolatedstoragefile.aspx
 	// http://vfs.codeplex.com/
-	public class FileSystem
+	abstract public class FileSystem : IDisposable
 	{
 		protected SortedDictionary<String, FileSystem> MountedFileSystems = new SortedDictionary<string, FileSystem>();
 
@@ -227,68 +227,24 @@ namespace CSharpUtils.VirtualFileSystem
 
 		#region Implementations
 
-		virtual protected void ImplSetFileTime(String Path, FileSystemEntry.FileTime FileTime)
-		{
-			throw (new NotImplementedException());
-		}
-
-		/*virtual protected FileSystemEntry.FileTime ImplGetFileTime(String Path)
-		{
-			throw (new NotImplementedException());
-		}*/
-
-		virtual protected FileSystemEntry ImplGetFileInfo(String Path)
-		{
-			throw (new NotImplementedException());
-		}
-
-		virtual protected void ImplDeleteFile(String Path)
-		{
-			throw (new NotImplementedException());
-		}
-
-		virtual protected void ImplDeleteDirectory(String Path)
-		{
-			throw (new NotImplementedException());
-		}
-
-		virtual protected void ImplMoveFile(String ExistingFileName, String NewFileName, bool ReplaceExisiting)
-		{
-			throw (new NotImplementedException());
-		}
-
-		virtual protected void ImplFindFiles(String Path, LinkedList<FileSystemEntry> List)
-		{
-			throw (new NotImplementedException());
-		}
-
-		//virtual protected FileSystemFileStream ImplCreateFile(String FileName, uint DesiredAccess, uint ShareMode, uint CreationDisposition, uint FlagsAndAttributes)
-		virtual protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
-		{
-			throw (new NotImplementedException());
-		}
-
-		virtual protected void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			throw (new NotImplementedException());
-		}
-
-		virtual protected int ImplReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			throw (new NotImplementedException());
-		}
-
-		virtual protected void ImplCloseFile(FileSystemFileStream FileStream)
-		{
-			//throw (new NotImplementedException());
-		}
-
-		virtual protected void ImplCreateDirectory(String Path, int Mode = 0777)
-		{
-			throw (new NotImplementedException());
-		}
+		abstract internal void ImplSetFileTime(String Path, FileSystemEntry.FileTime FileTime);
+		abstract internal FileSystemEntry ImplGetFileInfo(String Path);
+		abstract internal void ImplDeleteFile(String Path);
+		abstract internal void ImplDeleteDirectory(String Path);
+		abstract internal void ImplMoveFile(String ExistingFileName, String NewFileName, bool ReplaceExisiting);
+		abstract internal void ImplFindFiles(String Path, LinkedList<FileSystemEntry> List);
+		abstract internal FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode);
+		abstract internal void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
+		abstract internal int ImplReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
+		abstract internal void ImplCloseFile(FileSystemFileStream FileStream);
+		abstract internal void ImplCreateDirectory(String Path, int Mode = 0777);
 
 		#endregion
+
+		public void Dispose()
+		{
+			Shutdown();
+		}
 	}
 
 	public class FileSystemEntryNameComparer : IEqualityComparer<FileSystemEntry>

@@ -43,10 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DokanTest.cs" />
+    <Compile Include="ProcessTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CSharpUtilsTests\CSharpUtilsTests.csproj">
+      <Project>{1ED2F70F-882E-4E15-8604-AFA2E00F3A17}</Project>
+      <Name>CSharpUtilsTests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
       <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
       <Name>CSharpUtils</Name>

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSharpUtils.VirtualFileSystem.Zip
 {
-	class ZipFileSystem : FileSystem
+	class ZipFileSystem : ImplFileSystem
 	{
 		String ZipFilePath;
 

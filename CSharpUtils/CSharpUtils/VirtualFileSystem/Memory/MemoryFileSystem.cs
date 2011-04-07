@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem.Memory
 {
-	class MemoryFileSystem : FileSystem
+	class MemoryFileSystem : ImplFileSystem
 	{
 		//Dictionary<String, FileSystemFileStream> Files;
 

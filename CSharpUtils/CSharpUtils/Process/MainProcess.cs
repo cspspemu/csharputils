@@ -5,14 +5,14 @@ using System.Text;
 
 namespace CSharpUtils.Process
 {
-    class MainProcess : Process
+    public class MainProcess : Process
     {
         public MainProcess()
         {
             currentExecutingProcess = this;
         }
 
-        public bool Alive
+        private bool Alive
         {
             get
             {

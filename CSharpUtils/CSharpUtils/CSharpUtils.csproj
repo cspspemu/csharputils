@@ -62,6 +62,10 @@
     <Compile Include="Net\DiffieHellman\TestApp.cs" />
     <Compile Include="Net\FTP.cs" />
     <Compile Include="Net\FtpClient.cs" />
+    <Compile Include="Process\Impl\IProcessBaseImpl.cs" />
+    <Compile Include="Process\Impl\ProcessBaseImplFibers.cs" />
+    <Compile Include="Process\Impl\ProcessBaseImplPcontext.cs" />
+    <Compile Include="Process\Impl\ProcessBaseImplThreads.cs" />
     <Compile Include="Process\MainProcess.cs" />
     <Compile Include="Process\Process.cs" />
     <Compile Include="Net\Security\Certificates\Certificate.cs" />
@@ -259,6 +263,9 @@
     <Compile Include="Net\SharpSSH\Streams\PipedOutputStream.cs" />
     <Compile Include="Net\SharpSSH\Streams\PipedStream.cs" />
     <Compile Include="Net\SharpSSH\Streams\ProtectedConsoleStream.cs" />
+    <Compile Include="Process\ProcessBase.cs" />
+    <Compile Include="Process\RunDelegate.cs" />
+    <Compile Include="Process\State.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
@@ -270,6 +277,7 @@
     <Compile Include="VirtualFileSystem\FileSystemProxyDokanOperations.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemEntry.cs" />
+    <Compile Include="VirtualFileSystem\ImplFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystem.cs" />
     <Compile Include="VirtualFileSystem\FileSystem.cs" />
     <Compile Include="VirtualFileSystem\FileSystemEntry.cs" />
@@ -278,6 +286,8 @@
     <Compile Include="VirtualFileSystem\FileSystemFileStreamStream.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalTemporalFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Memory\MemoryFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\ProxyFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\ProxyReadOnlyFilesystem.cs" />
     <Compile Include="VirtualFileSystem\RemoteFileSystem.cs" />
     <Compile Include="VirtualFileSystem\RemoteFileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\Ssh\SftpFileSystem.cs" />

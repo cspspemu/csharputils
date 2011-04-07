@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
 {
-	abstract public class RemoteFileSystem : FileSystem
+	abstract public class RemoteFileSystem : ImplFileSystem
 	{
 		protected string Host;
 		protected int Port;
@@ -49,7 +49,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		abstract public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000);
 
-		protected override FileSystemFileStream ImplOpenFile(string FileName, System.IO.FileMode FileMode)
+		override internal FileSystemFileStream ImplOpenFile(string FileName, System.IO.FileMode FileMode)
 		{
 			return new RemoteFileSystemFileStream(this, RealPath(FileName), FileMode);
 		}

@@ -99,7 +99,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			}
 		}
 
-		override protected FileSystemEntry ImplGetFileInfo(String Path)
+		override internal FileSystemEntry ImplGetFileInfo(String Path)
 		{
 			String CachedRealPath = RealPath(Path);
 			var Info = new FileSystemEntry(this, Path);
@@ -108,13 +108,13 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			return Info;
 		}
 
-		protected override void ImplDeleteFile(string Path)
+		override internal void ImplDeleteFile(string Path)
 		{
 			String CachedRealPath = RealPath(Path);
 			Ftp.RemoveFile(CachedRealPath);
 		}
 
-		protected override void ImplFindFiles(string Path, LinkedList<FileSystemEntry> Entries)
+		override internal void ImplFindFiles(string Path, LinkedList<FileSystemEntry> Entries)
 		{
 			Ftp.ChangeDir(RealPath(Path));
 			foreach (var FTPEntry in Ftp.ListEntries())
@@ -125,7 +125,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			}
 		}
 
-		override protected void ImplCreateDirectory(String Path, int Mode = 0777)
+		override internal void ImplCreateDirectory(String Path, int Mode = 0777)
 		{
 			Ftp.MakeDir(Path);
 			//Directory.CreateDirectory(Path);
