@@ -10,7 +10,7 @@ namespace CSharpPspEmulator
 	{
 		static void Main(string[] args)
 		{
-			var Registers = new Registers();
+			var Registers = new RegistersCpu();
 			var Memory = new Memory();
 			var Cpu = new Cpu();
 			var CpuState = new CpuState(Registers, Cpu, Memory);

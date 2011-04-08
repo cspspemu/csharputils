@@ -11,9 +11,22 @@ namespace CSharpPspEmulator.Core
 
 	public sealed class InstructionAttribute : Attribute
 	{
-		public enum AddressType {
-			None,
-		}
+        public enum AddressType
+        {
+            None,
+            S16,
+            S26,
+            Register,
+        }
+
+        public enum InstructionType
+        {
+            Normal,
+            PSP,
+            Branch,
+            JumpAndLink,
+            Jump
+        }
 
 		public MethodInfo MethodInfo;
 		public ExecutionDelegate Execute;
@@ -25,6 +38,7 @@ namespace CSharpPspEmulator.Core
 			}
 		}
 		readonly public String Format;
+        readonly public InstructionType _InstructionType;
 		readonly public AddressType _AddressType;
 		public uint FormatValue;
 		public uint FormatMask;
@@ -78,12 +92,38 @@ namespace CSharpPspEmulator.Core
 			{
 				switch (Part)
 				{
-					case "rs": case "rt": case "rd":
-						FormatInsert(0, 0, 5);
-					break;
-					case "imm16":
-						FormatInsert(0, 0, 16);
-					break;
+                    case "cstw": case "cstz": case "csty": case "cstx":
+                    case "absw": case "absz": case "absy": case "absx":
+                    case "mskw": case "mskz": case "msky": case "mskx":
+                    case "negw": case "negz": case "negy": case "negx":
+                    case "one": case "two":
+                    case "vt1":
+                        FormatInsert(0, 0, 1);
+                    break;
+                    case "vt2":
+                    case "satw": case "satz": case "saty": case "satx":
+                    case "swzw": case "swzz": case "swzy": case "swzx":
+                       FormatInsert(0, 0, 2);
+                    break;
+                    case "imm3":
+                        FormatInsert(0, 0, 3);
+                    break;
+                    case "fcond":
+                        FormatInsert(0, 0, 4);
+                    break;
+                    case "c0dr": case "c0cr": case "c1dr": case "c1cr": case "imm5": case "vt5":
+                    case "rs": case "rd": case "rt": case "sa": case "lsb": case "msb": case "fs": case "fd": case "ft":
+                        FormatInsert(0, 0, 5);
+                    break;
+                    case "vs": case "vt": case "vd": case "imm7":
+                        FormatInsert(0, 0, 7);
+                    break;
+                    case "imm8" : FormatInsert(0, 0, 8); break;
+                    case "imm14": FormatInsert(0, 0, 14); break;
+                    case "imm16": FormatInsert(0, 0, 16); break;
+                    case "imm20": FormatInsert(0, 0, 20); break;
+                    case "imm26": FormatInsert(0, 0, 26); break;
+
 					default:
 						foreach (var Bit in Part) {
 							switch (Bit)
@@ -99,11 +139,12 @@ namespace CSharpPspEmulator.Core
 			}
 		}
 
-		public InstructionAttribute(String Format, AddressType _AddressType)
+        public InstructionAttribute(String Format, AddressType _AddressType, InstructionType _InstructionType = InstructionType.Normal)
 		{
 			//this.Name = Name;
 			this.Format = Format;
 			this._AddressType = _AddressType;
+            this._InstructionType = _InstructionType;
 			ParseFormat();
 		}
 	}

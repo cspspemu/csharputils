@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSharpPspEmulator.Core
 {
-	unsafe public class Registers
+	unsafe public class RegistersCpu
 	{
 		//public fixed uint _R[32];
 		protected uint _PC = 0;
@@ -29,4 +29,12 @@ namespace CSharpPspEmulator.Core
 			return 0;
 		}
 	}
+
+    unsafe public class RegistersFpu
+    {
+    }
+
+    unsafe public class RegistersVFpu
+    {
+    }
 }
