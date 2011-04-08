@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtilsDokanMount", "CSharpUtilsDokanMount\CSharpUtilsDokanMount.csproj", "{E0F38C2B-8C1A-4CF6-A96C-D2FADAF1F7E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpPspEmulator", "CSharpPspEmulator\CSharpPspEmulator.csproj", "{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = CSharpUtils.vsmdi
@@ -57,6 +59,16 @@ Global
 		{E0F38C2B-8C1A-4CF6-A96C-D2FADAF1F7E6}.Release|Mixed Platforms.Build.0 = Release|x86
 		{E0F38C2B-8C1A-4CF6-A96C-D2FADAF1F7E6}.Release|x86.ActiveCfg = Release|x86
 		{E0F38C2B-8C1A-4CF6-A96C-D2FADAF1F7E6}.Release|x86.Build.0 = Release|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Debug|x86.ActiveCfg = Debug|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Debug|x86.Build.0 = Debug|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Release|Any CPU.ActiveCfg = Release|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Release|Mixed Platforms.Build.0 = Release|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Release|x86.ActiveCfg = Release|x86
+		{FE8F793C-FBB8-4FF2-BD2D-85D05A4B2212}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
