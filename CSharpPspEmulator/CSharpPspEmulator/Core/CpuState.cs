@@ -38,5 +38,15 @@ namespace CSharpPspEmulator.Core
 			set { RegistersCpu.SetRegister(InstructionData.RD, value); }
 			get { return RegistersCpu.GetRegister(InstructionData.RD); }
 		}
-	}
+
+        public int IMM
+        {
+            get { return InstructionData.IMM ; }
+        }
+    
+        public uint IMMU
+        {
+            get { return InstructionData.IMMU; }
+        }
+    }
 }

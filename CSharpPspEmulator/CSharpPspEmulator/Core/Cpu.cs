@@ -24,12 +24,12 @@ namespace CSharpPspEmulator.Core
 
 		public override void ADDI(CpuState CpuState)
 		{
-			throw new NotImplementedException();
+            CpuState.RT = CpuState.RD + CpuState.IMMU;
 		}
 
         public override void ADDIU(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RT = CpuState.RD + CpuState.IMMU;
         }
 
         public override void SUB(CpuState CpuState)

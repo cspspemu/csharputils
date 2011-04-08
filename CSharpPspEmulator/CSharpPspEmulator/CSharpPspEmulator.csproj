@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utils\BitExtensions.cs" />
     <Compile Include="Core\Cpu.cs" />
     <Compile Include="Core\CpuBase.cs" />
     <Compile Include="Core\CpuState.cs" />

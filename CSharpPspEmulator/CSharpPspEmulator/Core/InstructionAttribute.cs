@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DEBUG_INSTRUCTION_GENERATE_TABLE
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +45,139 @@ namespace CSharpPspEmulator.Core
 		public uint FormatValue;
 		public uint FormatMask;
 
+        public struct TableExecutionDelegate
+        {
+            IEnumerable<InstructionAttribute> InstructionList;
+            public int Offset;
+            public uint BaseMask;
+            public uint Mask;
+            public uint Level;
+            public ExecutionDelegate[] Delegates;
+
+            public TableExecutionDelegate(IEnumerable<InstructionAttribute> InstructionList, uint BaseMask = 0xFFFFFFFF, uint Level = 0)
+            {
+                this.InstructionList = InstructionList;
+                Offset = 0;
+                Mask = 0;
+                this.BaseMask = BaseMask;
+                this.Level = Level;
+                if (Level > 6) throw(new Exception("Too much recursion generating tables"));
+                Delegates = null;
+                GetOffsetMask();
+                #if DEBUG_INSTRUCTION_GENERATE_TABLE
+                    Console.WriteLine("TableExecutionDelegate Offset:{0,8:X} Mask:{1,8:X} BaseMask:{2,8:X} Level:{3}", Offset, Mask, BaseMask, Level);
+                #endif
+                FillDelegates();
+            }
+
+            private void FillDelegates()
+            {
+                var InstructionsPerOffset = new Dictionary<uint, List<InstructionAttribute>>();
+
+                foreach (var Instruction in InstructionList)
+                {
+                    var InstructionOffset = (Instruction.FormatValue >> Offset) & Mask;
+                    if (!InstructionsPerOffset.ContainsKey(InstructionOffset))
+                    {
+                        InstructionsPerOffset[InstructionOffset] = new List<InstructionAttribute>();
+                    }
+                    InstructionsPerOffset[InstructionOffset].Add(Instruction);
+                }
+
+                foreach (var InstructionPerOffset in InstructionsPerOffset)
+                {
+                    var InstructionOffset = InstructionPerOffset.Key;
+                    var InstructionListForThisOffset = InstructionPerOffset.Value;
+                    if (InstructionOffset < 0) throw (new Exception("Invalid Instruction Offset (I)"));
+                    if (InstructionOffset >= Delegates.Length) throw (new Exception("Invalid Instruction Offset (II)"));
+                    if (Delegates[InstructionOffset] != null) throw (new Exception("Repeated Instruction"));
+
+                    if (InstructionListForThisOffset.Count == 0)
+                    {
+                        throw(new Exception("No Items in list"));
+                    }
+                    else if (InstructionListForThisOffset.Count > 1)
+                    {
+                        /*foreach (var Instruction in InstructionList)
+                        {
+
+                            Console.WriteLine(Instruction.Name + ": " + InstructionOffset + ": " + Delegates[InstructionOffset]);
+                        }*/
+                        Delegates[InstructionOffset] = new TableExecutionDelegate(InstructionListForThisOffset, BaseMask & ~(Mask << Offset), Level + 1);
+                        //throw(new NotImplementedException());
+                    }
+                    // One in list.
+                    else
+                    {
+                        #if DEBUG_INSTRUCTION_GENERATE_TABLE
+                            Console.WriteLine("{0}", InstructionListForThisOffset[0]);
+                        #endif
+                        Delegates[InstructionOffset] = InstructionListForThisOffset[0].Execute;
+                    }
+                }
+            }
+
+            private void GetOffsetMask()
+            {
+                Mask = GetCommonMask(InstructionList);
+                Mask &= BaseMask;
+                if (Mask == 0) throw (new Exception("Empty CommonMask"));
+                Offset = 0;
+                while ((Mask & 1) == 0)
+                {
+                    Offset++;
+                    Mask >>= 1;
+                }
+                Delegates = new ExecutionDelegate[1 << SizeBitcount(Mask)];
+                Mask &= (uint)(Delegates.Length - 1);
+            }
+
+            static int SizeBitcount(uint n)
+            {
+                int count = 0;
+                while ((n & 1) != 0)
+                {
+                    count++;
+                    n >>= 1;
+                }
+                return count;
+            }
+
+            /*static int SparseBitcount(int n)
+            {
+                int count = 0;
+                while (n != 0)
+                {
+                    count++;
+                    n &= (n - 1);
+                }
+                return count;
+            }*/
+
+            static public implicit operator ExecutionDelegate(TableExecutionDelegate TableExecutionDelegate)
+            {
+                return TableExecutionDelegate.Execute;
+            }
+
+            static private uint GetCommonMask(IEnumerable<InstructionAttribute> InstructionList)
+            {
+                return InstructionList.Aggregate((uint)0xFFFFFFFF, (Previous, Item) => Previous & Item.FormatMask);
+            }
+
+            public void Execute(CpuState CpuState)
+            {
+                Delegates[(CpuState.InstructionData.Value >> Offset) & Mask](CpuState);
+            }
+        }
+
+        static public implicit operator ExecutionDelegate(InstructionAttribute Attribute)
+        {
+            return delegate(CpuState CpuState)
+            {
+                Attribute.MethodInfo.Invoke(CpuState.CpuBase, new object[] { CpuState });
+            };
+        }
+
 		static public ExecutionDelegate ProcessClass(Type Type)
 		{
 			var InstructionList = new List<InstructionAttribute>();
@@ -54,11 +189,15 @@ namespace CSharpPspEmulator.Core
 				{
 					//Console.WriteLine("{0} {1,08:X} {2,08:X}", Attributes[0].Name, Attributes[0].FormatValue, Attributes[0].FormatMask);
 					Attributes[0].MethodInfo = MethodInfo;
+                    Attributes[0].Execute = Attributes[0];
 					InstructionList.Add(Attributes[0]);
 				}
 				//Type.InvokeMember();
 				//Console.WriteLine([0]);
 			}
+
+            TableExecutionDelegate TableExecutionDelegate = new TableExecutionDelegate(InstructionList);
+
 			ExecutionDelegate = delegate(CpuState CpuState)
 			{
 				foreach (var Instruction in InstructionList)
@@ -139,7 +278,7 @@ namespace CSharpPspEmulator.Core
 			}
 		}
 
-        public InstructionAttribute(String Format, AddressType _AddressType, InstructionType _InstructionType = InstructionType.Normal)
+        public InstructionAttribute(String Format, AddressType _AddressType = InstructionAttribute.AddressType.None, InstructionType _InstructionType = InstructionType.Normal)
 		{
 			//this.Name = Name;
 			this.Format = Format;
@@ -147,5 +286,10 @@ namespace CSharpPspEmulator.Core
             this._InstructionType = _InstructionType;
 			ParseFormat();
 		}
+
+        public override string ToString()
+        {
+            return String.Format("InstructionAttribute({0}:{1,8:X}:{2,8:X})", Name, FormatValue, FormatMask);
+        }
 	}
 }
