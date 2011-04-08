@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace CSharpPspEmulator.Core
+namespace CSharpPspEmulator.Core.Cpu
 {
 	abstract public class CpuBase
 	{
@@ -18,7 +18,7 @@ namespace CSharpPspEmulator.Core
 		// http://code.google.com/p/pspemu/source/browse/trunk/pspemu/core/cpu/Table.d
 
         // Arithmetic operations.
-		[Instruction(Format:"000000:rs:rt:rd:00000:100000")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100000", AssemblerFormat: "add $d, $s, $t")]
 		abstract public void ADD(CpuState CpuState);
 
 		[Instruction(Format:"000000:rs:rt:rd:00000:100001")]

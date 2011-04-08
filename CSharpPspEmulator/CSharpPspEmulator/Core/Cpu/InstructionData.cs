@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CSharpPspEmulator.Utils;
 
-namespace CSharpPspEmulator.Core
+namespace CSharpPspEmulator.Core.Cpu
 {
 	public struct InstructionData
 	{

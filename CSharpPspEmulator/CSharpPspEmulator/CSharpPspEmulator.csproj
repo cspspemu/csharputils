@@ -45,12 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Utils\BitExtensions.cs" />
-    <Compile Include="Core\Cpu.cs" />
-    <Compile Include="Core\CpuBase.cs" />
-    <Compile Include="Core\CpuState.cs" />
-    <Compile Include="Core\InstructionAttribute.cs" />
-    <Compile Include="Core\InstructionData.cs" />
-    <Compile Include="Core\Registers.cs" />
+    <Compile Include="Core\Cpu\Cpu.cs" />
+    <Compile Include="Core\Cpu\CpuBase.cs" />
+    <Compile Include="Core\Cpu\CpuState.cs" />
+    <Compile Include="Core\Cpu\InstructionAttribute.cs" />
+    <Compile Include="Core\Cpu\InstructionData.cs" />
+    <Compile Include="Core\Cpu\Registers.cs" />
     <Compile Include="Core\Memory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

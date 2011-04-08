@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CSharpPspEmulator.Core
+namespace CSharpPspEmulator.Core.Cpu
 {
 	public class CpuState
 	{

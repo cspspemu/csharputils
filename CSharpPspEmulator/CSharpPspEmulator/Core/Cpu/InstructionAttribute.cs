@@ -7,7 +7,7 @@ using System.Text;
 using System.Reflection.Emit;
 using System.Reflection;
 
-namespace CSharpPspEmulator.Core
+namespace CSharpPspEmulator.Core.Cpu
 {
 	public delegate void ExecutionDelegate(CpuState CpuState);
 
@@ -40,6 +40,7 @@ namespace CSharpPspEmulator.Core
 			}
 		}
 		readonly public String Format;
+        readonly public String AssemblerFormat;
         readonly public InstructionType _InstructionType;
 		readonly public AddressType _AddressType;
 		public uint FormatValue;
@@ -278,10 +279,11 @@ namespace CSharpPspEmulator.Core
 			}
 		}
 
-        public InstructionAttribute(String Format, AddressType _AddressType = InstructionAttribute.AddressType.None, InstructionType _InstructionType = InstructionType.Normal)
+        public InstructionAttribute(String Format, String AssemblerFormat = "", AddressType _AddressType = InstructionAttribute.AddressType.None, InstructionType _InstructionType = InstructionType.Normal)
 		{
 			//this.Name = Name;
 			this.Format = Format;
+            this.AssemblerFormat = AssemblerFormat;
 			this._AddressType = _AddressType;
             this._InstructionType = _InstructionType;
 			ParseFormat();
