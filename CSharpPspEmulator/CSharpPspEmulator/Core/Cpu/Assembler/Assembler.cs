@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSharpPspEmulator.Core.Cpu.Assembler
 {
-    class Assembler
+    public class Assembler
     {
     }
 }
