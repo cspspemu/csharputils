@@ -63,6 +63,7 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
 
                 return Result
                     .Replace("{$imm}", "" + State.InstructionData.IMM)
+                    .Replace("{$immu}", "" + State.InstructionData.IMMU)
                     .Replace(",", ", ")
                 ;
             };

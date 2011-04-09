@@ -46,7 +46,12 @@
   <ItemGroup>
     <Compile Include="Core\Cpu\Assembler\Assembler.cs" />
     <Compile Include="Core\Cpu\Assembler\Disassembler.cs" />
+    <Compile Include="Core\Cpu\Cpu.Arithmetic.cs" />
+    <Compile Include="Core\Cpu\Cpu.Branch.cs" />
+    <Compile Include="Core\Cpu\Cpu.Fpu.cs" />
+    <Compile Include="Core\Cpu\Cpu.Memory.cs" />
     <Compile Include="Core\Cpu\ExecutionDelegate.cs" />
+    <Compile Include="Core\Cpu\ThreadInfo.cs" />
     <Compile Include="Utils\Tables\ITableItem.cs" />
     <Compile Include="Utils\Tables\TableExecutionDelegate.cs" />
     <Compile Include="Utils\BitExtensions.cs" />

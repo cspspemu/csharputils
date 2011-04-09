@@ -16,46 +16,50 @@ namespace CSharpPspEmulator.Core.Cpu
 		}
 
 		// http://code.google.com/p/pspemu/source/browse/trunk/pspemu/core/cpu/Table.d
+        static public String AssemblerFormat_RType(String Name)
+        {
+            return Name + " {$d},{$s},{$t}";
+        }
 
         // Arithmetic operations.
-        [Instruction(Format: "000000:rs:rt:rd:00000:100000", AssemblerFormat: "add {$d},{$s},{$t}")]
+        [Instruction(Name : "add", Format: "000000:rs:rt:rd:00000:100000", AssemblerFormat: "add {$d},{$s},{$t}")]
 		abstract public void ADD(CpuState CpuState);
 
-        [Instruction(Format: "000000:rs:rt:rd:00000:100001", AssemblerFormat: "addu {$d},{$s},{$t}")]
+        [Instruction(Name : "addu", Format: "000000:rs:rt:rd:00000:100001", AssemblerFormat: "addu {$d},{$s},{$t}")]
 		abstract public void ADDU(CpuState CpuState);
 
         [Instruction(Format: "001000:rs:rt:imm16", AssemblerFormat: "addi {$t},{$s},{$imm}")]
 		abstract public void ADDI(CpuState CpuState);
 
-        [Instruction(Format:"001001:rs:rt:imm16"          )]
+        [Instruction(Format: "001001:rs:rt:imm16", AssemblerFormat: "addiu {$t},{$s},{$immu}")]
         abstract public void ADDIU(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:100010")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100010", AssemblerFormat: "sub {$d},{$s},{$t}")]
         abstract public void SUB(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:100011")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100011", AssemblerFormat: "subu {$d},{$s},{$t}")]
         abstract public void SUBU(CpuState CpuState);
         
         // Logical Operations.
-        [Instruction(Format:"000000:rs:rt:rd:00000:100100")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100100", AssemblerFormat: "and {$d},{$s},{$t}")]
         abstract public void AND(CpuState CpuState);
 
-        [Instruction(Format:"001100:rs:rt:imm16"          )]
+        [Instruction(Format: "001100:rs:rt:imm16", AssemblerFormat: "andi {$t},{$s},{$immu}")]
         abstract public void ANDI(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:100111")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100111", AssemblerFormat: "nor {$d},{$s},{$t}")]
         abstract public void NOR(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:100101")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100101", AssemblerFormat: "or {$d},{$s},{$t}")]
         abstract public void OR(CpuState CpuState);
 
-        [Instruction(Format:"001101:rs:rt:imm16"          )]
+        [Instruction(Format: "001101:rs:rt:imm16", AssemblerFormat: "ori {$t},{$s},{$immu}")]
         abstract public void ORI(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:100110")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100110", AssemblerFormat: "xor {$d},{$s},{$t}")]
         abstract public void XOR(CpuState CpuState);
 
-        [Instruction(Format:"001110:rs:rt:imm16"          )]
+        [Instruction(Format: "001110:rs:rt:imm16", AssemblerFormat: "xori {$t},{$s},{$immu}")]
         abstract public void XORI(CpuState CpuState);
 
         // Shift Left/Right Logical/Arithmethic (Variable).

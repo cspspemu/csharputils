@@ -12,6 +12,18 @@ namespace CSharpPspEmulator.Core.Cpu
 		protected uint _nPC = 0;
 		protected uint[] _R = new uint[32];
 
+        public uint PC
+        {
+            get { return _PC; }
+            set { _PC = value; }
+        }
+
+        public uint nPC
+        {
+            get { return _nPC; }
+            set { _nPC = value; }
+        }
+
 		public void SetRegister(uint Register, uint Value)
 		{
 			if (Register != 0)

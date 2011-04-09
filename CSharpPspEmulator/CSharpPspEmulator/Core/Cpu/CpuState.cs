@@ -11,6 +11,7 @@ namespace CSharpPspEmulator.Core.Cpu
 		public RegistersCpu RegistersCpu;
         public RegistersFpu RegistersFpu;
         public RegistersVFpu RegistersVFpu;
+        public ThreadInfo ThreadInfo;
 		public Memory Memory;
 		public CpuBase CpuBase;
 
@@ -47,6 +48,12 @@ namespace CSharpPspEmulator.Core.Cpu
         public uint IMMU
         {
             get { return InstructionData.IMMU; }
+        }
+
+        internal void AdvancePC(int Offset)
+        {
+            RegistersCpu.PC = RegistersCpu.nPC;
+            RegistersCpu.nPC = (uint)(RegistersCpu.nPC + Offset);
         }
     }
 }
