@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Cpu\Assembler\Assembler.cs" />
+    <Compile Include="Core\Cpu\Assembler\Disassembler.cs" />
+    <Compile Include="Core\Cpu\ExecutionDelegate.cs" />
     <Compile Include="Utils\Tables\ITableItem.cs" />
     <Compile Include="Utils\Tables\TableExecutionDelegate.cs" />
     <Compile Include="Utils\BitExtensions.cs" />

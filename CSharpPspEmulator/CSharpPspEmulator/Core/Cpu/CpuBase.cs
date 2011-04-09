@@ -12,7 +12,7 @@ namespace CSharpPspEmulator.Core.Cpu
 
 		public CpuBase()
 		{
-			Execute = InstructionAttribute.ProcessClass(typeof(CpuBase));
+			Execute = InstructionAttribute.GetExecutor(typeof(CpuBase));
 		}
 
 		// http://code.google.com/p/pspemu/source/browse/trunk/pspemu/core/cpu/Table.d
@@ -492,6 +492,11 @@ namespace CSharpPspEmulator.Core.Cpu
 
         [Instruction(Format:"010010:00:111:rt:0:0000000:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
         abstract public void MTVC(CpuState CpuState);
+
+        virtual public void INVALID(CpuState CpuState)
+        {
+            throw(new InvalidOperationException());
+        }
 
         /*
         // Load/Store Vfpu (Left/Right).

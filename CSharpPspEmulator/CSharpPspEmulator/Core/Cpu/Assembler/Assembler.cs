@@ -7,5 +7,12 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
 {
     public class Assembler
     {
+        public Assembler()
+        {
+            foreach (var Attribute in InstructionAttribute.GetInstructionAttributeMethods(typeof(Cpu)))
+            {
+                Console.WriteLine(Attribute.Name + ": " + Attribute.AssemblerFormat);
+            }
+        }
     }
 }

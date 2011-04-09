@@ -8,9 +8,7 @@ using CSharpPspEmulator.Utils.Tables;
 
 namespace CSharpPspEmulator.Core.Cpu
 {
-	public delegate void ExecutionDelegate(CpuState CpuState);
-
-	public sealed class InstructionAttribute : Attribute
+    public sealed class InstructionAttribute : Attribute, ITableItem
 	{
         public enum AddressType
         {
@@ -45,6 +43,16 @@ namespace CSharpPspEmulator.Core.Cpu
 		public uint FormatValue;
 		public uint FormatMask;
 
+        public uint TableValue
+        {
+            get { return FormatValue; }
+        }
+
+        public uint TableMask
+        {
+            get { return FormatMask; }
+        }
+
         /*static public implicit operator ExecutionDelegate(InstructionAttribute Attribute)
         {
             return delegate(CpuState CpuState)
@@ -53,41 +61,59 @@ namespace CSharpPspEmulator.Core.Cpu
             };
         }*/
 
-        public ExecutionDelegate CreateExecutionDelegate()
+        public delegate ExecutionDelegate ExecutionDelegateGenerator(InstructionAttribute InstructionAttribute);
+
+        /*static public ExecutionDelegate CreateExecutionDelegate(InstructionAttribute InstructionAttribute)
         {
-            InstructionAttribute Attribute = this;
             return delegate(CpuState CpuState)
             {
-                Attribute.MethodInfo.Invoke(CpuState.CpuBase, new object[] { CpuState });
+                InstructionAttribute.MethodInfo.Invoke(CpuState.CpuBase, new object[] { CpuState });
             };
-        }
+        }*/
 
-        static public IEnumerable<KeyValuePair<MethodInfo, InstructionAttribute>> GetInstructionAttributeMethods(Type Type)
+        static public IEnumerable<InstructionAttribute> GetInstructionAttributeMethods(Type Type)
         {
-            return Type.GetMethods()
-                .Select(MethodInfo => new KeyValuePair<MethodInfo, InstructionAttribute[]>(MethodInfo, (InstructionAttribute[])MethodInfo.GetCustomAttributes(typeof(InstructionAttribute), true)))
-                .Where(KeyValue => (KeyValue.Value.Count() == 1))
-                .Select(KeyValue => new KeyValuePair<MethodInfo, InstructionAttribute>(KeyValue.Key, KeyValue.Value[0]))
-            ;
+            var List = new List<InstructionAttribute>();
+            foreach (var MethodInfo in Type.GetMethods())
+            {
+                var InstructionAttributes = (InstructionAttribute[])MethodInfo.GetCustomAttributes(typeof(InstructionAttribute), true);
+                //Console.WriteLine("InstructionAttributes:" + InstructionAttributes.Length);
+                if (InstructionAttributes.Length == 1)
+                {
+                    InstructionAttributes[0].MethodInfo = MethodInfo;
+                    List.Add(InstructionAttributes[0]);
+                }
+            }
+            return List;
         }
 
-		static public ExecutionDelegate ProcessClass(Type Type)
-		{
-			var InstructionList = new List<InstructionAttribute>();
+        static public ExecutionDelegate GetExecutor(Type Type)
+        {
+            return GetExecutor(Type, InstructionAttribute => delegate(CpuState CpuState)
+            {
+                InstructionAttribute.MethodInfo.Invoke(CpuState.CpuBase, new object[] { CpuState });
+            }, delegate(CpuState CpuState)
+            {
+                Type.GetMethod("INVALID").Invoke(CpuState.CpuBase, new object[] { CpuState });
+            });
+        }
 
-            foreach (var KeyValue in GetInstructionAttributeMethods(Type)) {
-                var MethodInfo = KeyValue.Key;
-                var Attribute = KeyValue.Value;
-                Attribute.MethodInfo = MethodInfo;
-                Attribute.Execute = Attribute.CreateExecutionDelegate();
-                InstructionList.Add(Attribute);
+        static public ExecutionDelegate GetExecutor(Type Type, ExecutionDelegateGenerator ExecutionDelegateGenerator, ExecutionDelegate DefaultExecutionDelegate)
+		{
+            var Table = new List<TableExecutionDelegate<ExecutionDelegate>.TableExecutionItem>();
+
+            foreach (var Attribute in GetInstructionAttributeMethods(Type))
+            {
+                var Item = new TableExecutionDelegate<ExecutionDelegate>.TableExecutionItem();
+                Item.TableItem = Attribute;
+                Item.ExecutionDelegate = ExecutionDelegateGenerator(Attribute);
+                Table.Add(Item);
 			}
 
-            //return new TableExecutionDelegate(InstructionList);
-            return delegate(CpuState CpuState)
+            return new TableExecutionDelegate<ExecutionDelegate>(Table, CurrentTable => delegate(CpuState CpuState)
             {
-                throw(new NotImplementedException());
-            };
+                CurrentTable.GetDelegateByValue(CpuState.InstructionData.Value)(CpuState);
+            }, DefaultExecutionDelegate);
 		}
 
 		public bool FormatMatches(uint Value)
@@ -170,5 +196,5 @@ namespace CSharpPspEmulator.Core.Cpu
         {
             return String.Format("InstructionAttribute({0}:{1,8:X}:{2,8:X})", Name, FormatValue, FormatMask);
         }
-	}
+    }
 }
