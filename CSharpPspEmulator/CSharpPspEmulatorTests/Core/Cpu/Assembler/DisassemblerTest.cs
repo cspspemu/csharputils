@@ -16,5 +16,12 @@ namespace CSharpPspEmulatorTest.Core.Cpu.Assembler
             Assert.AreEqual("addu r0, r0, r0", Disassembler.Disassemble(new Disassembler.State(0x00000021)));
             Assert.AreEqual("addi r0, r0, -2", Disassembler.Disassemble(new Disassembler.State(0x2000FFFE)));
         }
+
+        [TestMethod]
+        public void MemonicTest()
+        {
+            var Disassembler = new Disassembler();
+            Assert.AreEqual("add zr, zr, zr", Disassembler.Disassemble(new Disassembler.State(0x00000020, 0, true)));
+        }
     }
 }
