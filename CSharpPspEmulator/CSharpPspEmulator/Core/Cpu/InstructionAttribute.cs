@@ -116,11 +116,6 @@ namespace CSharpPspEmulator.Core.Cpu
             }, DefaultExecutionDelegate);
 		}
 
-		public bool FormatMatches(uint Value)
-		{
-			return (Value & FormatMask) == FormatValue;
-		}
-
 		private void FormatInsert(uint Value, uint Mask, int Count = 1)
 		{
 			uint MMask = (uint)((1 << Count) - 1);
@@ -130,7 +125,6 @@ namespace CSharpPspEmulator.Core.Cpu
 
 		private void ParseFormat()
 		{
-
 			foreach (var Part in Format.Split(':'))
 			{
 				switch (Part)
@@ -182,7 +176,7 @@ namespace CSharpPspEmulator.Core.Cpu
 			}
 		}
 
-        public InstructionAttribute(String Format, String AssemblerFormat = "", AddressType _AddressType = InstructionAttribute.AddressType.None, InstructionType _InstructionType = InstructionType.Normal)
+        public InstructionAttribute(String Format, String AssemblerFormat = "<NoAssemblerFormat>", AddressType _AddressType = InstructionAttribute.AddressType.None, InstructionType _InstructionType = InstructionType.Normal)
 		{
 			//this.Name = Name;
 			this.Format = Format;

@@ -12,7 +12,8 @@ namespace CSharpPspEmulator
 	{
 		static void Main(string[] args)
 		{
-            var Assembler = new Assembler();
+            var Disassembler = new Disassembler();
+            Console.WriteLine(Disassembler.Disassemble(new Disassembler.State(0x00000020)));
 
             /*
 			var Registers = new RegistersCpu();

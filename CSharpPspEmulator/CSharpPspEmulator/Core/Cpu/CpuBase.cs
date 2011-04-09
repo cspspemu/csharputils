@@ -18,13 +18,13 @@ namespace CSharpPspEmulator.Core.Cpu
 		// http://code.google.com/p/pspemu/source/browse/trunk/pspemu/core/cpu/Table.d
 
         // Arithmetic operations.
-        [Instruction(Format: "000000:rs:rt:rd:00000:100000", AssemblerFormat: "add $d, $s, $t")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100000", AssemblerFormat: "add {$d},{$s},{$t}")]
 		abstract public void ADD(CpuState CpuState);
 
-		[Instruction(Format:"000000:rs:rt:rd:00000:100001")]
+        [Instruction(Format: "000000:rs:rt:rd:00000:100001", AssemblerFormat: "addu {$d},{$s},{$t}")]
 		abstract public void ADDU(CpuState CpuState);
 
-		[Instruction(Format:"001000:rs:rt:imm16"          )]
+        [Instruction(Format: "001000:rs:rt:imm16", AssemblerFormat: "addi {$t},{$s},{$imm}")]
 		abstract public void ADDI(CpuState CpuState);
 
         [Instruction(Format:"001001:rs:rt:imm16"          )]
