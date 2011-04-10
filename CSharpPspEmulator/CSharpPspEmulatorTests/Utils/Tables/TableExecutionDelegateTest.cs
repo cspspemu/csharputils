@@ -45,6 +45,34 @@ namespace CSharpPspEmulatorTests.Utils.Tables
 
             Assert.AreEqual("-,1,2,-,-", String.Join(",", Output));
         }
+
+        [TestMethod]
+        public void TableExecutionDelegateVeryLongTest()
+        {
+            var Output = new List<String>();
+            var Table = new List<TableExecutionDelegate<ExecutionDelegate>.TableExecutionItem>();
+
+            var Item2 = new TableExecutionDelegate<ExecutionDelegate>.TableExecutionItem();
+            Item2.TableItem = new TableItem(0x00000002, 0x03FFFFFF);
+            Item2.ExecutionDelegate = delegate(ExecutionState ExecutionState)
+            {
+                Output.Add("2");
+            };
+            Table.Add(Item2);
+
+            ExecutionDelegate Executor = new TableExecutionDelegate<ExecutionDelegate>(Table, CurrentTable => delegate(ExecutionState ExecutionState)
+            {
+                CurrentTable.GetDelegateByValue(ExecutionState.Value)(ExecutionState);
+            }, delegate(ExecutionState ExecutionState)
+            {
+                Output.Add("-");
+            });
+            Executor(new ExecutionState(0));
+            Executor(new ExecutionState(2));
+            Executor(new ExecutionState(0xFFF));
+
+            Assert.AreEqual("-,2,-", String.Join(",", Output));
+        }
     }
 
     delegate void ExecutionDelegate(ExecutionState ExecutionState);

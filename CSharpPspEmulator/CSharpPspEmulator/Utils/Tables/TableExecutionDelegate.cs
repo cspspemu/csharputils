@@ -25,6 +25,7 @@ namespace CSharpPspEmulator.Utils.Tables
         public uint Level;
         public bool[] SettedDelegates;
         public TExecutionDelegate[] Delegates;
+        public uint DelegatesLength;
         public TExecutionDelegate DefaultExecutionDelegate;
 
         public TableExecutionDelegate(IEnumerable<TableExecutionItem> TableExecutionList, CreateExecutionDelegateDelegate CreateExecutionDelegate, TExecutionDelegate DefaultExecutionDelegate, uint BaseMask = 0xFFFFFFFF, uint Level = 0)
@@ -42,24 +43,36 @@ namespace CSharpPspEmulator.Utils.Tables
 #if DEBUG_INSTRUCTION_GENERATE_TABLE
                     Console.WriteLine("TableExecutionDelegate Offset:{0,8:X} Mask:{1,8:X} BaseMask:{2,8:X} Level:{3}", Offset, Mask, BaseMask, Level);
 #endif
-            FillDelegates();
+            if (DelegatesLength > 4096)
+            {
+                //throw (new Exception("Mask too big"));
+				Delegates = null;
+            }
+            else
+            {
+                Delegates = new TExecutionDelegate[DelegatesLength];
+                SettedDelegates = new bool[Delegates.Length];
+                for (int n = 0; n < Delegates.Length; n++) Delegates[n] = DefaultExecutionDelegate;
+                Mask &= (uint)(Delegates.Length - 1);
+                FillDelegates();
+            }
         }
 
         private void GetOffsetMask()
         {
-            Mask = GetCommonMask(TableExecutionList);
-            Mask &= BaseMask;
+            Mask = GetCommonMask(TableExecutionList) & BaseMask;
             if (Mask == 0) throw (new Exception("Empty CommonMask"));
+
             Offset = 0;
             while ((Mask & 1) == 0)
             {
                 Offset++;
                 Mask >>= 1;
             }
-            Delegates = new TExecutionDelegate[1 << SizeBitcount(Mask)];
-            SettedDelegates = new bool[Delegates.Length];
-            for (int n = 0; n < Delegates.Length; n++) Delegates[n] = DefaultExecutionDelegate;
-            Mask &= (uint)(Delegates.Length - 1);
+
+            DelegatesLength = (uint)(1 << SizeBitcount(Mask));
+
+            //Console.WriteLine("Table[" + DelegatesLength + "][" + Level + "]");
         }
 
         private void FillDelegates()
@@ -130,13 +143,31 @@ namespace CSharpPspEmulator.Utils.Tables
 
         public TExecutionDelegate GetDelegateByValue(uint Value)
         {
-            return Delegates[(Value >> Offset) & Mask];
+            if (Delegates != null)
+            {
+                return Delegates[(Value >> Offset) & Mask];
+            }
+            else
+            {
+                foreach (var TableExecutionItem in TableExecutionList)
+                {
+                    if ((Value & TableExecutionItem.TableItem.TableMask) == TableExecutionItem.TableItem.TableValue)
+                    {
+                        return TableExecutionItem.ExecutionDelegate;
+                    }
+                }
+                return DefaultExecutionDelegate;
+            }
         }
 
         TExecutionDelegate CreateTExecutionDelegate()
         {
+            if (Delegates != null)
+            {
+                if (Delegates.Length == 0) throw (new Exception("Invalid CreateTExecutionDelegate"));
+                if (Delegates.Length == 1) return Delegates[0];
+            }
             return CreateExecutionDelegate(this);
-            //return Delegates[(Value >> Offset) & Mask];
         }
     }
 }
