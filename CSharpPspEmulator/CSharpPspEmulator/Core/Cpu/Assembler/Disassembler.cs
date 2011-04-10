@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CSharpPspEmulator.Utils.Tables;
+using CSharpPspEmulator.Core.Cpu.Interpreter;
 
 namespace CSharpPspEmulator.Core.Cpu.Assembler
 {
@@ -42,7 +43,7 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
         {
             return delegate(State State)
             {
-                String Result = InstructionAttribute.AssemblerFormat;
+                String Result = InstructionAttribute.Name + " " + InstructionAttribute.AssemblerFormat;
 
                 String[] RegisterTable;
 
@@ -61,6 +62,8 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
                     .Replace("{$t}", RegisterTable[State.InstructionData.RT])
                 ;
 
+                
+
                 return Result
                     .Replace("{$imm}", "" + State.InstructionData.IMM)
                     .Replace("{$immu}", "" + State.InstructionData.IMMU)
@@ -75,7 +78,7 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
         {
             var Table = new List<TableExecutionDelegate<DisassembleDelegate>.TableExecutionItem>();
 
-            foreach (var Attribute in InstructionAttribute.GetInstructionAttributeMethods(typeof(Cpu)))
+            foreach (var Attribute in InstructionAttribute.GetInstructionAttributeMethods(typeof(InterpretedCpu)))
             {
                 var Item = new TableExecutionDelegate<DisassembleDelegate>.TableExecutionItem();
                 Item.TableItem = Attribute;

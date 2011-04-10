@@ -32,12 +32,11 @@ namespace CSharpPspEmulator.Core.Cpu
 
 		public MethodInfo MethodInfo;
 		public ExecutionDelegate Execute;
-        String _Name;
-		public String Name
+        public String Name;
+		public String MethodName
 		{
 			get
 			{
-                if (_Name.Length > 0) return _Name;
 				return MethodInfo.Name;
 			}
 		}
@@ -202,7 +201,7 @@ namespace CSharpPspEmulator.Core.Cpu
 
         public InstructionAttribute(String Format, String Name = "", String AssemblerFormat = "<NoAssemblerFormat>", AddressType _AddressType = InstructionAttribute.AddressType.None, InstructionType _InstructionType = InstructionType.Normal)
 		{
-			this._Name = Name;
+			this.Name = Name;
 			this._Format = Format;
             this.AssemblerFormat = AssemblerFormat;
 			this._AddressType = _AddressType;

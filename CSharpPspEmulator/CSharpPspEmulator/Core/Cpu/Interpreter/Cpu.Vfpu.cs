@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CSharpPspEmulator.Core.Cpu
+namespace CSharpPspEmulator.Core.Cpu.Interpreter
 {
-    public partial class Cpu : CpuBase
+    public partial class InterpretedCpu : CpuBase
     {
 
         public override void LV_S(CpuState CpuState)

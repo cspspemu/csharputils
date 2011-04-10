@@ -6,6 +6,23 @@ using System.Runtime.InteropServices;
 
 namespace CSharpPspEmulator.Core.Cpu
 {
+    /// <summary>
+    /// Principle: DRY - Don't Repeat Yourself
+    /// 
+    /// This class describes all the instructions available on the Allegrex CPU.
+    /// It describes the name of the instructions, its assembler format and the instruction encoding.
+    /// This information can be used to create an assembler, a disassembler, and runtime tables for
+    /// an interpreter or for a JIT.
+    /// 
+    /// It's based on the Table I have made for the DPSPEmulator, that is based on jpcsp Allegrex.isa
+    /// and ps2dev disasm.
+    /// http://code.google.com/p/pspemu/source/browse/trunk/pspemu/core/cpu/Table.d
+    /// 
+    /// http://jpcsp.googlecode.com/svn/trunk/src/jpcsp/Allegrex.isa 
+    /// http://svn.ps2dev.org/filedetails.php?repname=psp&path=/trunk/prxtool/disasm.C&rev=0&sc=0 
+    /// 
+    /// - Soywiz
+    /// </summary>
 	abstract public class CpuBase
 	{
 		public ExecutionDelegate Execute;
@@ -15,51 +32,51 @@ namespace CSharpPspEmulator.Core.Cpu
 			Execute = InstructionAttribute.GetExecutor(typeof(CpuBase));
 		}
 
-		// http://code.google.com/p/pspemu/source/browse/trunk/pspemu/core/cpu/Table.d
-        static public String AssemblerFormat_RType(String Name)
+        /*static public String AssemblerFormat_RType(String Name)
         {
             return Name + " {$d},{$s},{$t}";
-        }
+        }*/
 
+        #region ALU
         // Arithmetic operations.
-        [Instruction(Name : "add", Format: "000000:rs:rt:rd:00000:100000", AssemblerFormat: "add {$d},{$s},{$t}")]
+        [Instruction(Name: "add", Format: "000000:rs:rt:rd:00000:100000", AssemblerFormat: "{$d},{$s},{$t}")]
 		abstract public void ADD(CpuState CpuState);
 
-        [Instruction(Name : "addu", Format: "000000:rs:rt:rd:00000:100001", AssemblerFormat: "addu {$d},{$s},{$t}")]
+        [Instruction(Name: "addu", Format: "000000:rs:rt:rd:00000:100001", AssemblerFormat: "{$d},{$s},{$t}")]
 		abstract public void ADDU(CpuState CpuState);
 
-        [Instruction(Name:"addi", Format: "001000:rs:rt:imm16", AssemblerFormat: "addi {$t},{$s},{$imm}")]
+        [Instruction(Name:"addi", Format: "001000:rs:rt:imm16", AssemblerFormat: "{$t},{$s},{$imm}")]
 		abstract public void ADDI(CpuState CpuState);
 
-        [Instruction(Name: "addiu", Format: "001001:rs:rt:imm16", AssemblerFormat: "addiu {$t},{$s},{$immu}")]
+        [Instruction(Name: "addiu", Format: "001001:rs:rt:imm16", AssemblerFormat: "{$t},{$s},{$immu}")]
         abstract public void ADDIU(CpuState CpuState);
 
-        [Instruction(Name: "sub", Format: "000000:rs:rt:rd:00000:100010", AssemblerFormat: "sub {$d},{$s},{$t}")]
+        [Instruction(Name: "sub", Format: "000000:rs:rt:rd:00000:100010", AssemblerFormat: "{$d},{$s},{$t}")]
         abstract public void SUB(CpuState CpuState);
 
-        [Instruction(Name: "subu", Format: "000000:rs:rt:rd:00000:100011", AssemblerFormat: "subu {$d},{$s},{$t}")]
+        [Instruction(Name: "subu", Format: "000000:rs:rt:rd:00000:100011", AssemblerFormat: "{$d},{$s},{$t}")]
         abstract public void SUBU(CpuState CpuState);
         
         // Logical Operations.
-        [Instruction(Name: "and", Format: "000000:rs:rt:rd:00000:100100", AssemblerFormat: "and {$d},{$s},{$t}")]
+        [Instruction(Name: "and", Format: "000000:rs:rt:rd:00000:100100", AssemblerFormat: "{$d},{$s},{$t}")]
         abstract public void AND(CpuState CpuState);
 
-        [Instruction(Name: "andi", Format: "001100:rs:rt:imm16", AssemblerFormat: "andi {$t},{$s},{$immu}")]
+        [Instruction(Name: "andi", Format: "001100:rs:rt:imm16", AssemblerFormat: "{$t},{$s},{$immu}")]
         abstract public void ANDI(CpuState CpuState);
 
-        [Instruction(Name: "nor", Format: "000000:rs:rt:rd:00000:100111", AssemblerFormat: "nor {$d},{$s},{$t}")]
+        [Instruction(Name: "nor", Format: "000000:rs:rt:rd:00000:100111", AssemblerFormat: "{$d},{$s},{$t}")]
         abstract public void NOR(CpuState CpuState);
 
-        [Instruction(Name: "or", Format: "000000:rs:rt:rd:00000:100101", AssemblerFormat: "or {$d},{$s},{$t}")]
+        [Instruction(Name: "or", Format: "000000:rs:rt:rd:00000:100101", AssemblerFormat: "{$d},{$s},{$t}")]
         abstract public void OR(CpuState CpuState);
 
-        [Instruction(Name: "ori", Format: "001101:rs:rt:imm16", AssemblerFormat: "ori {$t},{$s},{$immu}")]
+        [Instruction(Name: "ori", Format: "001101:rs:rt:imm16", AssemblerFormat: "{$t},{$s},{$immu}")]
         abstract public void ORI(CpuState CpuState);
 
-        [Instruction(Name: "xor", Format: "000000:rs:rt:rd:00000:100110", AssemblerFormat: "xor {$d},{$s},{$t}")]
+        [Instruction(Name: "xor", Format: "000000:rs:rt:rd:00000:100110", AssemblerFormat: "{$d},{$s},{$t}")]
         abstract public void XOR(CpuState CpuState);
 
-        [Instruction(Name: "xori", Format: "001110:rs:rt:imm16", AssemblerFormat: "xori {$t},{$s},{$immu}")]
+        [Instruction(Name: "xori", Format: "001110:rs:rt:imm16", AssemblerFormat: "{$t},{$s},{$immu}")]
         abstract public void XORI(CpuState CpuState);
 
         // Shift Left/Right Logical/Arithmethic (Variable).
@@ -156,10 +173,10 @@ namespace CSharpPspEmulator.Core.Cpu
         [Instruction(Name: "mflo", Format: "000000:00000:00000:rd:00000:010010")]
         abstract public void MFLO(CpuState CpuState);
 
-        [Instruction(Name: "mfhi", Format: "000000:rs:00000:00000:00000:010001")]
+        [Instruction(Name: "mthi", Format: "000000:rs:00000:00000:00000:010001")]
         abstract public void MTHI(CpuState CpuState);
 
-        [Instruction(Name: "mflo", Format: "000000:rs:00000:00000:00000:010011")]
+        [Instruction(Name: "mtlo", Format: "000000:rs:00000:00000:00000:010011")]
         abstract public void MTLO(CpuState CpuState);
 
         // Move if Zero/Non zero.
@@ -190,6 +207,9 @@ namespace CSharpPspEmulator.Core.Cpu
         [Instruction(Name: "wsbw", Format: "011111:00000:rt:rd:00011:100000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void WSBW(CpuState CpuState);
 
+        #endregion
+        
+        #region Branching
         // Branch on EQuals (Likely).
         [Instruction(Name: "beq", Format: "000100:rs:rt:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BEQ(CpuState CpuState);
@@ -270,6 +290,9 @@ namespace CSharpPspEmulator.Core.Cpu
         [Instruction(Name: "bc1tl", Format: "010001:01000:00011:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BC1TL(CpuState CpuState);
 
+        #endregion
+
+        #region Memory
         // Load Byte/Half word/Word (Left/Right/Unsigned).
         [Instruction(Name: "lb", Format: "100000:rs:rt:imm16")]
         abstract public void LB(CpuState CpuState);
@@ -316,6 +339,9 @@ namespace CSharpPspEmulator.Core.Cpu
         [Instruction(Name: "sc", Format: "111000:rs:rt:imm16")]
         abstract public void SC(CpuState CpuState);
 
+        #endregion
+
+        #region Fpu
         // Load Word to Cop1 floating point.
         // Store Word from Cop1 floating point.
         [Instruction(Name: "lwc1", Format: "110001:rs:ft:imm16")]
@@ -431,6 +457,9 @@ namespace CSharpPspEmulator.Core.Cpu
         [Instruction(Name: "c_ngt_s", Format: "010001:10000:ft:fs:00000:11:1111")]
         abstract public void C_NGT_S(CpuState CpuState);
 
+        #endregion
+
+        #region Special
         // Syscall
         [Instruction(Name: "syscall", Format: "000000:imm20:001100")]
         abstract public void SYSCALL(CpuState CpuState);
@@ -484,6 +513,10 @@ namespace CSharpPspEmulator.Core.Cpu
 
         [Instruction(Name: "mtc0", Format: "010000:00100:----------:00000:000000")]              // MTC0(010000:00100:rt:c0dr:00000:000000)
         abstract public void MTC0(CpuState CpuState);
+
+        #endregion
+
+        #region VFpu
 
         // Move From/to Vfpu (C?).
         [Instruction(Name: "mfv", Format: "010010:00:011:rt:0:0000000:0:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
@@ -855,6 +888,8 @@ namespace CSharpPspEmulator.Core.Cpu
 
         [Instruction(Name: "vwbn", Format: "110100:11:imm8:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void VWBN(CpuState CpuState);
+
+        #endregion
 
         virtual public void INVALID(CpuState CpuState)
         {

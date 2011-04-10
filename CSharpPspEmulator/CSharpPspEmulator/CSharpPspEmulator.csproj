@@ -61,17 +61,17 @@
   <ItemGroup>
     <Compile Include="Core\Cpu\Assembler\Assembler.cs" />
     <Compile Include="Core\Cpu\Assembler\Disassembler.cs" />
-    <Compile Include="Core\Cpu\Cpu.Arithmetic.cs" />
-    <Compile Include="Core\Cpu\Cpu.Branch.cs" />
-    <Compile Include="Core\Cpu\Cpu.Fpu.cs" />
-    <Compile Include="Core\Cpu\Cpu.Memory.cs" />
-    <Compile Include="Core\Cpu\Cpu.Vfpu.cs" />
+    <Compile Include="Core\Cpu\Interpreter\Cpu.Arithmetic.cs" />
+    <Compile Include="Core\Cpu\Interpreter\Cpu.Branch.cs" />
+    <Compile Include="Core\Cpu\Interpreter\Cpu.Fpu.cs" />
+    <Compile Include="Core\Cpu\Interpreter\Cpu.Memory.cs" />
+    <Compile Include="Core\Cpu\Interpreter\Cpu.Vfpu.cs" />
     <Compile Include="Core\Cpu\ExecutionDelegate.cs" />
     <Compile Include="Core\Cpu\ThreadInfo.cs" />
     <Compile Include="Utils\Tables\ITableItem.cs" />
     <Compile Include="Utils\Tables\TableExecutionDelegate.cs" />
     <Compile Include="Utils\BitExtensions.cs" />
-    <Compile Include="Core\Cpu\Cpu.cs" />
+    <Compile Include="Core\Cpu\Interpreter\Cpu.cs" />
     <Compile Include="Core\Cpu\CpuBase.cs" />
     <Compile Include="Core\Cpu\CpuState.cs" />
     <Compile Include="Core\Cpu\InstructionAttribute.cs" />

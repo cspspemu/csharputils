@@ -7,9 +7,9 @@ namespace CSharpPspEmulator.Core
 {
 	unsafe public class Memory
 	{
-        class SegmentsClass
+        sealed class SegmentsClass
         {
-            class Segment
+            sealed class Segment
             {
                 String Name;
                 byte[] Memory;
@@ -42,10 +42,10 @@ namespace CSharpPspEmulator.Core
                 }
             }
 
-            Segment ScratchPad;
-            Segment FrameBuffer;
-            Segment MainMemory;
-            Segment[] Segments;
+            readonly private Segment ScratchPad;
+            readonly private Segment FrameBuffer;
+            readonly private Segment MainMemory;
+            readonly private Segment[] Segments;
 
             public SegmentsClass()
             {
