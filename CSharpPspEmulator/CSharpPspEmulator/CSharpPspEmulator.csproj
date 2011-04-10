@@ -50,6 +50,7 @@
     <Compile Include="Core\Cpu\Cpu.Branch.cs" />
     <Compile Include="Core\Cpu\Cpu.Fpu.cs" />
     <Compile Include="Core\Cpu\Cpu.Memory.cs" />
+    <Compile Include="Core\Cpu\Cpu.Vfpu.cs" />
     <Compile Include="Core\Cpu\ExecutionDelegate.cs" />
     <Compile Include="Core\Cpu\ThreadInfo.cs" />
     <Compile Include="Utils\Tables\ITableItem.cs" />

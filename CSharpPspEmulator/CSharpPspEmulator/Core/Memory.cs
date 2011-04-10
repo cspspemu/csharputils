@@ -7,50 +7,90 @@ namespace CSharpPspEmulator.Core
 {
 	unsafe public class Memory
 	{
-		/*
-		fixed byte ScratchPad[0x00004000];
-		fixed byte FrameBuffe[0x00200000];
-		fixed byte Main      [0x02000000];
-		*/
+        class SegmentsClass
+        {
+            class Segment
+            {
+                String Name;
+                byte[] Memory;
+                uint Start;
+                uint End;
 
-		/*
-		const scratchPad  = Segment(0x00_010000, 0x00004000);
-		const frameBuffer = Segment(0x04_000000, 0x00200000);
-		const mainMemory  = Segment(0x08_000000, 0x02000000);
-		*/
+                public Segment(String Name, uint Start, uint Length)
+                {
+                    this.Name = Name;
+                    this.Start = Start;
+                    this.End = Start + Length;
+                    this.Memory = new byte[Length];
+                }
 
-		class Segment
+                public bool IsAddressInside(uint Address)
+                {
+                    return (Address >= this.Start && Address < this.End);
+                }
+
+                public byte* GetPointer(uint Address)
+                {
+                    if (IsAddressInside(Address))
+                    {
+                        fixed (byte* MemoryPtr = &Memory[Address - this.Start])
+                        {
+                            return MemoryPtr;
+                        }
+                    }
+                    return null;
+                }
+            }
+
+            Segment ScratchPad;
+            Segment FrameBuffer;
+            Segment MainMemory;
+            Segment[] Segments;
+
+            public SegmentsClass()
+            {
+                Segments = new Segment[3];
+                Segments[0] = ScratchPad = new Segment("ScratchPad", 0x00010000, 0x00004000);
+                Segments[1] = FrameBuffer = new Segment("FrameBuffer", 0x04000000, 0x00200000);
+                Segments[2] = MainMemory = new Segment("MainMemory", 0x08000000, 0x02000000);
+            }
+
+            public unsafe byte* GetPointer(uint Address)
+            {
+                foreach (var Segment in Segments)
+                {
+                    byte *Pointer = Segment.GetPointer(Address);
+                    if (Pointer != null) return Pointer;
+                }
+                return null;
+            }
+        }
+
+        SegmentsClass Segments = new SegmentsClass();
+
+        public unsafe byte* GetPointer(uint Address)
 		{
-			uint Start;
-			uint End;
-
-			public Segment(uint Start, uint Length)
-			{
-				this.Start = Start;
-				this.End = Start + Length;
-			}
-
-			public bool IsAddressInside(uint Address)
-			{
-				return (Address >= this.Start && Address < this.End);
-			}
+            return Segments.GetPointer(Address);
 		}
 
-		/*static struct Segments {
-			static public Segment ScratchPad = new Segment(0x00010000, 0x00004000);
-			static public Segment FrameBuffer = new Segment(0x04000000, 0x00200000);
-			static public Segment MainMemory = new Segment(0x08000000, 0x02000000);
-		}*/
+        public byte ReadUnsigned8(uint Address)
+        {
+            return *((byte*)GetPointer(Address));
+        }
 
-		unsafe byte *Address(uint Address)
-		{
-			//if (Segments.ScratchPad.IsAddressInside(Address)) return &ScratchPad;
-			return null;
-		}
+        public ushort ReadUnsigned16(uint Address)
+        {
+            return *((ushort*)GetPointer(Address));
+        }
 
-		uint GetUint(uint Address)
-		{
-			return 0;
-		}
-	}
+        public uint ReadUnsigned32(uint Address)
+        {
+            return *((uint *)GetPointer(Address));
+        }
+
+        public ulong ReadUnsigned64(uint Address)
+        {
+            return *((ulong*)GetPointer(Address));
+        }
+    }
 }

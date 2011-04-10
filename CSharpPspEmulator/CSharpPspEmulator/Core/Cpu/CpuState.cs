@@ -50,6 +50,31 @@ namespace CSharpPspEmulator.Core.Cpu
             get { return InstructionData.IMMU; }
         }
 
+        public uint PC
+        {
+            get { return RegistersCpu.PC; }
+            set {
+                RegistersCpu.PC = RegistersCpu.nPC;
+                RegistersCpu.nPC = value;
+            }
+        }
+
+        public void ReadInstructionAtPC()
+        {
+            InstructionData.Value = Memory.ReadUnsigned32(RegistersCpu.PC);
+        }
+
+        public void ExecuteStoredInstruction()
+        {
+            CpuBase.Execute(this);
+        }
+
+        public void ExecuteNextInstruction()
+        {
+            ReadInstructionAtPC();
+            ExecuteStoredInstruction();
+        }
+
         internal void AdvancePC(int Offset)
         {
             RegistersCpu.PC = RegistersCpu.nPC;

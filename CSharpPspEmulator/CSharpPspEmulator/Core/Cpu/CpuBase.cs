@@ -28,642 +28,759 @@ namespace CSharpPspEmulator.Core.Cpu
         [Instruction(Name : "addu", Format: "000000:rs:rt:rd:00000:100001", AssemblerFormat: "addu {$d},{$s},{$t}")]
 		abstract public void ADDU(CpuState CpuState);
 
-        [Instruction(Format: "001000:rs:rt:imm16", AssemblerFormat: "addi {$t},{$s},{$imm}")]
+        [Instruction(Name:"addi", Format: "001000:rs:rt:imm16", AssemblerFormat: "addi {$t},{$s},{$imm}")]
 		abstract public void ADDI(CpuState CpuState);
 
-        [Instruction(Format: "001001:rs:rt:imm16", AssemblerFormat: "addiu {$t},{$s},{$immu}")]
+        [Instruction(Name: "addiu", Format: "001001:rs:rt:imm16", AssemblerFormat: "addiu {$t},{$s},{$immu}")]
         abstract public void ADDIU(CpuState CpuState);
 
-        [Instruction(Format: "000000:rs:rt:rd:00000:100010", AssemblerFormat: "sub {$d},{$s},{$t}")]
+        [Instruction(Name: "sub", Format: "000000:rs:rt:rd:00000:100010", AssemblerFormat: "sub {$d},{$s},{$t}")]
         abstract public void SUB(CpuState CpuState);
 
-        [Instruction(Format: "000000:rs:rt:rd:00000:100011", AssemblerFormat: "subu {$d},{$s},{$t}")]
+        [Instruction(Name: "subu", Format: "000000:rs:rt:rd:00000:100011", AssemblerFormat: "subu {$d},{$s},{$t}")]
         abstract public void SUBU(CpuState CpuState);
         
         // Logical Operations.
-        [Instruction(Format: "000000:rs:rt:rd:00000:100100", AssemblerFormat: "and {$d},{$s},{$t}")]
+        [Instruction(Name: "and", Format: "000000:rs:rt:rd:00000:100100", AssemblerFormat: "and {$d},{$s},{$t}")]
         abstract public void AND(CpuState CpuState);
 
-        [Instruction(Format: "001100:rs:rt:imm16", AssemblerFormat: "andi {$t},{$s},{$immu}")]
+        [Instruction(Name: "andi", Format: "001100:rs:rt:imm16", AssemblerFormat: "andi {$t},{$s},{$immu}")]
         abstract public void ANDI(CpuState CpuState);
 
-        [Instruction(Format: "000000:rs:rt:rd:00000:100111", AssemblerFormat: "nor {$d},{$s},{$t}")]
+        [Instruction(Name: "nor", Format: "000000:rs:rt:rd:00000:100111", AssemblerFormat: "nor {$d},{$s},{$t}")]
         abstract public void NOR(CpuState CpuState);
 
-        [Instruction(Format: "000000:rs:rt:rd:00000:100101", AssemblerFormat: "or {$d},{$s},{$t}")]
+        [Instruction(Name: "or", Format: "000000:rs:rt:rd:00000:100101", AssemblerFormat: "or {$d},{$s},{$t}")]
         abstract public void OR(CpuState CpuState);
 
-        [Instruction(Format: "001101:rs:rt:imm16", AssemblerFormat: "ori {$t},{$s},{$immu}")]
+        [Instruction(Name: "ori", Format: "001101:rs:rt:imm16", AssemblerFormat: "ori {$t},{$s},{$immu}")]
         abstract public void ORI(CpuState CpuState);
 
-        [Instruction(Format: "000000:rs:rt:rd:00000:100110", AssemblerFormat: "xor {$d},{$s},{$t}")]
+        [Instruction(Name: "xor", Format: "000000:rs:rt:rd:00000:100110", AssemblerFormat: "xor {$d},{$s},{$t}")]
         abstract public void XOR(CpuState CpuState);
 
-        [Instruction(Format: "001110:rs:rt:imm16", AssemblerFormat: "xori {$t},{$s},{$immu}")]
+        [Instruction(Name: "xori", Format: "001110:rs:rt:imm16", AssemblerFormat: "xori {$t},{$s},{$immu}")]
         abstract public void XORI(CpuState CpuState);
 
         // Shift Left/Right Logical/Arithmethic (Variable).
-        [Instruction(Format:"000000:00000:rt:rd:sa:000000")]
+        [Instruction(Name: "sll", Format: "000000:00000:rt:rd:sa:000000")]
         abstract public void SLL(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:000100")]
+        [Instruction(Name: "sllv", Format: "000000:rs:rt:rd:00000:000100")]
         abstract public void SLLV(CpuState CpuState);
 
-        [Instruction(Format:"000000:00000:rt:rd:sa:000011")]
+        [Instruction(Name: "sra", Format: "000000:00000:rt:rd:sa:000011")]
         abstract public void SRA(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:000111")]
+        [Instruction(Name: "srav", Format: "000000:rs:rt:rd:00000:000111")]
         abstract public void SRAV(CpuState CpuState);
 
-        [Instruction(Format:"000000:00000:rt:rd:sa:000010")]
+        [Instruction(Name: "srl", Format: "000000:00000:rt:rd:sa:000010")]
         abstract public void SRL(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:000110")]
+        [Instruction(Name: "srlv", Format: "000000:rs:rt:rd:00000:000110")]
         abstract public void SRLV(CpuState CpuState);
 
-        [Instruction(Format:"000000:00001:rt:rd:sa:000010")]
+        [Instruction(Name: "rotr", Format: "000000:00001:rt:rd:sa:000010")]
         abstract public void ROTR(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00001:000110")]
+        [Instruction(Name: "rotrv", Format: "000000:rs:rt:rd:00001:000110")]
         abstract public void ROTRV(CpuState CpuState);
 
         // Set Less Than (Immediate) (Unsigned).
-        [Instruction(Format:"000000:rs:rt:rd:00000:101010")]
+        [Instruction(Name: "slt", Format: "000000:rs:rt:rd:00000:101010")]
         abstract public void SLT(CpuState CpuState);
 
-        [Instruction(Format:"001010:rs:rt:imm16"          )]
+        [Instruction(Name: "slti", Format: "001010:rs:rt:imm16")]
         abstract public void SLTI(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:101011")]
+        [Instruction(Name: "sltu", Format: "000000:rs:rt:rd:00000:101011")]
         abstract public void SLTU(CpuState CpuState);
 
-        [Instruction(Format:"001011:rs:rt:imm16"          )]
+        [Instruction(Name: "sltiu", Format: "001011:rs:rt:imm16")]
         abstract public void SLTIU(CpuState CpuState);
 
         // Load Upper Immediate.
-        [Instruction(Format: "001111:00000:rt:imm16", _AddressType: InstructionAttribute.AddressType.None)]
+        [Instruction(Name: "lui", Format: "001111:00000:rt:imm16", _AddressType: InstructionAttribute.AddressType.None)]
         abstract public void LUI(CpuState CpuState);
 
         // Sign Extend Byte/Half word.
-        [Instruction(Format:"011111:00000:rt:rd:10000:100000")]
+        [Instruction(Name: "seb", Format: "011111:00000:rt:rd:10000:100000")]
         abstract public void SEB(CpuState CpuState);
-        [Instruction(Format:"011111:00000:rt:rd:11000:100000")]
+
+        [Instruction(Name: "seh", Format: "011111:00000:rt:rd:11000:100000")]
         abstract public void SEH(CpuState CpuState);
         
         // BIT REVerse.
-        [Instruction(Format:"011111:00000:rt:rd:10100:100000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "bitrev", Format: "011111:00000:rt:rd:10100:100000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void BITREV(CpuState CpuState);
 
         // MAXimum/MINimum.
-        [Instruction(Format:"000000:rs:rt:rd:00000:101100", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "max", Format: "000000:rs:rt:rd:00000:101100", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MAX(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:101101", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "min", Format: "000000:rs:rt:rd:00000:101101", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MIN(CpuState CpuState);
 
         // DIVide (Unsigned).
-        [Instruction(Format:"000000:rs:rt:00000:00000:011010")]
+        [Instruction(Name: "div", Format: "000000:rs:rt:00000:00000:011010")]
         abstract public void DIV(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:00000:00000:011011")]
+        [Instruction(Name: "divu", Format: "000000:rs:rt:00000:00000:011011")]
         abstract public void DIVU(CpuState CpuState);
 
         // MULTiply (Unsigned).
-        [Instruction(Format:"000000:rs:rt:00000:00000:011000")]
+        [Instruction(Name: "mult", Format: "000000:rs:rt:00000:00000:011000")]
         abstract public void MULT(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:00000:00000:011001")]
+        [Instruction(Name: "multu", Format: "000000:rs:rt:00000:00000:011001")]
         abstract public void MULTU(CpuState CpuState);
 
         // Multiply ADD/SUBstract (Unsigned).
-        [Instruction(Format:"000000:rs:rt:00000:00000:011100", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "madd", Format: "000000:rs:rt:00000:00000:011100", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MADD(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:00000:00000:011101", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "maddu", Format: "000000:rs:rt:00000:00000:011101", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MADDU(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:00000:00000:101110", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "msub", Format: "000000:rs:rt:00000:00000:101110", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MSUB(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:00000:00000:101111", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "msubu", Format: "000000:rs:rt:00000:00000:101111", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MSUBU(CpuState CpuState);
 
         // Move To/From HI/LO.
-        [Instruction(Format:"000000:00000:00000:rd:00000:010000")]
+        [Instruction(Name: "mfhi", Format: "000000:00000:00000:rd:00000:010000")]
         abstract public void MFHI(CpuState CpuState);
 
-        [Instruction(Format:"000000:00000:00000:rd:00000:010010")]
+        [Instruction(Name: "mflo", Format: "000000:00000:00000:rd:00000:010010")]
         abstract public void MFLO(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:00000:00000:00000:010001")]
+        [Instruction(Name: "mfhi", Format: "000000:rs:00000:00000:00000:010001")]
         abstract public void MTHI(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:00000:00000:00000:010011")]
+        [Instruction(Name: "mflo", Format: "000000:rs:00000:00000:00000:010011")]
         abstract public void MTLO(CpuState CpuState);
 
         // Move if Zero/Non zero.
-        [Instruction(Format:"000000:rs:rt:rd:00000:001010", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "movz", Format: "000000:rs:rt:rd:00000:001010", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MOVZ(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:rt:rd:00000:001011", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "movn", Format: "000000:rs:rt:rd:00000:001011", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MOVN(CpuState CpuState);
 
         // EXTract/INSert.
-        [Instruction(Format:"011111:rs:rt:msb:lsb:000000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "ext", Format: "011111:rs:rt:msb:lsb:000000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void EXT(CpuState CpuState);
 
-        [Instruction(Format:"011111:rs:rt:msb:lsb:000100", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "ins", Format: "011111:rs:rt:msb:lsb:000100", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void INS(CpuState CpuState);
 
         // Count Leading Ones/Zeros in word.
-        [Instruction(Format:"000000:rs:00000:rd:00000:010110", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "clz", Format: "000000:rs:00000:rd:00000:010110", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void CLZ(CpuState CpuState);
 
-        [Instruction(Format:"000000:rs:00000:rd:00000:010111", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "clo", Format: "000000:rs:00000:rd:00000:010111", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void CLO(CpuState CpuState);
 
         // Word Swap Bytes Within Halfwords/Words.
-        [Instruction(Format:"011111:00000:rt:rd:00010:100000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "wsbh", Format: "011111:00000:rt:rd:00010:100000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void WSBH(CpuState CpuState);
 
-        [Instruction(Format:"011111:00000:rt:rd:00011:100000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "wsbw", Format: "011111:00000:rt:rd:00011:100000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void WSBW(CpuState CpuState);
 
         // Branch on EQuals (Likely).
-        [Instruction(Format:"000100:rs:rt:imm16"   , _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "beq", Format: "000100:rs:rt:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BEQ(CpuState CpuState);
 
-        [Instruction(Format:"010100:rs:rt:imm16"   , _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "beql", Format: "010100:rs:rt:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BEQL(CpuState CpuState);
 
         // Branch on Greater Equal Zero (And Link) (Likely).
-        [Instruction(Format:"000001:rs:00001:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bgez", Format: "000001:rs:00001:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BGEZ(CpuState CpuState);
 
-        [Instruction(Format:"000001:rs:00011:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bgezl", Format: "000001:rs:00011:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BGEZL(CpuState CpuState);
 
-        [Instruction(Format:"000001:rs:10001:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.JumpAndLink)]
+        [Instruction(Name: "bgezal", Format: "000001:rs:10001:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.JumpAndLink)]
         abstract public void BGEZAL(CpuState CpuState);
 
-        [Instruction(Format:"000001:rs:10011:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.JumpAndLink)]
+        [Instruction(Name: "bgezall", Format: "000001:rs:10011:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.JumpAndLink)]
         abstract public void BGEZALL(CpuState CpuState);
 
         // Branch on Less Than Zero (And Link) (Likely).
-        [Instruction(Format:"000001:rs:00000:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bltz", Format: "000001:rs:00000:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BLTZ(CpuState CpuState);
 
-        [Instruction(Format:"000001:rs:00010:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bltzl", Format: "000001:rs:00010:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BLTZL(CpuState CpuState);
 
-        [Instruction(Format:"000001:rs:10000:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.JumpAndLink)]
+        [Instruction(Name: "bltzal", Format: "000001:rs:10000:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.JumpAndLink)]
         abstract public void BLTZAL(CpuState CpuState);
 
-        [Instruction(Format:"000001:rs:10010:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.JumpAndLink)]
+        [Instruction(Name: "bltzall", Format: "000001:rs:10010:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.JumpAndLink)]
         abstract public void BLTZALL(CpuState CpuState);
 
         // Branch on Less Or Equals than Zero (Likely).
-        [Instruction(Format:"000110:rs:00000:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "blez", Format: "000110:rs:00000:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BLEZ(CpuState CpuState);
 
-        [Instruction(Format:"010110:rs:00000:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "blezl", Format: "010110:rs:00000:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BLEZL(CpuState CpuState);
 
         // Branch on Great Than Zero (Likely).
-        [Instruction(Format:"000111:rs:00000:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bgtz", Format: "000111:rs:00000:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BGTZ(CpuState CpuState);
 
-        [Instruction(Format:"010111:rs:00000:imm16",     _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bgtzl", Format: "010111:rs:00000:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BGTZL(CpuState CpuState);
 
         // Branch on Not Equals (Likely).
-        [Instruction(Format:"000101:rs:rt:imm16"   , _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bne", Format: "000101:rs:rt:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BNE(CpuState CpuState);
 
-        [Instruction(Format:"010101:rs:rt:imm16"   , _AddressType:InstructionAttribute.AddressType.S16,  _InstructionType:InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bnel", Format: "010101:rs:rt:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BNEL(CpuState CpuState);
 
         // Jump (And Link) (Register).
-        [Instruction(Format: "000010:imm26", _AddressType: InstructionAttribute.AddressType.S26, _InstructionType: InstructionAttribute.InstructionType.Jump)]
+        [Instruction(Name: "j", Format: "000010:imm26", _AddressType: InstructionAttribute.AddressType.S26, _InstructionType: InstructionAttribute.InstructionType.Jump)]
         abstract public void J(CpuState CpuState);
 
-        [Instruction(Format: "000000:rs:00000:00000:00000:001000", _AddressType: InstructionAttribute.AddressType.Register, _InstructionType: InstructionAttribute.InstructionType.Jump)]
+        [Instruction(Name: "jr", Format: "000000:rs:00000:00000:00000:001000", _AddressType: InstructionAttribute.AddressType.Register, _InstructionType: InstructionAttribute.InstructionType.Jump)]
         abstract public void JR(CpuState CpuState);
 
-        [Instruction(Format: "000000:rs:00000:rd:00000:001001", _AddressType: InstructionAttribute.AddressType.Register, _InstructionType: InstructionAttribute.InstructionType.JumpAndLink)]
+        [Instruction(Name: "jalr", Format: "000000:rs:00000:rd:00000:001001", _AddressType: InstructionAttribute.AddressType.Register, _InstructionType: InstructionAttribute.InstructionType.JumpAndLink)]
         abstract public void JALR(CpuState CpuState);
 
-        [Instruction(Format: "000011:imm26", _AddressType: InstructionAttribute.AddressType.S26, _InstructionType: InstructionAttribute.InstructionType.JumpAndLink)]
+        [Instruction(Name: "jal", Format: "000011:imm26", _AddressType: InstructionAttribute.AddressType.S26, _InstructionType: InstructionAttribute.InstructionType.JumpAndLink)]
         abstract public void JAL(CpuState CpuState);
 
         // Branch on C1 False/True (Likely).
-        [Instruction(Format: "010001:01000:00000:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bc1f", Format: "010001:01000:00000:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BC1F(CpuState CpuState);
 
-        [Instruction(Format: "010001:01000:00001:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bc1t", Format: "010001:01000:00001:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BC1T(CpuState CpuState);
 
-        [Instruction(Format: "010001:01000:00010:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bc1fl", Format: "010001:01000:00010:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BC1FL(CpuState CpuState);
 
-        [Instruction(Format: "010001:01000:00011:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bc1tl", Format: "010001:01000:00011:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BC1TL(CpuState CpuState);
 
         // Load Byte/Half word/Word (Left/Right/Unsigned).
-        [Instruction(Format:"100000:rs:rt:imm16")]
+        [Instruction(Name: "lb", Format: "100000:rs:rt:imm16")]
         abstract public void LB(CpuState CpuState);
 
-        [Instruction(Format:"100001:rs:rt:imm16")]
+        [Instruction(Name: "lh", Format: "100001:rs:rt:imm16")]
         abstract public void LH(CpuState CpuState);
 
-        [Instruction(Format:"100011:rs:rt:imm16")]
+        [Instruction(Name: "lw", Format: "100011:rs:rt:imm16")]
         abstract public void LW(CpuState CpuState);
 
-        [Instruction(Format:"100010:rs:rt:imm16")]
+        [Instruction(Name: "lwl", Format: "100010:rs:rt:imm16")]
         abstract public void LWL(CpuState CpuState);
 
-        [Instruction(Format:"100110:rs:rt:imm16")]
+        [Instruction(Name: "lwr", Format: "100110:rs:rt:imm16")]
         abstract public void LWR(CpuState CpuState);
 
-        [Instruction(Format:"100100:rs:rt:imm16")]
+        [Instruction(Name: "lbu", Format: "100100:rs:rt:imm16")]
         abstract public void LBU(CpuState CpuState);
 
-        [Instruction(Format:"100101:rs:rt:imm16")]
+        [Instruction(Name: "lhu", Format: "100101:rs:rt:imm16")]
         abstract public void LHU(CpuState CpuState);
 
         // Store Byte/Half word/Word (Left/Right).
-        [Instruction(Format:"101000:rs:rt:imm16")]
+        [Instruction(Name: "sb", Format: "101000:rs:rt:imm16")]
         abstract public void SB(CpuState CpuState);
 
-        [Instruction(Format:"101001:rs:rt:imm16")]
+        [Instruction(Name: "sh", Format: "101001:rs:rt:imm16")]
         abstract public void SH(CpuState CpuState);
 
-        [Instruction(Format:"101011:rs:rt:imm16")]
+        [Instruction(Name: "sw", Format: "101011:rs:rt:imm16")]
         abstract public void SW(CpuState CpuState);
 
-        [Instruction(Format:"101010:rs:rt:imm16")]
+        [Instruction(Name: "swl", Format: "101010:rs:rt:imm16")]
         abstract public void SWL(CpuState CpuState);
 
-        [Instruction(Format:"101110:rs:rt:imm16")]
+        [Instruction(Name: "swr", Format: "101110:rs:rt:imm16")]
         abstract public void SWR(CpuState CpuState);
 
         // Load Linked word.
         // Store Conditional word.
-        [Instruction(Format:"110000:rs:rt:imm16")]
+        [Instruction(Name: "ll", Format: "110000:rs:rt:imm16")]
         abstract public void LL(CpuState CpuState);
 
-        [Instruction(Format:"111000:rs:rt:imm16")]
+        [Instruction(Name: "sc", Format: "111000:rs:rt:imm16")]
         abstract public void SC(CpuState CpuState);
 
         // Load Word to Cop1 floating point.
         // Store Word from Cop1 floating point.
-        [Instruction(Format:"110001:rs:ft:imm16")]
+        [Instruction(Name: "lwc1", Format: "110001:rs:ft:imm16")]
         abstract public void LWC1(CpuState CpuState);
 
-        [Instruction(Format:"111001:rs:ft:imm16")]
+        [Instruction(Name: "swc1", Format: "111001:rs:ft:imm16")]
         abstract public void SWC1(CpuState CpuState);
 
         // Binary Floating Point Unit Operations
-        [Instruction(Format:"010001:10000:ft:fs:fd:000000"   )]
+        [Instruction(Name: "add_s", Format: "010001:10000:ft:fs:fd:000000")]
         abstract public void ADD_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:fd:000001"   )]
+        [Instruction(Name: "sub_s", Format: "010001:10000:ft:fs:fd:000001")]
         abstract public void SUB_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:fd:000010"   )]
+        [Instruction(Name: "mul_s", Format: "010001:10000:ft:fs:fd:000010")]
         abstract public void MUL_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:fd:000011"   )]
+        [Instruction(Name: "div_s", Format: "010001:10000:ft:fs:fd:000011")]
         abstract public void DIV_S(CpuState CpuState);
 
         // Unary Floating Point Unit Operations
-        [Instruction(Format:"010001:10000:00000:fs:fd:000100")]
+        [Instruction(Name: "sqrt_s", Format: "010001:10000:00000:fs:fd:000100")]
         abstract public void SQRT_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:00000:fs:fd:000101")]
+        [Instruction(Name: "abs_s", Format: "010001:10000:00000:fs:fd:000101")]
         abstract public void ABS_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:00000:fs:fd:000110")]
+        [Instruction(Name: "mov_s", Format: "010001:10000:00000:fs:fd:000110")]
         abstract public void MOV_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:00000:fs:fd:000111")]
+        [Instruction(Name: "neg_s", Format: "010001:10000:00000:fs:fd:000111")]
         abstract public void NEG_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:00000:fs:fd:001100")]
+        [Instruction(Name: "round_w_s", Format: "010001:10000:00000:fs:fd:001100")]
         abstract public void ROUND_W_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:00000:fs:fd:001101")]
+        [Instruction(Name: "trunc_w_s", Format: "010001:10000:00000:fs:fd:001101")]
         abstract public void TRUNC_W_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:00000:fs:fd:001110")]
+        [Instruction(Name: "ceil_w_s", Format: "010001:10000:00000:fs:fd:001110")]
         abstract public void CEIL_W_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:00000:fs:fd:001111")]
+        [Instruction(Name: "floor_w_s", Format: "010001:10000:00000:fs:fd:001111")]
         abstract public void FLOOR_W_S(CpuState CpuState);
 
         // Convert
-        [Instruction(Format:"010001:10100:00000:fs:fd:100000")]
+        [Instruction(Name: "cvt_s_w", Format: "010001:10100:00000:fs:fd:100000")]
         abstract public void CVT_S_W(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:00000:fs:fd:100100")]
+        [Instruction(Name: "cvt_w_s", Format: "010001:10000:00000:fs:fd:100100")]
         abstract public void CVT_W_S(CpuState CpuState);
 
         // Move float point registers
-        [Instruction(Format:"010001:00000:rt:c1dr:00000:000000")]
+        [Instruction(Name: "mfc1", Format: "010001:00000:rt:c1dr:00000:000000")]
         abstract public void MFC1(CpuState CpuState);
 
-        [Instruction(Format:"010001:00010:rt:c1cr:00000:000000")]
+        [Instruction(Name: "cfc1", Format: "010001:00010:rt:c1cr:00000:000000")]
         abstract public void CFC1(CpuState CpuState);
 
-        [Instruction(Format:"010001:00100:rt:c1dr:00000:000000")]
+        [Instruction(Name: "mtc1", Format: "010001:00100:rt:c1dr:00000:000000")]
         abstract public void MTC1(CpuState CpuState);
 
-        [Instruction(Format:"010001:00110:rt:c1cr:00000:000000")]
+        [Instruction(Name: "ctc1", Format: "010001:00110:rt:c1cr:00000:000000")]
         abstract public void CTC1(CpuState CpuState);
 
         // Compare <condition> Single.
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:0000")]
+        [Instruction(Name: "c_f_s", Format: "010001:10000:ft:fs:00000:11:0000")]
         abstract public void C_F_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:0001")]
+        [Instruction(Name: "c_un_s", Format: "010001:10000:ft:fs:00000:11:0001")]
         abstract public void C_UN_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:0010")]
+        [Instruction(Name: "c_eq_s", Format: "010001:10000:ft:fs:00000:11:0010")]
         abstract public void C_EQ_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:0011")]
+        [Instruction(Name: "c_ueq_s", Format: "010001:10000:ft:fs:00000:11:0011")]
         abstract public void C_UEQ_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:0100")]
+        [Instruction(Name: "c_olt_s", Format: "010001:10000:ft:fs:00000:11:0100")]
         abstract public void C_OLT_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:0101")]
+        [Instruction(Name: "c_ult_s", Format: "010001:10000:ft:fs:00000:11:0101")]
         abstract public void C_ULT_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:0110")]
+        [Instruction(Name: "c_ole_s", Format: "010001:10000:ft:fs:00000:11:0110")]
         abstract public void C_OLE_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:0111")]
+        [Instruction(Name: "c_ule_s", Format: "010001:10000:ft:fs:00000:11:0111")]
         abstract public void C_ULE_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:1000")]
+        [Instruction(Name: "c_sf_s", Format: "010001:10000:ft:fs:00000:11:1000")]
         abstract public void C_SF_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:1001")]
+        [Instruction(Name: "c_ngle_s", Format: "010001:10000:ft:fs:00000:11:1001")]
         abstract public void C_NGLE_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:1010")]
+        [Instruction(Name: "c_seq_s", Format: "010001:10000:ft:fs:00000:11:1010")]
         abstract public void C_SEQ_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:1011")]
+        [Instruction(Name: "c_ngl_s", Format: "010001:10000:ft:fs:00000:11:1011")]
         abstract public void C_NGL_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:1100")]
+        [Instruction(Name: "c_lt_s", Format: "010001:10000:ft:fs:00000:11:1100")]
         abstract public void C_LT_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:1101")]
+        [Instruction(Name: "c_nge_s", Format: "010001:10000:ft:fs:00000:11:1101")]
         abstract public void C_NGE_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:1110")]
+        [Instruction(Name: "c_le_s", Format: "010001:10000:ft:fs:00000:11:1110")]
         abstract public void C_LE_S(CpuState CpuState);
 
-        [Instruction(Format:"010001:10000:ft:fs:00000:11:1111")]
+        [Instruction(Name: "c_ngt_s", Format: "010001:10000:ft:fs:00000:11:1111")]
         abstract public void C_NGT_S(CpuState CpuState);
 
         // Syscall
-        [Instruction(Format:"000000:imm20:001100" )]
+        [Instruction(Name: "syscall", Format: "000000:imm20:001100")]
         abstract public void SYSCALL(CpuState CpuState);
 
-        [Instruction(Format:"101111--------------------------")]
+        [Instruction(Name: "cache", Format: "101111--------------------------")]
         abstract public void CACHE(CpuState CpuState);
 
-        [Instruction(Format:"000000:00000:00000:00000:00000:001111")]
+        [Instruction(Name: "sync", Format: "000000:00000:00000:00000:00000:001111")]
         abstract public void SYNC(CpuState CpuState);
 
-        [Instruction(Format:"000000:imm20:001101"                  )]
+        [Instruction(Name: "break", Format: "000000:imm20:001101")]
         abstract public void BREAK(CpuState CpuState);
 
-        [Instruction(Format:"011100:00000:00000:00000:00000:111111", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "dbreak", Format: "011100:00000:00000:00000:00000:111111", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void DBREAK(CpuState CpuState);
 
-        [Instruction(Format:"011100:00000:00000:00000:00000:000000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "halt", Format: "011100:00000:00000:00000:00000:000000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void HALT(CpuState CpuState);
 
         // (D?/Exception) RETurn
-        [Instruction(Format:"011100:00000:00000:00000:00000:111110", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "dret", Format: "011100:00000:00000:00000:00000:111110", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void DRET(CpuState CpuState);
 
-        [Instruction(Format:"010000:10000:00000:00000:00000:011000")]
+        [Instruction(Name: "eret", Format: "010000:10000:00000:00000:00000:011000")]
         abstract public void ERET(CpuState CpuState);
 
         // Move (From/To) IC
-        [Instruction(Format:"011100:rt:00000:00000:00000:100100", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "mfic", Format: "011100:rt:00000:00000:00000:100100", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MFIC(CpuState CpuState);
 
-        [Instruction(Format:"011100:rt:00000:00000:00000:100110", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "mtic", Format: "011100:rt:00000:00000:00000:100110", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MTIC(CpuState CpuState);
 
         // Move (From/To) DR
-        [Instruction(Format:"011100:00000:----------:00000:111101", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "mfdr", Format: "011100:00000:----------:00000:111101", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MFDR(CpuState CpuState);
 
-        [Instruction(Format:"011100:00100:----------:00000:111101", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "mtdr", Format: "011100:00100:----------:00000:111101", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MTDR(CpuState CpuState);
 
         // C? (From/To) Cop0
-        [Instruction(Format:"010000:00010:----------:00000:000000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)] // CFC0(010000:00010:rt:c0cr:00000:000000)
+        [Instruction(Name: "cfc0", Format: "010000:00010:----------:00000:000000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)] // CFC0(010000:00010:rt:c0cr:00000:000000)
         abstract public void CFC0(CpuState CpuState);
 
-        [Instruction(Format:"010000:00110:----------:00000:000000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)] // CTC0(010000:00110:rt:c0cr:00000:000000)
+        [Instruction(Name: "ctc0", Format: "010000:00110:----------:00000:000000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)] // CTC0(010000:00110:rt:c0cr:00000:000000)
         abstract public void CTC0(CpuState CpuState);
 
         // Move (From/To) Cop0
-        [Instruction(Format:"010000:00000:----------:00000:000000")]              // MFC0(010000:00000:rt:c0dr:00000:000000)
+        [Instruction(Name: "mfc0", Format: "010000:00000:----------:00000:000000")]              // MFC0(010000:00000:rt:c0dr:00000:000000)
         abstract public void MFC0(CpuState CpuState);
 
-        [Instruction(Format:"010000:00100:----------:00000:000000")]              // MTC0(010000:00100:rt:c0dr:00000:000000)
+        [Instruction(Name: "mtc0", Format: "010000:00100:----------:00000:000000")]              // MTC0(010000:00100:rt:c0dr:00000:000000)
         abstract public void MTC0(CpuState CpuState);
 
         // Move From/to Vfpu (C?).
-        [Instruction(Format:"010010:00:011:rt:0:0000000:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "mfv", Format: "010010:00:011:rt:0:0000000:0:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MFV(CpuState CpuState);
 
-        [Instruction(Format:"010010:00:011:rt:0:0000000:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "mfvc", Format: "010010:00:011:rt:0:0000000:1:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MFVC(CpuState CpuState);
 
-        [Instruction(Format:"010010:00:111:rt:0:0000000:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "mtv", Format: "010010:00:111:rt:0:0000000:0:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MTV(CpuState CpuState);
 
-        [Instruction(Format:"010010:00:111:rt:0:0000000:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "mtvc", Format: "010010:00:111:rt:0:0000000:1:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void MTVC(CpuState CpuState);
 
-        virtual public void INVALID(CpuState CpuState)
-        {
-            throw(new InvalidOperationException());
-        }
-
-        /*
         // Load/Store Vfpu (Left/Right).
-        ID("lv.s",        VM("110010:rs:vt5:imm14:vt2", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("lv.q",        VM("110110:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("lvl.q",       VM("110101:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("lvr.q",       VM("110101:rs:vt5:imm14:1:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("sv.q",        VM("111110:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "lv.s", Format: "110010:rs:vt5:imm14:vt2", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void LV_S(CpuState CpuState);
+
+        [Instruction(Name: "lv.q",        Format: "110110:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void LV_Q(CpuState CpuState);
+
+        [Instruction(Name: "lvl.q",       Format: "110101:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void LVL_Q(CpuState CpuState);
+
+        [Instruction(Name: "lvr.q",       Format: "110101:rs:vt5:imm14:1:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void LVR_Q(CpuState CpuState);
+
+        [Instruction(Name: "sv.q",        Format: "111110:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void SV_Q(CpuState CpuState);
 
         // Vfpu DOT product
         // Vfpu SCaLe/ROTate
-        ID("vdot",        VM("011001:001:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vscl",        VM("011001:010:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vslt",        VM("011011:100:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsge",        VM("011011:110:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vdot", Format: "011001:001:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VDOT(CpuState CpuState);
+
+        [Instruction(Name: "vscl", Format: "011001:010:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSCL(CpuState CpuState);
+
+        [Instruction(Name: "vslt", Format: "011011:100:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSLT(CpuState CpuState);
+
+        [Instruction(Name: "vsge", Format: "011011:110:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSGE(CpuState CpuState);
 
         // ROTate
-        ID("vrot",        VM("111100:111:01:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vrot", Format: "111100:111:01:imm5:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VROT(CpuState CpuState);
 
         // Vfpu ZERO/ONE
-        ID("vzero",       VM("110100:00:000:0:0110:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vone",        VM("110100:00:000:0:0111:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vzero", Format: "110100:00:000:0:0110:two:0000000:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VZERO(CpuState CpuState);
+
+        [Instruction(Name: "vone", Format: "110100:00:000:0:0111:two:0000000:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VONE(CpuState CpuState);
 
         // Vfpu MOVe/SiGN/Reverse SQuare root/COSine/Arc SINe/LOG2
-        ID("vmov",        VM("110100:00:000:0:0000:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vabs",        VM("110100:00:000:0:0001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vneg",        VM("110100:00:000:0:0010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vocp",        VM("110100:00:010:0:0100:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsgn",        VM("110100:00:010:0:1010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vrcp",        VM("110100:00:000:1:0000:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vrsq",        VM("110100:00:000:1:0001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsin",        VM("110100:00:000:1:0010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vcos",        VM("110100:00:000:1:0011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vexp2",       VM("110100:00:000:1:0100:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vlog2",       VM("110100:00:000:1:0101:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsqrt",       VM("110100:00:000:1:0110:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vasin",       VM("110100:00:000:1:0111:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vnrcp",       VM("110100:00:000:1:1000:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vnsin",       VM("110100:00:000:1:1010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vrexp2",      VM("110100:00:000:1:1100:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmov", Format: "110100:00:000:0:0000:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMOV(CpuState CpuState);
 
-        ID("vsat0",       VM("110100:00:000:0:0100:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsat1",       VM("110100:00:000:0:0101:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vabs", Format: "110100:00:000:0:0001:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VABS(CpuState CpuState);
+
+        [Instruction(Name: "vneg", Format: "110100:00:000:0:0010:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VNEG(CpuState CpuState);
+
+        [Instruction(Name: "vocp", Format: "110100:00:010:0:0100:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VOCP(CpuState CpuState);
+
+        [Instruction(Name: "vsgn", Format: "110100:00:010:0:1010:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSGN(CpuState CpuState);
+
+        [Instruction(Name: "vrcp", Format: "110100:00:000:1:0000:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VRCP(CpuState CpuState);
+
+        [Instruction(Name: "vrsq", Format: "110100:00:000:1:0001:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VRSQ(CpuState CpuState);
+
+        [Instruction(Name: "vsin", Format: "110100:00:000:1:0010:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSIN(CpuState CpuState);
+
+        [Instruction(Name: "vcos", Format: "110100:00:000:1:0011:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VCOS(CpuState CpuState);
+
+        [Instruction(Name: "vexp2", Format: "110100:00:000:1:0100:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VEXP2(CpuState CpuState);
+
+        [Instruction(Name: "vlog2", Format: "110100:00:000:1:0101:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VLOG2(CpuState CpuState);
+
+        [Instruction(Name: "vsqrt", Format: "110100:00:000:1:0110:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSQRT(CpuState CpuState);
+
+        [Instruction(Name: "vasin", Format: "110100:00:000:1:0111:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VASIN(CpuState CpuState);
+
+        [Instruction(Name: "vnrcp", Format: "110100:00:000:1:1000:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VNRCP(CpuState CpuState);
+
+        [Instruction(Name: "vnsin", Format: "110100:00:000:1:1010:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VNSIN(CpuState CpuState);
+        
+        [Instruction(Name: "vrexp2", Format: "110100:00:000:1:1100:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VREXP2(CpuState CpuState);
+
+        [Instruction(Name: "vsat0", Format: "110100:00:000:0:0100:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSAT0(CpuState CpuState);
+
+        [Instruction(Name: "vsat1", Format: "110100:00:000:0:0101:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSAT1(CpuState CpuState);
 
         // Vfpu ConSTant
-        ID("vcst",        VM("110100:00:011:imm5:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vcst", Format: "110100:00:011:imm5:two:0000000:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VCST(CpuState CpuState);
 
         // Vfpu Matrix MULtiplication
-        ID("vmmul",       VM("111100:000:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmmul",       Format: "111100:000:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMMUL(CpuState CpuState);
 
         // -
-        ID("vhdp",        VM("011001:100:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vcrs.t",      VM("011001:101:vt:1:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vcrsp.t",     VM("111100:101:vt:1:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vhdp",        Format: "011001:100:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VHDP(CpuState CpuState);
+
+        [Instruction(Name: "vcrs.t",      Format: "011001:101:vt:1:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VCRS(CpuState CpuState);
+
+        [Instruction(Name: "vcrsp.t",     Format: "111100:101:vt:1:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VCRSP_T(CpuState CpuState);
 
         // Vfpu Integer to(2) Color
-        ID("vi2c",        VM("110100:00:001:11:101:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vi2uc",       VM("110100:00:001:11:100:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vi2c",        Format: "110100:00:001:11:101:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VI2C(CpuState CpuState);
+
+        [Instruction(Name: "vi2uc",       Format: "110100:00:001:11:100:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VI2UC(CpuState CpuState);
 
         // -
-        ID("vtfm2",       VM("111100:001:vt:0:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vtfm3",       VM("111100:010:vt:1:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vtfm4",       VM("111100:011:vt:1:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vtfm2",       Format: "111100:001:vt:0:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VTFM2(CpuState CpuState);
 
-        ID("vhtfm2",      VM("111100:001:vt:0:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vhtfm3",      VM("111100:010:vt:0:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vhtfm4",      VM("111100:011:vt:1:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vtfm3",       Format: "111100:010:vt:1:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VTFM3(CpuState CpuState);
 
-        ID("vsrt3",       VM("110100:00:010:01000:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vtfm4",       Format: "111100:011:vt:1:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VTFM4(CpuState CpuState);
 
-        ID("vfad",        VM("110100:00:010:00110:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vhtfm2",      Format: "111100:001:vt:0:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VHTFM2(CpuState CpuState);
+
+        [Instruction(Name: "vhtfm3",      Format: "111100:010:vt:0:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VHTFM3(CpuState CpuState);
+
+        [Instruction(Name: "vhtfm4",      Format: "111100:011:vt:1:vs:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VHTFM4(CpuState CpuState);
+
+        [Instruction(Name: "vsrt3",       Format: "110100:00:010:01000:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSRT3(CpuState CpuState);
+
+        [Instruction(Name: "vfad", Format: "110100:00:010:00110:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VFAD(CpuState CpuState);
 
         // Vfpu MINimum/MAXium/ADD/SUB/DIV/MUL
-        ID("vmin",        VM("011011:010:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vmax",        VM("011011:011:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vadd",        VM("011000:000:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsub",        VM("011000:001:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vdiv",        VM("011000:111:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vmul",        VM("011001:000:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmin",        Format: "011011:010:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMIN(CpuState CpuState);
+
+        [Instruction(Name: "vmax",        Format: "011011:011:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMAX(CpuState CpuState);
+
+        [Instruction(Name: "vadd", Format: "011000:000:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VADD(CpuState CpuState);
+
+        [Instruction(Name: "vsub", Format: "011000:001:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSUB(CpuState CpuState);
+
+        [Instruction(Name: "vdiv", Format: "011000:111:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VDIV(CpuState CpuState);
+
+        [Instruction(Name: "vmul", Format: "011001:000:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMUL(CpuState CpuState);
+
 
         // Vfpu (Matrix) IDenTity
-        ID("vidt",        VM("110100:00:000:0:0011:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vmidt",       VM("111100:111:00:00011:two:0000000:one:vd",  InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vidt",        Format: "110100:00:000:0:0011:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VIDT(CpuState CpuState);
 
-        ID("viim",        VM("110111:11:0:vd:imm16", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmidt",       Format: "111100:111:00:00011:two:0000000:one:vd",  _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMIDT(CpuState CpuState);
+        
+        [Instruction(Name: "viim",        Format: "110111:11:0:vd:imm16", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VIIM(CpuState CpuState);
 
-        ID("vmmov",       VM("111100:111:00:00000:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vmzero",      VM("111100:111:00:00110:two:0000000:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vmone",       VM("111100:111:00:00111:two:0000000:one:vd",           InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmmov",       Format: "111100:111:00:00000:two:vs:one:vd",      _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMMOV(CpuState CpuState);
 
-        ID("vnop",        VM("111111:1111111111:00000:00000000000"), "",         InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsync",       VM("111111:1111111111:00000:01100100000"), "", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vflush",      VM("111111:1111111111:00000:10000001101"), "",              InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmzero",      Format: "111100:111:00:00110:two:0000000:one:vd",      _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMZERO(CpuState CpuState);
 
-        ID("vpfxd",       VM("110111:10:------------:mskw:mskz:msky:mskx:satw:satz:saty:satx"), "[%vp4, %vp5, %vp6, %vp7]", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vpfxs",       VM("110111:00:----:negw:negz:negy:negx:cstw:cstz:csty:cstx:absw:absz:absy:absx:swzw:swzz:swzy:swzx"), "[%vp0, %vp1, %vp2, %vp3]", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vpfxt",       VM("110111:01:----:negw:negz:negy:negx:cstw:cstz:csty:cstx:absw:absz:absy:absx:swzw:swzz:swzy:swzx"), "[%vp0, %vp1, %vp2, %vp3]", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmone",       Format: "111100:111:00:00111:two:0000000:one:vd",           _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMONE(CpuState CpuState);
 
-        ID("vdet",        VM("011001:110:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vnop",        Format: "111111:1111111111:00000:00000000000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VNOP(CpuState CpuState);
 
-        ID("vrnds",       VM("110100:00:001:00:000:two:vs:one:0000000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vrndi",       VM("110100:00:001:00:001:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vrndf1",      VM("110100:00:001:00:010:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vrndf2",      VM("110100:00:001:00:011:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vsync",       Format: "111111:1111111111:00000:01100100000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSYNC(CpuState CpuState);
 
+        [Instruction(Name: "vflush",      Format: "111111:1111111111:00000:10000001101",      _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VFLUSH(CpuState CpuState);
+
+        [Instruction(Name: "vpfxd",       Format: "110111:10:------------:mskw:mskz:msky:mskx:satw:satz:saty:satx", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VPFXD(CpuState CpuState);
+
+        [Instruction(Name: "vpfxs",       Format: "110111:00:----:negw:negz:negy:negx:cstw:cstz:csty:cstx:absw:absz:absy:absx:swzw:swzz:swzy:swzx", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VPFXS(CpuState CpuState);
+
+        [Instruction(Name: "vpfxt",       Format: "110111:01:----:negw:negz:negy:negx:cstw:cstz:csty:cstx:absw:absz:absy:absx:swzw:swzz:swzy:swzx", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VPFXT(CpuState CpuState);
+
+        [Instruction(Name: "vdet",        Format: "011001:110:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VDET(CpuState CpuState);
+
+        [Instruction(Name: "vrnds",       Format: "110100:00:001:00:000:two:vs:one:0000000", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VRNDS(CpuState CpuState);
+
+        [Instruction(Name: "vrndi",       Format: "110100:00:001:00:001:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VRNDI(CpuState CpuState);
+
+        [Instruction(Name: "vrndf1",      Format: "110100:00:001:00:010:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VRNDF1(CpuState CpuState);
+
+        [Instruction(Name: "vrndf2",      Format: "110100:00:001:00:011:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VRNDF2(CpuState CpuState);
+
+
+        /*
         ////////////////////////////
         /// Not implemented yet!
         ////////////////////////////
-        ID("vcmp",        VM("011011:000:vt:two:vs:one:0000:imm3" , _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vcmp",        Format: "011011:000:vt:two:vs:one:0000:imm3" , _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
 
-        ID("vcmovf",      VM("110100:10:101:01:imm3:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vcmovt",      VM("110100:10:101:00:imm3:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vcmovf",      Format: "110100:10:101:01:imm3:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vcmovt",      Format: "110100:10:101:00:imm3:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
 
-        ID("bvf",         VM("010010:01:000:imm3:00:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
-        ID("bvfl",        VM("010010:01:000:imm3:10:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
-        ID("bvt",         VM("010010:01:000:imm3:01:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
-        ID("bvtl",        VM("010010:01:000:imm3:11:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bvf",         Format: "010010:01:000:imm3:00:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bvfl",        Format: "010010:01:000:imm3:10:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bvt",         Format: "010010:01:000:imm3:01:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bvtl",        Format: "010010:01:000:imm3:11:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
 
-        ID("vavg",        VM("110100:00:010:00111:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vf2id",       VM("110100:10:011:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vf2in",       VM("110100:10:000:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vf2iu",       VM("110100:10:010:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vf2iz",       VM("110100:10:001:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vi2f",        VM("110100:10:100:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vavg",        Format: "110100:00:010:00111:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vf2id",       Format: "110100:10:011:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vf2in",       Format: "110100:10:000:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vf2iu",       Format: "110100:10:010:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vf2iz",       Format: "110100:10:001:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vi2f",        Format: "110100:10:100:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
 
-        ID("vscmp",       VM("011011:101:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vmscl",       VM("111100:100:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vscmp",       Format: "011011:101:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmscl",       Format: "111100:100:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
 
-        ID("vt4444.q",    VM("110100:00:010:11001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vt5551.q",    VM("110100:00:010:11010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vt5650.q",    VM("110100:00:010:11011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vt4444.q",    Format: "110100:00:010:11001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vt5551.q",    Format: "110100:00:010:11010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vt5650.q",    Format: "110100:00:010:11011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
 
-        ID("vmfvc",       VM("110100:00:010:10000:1:imm7:0:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vmtvc",       VM("110100:00:010:10001:0:vs:1:imm7",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmfvc",       Format: "110100:00:010:10000:1:imm7:0:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vmtvc",       Format: "110100:00:010:10001:0:vs:1:imm7",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
 
-        ID("mfvme",       VM("011010--------------------------")]
-        ID("mtvme",       VM("101100--------------------------")]
+        [Instruction(Name: "mfvme",       Format: "011010--------------------------")]
+        [Instruction(Name: "mtvme",       Format: "101100--------------------------")]
 
-        ID("sv.s",        VM("111010:rs:vt5:imm14:vt2", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("svl.q",       VM("111101:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("svr.q",       VM("111101:rs:vt5:imm14:1:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vbfy1",       VM("110100:00:010:00010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vbfy2",       VM("110100:00:010:00011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vfim",        VM("110111:11:1:vd:imm16",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "sv.s",        Format: "111010:rs:vt5:imm14:vt2", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "svl.q",       Format: "111101:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "svr.q",       Format: "111101:rs:vt5:imm14:1:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vbfy1",       Format: "110100:00:010:00010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vbfy2",       Format: "110100:00:010:00011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vfim",        Format: "110111:11:1:vd:imm16",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
 
-        ID("vf2h",        VM("110100:00:001:10:010:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vh2f",        VM("110100:00:001:10:011:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vi2s",        VM("110100:00:001:11:111:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vi2us",       VM("110100:00:001:11:110:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vidt",        VM("110100:00:000:0:0011:two:0000000:one:vd",           InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vf2h",        Format: "110100:00:001:10:010:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vh2f",        Format: "110100:00:001:10:011:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vi2s",        Format: "110100:00:001:11:111:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vi2us",       Format: "110100:00:001:11:110:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vidt",        Format: "110100:00:000:0:0011:two:0000000:one:vd",           InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
 
-        ID("vlgb",        VM("110100:00:001:10:111:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vqmul",       VM("111100:101:vt:1:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vs2i",        VM("110100:00:001:11:011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsbn",        VM("011000:010:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsbz",        VM("110100:00:001:10:110:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsocp",       VM("110100:00:010:00101:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsrt1",       VM("110100:00:010:00000:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsrt2",       VM("110100:00:010:00001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vsrt4",       VM("110100:00:010:01001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vus2i",       VM("110100:00:001:11:010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vwb.q",       VM("111110------------------------1-", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        ID("vwbn",        VM("110100:11:imm8:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vlgb",        Format: "110100:00:001:10:111:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vqmul",       Format: "111100:101:vt:1:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vs2i",        Format: "110100:00:001:11:011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vsbn",        Format: "011000:010:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vsbz",        Format: "110100:00:001:10:110:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vsocp",       Format: "110100:00:010:00101:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vsrt1",       Format: "110100:00:010:00000:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vsrt2",       Format: "110100:00:010:00001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vsrt4",       Format: "110100:00:010:01001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vus2i",       Format: "110100:00:001:11:010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vwb.q",       Format: "111110------------------------1-", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vwbn",        Format: "110100:11:imm8:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
         */
+
+        virtual public void INVALID(CpuState CpuState)
+        {
+            throw (new InvalidOperationException());
+        }
 	}
 }
