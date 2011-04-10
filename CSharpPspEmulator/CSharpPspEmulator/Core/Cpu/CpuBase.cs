@@ -716,67 +716,145 @@ namespace CSharpPspEmulator.Core.Cpu
         [Instruction(Name: "vrndf2",      Format: "110100:00:001:00:011:two:0000000:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
         abstract public void VRNDF2(CpuState CpuState);
 
-
-        /*
         ////////////////////////////
         /// Not implemented yet!
         ////////////////////////////
         [Instruction(Name: "vcmp",        Format: "011011:000:vt:two:vs:one:0000:imm3" , _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VCMP(CpuState CpuState);
 
         [Instruction(Name: "vcmovf",      Format: "110100:10:101:01:imm3:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vcmovt",      Format: "110100:10:101:00:imm3:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VCMOVF(CpuState CpuState);
 
-        [Instruction(Name: "bvf",         Format: "010010:01:000:imm3:00:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
-        [Instruction(Name: "bvfl",        Format: "010010:01:000:imm3:10:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
-        [Instruction(Name: "bvt",         Format: "010010:01:000:imm3:01:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
-        [Instruction(Name: "bvtl",        Format: "010010:01:000:imm3:11:imm16", _AddressType:InstructionAttribute.AddressType.S16, InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "vcmovt", Format: "110100:10:101:00:imm3:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VCMOVT(CpuState CpuState);
+
+        [Instruction(Name: "bvf", Format: "010010:01:000:imm3:00:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        abstract public void BVF(CpuState CpuState);
+
+        [Instruction(Name: "bvfl", Format: "010010:01:000:imm3:10:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        abstract public void BVFL(CpuState CpuState);
+
+        [Instruction(Name: "bvt", Format: "010010:01:000:imm3:01:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        abstract public void BVT(CpuState CpuState);
+
+        [Instruction(Name: "bvtl", Format: "010010:01:000:imm3:11:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.PSP | InstructionAttribute.InstructionType.Branch)]
+        abstract public void BVTL(CpuState CpuState);
 
         [Instruction(Name: "vavg",        Format: "110100:00:010:00111:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vf2id",       Format: "110100:10:011:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vf2in",       Format: "110100:10:000:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vf2iu",       Format: "110100:10:010:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vf2iz",       Format: "110100:10:001:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vi2f",        Format: "110100:10:100:imm5:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VAVG(CpuState CpuState);
+
+        [Instruction(Name: "vf2id", Format: "110100:10:011:imm5:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VF2ID(CpuState CpuState);
+
+        [Instruction(Name: "vf2in", Format: "110100:10:000:imm5:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VF2IN(CpuState CpuState);
+
+        [Instruction(Name: "vf2iu", Format: "110100:10:010:imm5:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VF2IU(CpuState CpuState);
+
+        [Instruction(Name: "vf2iz", Format: "110100:10:001:imm5:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VF2IZ(CpuState CpuState);
+
+        [Instruction(Name: "vi2f", Format: "110100:10:100:imm5:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VI2F(CpuState CpuState);
 
         [Instruction(Name: "vscmp",       Format: "011011:101:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vmscl",       Format: "111100:100:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSCMP(CpuState CpuState);
+
+        [Instruction(Name: "vmscl", Format: "111100:100:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMSCL(CpuState CpuState);
 
         [Instruction(Name: "vt4444.q",    Format: "110100:00:010:11001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vt5551.q",    Format: "110100:00:010:11010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vt5650.q",    Format: "110100:00:010:11011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void VT4444_Q(CpuState CpuState);
 
-        [Instruction(Name: "vmfvc",       Format: "110100:00:010:10000:1:imm7:0:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vmtvc",       Format: "110100:00:010:10001:0:vs:1:imm7",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "vt5551.q", Format: "110100:00:010:11010:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VT5551_Q(CpuState CpuState);
+
+        [Instruction(Name: "vt5650.q", Format: "110100:00:010:11011:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VT5650_Q(CpuState CpuState);
+
+        [Instruction(Name: "vmfvc", Format: "110100:00:010:10000:1:imm7:0:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMFVC(CpuState CpuState);
+
+        [Instruction(Name: "vmtvc", Format: "110100:00:010:10001:0:vs:1:imm7", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VMTVC(CpuState CpuState);
 
         [Instruction(Name: "mfvme",       Format: "011010--------------------------")]
-        [Instruction(Name: "mtvme",       Format: "101100--------------------------")]
+        abstract public void MFVME(CpuState CpuState);
+
+        [Instruction(Name: "mtvme", Format: "101100--------------------------")]
+        abstract public void MTVME(CpuState CpuState);
 
         [Instruction(Name: "sv.s",        Format: "111010:rs:vt5:imm14:vt2", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "svl.q",       Format: "111101:rs:vt5:imm14:0:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "svr.q",       Format: "111101:rs:vt5:imm14:1:vt1", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vbfy1",       Format: "110100:00:010:00010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vbfy2",       Format: "110100:00:010:00011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vfim",        Format: "110111:11:1:vd:imm16",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        abstract public void SV_S(CpuState CpuState);
 
-        [Instruction(Name: "vf2h",        Format: "110100:00:001:10:010:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vh2f",        Format: "110100:00:001:10:011:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vi2s",        Format: "110100:00:001:11:111:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vi2us",       Format: "110100:00:001:11:110:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vidt",        Format: "110100:00:000:0:0011:two:0000000:one:vd",           InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "svl.q", Format: "111101:rs:vt5:imm14:0:vt1", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void SVL_Q(CpuState CpuState);
 
-        [Instruction(Name: "vlgb",        Format: "110100:00:001:10:111:two:vs:one:vd",      InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vqmul",       Format: "111100:101:vt:1:vs:1:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vs2i",        Format: "110100:00:001:11:011:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vsbn",        Format: "011000:010:vt:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vsbz",        Format: "110100:00:001:10:110:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vsocp",       Format: "110100:00:010:00101:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vsrt1",       Format: "110100:00:010:00000:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vsrt2",       Format: "110100:00:010:00001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vsrt4",       Format: "110100:00:010:01001:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vus2i",       Format: "110100:00:001:11:010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vwb.q",       Format: "111110------------------------1-", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
-        [Instruction(Name: "vwbn",        Format: "110100:11:imm8:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType:InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "svr.q", Format: "111101:rs:vt5:imm14:1:vt1", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void SVR_Q(CpuState CpuState);
+
+        [Instruction(Name: "vbfy1", Format: "110100:00:010:00010:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VBFY1(CpuState CpuState);
+
+        [Instruction(Name: "vbfy2", Format: "110100:00:010:00011:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VBFY2(CpuState CpuState);
+
+        [Instruction(Name: "vfim", Format: "110111:11:1:vd:imm16", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VFIM(CpuState CpuState);
+
+        [Instruction(Name: "vf2h", Format: "110100:00:001:10:010:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VF2H(CpuState CpuState);
+
+        [Instruction(Name: "vh2f", Format: "110100:00:001:10:011:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VH2F(CpuState CpuState);
+
+        [Instruction(Name: "vi2s", Format: "110100:00:001:11:111:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VI2S(CpuState CpuState);
+
+        [Instruction(Name: "vi2us", Format: "110100:00:001:11:110:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VI2US(CpuState CpuState);
+
+        /*
+        [Instruction(Name: "vidt", Format: "110100:00:000:0:0011:two:0000000:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VIDT(CpuState CpuState);
         */
+
+        [Instruction(Name: "vlgb", Format: "110100:00:001:10:111:two:vs:one:vd", _AddressType:InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VLGB(CpuState CpuState);
+
+        [Instruction(Name: "vqmul", Format: "111100:101:vt:1:vs:1:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VQMUL(CpuState CpuState);
+
+        [Instruction(Name: "vs2i", Format: "110100:00:001:11:011:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VS2I(CpuState CpuState);
+
+        [Instruction(Name: "vsbn", Format: "011000:010:vt:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSBN(CpuState CpuState);
+
+        [Instruction(Name: "vsbz", Format: "110100:00:001:10:110:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSBZ(CpuState CpuState);
+
+        [Instruction(Name: "vsocp", Format: "110100:00:010:00101:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSOCP(CpuState CpuState);
+
+        [Instruction(Name: "vsrt1", Format: "110100:00:010:00000:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSRT1(CpuState CpuState);
+
+        [Instruction(Name: "vsrt2", Format: "110100:00:010:00001:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSRT2(CpuState CpuState);
+
+        [Instruction(Name: "vsrt4", Format: "110100:00:010:01001:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VSRT4(CpuState CpuState);
+
+        [Instruction(Name: "vus2i", Format: "110100:00:001:11:010:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VUS2I(CpuState CpuState);
+
+        [Instruction(Name: "vwb.q", Format: "111110------------------------1-", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VWB_Q(CpuState CpuState);
+
+        [Instruction(Name: "vwbn", Format: "110100:11:imm8:two:vs:one:vd", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        abstract public void VWBN(CpuState CpuState);
 
         virtual public void INVALID(CpuState CpuState)
         {

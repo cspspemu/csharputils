@@ -347,5 +347,225 @@ namespace CSharpPspEmulator.Core.Cpu
         {
             throw new NotImplementedException();
         }
+
+        public override void VCMP(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VCMOVF(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VCMOVT(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BVF(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BVFL(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BVT(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BVTL(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VAVG(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VF2ID(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VF2IN(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VF2IU(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VF2IZ(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VI2F(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VSCMP(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VMSCL(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VT4444_Q(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VT5551_Q(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VT5650_Q(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VMFVC(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VMTVC(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void MFVME(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void MTVME(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SV_S(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SVL_Q(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SVR_Q(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VBFY1(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VBFY2(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VFIM(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VF2H(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VH2F(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VI2S(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VI2US(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VLGB(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VQMUL(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VS2I(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VSBN(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VSBZ(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VSOCP(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VSRT1(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VSRT2(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VSRT4(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VUS2I(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VWB_Q(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VWBN(CpuState CpuState)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -20,11 +20,12 @@ namespace CSharpPspEmulator.Core.Cpu
 
         public enum InstructionType
         {
-            Normal,
-            PSP,
-            Branch,
-            JumpAndLink,
-            Jump
+            Normal = 1,
+            Branch = 2,
+            Jump = 4,
+            Link = 8,
+            JumpAndLink = Jump | Link,
+            PSP = 16,
         }
 
         //public delegate String GenerateAssemblerDelegate(String Name);
@@ -40,21 +41,40 @@ namespace CSharpPspEmulator.Core.Cpu
 				return MethodInfo.Name;
 			}
 		}
-		readonly public String Format;
+		readonly public String _Format;
         readonly public String AssemblerFormat;
         readonly public InstructionType _InstructionType;
 		readonly public AddressType _AddressType;
-		public uint FormatValue;
-		public uint FormatMask;
+        private bool FormatParsed;
+		private uint FormatValue;
+		private uint FormatMask;
+
+        private void CheckFormatParsed()
+        {
+            lock (this)
+            {
+                if (!FormatParsed)
+                {
+                    ParseFormat();
+                    FormatParsed = true;
+                }
+            }
+        }
 
         public uint TableValue
         {
-            get { return FormatValue; }
+            get {
+                CheckFormatParsed();
+                return FormatValue;
+            }
         }
 
         public uint TableMask
         {
-            get { return FormatMask; }
+            get {
+                CheckFormatParsed();
+                return FormatMask;
+            }
         }
 
         /*static public implicit operator ExecutionDelegate(InstructionAttribute Attribute)
@@ -129,7 +149,7 @@ namespace CSharpPspEmulator.Core.Cpu
 
 		private void ParseFormat()
 		{
-			foreach (var Part in Format.Split(':'))
+			foreach (var Part in _Format.Split(':'))
 			{
 				switch (Part)
 				{
@@ -183,11 +203,11 @@ namespace CSharpPspEmulator.Core.Cpu
         public InstructionAttribute(String Format, String Name = "", String AssemblerFormat = "<NoAssemblerFormat>", AddressType _AddressType = InstructionAttribute.AddressType.None, InstructionType _InstructionType = InstructionType.Normal)
 		{
 			this._Name = Name;
-			this.Format = Format;
+			this._Format = Format;
             this.AssemblerFormat = AssemblerFormat;
 			this._AddressType = _AddressType;
             this._InstructionType = _InstructionType;
-			ParseFormat();
+			//ParseFormat();
 		}
 
         public override string ToString()
