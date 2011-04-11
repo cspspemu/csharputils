@@ -9,25 +9,25 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
     {
         public override void ADD(CpuState CpuState)
         {
-            CpuState.RT = CpuState.RD + CpuState.RS;
+            CpuState.RD = CpuState.RS + CpuState.RT;
             CpuState.AdvancePC(4);
         }
 
         public override void ADDU(CpuState CpuState)
         {
-            CpuState.RT = CpuState.RD + CpuState.RS;
+            CpuState.RD = CpuState.RS + CpuState.RT;
             CpuState.AdvancePC(4);
         }
 
         public override void ADDI(CpuState CpuState)
         {
-            CpuState.RT = CpuState.RD + CpuState.IMMU;
+            CpuState.RT = (uint)(CpuState.RS + CpuState.IMM);
             CpuState.AdvancePC(4);
         }
 
         public override void ADDIU(CpuState CpuState)
         {
-            CpuState.RT = CpuState.RD + CpuState.IMMU;
+            CpuState.RT = (uint)(CpuState.RS + CpuState.IMM);
             CpuState.AdvancePC(4);
         }
 
@@ -43,7 +43,8 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void AND(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RD = CpuState.RS & CpuState.RT;
+            CpuState.AdvancePC(4);
         }
 
         public override void ANDI(CpuState CpuState)
@@ -58,17 +59,21 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void OR(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RD = CpuState.RS | CpuState.RT;
+            CpuState.AdvancePC(4);
         }
 
         public override void ORI(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RT = CpuState.RS | CpuState.IMMU;
+            CpuState.AdvancePC(4);
+            //throw(new NotImplementedException());
         }
 
         public override void XOR(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RD = CpuState.RS ^ CpuState.RT;
+            CpuState.AdvancePC(4);
         }
 
         public override void XORI(CpuState CpuState)
@@ -78,7 +83,9 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void SLL(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            //$rd = SLL($rt, $ps);
+            CpuState.RD = (uint)((uint)CpuState.RT << (int)CpuState.PS);
+            CpuState.AdvancePC(4);
         }
 
         public override void SLLV(CpuState CpuState)
@@ -88,7 +95,8 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void SRA(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RD = (uint)((int)CpuState.RT >> (int)CpuState.PS);
+            CpuState.AdvancePC(4);
         }
 
         public override void SRAV(CpuState CpuState)
@@ -98,7 +106,8 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void SRL(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RD = (uint)((uint)CpuState.RT >> (int)CpuState.PS);
+            CpuState.AdvancePC(4);
         }
 
         public override void SRLV(CpuState CpuState)
@@ -128,7 +137,8 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void SLTU(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RD = (uint)(((uint)CpuState.RS < (uint)CpuState.RT) ? 1 : 0);
+            CpuState.AdvancePC(4);
         }
 
         public override void SLTIU(CpuState CpuState)
@@ -138,7 +148,8 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void LUI(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RT = CpuState.IMMU << 16;
+            CpuState.AdvancePC(4);
         }
 
         public override void SEB(CpuState CpuState)
@@ -173,7 +184,9 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void DIVU(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RegistersCpu.LO = (uint)CpuState.RS / (uint)CpuState.RT;
+            CpuState.RegistersCpu.HI = (uint)CpuState.RS % (uint)CpuState.RT;
+            CpuState.AdvancePC(4);
         }
 
         public override void MULT(CpuState CpuState)
@@ -208,12 +221,14 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void MFHI(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RD = CpuState.RegistersCpu.HI;
+            CpuState.AdvancePC(4);
         }
 
         public override void MFLO(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RD = CpuState.RegistersCpu.LO;
+            CpuState.AdvancePC(4);
         }
 
         public override void MTHI(CpuState CpuState)

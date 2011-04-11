@@ -18,6 +18,7 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
             //new Regex();
             foreach (var Attribute in InstructionAttribute.GetInstructionAttributeMethods(typeof(InterpretedCpu)))
             {
+                //Console.WriteLine(Attribute.Name);
                 Instructions.Add(Attribute.Name, Attribute);
             }
         }
@@ -46,7 +47,7 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
                         return @"(r\d+|\w{2})";
 
                     // Immediate value.
-                    case "imm":
+                    case "imm": case "h":
                         return @"(\-?\d+)";
                     default:
                         throw(new Exception("Invalid format '" + Match + "'"));
@@ -71,6 +72,7 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
                     case "s": InstructionData.RS = (uint)RegistersCpu.RegisterNameToIndex(Value); break;
                     case "t": InstructionData.RT = (uint)RegistersCpu.RegisterNameToIndex(Value); break;
                     case "d": InstructionData.RD = (uint)RegistersCpu.RegisterNameToIndex(Value); break;
+                    case "h": InstructionData.PS = (uint)Convert.ToInt16(Value); break;
                     case "imm": InstructionData.IMM = (short)Convert.ToInt64(Value); break;
                     case "immu": InstructionData.IMMU = (ushort)Convert.ToInt64(Value); break;
                     default: throw (new Exception("Unknown TypeName '" + TypeName + "'"));
@@ -85,7 +87,8 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
         public List<InstructionData> Assemble(String Line)
         {
             
-            var Expr = new Regex(@"^\s*((?<Name>\S+)\s+(?<Params>[^#]*))?(?<Comment>#.*)?$");
+            var Expr = new Regex(@"^\s*((?<Name>\S+)(?:$|\s+(?<Params>[^#]*))?(?<Comment>#.*)?$)");
+            if (!Expr.IsMatch(Line)) throw(new Exception("Invalid line to assemble"));
             var Match = Expr.Match(Line);
             var InstructionName = Match.Groups["Name"].Value;
             var InstructionParams = Match.Groups["Params"].Value;

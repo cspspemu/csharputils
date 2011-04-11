@@ -34,7 +34,8 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void LBU(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RT = (uint)(0xFF & CpuState.Memory.ReadUnsigned8((uint)(CpuState.RS + CpuState.IMM)));
+            CpuState.AdvancePC(4);
         }
 
         public override void LHU(CpuState CpuState)
@@ -42,9 +43,22 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// SB -- Store byte
+        /// Description:
+        ///     The least significant byte of $t is stored at the specified address.
+        /// Operation:
+        ///     MEM[$s + offset] = (0xff & $t); advance_pc (4);
+        /// Syntax:
+        ///     sb $t, offset($s)
+        /// Encoding:
+        ///    1010 00ss ssst tttt iiii iiii iiii iiii
+        /// </summary>
+        /// <param name="CpuState"></param>
         public override void SB(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.Memory.WriteUnsigned8((uint)(CpuState.RS + CpuState.IMM), (byte)(CpuState.RT & 0xFF));
+            CpuState.AdvancePC(4);
         }
 
         public override void SH(CpuState CpuState)
@@ -54,7 +68,8 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void SW(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.Memory.WriteUnsigned32((uint)(CpuState.RS + CpuState.IMM), (uint)CpuState.RT);
+            CpuState.AdvancePC(4);
         }
 
         public override void SWL(CpuState CpuState)

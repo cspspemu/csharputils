@@ -53,6 +53,8 @@
     <Compile Include="BitExtensionsTest.cs" />
     <Compile Include="Core\Cpu\Assembler\AssemblerTest.cs" />
     <Compile Include="Core\Cpu\Assembler\DisassemblerTest.cs" />
+    <Compile Include="Core\Cpu\InterpretedCpuTest.cs" />
+    <Compile Include="Hle\Elf\ElfLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Tables\TableExecutionDelegateTest.cs" />
   </ItemGroup>

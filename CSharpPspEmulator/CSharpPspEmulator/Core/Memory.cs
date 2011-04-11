@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace CSharpPspEmulator.Core
 {
@@ -62,7 +63,8 @@ namespace CSharpPspEmulator.Core
                     byte *Pointer = Segment.GetPointer(Address);
                     if (Pointer != null) return Pointer;
                 }
-                return null;
+                throw(new Exception(String.Format("Invalid Address {0,8:X}", Address)));
+                //return null;
             }
         }
 
@@ -73,24 +75,30 @@ namespace CSharpPspEmulator.Core
             return Segments.GetPointer(Address);
 		}
 
-        public byte ReadUnsigned8(uint Address)
+        public unsafe IntPtr GetIntPtr(uint Address)
         {
-            return *((byte*)GetPointer(Address));
+            return (IntPtr)GetPointer(Address);
         }
 
-        public ushort ReadUnsigned16(uint Address)
-        {
-            return *((ushort*)GetPointer(Address));
+        public byte ReadUnsigned8(uint Address) { return *((byte*)GetPointer(Address)); }
+        public ushort ReadUnsigned16(uint Address) { return *((ushort*)GetPointer(Address)); }
+        public uint ReadUnsigned32(uint Address) { return *((uint *)GetPointer(Address)); }
+        public ulong ReadUnsigned64(uint Address) { return *((ulong*)GetPointer(Address)); }
+
+        public void WriteUnsigned8(uint Address, byte Value) { *((byte*)GetPointer(Address)) = Value; }
+        public void WriteUnsigned16(uint Address, ushort Value) { *((ushort*)GetPointer(Address)) = Value; }
+        public void WriteUnsigned32(uint Address, uint Value) { *((uint*)GetPointer(Address)) = Value; }
+        public void WriteUnsigned64(uint Address, ulong Value) {
+            Marshal.WriteInt64((IntPtr)GetPointer(Address), (long)Value);
         }
 
-        public uint ReadUnsigned32(uint Address)
+        public void WriteBytes(uint Address, byte[] Data, uint Position, int Length)
         {
-            return *((uint *)GetPointer(Address));
-        }
-
-        public ulong ReadUnsigned64(uint Address)
-        {
-            return *((ulong*)GetPointer(Address));
+            var Pointer = (IntPtr)GetPointer(Address);
+            for (int n = 0; n < Length; n++)
+            {
+                Marshal.WriteByte(Pointer, n, Data[Position + n]);
+            }
         }
     }
 }

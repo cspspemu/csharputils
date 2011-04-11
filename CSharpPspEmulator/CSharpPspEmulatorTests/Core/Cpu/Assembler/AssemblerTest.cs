@@ -14,8 +14,10 @@ namespace CSharpPspEmulatorTests
         {
             Assembler Assembler = new Assembler();
             var InstructionDataList = Assembler.Assemble("addi r1, r0, 1000");
+            //Console.WriteLine((new Disassembler()).Disassemble(new Disassembler.State(InstructionDataList[0])));
+
             Assert.AreEqual(1, InstructionDataList.Count);
-            Assert.AreEqual(0x200103E8, InstructionDataList[0].Value);
+            Assert.AreEqual<uint>(0x200103E8, InstructionDataList[0].Value);
         }
 
         [TestMethod]
@@ -23,9 +25,9 @@ namespace CSharpPspEmulatorTests
         {
             Assembler Assembler = new Assembler();
             var InstructionDataList = Assembler.Assemble("addi r1, r0, -1000");
-            Console.WriteLine(InstructionDataList[0]);
+            //Console.WriteLine(InstructionDataList[0]);
             Assert.AreEqual(1, InstructionDataList.Count);
-            Assert.AreEqual(0x200103E8, InstructionDataList[0].Value);
+            Assert.AreEqual<uint>(0x2001FC18, InstructionDataList[0].Value);
         }
     }
 }

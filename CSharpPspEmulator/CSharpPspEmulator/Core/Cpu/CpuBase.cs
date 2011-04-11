@@ -80,7 +80,7 @@ namespace CSharpPspEmulator.Core.Cpu
         abstract public void XORI(CpuState CpuState);
 
         // Shift Left/Right Logical/Arithmethic (Variable).
-        [Instruction(Name: "sll", Format: "000000:00000:rt:rd:sa:000000")]
+        [Instruction(Name: "sll", Format: "000000:00000:rt:rd:sa:000000", AssemblerFormat: "{$d},{$t},{$h}")]
         abstract public void SLL(CpuState CpuState);
 
         [Instruction(Name: "sllv", Format: "000000:rs:rt:rd:00000:000100")]
@@ -118,7 +118,7 @@ namespace CSharpPspEmulator.Core.Cpu
         abstract public void SLTIU(CpuState CpuState);
 
         // Load Upper Immediate.
-        [Instruction(Name: "lui", Format: "001111:00000:rt:imm16", _AddressType: InstructionAttribute.AddressType.None)]
+        [Instruction(Name: "lui", Format: "001111:00000:rt:imm16", AssemblerFormat: "{$t},{$immu}", _AddressType: InstructionAttribute.AddressType.None)]
         abstract public void LUI(CpuState CpuState);
 
         // Sign Extend Byte/Half word.
@@ -218,7 +218,7 @@ namespace CSharpPspEmulator.Core.Cpu
         abstract public void BEQL(CpuState CpuState);
 
         // Branch on Greater Equal Zero (And Link) (Likely).
-        [Instruction(Name: "bgez", Format: "000001:rs:00001:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
+        [Instruction(Name: "bgez", Format: "000001:rs:00001:imm16", AssemblerFormat:"{$s},{$offset2}", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
         abstract public void BGEZ(CpuState CpuState);
 
         [Instruction(Name: "bgezl", Format: "000001:rs:00011:imm16", _AddressType: InstructionAttribute.AddressType.S16, _InstructionType: InstructionAttribute.InstructionType.Branch)]
@@ -461,7 +461,7 @@ namespace CSharpPspEmulator.Core.Cpu
 
         #region Special
         // Syscall
-        [Instruction(Name: "syscall", Format: "000000:imm20:001100")]
+        [Instruction(Name: "syscall", Format: "000000:imm20:001100", AssemblerFormat: "{$code}")]
         abstract public void SYSCALL(CpuState CpuState);
 
         [Instruction(Name: "cache", Format: "101111--------------------------")]
@@ -473,7 +473,7 @@ namespace CSharpPspEmulator.Core.Cpu
         [Instruction(Name: "break", Format: "000000:imm20:001101")]
         abstract public void BREAK(CpuState CpuState);
 
-        [Instruction(Name: "dbreak", Format: "011100:00000:00000:00000:00000:111111", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
+        [Instruction(Name: "dbreak", Format: "011100:00000:00000:00000:00000:111111", AssemblerFormat: "", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]
         abstract public void DBREAK(CpuState CpuState);
 
         [Instruction(Name: "halt", Format: "011100:00000:00000:00000:00000:000000", _AddressType: InstructionAttribute.AddressType.None, _InstructionType: InstructionAttribute.InstructionType.PSP)]

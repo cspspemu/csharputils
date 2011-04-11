@@ -5,8 +5,35 @@ using System.Text;
 
 namespace CSharpPspEmulator.Core.Cpu.Interpreter
 {
+    /// <summary>
+    /// http://code.google.com/p/pspemu/source/browse/trunk/pspemu/core/cpu/interpreted/ops/Branch.d
+    /// </summary>
     public partial class InterpretedCpu : CpuBase 
     {
+        protected void Branch(CpuState CpuState, bool Result, bool Likely = false, bool Link = false)
+        {
+            if (Result)
+            {
+                if (Link)
+                {
+                    CpuState.RegistersCpu[31] = CpuState.RegistersCpu.nPC + 4;
+                }
+                CpuState.AdvancePC(CpuState.OFFSET2);
+            }
+            else
+            {
+                if (Likely)
+                {
+                    CpuState.RegistersCpu.PC = CpuState.RegistersCpu.nPC + 4;
+                    CpuState.RegistersCpu.nPC = CpuState.RegistersCpu.PC + 4;
+                }
+                else
+                {
+                    CpuState.AdvancePC(4);
+                }
+            }
+        }
+
         public override void BEQ(CpuState CpuState)
         {
             throw new NotImplementedException();
@@ -19,7 +46,7 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void BGEZ(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            Branch(CpuState, ((int)CpuState.RS) >= 0, Likely: false, Link: false);
         }
 
         public override void BGEZL(CpuState CpuState)
@@ -69,17 +96,17 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void BGTZ(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            Branch(CpuState, ((int)CpuState.RS) > 0, Likely: false, Link: false);
         }
 
         public override void BGTZL(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            Branch(CpuState, ((int)CpuState.RS) > 0, Likely: true, Link: false);
         }
 
         public override void BNE(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            Branch(CpuState, CpuState.RS != CpuState.RT);
         }
 
         public override void BNEL(CpuState CpuState)

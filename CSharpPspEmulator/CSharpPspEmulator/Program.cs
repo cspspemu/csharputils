@@ -5,6 +5,10 @@ using System.Text;
 using CSharpPspEmulator.Core;
 using CSharpPspEmulator.Core.Cpu;
 using CSharpPspEmulator.Core.Cpu.Assembler;
+using CSharpPspEmulator.Hle.Elf;
+using System.IO;
+using CSharpPspEmulator.Core.Cpu.Interpreter;
+using CSharpPspEmulator.Hle;
 
 namespace CSharpPspEmulator
 {
@@ -12,24 +16,23 @@ namespace CSharpPspEmulator
 	{
 		static void Main(string[] args)
 		{
-            /*
-            var Disassembler = new Disassembler();
-            Console.WriteLine(Disassembler.Disassemble(new Disassembler.State(0x00000020, 0, false)));
-            Console.WriteLine(Disassembler.Disassemble(new Disassembler.State(0x00000020, 0, true)));
-            */
+            var InterpretedCpu = new InterpretedCpu();
+            var RegistersCpu = new RegistersCpu();
+            var Memory = new Memory();
+            var SystemHle = new SystemHle();
+            var CpuState = new CpuState(SystemHle, RegistersCpu, InterpretedCpu, Memory);
 
-            var Assembler = new Assembler();
-            Console.WriteLine(Assembler.Assemble("addi r1, r0, 1000")[0]);
+            var ElfFile = new FileStream("../../../Demos/minifire.elf", FileMode.Open);
+            var Elf = new ElfLoader();
+            Elf.Load(ElfFile);
 
-            /*
-			var Registers = new RegistersCpu();
-			var Memory = new Memory();
-			var Cpu = new Cpu();
-			var CpuState = new CpuState(Registers, Cpu, Memory);
-			//var Cpu = new Cpu();
-			CpuState.InstructionData = 0x20;
-			Cpu.Execute(CpuState);
-            */
+            byte[] Data = new byte[0x1EF];
+            ElfFile.Position = 0xB0;
+            ElfFile.Read(Data, 0, Data.Length);
+            Memory.WriteBytes(0x08900000, Data, 0, Data.Length);
+            CpuState.PC = 0x08900008;
+            CpuState.Execute();
+
             Console.ReadKey();
         }
 	}

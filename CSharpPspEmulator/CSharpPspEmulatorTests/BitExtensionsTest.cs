@@ -12,7 +12,8 @@ namespace CSharpPspEmulatorTests
         {
             uint ValueIn = 0x07000011;
             uint ValueOut = ValueIn.Insert(16, 8, 0xFFFF);
-            Assert.AreEqual(0x07FF0011, ValueOut);
+            //Console.WriteLine("{0,8:X} {1,8:X}", ValueIn, ValueOut);
+            Assert.AreEqual<uint>(0x07FF0011, ValueOut);
         }
 
         [TestMethod]
@@ -20,7 +21,8 @@ namespace CSharpPspEmulatorTests
         {
             uint ValueIn = 0x07315411;
             uint ValueOut = ValueIn.ExtractUnsigned(8, 16);
-            Assert.AreEqual(0x3154, ValueOut);
+            //Console.WriteLine("{0,8:X} {1,8:X}", ValueIn, ValueOut);
+            Assert.AreEqual<uint>(0x3154, ValueOut);
         }
     }
 }

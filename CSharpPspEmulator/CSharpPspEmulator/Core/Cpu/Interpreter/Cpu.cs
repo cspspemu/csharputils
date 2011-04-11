@@ -9,7 +9,10 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 	{
         public override void SYSCALL(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            uint CODE = CpuState.CODE;
+            CpuState.AdvancePC(4);
+            CpuState.SystemHle.SyscallHandler.Handle(CpuState, CODE);
+            //throw new NotImplementedException();
         }
 
         public override void CACHE(CpuState CpuState)
@@ -24,12 +27,15 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void BREAK(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            Console.WriteLine("BREAK");
+            CpuState.AdvancePC(4);
         }
 
         public override void DBREAK(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            throw (new PspDebugBreakException());
+            //throw new NotImplementedException();
         }
 
         public override void HALT(CpuState CpuState)

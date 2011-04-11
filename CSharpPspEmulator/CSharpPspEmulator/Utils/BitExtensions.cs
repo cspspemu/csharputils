@@ -19,8 +19,9 @@ namespace CSharpPspEmulator.Utils
 
         static public uint Insert(this uint Value, int Offset, int Length, uint ValueToInsert)
         {
-            Value &= ~(uint)(Mask(Length) << Offset);
-            Value |= (uint)(ValueToInsert << Offset);
+            uint ValueMask = Mask(Length);
+            Value &= ~(uint)(ValueMask << Offset);
+            Value |= (uint)((ValueToInsert & ValueMask) << Offset);
             return Value;
         }
     }

@@ -25,20 +25,6 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
             }
         }
 
-        static String[] Memonics = new String[] {
-            "zr", "at", "v0", "v1", "a0", "a1", "a2", "a3",
-            "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7",
-            "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
-            "t8", "t9", "k0", "k1", "gp", "sp", "fp", "ra",
-        };
-
-        static String[] NoMemonics = new String[] {
-            "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7",
-            "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15",
-            "r16", "r17", "r18", "r19", "r20", "r21", "r22", "r23",
-            "r24", "r25", "r26", "r27", "r28", "r29", "r30", "r31",
-        };
-
         static public DisassembleDelegate CreateDisassembleDelegate(InstructionAttribute InstructionAttribute)
         {
             return delegate(State State)
@@ -49,11 +35,11 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
 
                 if (State.UseMemonic)
                 {
-                    RegisterTable = Memonics;
+                    RegisterTable = RegistersCpu.Memonics;
                 }
                 else
                 {
-                    RegisterTable = NoMemonics;
+                    RegisterTable = RegistersCpu.NoMemonics;
                 }
 
                 Result = Result
@@ -62,19 +48,33 @@ namespace CSharpPspEmulator.Core.Cpu.Assembler
                     .Replace("{$t}", RegisterTable[State.InstructionData.RT])
                 ;
 
-                
-
                 return Result
                     .Replace("{$imm}", "" + State.InstructionData.IMM)
-                    .Replace("{$immu}", "" + State.InstructionData.IMMU)
+                    .Replace("{$immu}", "" + State.InstructionData.IMM)
+                    .Replace("{$offset2}", "" + State.InstructionData.OFFSET2)
+                    .Replace("{$code}", "0x" + Convert.ToString(State.InstructionData.CODE, 16))
                     .Replace(",", ", ")
                 ;
+                
             };
         }
 
         public DisassembleDelegate Disassemble;
 
-        public Disassembler()
+        static Disassembler _Instance = null;
+        static public Disassembler Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                {
+                    _Instance = new Disassembler();
+                }
+                return _Instance;
+            }
+        }
+
+        protected Disassembler()
         {
             var Table = new List<TableExecutionDelegate<DisassembleDelegate>.TableExecutionItem>();
 

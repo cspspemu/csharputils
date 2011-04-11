@@ -5,6 +5,7 @@ using System.Text;
 using System.Reflection.Emit;
 using System.Reflection;
 using CSharpPspEmulator.Utils.Tables;
+using System.Runtime.InteropServices;
 
 namespace CSharpPspEmulator.Core.Cpu
 {
@@ -112,6 +113,12 @@ namespace CSharpPspEmulator.Core.Cpu
 
         static public ExecutionDelegate GetExecutor(Type Type)
         {
+            /*
+            return GetExecutor(Type, InstructionAttribute => (ExecutionDelegate)Delegate.CreateDelegate(typeof(ExecutionDelegate), null, InstructionAttribute.MethodInfo), delegate(CpuState CpuState)
+            {
+                Type.GetMethod("INVALID").Invoke(CpuState.CpuBase, new object[] { CpuState });
+            });
+            */
             return GetExecutor(Type, InstructionAttribute => delegate(CpuState CpuState)
             {
                 InstructionAttribute.MethodInfo.Invoke(CpuState.CpuBase, new object[] { CpuState });
