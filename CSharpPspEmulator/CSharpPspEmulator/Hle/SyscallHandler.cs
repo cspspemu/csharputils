@@ -25,6 +25,8 @@ namespace CSharpPspEmulator.Hle
 
             SyscallHandlers[0x213A] = (SystemHle.PspModuleManager.Get<sceDisplay>()).sceDisplaySetMode;
             SyscallHandlers[0x2147] = (SystemHle.PspModuleManager.Get<sceDisplay>()).sceDisplayWaitVblankStart;
+
+            SyscallHandlers[0x2150] = (SystemHle.PspModuleManager.Get<sceCtrl>()).sceCtrlPeekBufferPositive;
         }
 
         public void Handle(CpuState CpuState, uint Code)

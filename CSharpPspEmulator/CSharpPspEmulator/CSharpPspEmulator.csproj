@@ -48,6 +48,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -69,6 +70,7 @@
     <Compile Include="Core\Cpu\ExecutionDelegate.cs" />
     <Compile Include="Core\Exceptions.cs" />
     <Compile Include="Hle\MemoryManager.cs" />
+    <Compile Include="Hle\Modules\sceCtrl.cs" />
     <Compile Include="Hle\Modules\sceDisplay.cs" />
     <Compile Include="Hle\Modules\UtilsForUser.cs" />
     <Compile Include="Hle\PspModule.cs" />

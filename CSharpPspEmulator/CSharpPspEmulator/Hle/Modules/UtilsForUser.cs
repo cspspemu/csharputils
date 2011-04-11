@@ -35,7 +35,9 @@ namespace CSharpPspEmulator.Hle.Modules
         public void sceKernelUtilsMt19937UInt(CpuState CpuState)
         {
             //throw (new NotImplementedException());
-            Console.WriteLine("sceKernelUtilsMt19937UInt");
+            //Console.WriteLine("sceKernelUtilsMt19937UInt");
+
+            CpuState.SetReturnValue(0);
         }
     }
 }

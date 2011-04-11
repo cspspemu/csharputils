@@ -137,13 +137,14 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void SLTU(CpuState CpuState)
         {
-            CpuState.RD = (uint)(((uint)CpuState.RS < (uint)CpuState.RT) ? 1 : 0);
+            CpuState.RD = (uint)(((int)CpuState.RS < (int)CpuState.RT) ? 1 : 0);
             CpuState.AdvancePC(4);
         }
 
         public override void SLTIU(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RT = (uint)(((int)CpuState.RS < (int)CpuState.IMM) ? 1 : 0);
+            CpuState.AdvancePC(4);
         }
 
         public override void LUI(CpuState CpuState)

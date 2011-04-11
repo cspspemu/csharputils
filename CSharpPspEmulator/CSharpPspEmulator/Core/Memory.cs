@@ -58,6 +58,7 @@ namespace CSharpPspEmulator.Core
 
             public unsafe byte* GetPointer(uint Address)
             {
+                Address &= ~0xC0000000;
                 foreach (var Segment in Segments)
                 {
                     byte *Pointer = Segment.GetPointer(Address);

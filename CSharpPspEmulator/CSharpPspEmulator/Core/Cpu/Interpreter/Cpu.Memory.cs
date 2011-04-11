@@ -19,7 +19,8 @@ namespace CSharpPspEmulator.Core.Cpu.Interpreter
 
         public override void LW(CpuState CpuState)
         {
-            throw new NotImplementedException();
+            CpuState.RT = CpuState.Memory.ReadUnsigned32((uint)(CpuState.RS + CpuState.IMM));
+            CpuState.AdvancePC(4);
         }
 
         public override void LWL(CpuState CpuState)
