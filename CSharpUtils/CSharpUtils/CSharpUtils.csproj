@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DateTimeRange.cs" />
+    <Compile Include="Forms\TimerTaskQueue.cs" />
     <Compile Include="LinqExExtensions.cs" />
     <Compile Include="Net\DiffieHellman\DHKeyGeneration.cs" />
     <Compile Include="Net\DiffieHellman\DHParameters.cs" />
