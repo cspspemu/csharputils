@@ -9,7 +9,7 @@ namespace CSharpUtils.Forms
 	public class TimerTaskQueue
 	{
 		Timer Timer;
-		public LinkedList<TaskDelegate> Tasks = new LinkedList<TaskDelegate>();
+		public Queue<TaskDelegate> Tasks = new Queue<TaskDelegate>();
 		public delegate void TaskDelegate();
 
 		static protected Dictionary<String, TimerTaskQueue> NamedInstances = new Dictionary<string, TimerTaskQueue>();
@@ -36,8 +36,7 @@ namespace CSharpUtils.Forms
 
 		protected void ExecuteOne()
 		{
-			var TaskDelegate = Tasks.First.Value;
-			Tasks.RemoveFirst();
+			var TaskDelegate = Tasks.Dequeue();
 			TaskDelegate();
 			if (Tasks.Count == 0)
 			{
@@ -47,7 +46,7 @@ namespace CSharpUtils.Forms
 
 		public void AddQueue(TaskDelegate TaskDelegate)
 		{
-			Tasks.AddLast(TaskDelegate);
+			Tasks.Enqueue(TaskDelegate);
 			Timer.Start();
 		}
 	}
