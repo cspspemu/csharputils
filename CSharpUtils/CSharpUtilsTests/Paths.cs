@@ -6,8 +6,16 @@ using System.IO;
 
 namespace CSharpUtilsTests
 {
-	class Paths
+	class Config
 	{
+		static public String RemoteIp
+		{
+			get
+			{
+				return "192.168.1.45";
+			}
+		}
+
 		static public String ProjectPath
 		{
 			get

@@ -15,8 +15,8 @@ namespace CSharpUtilsTests
 		[TestInitialize]
 		public void InitializeTest()
 		{
-			LocalFileSystem = new LocalFileSystem(Paths.ProjectTestInputPath);
-			LocalFileSystem.Mount("/Mounted", new LocalFileSystem(Paths.ProjectTestInputMountedPath));
+			LocalFileSystem = new LocalFileSystem(Config.ProjectTestInputPath);
+			LocalFileSystem.Mount("/Mounted", new LocalFileSystem(Config.ProjectTestInputMountedPath));
 		}
 		[TestMethod]
 		public void GetFileTimeExistsTest()

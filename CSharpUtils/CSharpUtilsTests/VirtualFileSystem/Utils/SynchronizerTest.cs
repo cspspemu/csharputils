@@ -29,9 +29,9 @@ namespace CSharpUtilsTests
 		[TestMethod]
 		public void SynchronizeTest()
 		{
-			FileSystem SourceFileSystem = new LocalFileSystem(Paths.ProjectTestInputPath);
+			FileSystem SourceFileSystem = new LocalFileSystem(Config.ProjectTestInputPath);
 			string SourcePath = "/";
-			FileSystem DestinationFileSystem = new LocalFileSystem(Paths.ProjectTestOutputPath);
+			FileSystem DestinationFileSystem = new LocalFileSystem(Config.ProjectTestOutputPath);
 			string DestinationPath = "/";
 			Synchronizer.SynchronizationMode _SynchronizationMode = Synchronizer.SynchronizationMode.CopyNewAndUpdateOldFiles;
 			Synchronizer.ReferenceMode _ReferenceMode = new Synchronizer.ReferenceMode();

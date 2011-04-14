@@ -11,7 +11,7 @@ using CSharpUtils.VirtualFileSystem.Ftp;
 
 namespace CSharpUtilsDokanMount
 {
-	class Program
+	unsafe class Program
 	{
 		static void Main(string[] args)
 		{
