@@ -31,7 +31,6 @@ namespace CSharpUtils.Forms
 			{
 				ExecuteOne();
 			});
-			Timer.Start();
 		}
 
 		protected void ExecuteOne()
