@@ -79,6 +79,13 @@ namespace CSharpUtils
 			return !Subset.Except(Superset).Any();
 		}
 
+		static public Dictionary<TKey, TValue> CreateDictionary<TValue, TKey>(this IEnumerable<TValue> ListItems, Func<TValue, TKey> KeySelector)
+		{
+			var Dictionary = new Dictionary<TKey, TValue>();
+			foreach (var Item in ListItems) Dictionary.Add(KeySelector(Item), Item);
+			return Dictionary;
+		}
+
 		static public IEnumerable<TSource> OrderByNatural<TSource, TString>(this IEnumerable<TSource> Items, Func<TSource, TString> selector)
 		{
 			Func<string, object> convert = str =>
@@ -97,6 +104,11 @@ namespace CSharpUtils
 				Item => Regex.Split(selector(Item).ToString().Replace(" ", ""), "([0-9]+)").Select(convert),
 				new EnumerableComparer<object>()
 			);
+		}
+
+		static public IEnumerable<TSource> OrderByNatural<TSource>(this IEnumerable<TSource> Items)
+		{
+			return Items.OrderByNatural(Value => Value);
 		}
 	}
 }

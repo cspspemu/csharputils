@@ -299,6 +299,7 @@
     <Compile Include="VirtualFileSystem\Utils\Synchronizer.cs" />
     <Compile Include="VirtualFileSystem\Zip\ZipFileSystem.cs" />
     <Compile Include="Wildcard.cs" />
+    <Compile Include="XmlSerializerUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Net\DiffieHellman\license.txt" />
