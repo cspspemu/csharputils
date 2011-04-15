@@ -83,12 +83,12 @@ namespace CSharpUtils
 		{
 			Func<string, object> convert = str =>
 			{
-				try
+				int result;
+				if (int.TryParse(str, out result))
 				{
-					return int.Parse(str);
+					return result;
 				}
-				catch
-				{
+				else {
 					return str;
 				}
 			};
