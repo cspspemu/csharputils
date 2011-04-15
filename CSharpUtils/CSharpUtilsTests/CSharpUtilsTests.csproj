@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -50,6 +51,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LinqExExtensionsTest.cs" />
     <Compile Include="Process\ProcessTest.cs" />
     <Compile Include="DateTimeRangeTest.cs" />
     <Compile Include="FileSystemEntryTest.cs" />
