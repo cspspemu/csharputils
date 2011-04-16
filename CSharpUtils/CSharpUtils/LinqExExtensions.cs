@@ -110,5 +110,15 @@ namespace CSharpUtils
 		{
 			return Items.OrderByNatural(Value => Value);
 		}
+
+        static public String ToHexString(this IEnumerable<byte> Bytes)
+        {
+            return String.Join("", Bytes.Select(Byte => Byte.ToString("x2")));
+        }
+
+        static public String Implode<TSource>(this IEnumerable<TSource> Items, String Separator)
+        {
+            return String.Join(Separator, Items.Select(Item => Item.ToString()));
+        }
 	}
 }
