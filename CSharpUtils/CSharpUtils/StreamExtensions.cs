@@ -133,13 +133,14 @@ namespace CSharpUtils
             set
             {
                 if (value < 0) value = 0;
-                if (value > ThisLength) value = ThisLength;
+                if (value > Length) value = Length;
                 ThisPosition = value;
             }
         }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
+            //Console.WriteLine("Seek(offset: {0}, origin: {1})", offset, origin);
             switch (origin)
             {
                 case SeekOrigin.Begin:
@@ -152,6 +153,7 @@ namespace CSharpUtils
                     Position = Length + offset;
                     break;
             }
+            //Console.WriteLine("   {0}", Position);
             return Position;
         }
 
@@ -160,17 +162,19 @@ namespace CSharpUtils
             lock (ParentStream)
             {
                 var ParentStreamPositionToRestore = ParentStream.Position;
-                ParentStream.Position = ThisStart + ThisPosition;
-                if (ThisPosition + count > ThisLength)
+                ParentStream.Position = ThisStart + Position;
+                if (Position + count > Length)
                 {
-                    count = (int)(ThisLength - ThisPosition);
+                    count = (int)(Length - Position);
                 }
                 try
                 {
+                    //Console.WriteLine("Read(position: {0}, count: {1})", Position, count);
                     return base.Read(buffer, offset, count);
                 }
                 finally
                 {
+                    Seek(count, SeekOrigin.Current);
                     ParentStream.Position = ParentStreamPositionToRestore;
                 }
             }
@@ -181,10 +185,10 @@ namespace CSharpUtils
             lock (ParentStream)
             {
                 var ParentStreamPositionToRestore = ParentStream.Position;
-                ParentStream.Position = ThisStart + ThisPosition;
-                if (ThisPosition + count > ThisLength)
+                ParentStream.Position = ThisStart + Position;
+                if (Position + count > Length)
                 {
-                    count = (int)(ThisLength - ThisPosition);
+                    count = (int)(Length - Position);
                 }
                 try
                 {
@@ -192,6 +196,7 @@ namespace CSharpUtils
                 }
                 finally
                 {
+                    Seek(count, SeekOrigin.Current);
                     ParentStream.Position = ParentStreamPositionToRestore;
                 }
             }

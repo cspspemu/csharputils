@@ -48,10 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Lzx.cs" />
     <Compile Include="DateTimeRange.cs" />
+    <Compile Include="Endianness.cs" />
     <Compile Include="Forms\TimerTaskQueue.cs" />
     <Compile Include="LinqExExtensions.cs" />
     <Compile Include="Net\DiffieHellman\DHKeyGeneration.cs" />
