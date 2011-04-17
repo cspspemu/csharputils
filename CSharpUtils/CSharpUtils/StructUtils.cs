@@ -17,12 +17,6 @@ namespace CSharpUtils
         }
     }
 
-    public enum Endianness
-    {
-        BigEndian,
-        LittleEndian
-    }
-
     public class StructUtils
     {
         public static void RespectEndianness(Type type, byte[] data)
