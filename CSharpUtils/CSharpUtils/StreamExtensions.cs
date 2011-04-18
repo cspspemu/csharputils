@@ -29,7 +29,11 @@ namespace CSharpUtils
             var Readed = Stream.Read(Buffer, 0, ToRead);
             if (Readed != ToRead) throw(new Exception("Unable to read " + ToRead + " bytes, readed " + Readed + "."));
             return Buffer;
+        }
 
+        static public void WriteBytes(this Stream Stream, byte[] Bytes)
+        {
+            Stream.Write(Bytes, 0, Bytes.Length);
         }
 
         static public String ReadStringz(this Stream Stream, int ToRead = -1, Encoding Encoding = null)
