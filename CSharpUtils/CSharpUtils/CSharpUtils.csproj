@@ -275,6 +275,8 @@
     <Compile Include="Process\ProcessBase.cs" />
     <Compile Include="Process\RunDelegate.cs" />
     <Compile Include="Process\State.cs" />
+    <Compile Include="ProxyStream.cs" />
+    <Compile Include="SliceStream.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
