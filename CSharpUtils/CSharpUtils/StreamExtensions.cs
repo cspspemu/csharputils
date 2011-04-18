@@ -68,5 +68,19 @@ namespace CSharpUtils
             byte[] Bytes = StructUtils.StructToBytes(Struct);
             Stream.Write(Bytes, 0, Bytes.Length);
         }
+
+        public static void CopyToFile(this Stream Stream, String FileName)
+        {
+            using (var OutputFile = File.OpenWrite(FileName))
+            {
+                Stream.CopyTo(OutputFile);
+            }
+        }
+
+        public static Stream SetPosition(this Stream Stream, long Position)
+        {
+            Stream.Position = Position;
+            return Stream;
+        }
 	}
 }

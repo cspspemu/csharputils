@@ -11,7 +11,17 @@ namespace CSharpUtils
         protected long ThisPosition;
         protected long ThisStart, ThisLength;
 
-        public SliceStream(Stream ParentStream, long ThisStart, long ThisLength = -1, bool? CanWrite = null)
+        static public SliceStream CreateWithLength(Stream ParentStream, long ThisStart, long ThisLength = -1, bool? CanWrite = null)
+        {
+            return new SliceStream(ParentStream, ThisStart, ThisLength, CanWrite);
+        }
+
+        static public SliceStream CreateWithBounds(Stream ParentStream, long LowerBound, long UpperBound, bool? CanWrite = null)
+        {
+            return new SliceStream(ParentStream, LowerBound, UpperBound - LowerBound, CanWrite);
+        }
+
+        public SliceStream(Stream ParentStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
             : base(ParentStream)
         {
             this.ThisPosition = 0;
