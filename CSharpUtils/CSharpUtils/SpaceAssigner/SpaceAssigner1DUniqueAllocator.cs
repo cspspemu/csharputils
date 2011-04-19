@@ -14,13 +14,13 @@ namespace CSharpUtils.SpaceAssigner
 		public SpaceAssigner1DUniqueAllocator(SpaceAssigner1D SpaceAssigner)
 		{
 			this.SpaceAssigner = SpaceAssigner;
-			this.AllocatedSpaces = new Dictionary<byte[], SpaceAssigner1D.Space>();
+            this.AllocatedSpaces = new Dictionary<byte[], SpaceAssigner1D.Space>(new ByteArrayEqualityComparer());
 		}
 
 		public SpaceAssigner1D.Space AllocateUnique(byte[] data)
 		{
-			if (!AllocatedSpaces.ContainsKey(data))
-			{
+            if (!AllocatedSpaces.ContainsKey(data))
+            {
                 var AllocatedSpace = SpaceAssigner.Allocate(data.Length);
                 if (OnAllocate != null) OnAllocate(data, AllocatedSpace);
                 AllocatedSpaces[data] = AllocatedSpace;
