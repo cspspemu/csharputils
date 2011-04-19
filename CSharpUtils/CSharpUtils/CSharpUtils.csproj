@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ByteArrayEqualityComparer.cs" />
+    <Compile Include="ArrayEqualityComparer.cs" />
     <Compile Include="BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />

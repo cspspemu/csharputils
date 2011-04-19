@@ -14,7 +14,7 @@ namespace CSharpUtils.SpaceAssigner
 		public SpaceAssigner1DUniqueAllocator(SpaceAssigner1D SpaceAssigner)
 		{
 			this.SpaceAssigner = SpaceAssigner;
-            this.AllocatedSpaces = new Dictionary<byte[], SpaceAssigner1D.Space>(new ByteArrayEqualityComparer());
+            this.AllocatedSpaces = new Dictionary<byte[], SpaceAssigner1D.Space>(new ArrayEqualityComparer<byte>());
 		}
 
 		public SpaceAssigner1D.Space AllocateUnique(byte[] data)
