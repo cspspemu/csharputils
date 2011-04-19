@@ -65,6 +65,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SharpZip\ICSharpCode.SharpZLib.csproj">
+      <Project>{0E7413FF-EB9E-4714-ACF2-BE3A6A7B2FFD}</Project>
+      <Name>ICSharpCode.SharpZLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TalesOfVesperiaUtils\TalesOfVesperiaUtils.csproj">
+      <Project>{26B46DD3-FF59-4701-BC09-1E793D05DBEE}</Project>
+      <Name>TalesOfVesperiaUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
       <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
       <Name>CSharpUtils</Name>

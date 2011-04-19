@@ -23,5 +23,10 @@ namespace CSharpUtils
             Length = MathUtils.Clamp(Length, 0, String.Length - StartIndex);
             return String.Substring(StartIndex, Length);
         }
+
+        static public byte[] GetStringzBytes(this String String, Encoding Encoding)
+        {
+            return Encoding.GetBytes(String).Concat(new byte[] { 0 }).ToArray();
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 	[TestClass]
 	public class SftpFileSystemTest
 	{
+        /// @TODO: These should be Harness tests.
+        /*
+
 		static protected SftpFileSystem SftpFileSystem;
 
 		[ClassInitialize]
@@ -69,5 +72,6 @@ namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 
 			Assert.AreEqual("This is a string writed", SftpFileSystem.OpenFile("/home/ubuntu/myfile.txt", FileMode.Open).ReadAllContentsAsString(Encoding.UTF8));
 		}
+        */
 	}
 }

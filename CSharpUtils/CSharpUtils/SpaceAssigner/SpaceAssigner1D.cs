@@ -254,7 +254,7 @@ namespace CSharpUtils.SpaceAssigner
             return false;
         }
 
-		public void AddAvailable(Space SpaceToAdd)
+		public SpaceAssigner1D AddAvailable(Space SpaceToAdd)
 		{
             if (this.Intersects(SpaceToAdd))
             {
@@ -264,7 +264,19 @@ namespace CSharpUtils.SpaceAssigner
 
             AvailableSpaces.Add(SpaceToAdd);
             PerformCombine();
+
+            return this;
 		}
+
+        public SpaceAssigner1D AddAvailable(long Min, long Max)
+        {
+            return AddAvailable(new Space(Min, Max));
+        }
+
+        public SpaceAssigner1D AddAllPositiveAvailable()
+        {
+            return AddAvailable(new Space(0, long.MaxValue));
+        }
 
 		/**
 		 * Finds an Available Space Chunk that has a length greater or equals to
@@ -298,6 +310,22 @@ namespace CSharpUtils.SpaceAssigner
 
             return SpaceLeft;
 		}
+
+        /// <summary>
+        /// @TODO In order to avoid a greedy behaviour, Allocate[] should have the code and
+        ///       Allocate should use this function with a single item.
+        /// </summary>
+        /// <param name="RequiredLengths"></param>
+        /// <returns></returns>
+        public Space[] Allocate(long[] RequiredLengths)
+        {
+            var Spaces = new Space[RequiredLengths.Length];
+            for (int n = 0; n < RequiredLengths.Length; n++)
+            {
+                Spaces[n] = Allocate(RequiredLengths[n]);
+            }
+            return Spaces;
+        }
 
         public override string ToString()
         {

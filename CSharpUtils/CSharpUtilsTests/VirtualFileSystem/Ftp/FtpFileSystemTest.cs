@@ -7,15 +7,11 @@ using System.Threading;
 
 namespace CSharpUtilsTests
 {
-    
-    
-    /// <summary>
-    ///This is a test class for FtpFileSystemTest and is intended
-    ///to contain all FtpFileSystemTest Unit Tests
-    ///</summary>
-	[TestClass()]
+	[TestClass]
 	public class FtpFileSystemTest
 	{
+        /// @TODO: These should be Harness tests.
+        /*
 		static FtpFileSystem FtpFileSystem;
 
 		[ClassInitialize]
@@ -92,5 +88,6 @@ namespace CSharpUtilsTests
 			Assert.IsTrue(FtpFileSystem.GetFileTime("/Desktop/demo.txt").LastWriteTime >= StartTime);
 			FtpFileSystem.DeleteFile("/Desktop/demo.txt");
 		}
+        */
 	}
 }
