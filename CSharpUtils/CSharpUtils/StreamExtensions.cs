@@ -18,9 +18,15 @@ namespace CSharpUtils
 
 		static public byte[] ReadAll(this Stream Stream)
 		{
-			var Data = new byte[Stream.Length];
-			Stream.Read(Data, 0, Data.Length);
-			return Data;
+            lock (Stream)
+            {
+                var OldPosition = Stream.Position;
+                var Data = new byte[Stream.Length];
+                Stream.Position = 0;
+                Stream.Read(Data, 0, Data.Length);
+                Stream.Position = OldPosition;
+                return Data;
+            }
 		}
 
         static public byte[] ReadBytes(this Stream Stream, int ToRead)
@@ -52,6 +58,42 @@ namespace CSharpUtils
             else
             {
                 return Encoding.GetString(Stream.ReadBytes(ToRead)).TrimEnd('\0');
+            }
+        }
+
+        static public void WriteStringz(this Stream Stream, String Value, int ToWrite = -1, Encoding Encoding = null)
+        {
+            if (Encoding == null) Encoding = Encoding.ASCII;
+            if (ToWrite == -1)
+            {
+                Stream.WriteBytes(Value.GetStringzBytes(Encoding));
+            }
+            else
+            {
+                byte[] Bytes = Encoding.GetBytes(Value);
+                if (Bytes.Length > ToWrite) throw(new Exception("String too long"));
+                Stream.WriteBytes(Bytes);
+                ToWrite -= Bytes.Length;
+                while (ToWrite-- > 0)
+                {
+                    Stream.WriteByte(0);
+                }
+            }
+        }
+
+        static public void WriteZeroToPadding(this Stream Stream, int Padding)
+        {
+            while ((Stream.Position % Padding) != 0)
+            {
+                Stream.WriteByte(0);
+            }
+        }
+
+        static public void WriteZeroToOffset(this Stream Stream, long Offset)
+        {
+            while (Stream.Position < Offset)
+            {
+                Stream.WriteByte(0);
             }
         }
 

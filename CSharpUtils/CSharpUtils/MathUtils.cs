@@ -14,5 +14,14 @@ namespace CSharpUtils
             return Value;
         }
 
+
+        public static long Align(long Value, long AlignValue)
+        {
+            if ((Value % AlignValue) != 0)
+            {
+                Value += (AlignValue - (Value % AlignValue));
+            }
+            return Value;
+        }
     }
 }
