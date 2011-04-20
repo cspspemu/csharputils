@@ -73,28 +73,32 @@ namespace CSharpUtils
                 byte[] Bytes = Encoding.GetBytes(Value);
                 if (Bytes.Length > ToWrite) throw(new Exception("String too long"));
                 Stream.WriteBytes(Bytes);
-                ToWrite -= Bytes.Length;
-                while (ToWrite-- > 0)
-                {
-                    Stream.WriteByte(0);
-                }
+                Stream.WriteZeroBytes(ToWrite - Bytes.Length);
             }
         }
 
-        static public void WriteZeroToPadding(this Stream Stream, int Padding)
+        static public void WriteZeroBytes(this Stream Stream, int Count)
         {
-            while ((Stream.Position % Padding) != 0)
+            if (Count < 0)
             {
-                Stream.WriteByte(0);
+                Console.Error.WriteLine("Can't Write Negative Zero Bytes '" + Count + "'.");
+                //throw (new Exception("Can't Write Negative Zero Bytes '" + Count + "'."));
             }
+            else if (Count > 0)
+            {
+                var Bytes = new byte[Count];
+                Stream.WriteBytes(Bytes);
+            }
+        }
+
+        static public void WriteZeroToAlign(this Stream Stream, int Align)
+        {
+            Stream.WriteZeroBytes((int)(MathUtils.Align(Stream.Position, Align) - Stream.Position));
         }
 
         static public void WriteZeroToOffset(this Stream Stream, long Offset)
         {
-            while (Stream.Position < Offset)
-            {
-                Stream.WriteByte(0);
-            }
+            Stream.WriteZeroBytes((int)(Offset - Stream.Position));
         }
 
         public static T ReadStruct<T>(this Stream Stream) where T : struct
