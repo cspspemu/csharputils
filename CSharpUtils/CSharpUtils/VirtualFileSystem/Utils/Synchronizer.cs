@@ -172,7 +172,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			Stream SourceStream = SourceFileSystem.OpenFile(SourcePath + "/" + PathFileName, FileMode.Open);
 			Stream DestinationStream = DestinationFileSystem.OpenFile(DestinationPath + "/" + PathFileName, FileMode.Create);
 			{
-				SourceStream.CopyTo(DestinationStream);
+				SourceStream.CopyTo(DestinationStream, 1 * 1024 * 1024);
 			}
 			DestinationStream.Close();
 			SourceStream.Close();

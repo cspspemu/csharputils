@@ -119,7 +119,7 @@ namespace CSharpUtils
         {
             using (var OutputFile = File.OpenWrite(FileName))
             {
-                Stream.CopyTo(OutputFile);
+                Stream.CopyTo(OutputFile, 1 * 1024 * 1024);
             }
         }
 
