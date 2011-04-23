@@ -290,7 +290,7 @@ namespace CSharpUtils.VirtualFileSystem
 			{
 				using (var DestinationStream = FileSystem.OpenFile(DestinationPath, FileMode.Create))
 				{
-					SourceStream.CopyTo(DestinationStream, 1 * 1024 * 1024);
+					SourceStream.CopyToFast(DestinationStream);
 				}
 			}
 		}

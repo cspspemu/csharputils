@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using CSharpUtils;
 
 namespace CSharpUtils.VirtualFileSystem.Utils
 {
@@ -172,7 +173,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			Stream SourceStream = SourceFileSystem.OpenFile(SourcePath + "/" + PathFileName, FileMode.Open);
 			Stream DestinationStream = DestinationFileSystem.OpenFile(DestinationPath + "/" + PathFileName, FileMode.Create);
 			{
-				SourceStream.CopyTo(DestinationStream, 1 * 1024 * 1024);
+                SourceStream.CopyToFast(DestinationStream);
 			}
 			DestinationStream.Close();
 			SourceStream.Close();

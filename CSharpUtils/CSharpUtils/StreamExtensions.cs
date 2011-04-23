@@ -115,11 +115,17 @@ namespace CSharpUtils
             Stream.Write(Bytes, 0, Bytes.Length);
         }
 
+        public static void CopyToFast(this Stream FromStream, Stream ToStream)
+        {
+            /// TODO: Create a buffer and reuse it once for each thread.
+            FromStream.CopyTo(ToStream, 2 * 1024 * 1024);
+        }
+
         public static void CopyToFile(this Stream Stream, String FileName)
         {
             using (var OutputFile = File.OpenWrite(FileName))
             {
-                Stream.CopyTo(OutputFile, 1 * 1024 * 1024);
+                Stream.CopyToFast(OutputFile);
             }
         }
 
