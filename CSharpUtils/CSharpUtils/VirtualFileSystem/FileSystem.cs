@@ -108,6 +108,7 @@ namespace CSharpUtils.VirtualFileSystem
 		//public FileSystemFileStream CreateFile(String FileName, uint DesiredAccess, uint ShareMode, uint CreationDisposition, uint FlagsAndAttributes) {
 
 		// http://docs.python.org/whatsnew/2.6.html#pep-343-the-with-statement
+		// http://msdn.microsoft.com/en-us/library/yh598w02(v=VS.100).aspx
 		public FileSystemFileStream OpenFile(String FileName, FileMode FileMode)
 		{
 			FileSystem NewFileSystem; String NewFileName; Access(FileName, out NewFileSystem, out NewFileName);
