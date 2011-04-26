@@ -55,6 +55,7 @@
     <Compile Include="Compression\Lzx.cs" />
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="Endianness.cs" />
+    <Compile Include="EnumerableComparer.cs" />
     <Compile Include="Forms\TimerTaskQueue.cs" />
     <Compile Include="LinqExExtensions.cs" />
     <Compile Include="Logger.cs" />

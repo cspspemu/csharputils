@@ -5,23 +5,33 @@ using System.Text;
 
 namespace CSharpUtils
 {
-    static public class MathUtils
-    {
-        static public T Clamp<T>(T Value, T Min, T Max)
-        {
-            if ((dynamic)Value < (dynamic)Min) return Min;
-            if ((dynamic)Value > (dynamic)Max) return Max;
-            return Value;
-        }
+	static public class MathUtils
+	{
+		// http://www.lambda-computing.com/publications/articles/generics2/
+		// http://www.codeproject.com/KB/cs/genericoperators.aspx
+		static public T Clamp<T>(T Value, T Min, T Max)
+		{
+			if ((dynamic)Value < (dynamic)Min) return Min;
+			if ((dynamic)Value > (dynamic)Max) return Max;
+			return Value;
+		}
 
-
-        public static long Align(long Value, long AlignValue)
-        {
-            if ((Value % AlignValue) != 0)
-            {
-                Value += (AlignValue - (Value % AlignValue));
-            }
-            return Value;
-        }
-    }
+		/// <summary>
+		/// Returns the upper minimum value that will be divisible by AlignValue.
+		/// </summary>
+		/// <example>
+		/// Align(0x1200, 0x800) == 0x1800
+		/// </example>
+		/// <param name="Value"></param>
+		/// <param name="AlignValue"></param>
+		/// <returns></returns>
+		public static long Align(long Value, long AlignValue)
+		{
+			if ((Value % AlignValue) != 0)
+			{
+				Value += (AlignValue - (Value % AlignValue));
+			}
+			return Value;
+		}
+	}
 }
