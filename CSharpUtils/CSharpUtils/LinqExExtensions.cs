@@ -14,6 +14,14 @@ namespace CSharpUtils
 			return !Subset.Except(Superset).Any();
 		}
 
+		/// <summary>
+		/// See ToDictionary.
+		/// </summary>
+		/// <typeparam name="TValue"></typeparam>
+		/// <typeparam name="TKey"></typeparam>
+		/// <param name="ListItems"></param>
+		/// <param name="KeySelector"></param>
+		/// <returns></returns>
 		static public Dictionary<TKey, TValue> CreateDictionary<TValue, TKey>(this IEnumerable<TValue> ListItems, Func<TValue, TKey> KeySelector)
 		{
 			var Dictionary = new Dictionary<TKey, TValue>();
@@ -55,5 +63,16 @@ namespace CSharpUtils
         {
             return String.Join(Separator, Items.Select(Item => Item.ToString()));
         }
+
+		public static void ForEach<T>(this IEnumerable<T> Items, Action<int, T> action)
+		{
+			int index = 0;
+			foreach (var Item in Items) action(index++, Item);
+		}
+
+		public static void ForEach<T>(this IEnumerable<T> Items, Action<T> action)
+		{
+			foreach (var Item in Items) action(Item);
+		}
 	}
 }

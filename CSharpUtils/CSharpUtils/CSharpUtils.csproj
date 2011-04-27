@@ -53,11 +53,13 @@
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Lzx.cs" />
+    <Compile Include="ConvertEx.cs" />
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="Endianness.cs" />
     <Compile Include="EnumerableComparer.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="Forms\TimerTaskQueue.cs" />
+    <Compile Include="LazyHolder.cs" />
     <Compile Include="LinqExExtensions.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MathUtils.cs" />
