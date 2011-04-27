@@ -64,6 +64,18 @@ namespace CSharpUtils
             return String.Join(Separator, Items.Select(Item => Item.ToString()));
         }
 
+		/// <summary>
+		/// http://msdn.microsoft.com/en-us/magazine/cc163329.aspx
+		/// http://stackoverflow.com/questions/3789998/parallel-foreach-vs-foreachienumerablet-asparallel
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="Items"></param>
+		/// <param name="action"></param>
+		public static void ForEach<T>(this ParallelQuery<T> Items, Action<T> action)
+		{
+			Items.ForAll(action);
+		}
+
 		public static void ForEach<T>(this IEnumerable<T> Items, Action<int, T> action)
 		{
 			int index = 0;
