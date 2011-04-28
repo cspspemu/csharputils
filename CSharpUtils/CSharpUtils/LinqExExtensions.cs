@@ -54,6 +54,11 @@ namespace CSharpUtils
 			return Items.OrderByNatural(Value => Value);
 		}
 
+		static public IEnumerable<TSource> DistinctByKey<TSource, TResult>(this IEnumerable<TSource> Items, Func<TSource, TResult> Selector)
+		{
+			return Items.Distinct(new LinqEqualityComparer<TSource, TResult>(Selector));
+		}
+
         static public String ToHexString(this IEnumerable<byte> Bytes)
         {
             return String.Join("", Bytes.Select(Byte => Byte.ToString("x2")));

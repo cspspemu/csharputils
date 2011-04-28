@@ -53,8 +53,14 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 		protected void SynchronizeFolder(String Path)
 		{
-			var SourceFiles = FileSystemEntry.LinkedListToDictionary(this.SourceFileSystem.FindFiles(SourcePath + "/" + Path));
-			var DestinationFiles = FileSystemEntry.LinkedListToDictionary(this.DestinationFileSystem.FindFiles(DestinationPath + "/" + Path));
+			var SourceFiles = this.SourceFileSystem
+				.FindFiles(SourcePath + "/" + Path)
+				.ToDictionary(FileSystemEntry => FileSystemEntry.Name)
+			;
+			var DestinationFiles = this.DestinationFileSystem
+				.FindFiles(DestinationPath + "/" + Path)
+				.ToDictionary(FileSystemEntry => FileSystemEntry.Name)
+			;
 			var FilesToRemove = new LinkedList<FileSystemEntry>();
 			var FilesToUpdate = new LinkedList<FileSystemEntry>();
 			var FoldersToExplore = new LinkedList<String>();

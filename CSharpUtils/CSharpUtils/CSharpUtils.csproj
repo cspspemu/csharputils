@@ -58,6 +58,7 @@
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="Endianness.cs" />
     <Compile Include="EnumerableComparer.cs" />
+    <Compile Include="LinqEqualityComparer.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="Forms\TimerTaskQueue.cs" />
     <Compile Include="LazyHolder.cs" />
@@ -292,11 +293,13 @@
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="StructUtils.cs" />
+    <Compile Include="VirtualFileSystem\BaseFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanNet.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanOperations.cs" />
     <Compile Include="VirtualFileSystem\Dokan\Proxy.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\FileSystemProxyDokanOperations.cs" />
+    <Compile Include="VirtualFileSystem\FileSytemCursor.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemEntry.cs" />
     <Compile Include="VirtualFileSystem\ImplFileSystem.cs" />

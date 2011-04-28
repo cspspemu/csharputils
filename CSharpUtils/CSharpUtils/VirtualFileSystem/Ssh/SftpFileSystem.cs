@@ -108,7 +108,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			return FileSystemEntry;
 		}
 
-		override internal void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
+		override internal IEnumerable<FileSystemEntry> ImplFindFiles(String Path)
 		{
 			foreach (var i in csftp.ls(RealPath(Path)))
 			{
@@ -137,7 +137,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 				{
 					FileSystemEntry.ExtendedFlags |= VirtualFileSystem.FileSystemEntry.ExtendedFlagsTypes.Hidden;
 				}
-				Items.AddLast(FileSystemEntry);
+				yield return FileSystemEntry;
 			}
 		}
 

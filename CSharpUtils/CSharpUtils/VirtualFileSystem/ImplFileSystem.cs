@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
 {
@@ -32,12 +33,12 @@ namespace CSharpUtils.VirtualFileSystem
 			throw new NotImplementedException();
 		}
 
-		internal override void ImplFindFiles(string Path, LinkedList<FileSystemEntry> List)
+		internal override IEnumerable<FileSystemEntry> ImplFindFiles(string Path)
 		{
 			throw new NotImplementedException();
 		}
 
-		internal override FileSystemFileStream ImplOpenFile(string FileName, System.IO.FileMode FileMode)
+		internal override FileSystemFileStream ImplOpenFile(string FileName, FileMode FileMode)
 		{
 			throw new NotImplementedException();
 		}

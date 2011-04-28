@@ -39,9 +39,9 @@ namespace CSharpUtils.VirtualFileSystem
 			this.ParentFileSystem.ImplMoveFile(ExistingFileName, NewFileName, ReplaceExisiting);
 		}
 
-		internal override void ImplFindFiles(string Path, LinkedList<FileSystemEntry> List)
+		internal override IEnumerable<FileSystemEntry> ImplFindFiles(string Path)
 		{
-			this.ParentFileSystem.ImplFindFiles(Path, List);
+			return this.ParentFileSystem.ImplFindFiles(Path);
 		}
 
 		internal override FileSystemFileStream ImplOpenFile(string FileName, System.IO.FileMode FileMode)

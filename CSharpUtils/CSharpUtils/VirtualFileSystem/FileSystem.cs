@@ -10,100 +10,8 @@ namespace CSharpUtils.VirtualFileSystem
 {
 	// http://msdn.microsoft.com/en-us/library/system.io.isolatedstorage.isolatedstoragefile.aspx
 	// http://vfs.codeplex.com/
-	abstract public class FileSystem : IDisposable
+	abstract public partial class FileSystem : IDisposable
 	{
-		protected SortedDictionary<String, FileSystem> MountedFileSystems = new SortedDictionary<string, FileSystem>();
-
-		String CurrentWorkingPath = "";
-		virtual protected bool CaseInsensitiveFileSystem { get { return false; } }
-
-		~FileSystem()
-		{
-			Shutdown();
-		}
-
-		virtual public void Shutdown()
-		{
-		}
-
-		static public String AbsoluteNormalizePath(String Path, String CurrentWorkingPath = "")
-		{
-			var Components = new LinkedList<String>();
-
-			// Normalize slashes.
-			Path = Path.Replace('\\', '/');
-
-			// Relative Path
-			if (Path.StartsWith("/"))
-			{
-				Path = CurrentWorkingPath + "/" + Path;
-			}
-
-			// Normalize Components
-			foreach (var Component in Path.Split('/'))
-			{
-				switch (Component)
-				{
-					case "": case ".": break;
-					case "..": Components.RemoveLast(); break;
-					default: Components.AddLast(Component); break;
-				}
-			}
-
-			return String.Join("/", Components);
-		}
-
-		private void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
-		{
-			String ComparePath;
-
-			// Normalize Components
-			Path = AbsoluteNormalizePath(Path, CurrentWorkingPath);
-
-			ComparePath = Path;
-			if (CaseInsensitiveFileSystem)
-			{
-				ComparePath = ComparePath.ToLower();
-			}
-
-			// Check MountedFileSystems.
-			foreach (var Item in MountedFileSystems)
-			{
-				String CheckMountedPath = Item.Key;
-
-				if (CaseInsensitiveFileSystem)
-				{
-					CheckMountedPath = CheckMountedPath.ToLower();
-				}
-
-				if (
-					ComparePath.StartsWith(CheckMountedPath) &&
-					(
-						(CheckMountedPath.Length == ComparePath.Length) ||
-						(ComparePath.Substring(CheckMountedPath.Length, 1) == "/")
-					)
-				) {
-					// Use Mounted File System.
-					Item.Value.Access(ComparePath.Substring(CheckMountedPath.Length), out NewFileSystem, out NewPath);
-					return;
-				}
-			}
-			NewFileSystem = this;
-			NewPath = Path;
-		}
-
-		public void Mount(String Path, FileSystem FileSystemToMount)
-		{
-			String FinalPath = AbsoluteNormalizePath(Path, CurrentWorkingPath);
-			MountedFileSystems[FinalPath] = FileSystemToMount;
-		}
-
-		public void UnMount(String Path)
-		{
-			String FinalPath = AbsoluteNormalizePath(Path, CurrentWorkingPath);
-			MountedFileSystems.Remove(FinalPath);
-		}
-
 		#region Public Methods
 		//public FileSystemFileStream CreateFile(String FileName, uint DesiredAccess, uint ShareMode, uint CreationDisposition, uint FlagsAndAttributes) {
 
@@ -181,7 +89,7 @@ namespace CSharpUtils.VirtualFileSystem
 			NewFileSystem1.ImplMoveFile(NewPath1, NewPath2, ReplaceExisiting);
 		}
 
-		public void FindFilesAddMounted(String NewPath, LinkedList<FileSystemEntry> List)
+		public IEnumerable<FileSystemEntry> FindMountedFiles(String NewPath)
 		{
 			foreach (var MountedFileSystemPath in MountedFileSystems.Keys)
 			{
@@ -190,36 +98,29 @@ namespace CSharpUtils.VirtualFileSystem
 					var Components = MountedFileSystemPath.Substring(NewPath.Length).TrimStart('/').Split('/');
 					FileSystemEntry FileSystemEntry = new FileSystemEntry(this, Components[0]);
 					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
-					if (0 == List.Where((Item) => Item.Name == FileSystemEntry.Name).Count())
-					{
-						List.AddLast(FileSystemEntry);
-					}
+					yield return FileSystemEntry;
 				}
 			}
 		}
 
-		public LinkedList<FileSystemEntry> FindFiles(String Path)
+		public IEnumerable<FileSystemEntry> FindFiles(String Path)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
-			LinkedList<FileSystemEntry> List = new LinkedList<FileSystemEntry>();
-			try
-			{
-				NewFileSystem.FindFilesAddMounted(NewPath, List);
-				NewFileSystem.ImplFindFiles(NewPath, List);
-			}
-			catch (Exception e)
-			{
-				if (List.Count == 0) throw (new Exception("Not a normal directory nor a virtual one", e));
-			}
-			return new LinkedList<FileSystemEntry>(List.Distinct(new FileSystemEntryNameComparer()));
+
+			return NewFileSystem.FindMountedFiles(NewPath)
+				.Concat(NewFileSystem.ImplFindFiles(NewPath))
+				.DistinctByKey(FileSystemEntry => FileSystemEntry.Name)
+			;
 		}
 
-		public LinkedList<FileSystemEntry> FindFiles(String Path, Regex Regex)
+		public IEnumerable<FileSystemEntry> FindFiles(String Path, Regex Regex)
 		{
-			return new LinkedList<FileSystemEntry>(FindFiles(Path).Where((Entry) => Regex.IsMatch(Entry.Name)));
+			return FindFiles(Path)
+				.Where(Entry => Regex.IsMatch(Entry.Name))
+			;
 		}
 
-		public LinkedList<FileSystemEntry> FindFiles(String Path, Wildcard Wildcard)
+		public IEnumerable<FileSystemEntry> FindFiles(String Path, Wildcard Wildcard)
 		{
 			return FindFiles(Path, (Regex)Wildcard);
 		}
@@ -233,7 +134,7 @@ namespace CSharpUtils.VirtualFileSystem
 		abstract internal void ImplDeleteFile(String Path);
 		abstract internal void ImplDeleteDirectory(String Path);
 		abstract internal void ImplMoveFile(String ExistingFileName, String NewFileName, bool ReplaceExisiting);
-		abstract internal void ImplFindFiles(String Path, LinkedList<FileSystemEntry> List);
+		abstract internal IEnumerable<FileSystemEntry> ImplFindFiles(String Path);
 		abstract internal FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode);
 		abstract internal void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
 		abstract internal int ImplReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
@@ -241,24 +142,6 @@ namespace CSharpUtils.VirtualFileSystem
 		abstract internal void ImplCreateDirectory(String Path, int Mode = 0777);
 
 		#endregion
-
-		public void Dispose()
-		{
-			Shutdown();
-		}
-	}
-
-	public class FileSystemEntryNameComparer : IEqualityComparer<FileSystemEntry>
-	{
-		public bool Equals(FileSystemEntry x, FileSystemEntry y)
-		{
-			return x.Name == y.Name;
-		}
-
-		public int GetHashCode(FileSystemEntry obj)
-		{
-			return obj.GetHashCode();
-		}
 	}
 
 	static public class FileSystemUtils

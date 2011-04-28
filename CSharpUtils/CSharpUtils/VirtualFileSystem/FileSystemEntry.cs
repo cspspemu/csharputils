@@ -112,18 +112,7 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			return FileSystem.OpenFile(Path, FileMode);
 		}
-
-		static public Dictionary<String, FileSystemEntry> LinkedListToDictionary(LinkedList<FileSystemEntry> Entries)
-		{
-			var Dictionary = new Dictionary<String, FileSystemEntry>();
-			foreach (var Entry in Entries)
-			{
-				Dictionary.Add(Entry.Name, Entry);
-			}
-			return Dictionary;
-		}
 		
-
 		public override string ToString()
 		{
 			return "FileSystemEntry(FullName=" + FullName + ", Name=" + Name + ", Size=" + Size + ", Type=" + Type + ")";

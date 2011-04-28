@@ -114,14 +114,14 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			Ftp.RemoveFile(CachedRealPath);
 		}
 
-		override internal void ImplFindFiles(string Path, LinkedList<FileSystemEntry> Entries)
+		override internal IEnumerable<FileSystemEntry> ImplFindFiles(string Path)
 		{
 			Ftp.ChangeDir(RealPath(Path));
 			foreach (var FTPEntry in Ftp.ListEntries())
 			{
 				var FileSystemEntry = new FtpFileSystemEntry(this, Path + "/" + FTPEntry.Name, FTPEntry);
 
-				Entries.AddLast(FileSystemEntry);
+				yield return FileSystemEntry;
 			}
 		}
 

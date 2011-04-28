@@ -35,7 +35,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return new LocalFileSystemEntry(this, Path, FileSystemInfo);
 		}
 
-		override internal void ImplFindFiles(String Path, LinkedList<FileSystemEntry> Items)
+		override internal IEnumerable<FileSystemEntry> ImplFindFiles(String Path)
 		{
 			String CachedRealPath = RealPath(Path);
 
@@ -61,8 +61,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 				//
 				
 				//FileSystemEntry.Time = Item.
-				Items.AddLast(FileSystemEntry);
-				//yield return FileSystemEntry;
+				yield return FileSystemEntry;
 			}
 		}
 

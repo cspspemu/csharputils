@@ -30,12 +30,13 @@ namespace CSharpUtilsTests
 		public void SynchronizeTest()
 		{
 			FileSystem SourceFileSystem = new LocalFileSystem(Config.ProjectTestInputPath);
-			string SourcePath = "/";
 			FileSystem DestinationFileSystem = new LocalFileSystem(Config.ProjectTestOutputPath);
-			string DestinationPath = "/";
-			Synchronizer.SynchronizationMode _SynchronizationMode = Synchronizer.SynchronizationMode.CopyNewAndUpdateOldFiles;
-			Synchronizer.ReferenceMode _ReferenceMode = new Synchronizer.ReferenceMode();
-			Synchronizer.Synchronize(SourceFileSystem, SourcePath, DestinationFileSystem, DestinationPath, _SynchronizationMode, _ReferenceMode);
+			Synchronizer.Synchronize(
+				SourceFileSystem, ".",
+				DestinationFileSystem, ".",
+				Synchronizer.SynchronizationMode.CopyNewAndUpdateOldFiles,
+				Synchronizer.ReferenceMode.SizeAndLastWriteTime
+			);
 			DestinationFileSystem.GetFileTime("ExistentFolder/2/AnotherFile.txt");
 		}
 	}
