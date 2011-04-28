@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -58,6 +59,12 @@
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="Endianness.cs" />
     <Compile Include="EnumerableComparer.cs" />
+    <Compile Include="Forms\ProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProgressForm.Designer.cs">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LinqEqualityComparer.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="Forms\TimerTaskQueue.cs" />
@@ -293,6 +300,7 @@
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="StructUtils.cs" />
+    <Compile Include="TimeSampler.cs" />
     <Compile Include="VirtualFileSystem\BaseFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanNet.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanOperations.cs" />
@@ -323,6 +331,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Net\DiffieHellman\license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\ProgressForm.resx">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

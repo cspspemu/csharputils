@@ -75,10 +75,23 @@ namespace CSharpUtils.VirtualFileSystem
 		}
 
 		abstract internal void ImplCreateDirectory(String Path, int Mode = 0777);
-		public void CreateDirectory(String Path, int Mode = 0777)
+		public void CreateDirectory(String Path, int Mode = 0777, bool ThrowErrorIfNotExists = true)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
-			NewFileSystem.ImplCreateDirectory(NewPath, Mode);
+			if (ThrowErrorIfNotExists)
+			{
+				NewFileSystem.ImplCreateDirectory(NewPath, Mode);
+			}
+			else
+			{
+				try
+				{
+					NewFileSystem.ImplCreateDirectory(NewPath, Mode);
+				}
+				catch
+				{
+				}
+			}
 		}
 
 		abstract internal void ImplMoveFile(String ExistingFileName, String NewFileName, bool ReplaceExisiting);

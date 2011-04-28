@@ -117,7 +117,9 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 		override internal IEnumerable<FileSystemEntry> ImplFindFiles(string Path)
 		{
 			Ftp.ChangeDir(RealPath(Path));
-			foreach (var FTPEntry in Ftp.ListEntries())
+			var Entries = Ftp.ListEntries();
+			Ftp.ChangeDir(RootPath);
+			foreach (var FTPEntry in Entries)
 			{
 				var FileSystemEntry = new FtpFileSystemEntry(this, Path + "/" + FTPEntry.Name, FTPEntry);
 

@@ -4,11 +4,18 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CSharpUtils;
+using System.Diagnostics;
+using System.Windows.Forms;
+using CSharpUtils.Forms;
 
 namespace CSharpUtils.VirtualFileSystem.Utils
 {
 	public class Synchronizer
 	{
+		String RemovingFormat = "Removing {0}...";
+		String UpdatingFormat = "Updating {0}...";
+		String SynchronizingFormat = "Synchronizing {0}...";
+
 		public enum SynchronizationMode
 		{
 			CopyNewFiles = 1,
@@ -26,12 +33,14 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			SizeAndLastWriteTime = Size | LastWriteTime,
 		}
 
+		public bool Canceling = false;
 		FileSystem SourceFileSystem, DestinationFileSystem;
 		String SourcePath, DestinationPath;
 		SynchronizationMode _SynchronizationMode;
 		ReferenceMode _ReferenceMode;
+		public event Action<double, String> OnStep;
 
-		protected Synchronizer(FileSystem SourceFileSystem, String SourcePath, FileSystem DestinationFileSystem, String DestinationPath, SynchronizationMode _SynchronizationMode, ReferenceMode _ReferenceMode)
+		public Synchronizer(FileSystem SourceFileSystem, String SourcePath, FileSystem DestinationFileSystem, String DestinationPath, SynchronizationMode _SynchronizationMode, ReferenceMode _ReferenceMode)
 		{
 			this.SourceFileSystem = SourceFileSystem;
 			this.DestinationFileSystem = DestinationFileSystem;
@@ -39,6 +48,15 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			this.DestinationPath = DestinationPath;
 			this._SynchronizationMode = _SynchronizationMode;
 			this._ReferenceMode = _ReferenceMode;
+
+			OnStep += delegate(double Value, String Details) {
+				//Console.WriteLine("OnStep: " + Value + "; " + Details);
+			};
+		}
+
+		public void Cancel()
+		{
+			Canceling = true;
 		}
 
 		static public void Synchronize(FileSystem SourceFileSystem, String SourcePath, FileSystem DestinationFileSystem, String DestinationPath, SynchronizationMode _SynchronizationMode, ReferenceMode _ReferenceMode)
@@ -53,8 +71,45 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			}
 		}
 
-		protected void SynchronizeFolder(String Path)
+		protected void CheckCanceling()
 		{
+			if (Canceling) throw(new OperationCanceledException());
+		}
+
+		public void SynchronizeFolder(String Path = "/")
+		{
+			try
+			{
+				Console.WriteLine("Synchronizing folder");
+				_SynchronizeFolder(Path);
+				CallStep(1.0, "Finished");
+			}
+			catch (OperationCanceledException)
+			{
+				Console.WriteLine("Cancelled");
+			}
+		}
+
+		private void CallStep(double Step, String Details)
+		{
+			if (OnStep != null) OnStep(Step, Details);
+		}
+
+		private double GetStep(double StepFrom, double StepTo, int subStep, int subSteps)
+		{
+			Debug.Assert(StepTo >= StepFrom);
+			Debug.Assert(subSteps >= subStep);
+			return StepFrom + (StepTo - StepFrom) * (double)subStep / (double)subSteps;
+		}
+
+		private void _SynchronizeFolder(String Path, double StepFrom = 0.0, double StepTo = 1.0)
+		{
+			//Console.WriteLine("------------{0}/{1}", StepFrom, StepTo);
+
+			Canceling = false;
+
+			CallStep(StepFrom, String.Format(SynchronizingFormat, Path));
+
 			var SourceFiles = this.SourceFileSystem
 				.FindFiles(SourcePath + "/" + Path)
 				.ToDictionary(FileSystemEntry => FileSystemEntry.Name)
@@ -70,6 +125,8 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			// Folders to Explore.
 			foreach (var PairSourceFile in SourceFiles)
 			{
+				CheckCanceling();
+
 				var SourceFile = PairSourceFile.Value;
 				var SourceFileName = PairSourceFile.Key;
 
@@ -81,6 +138,8 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 			foreach (var PairSourceFile in SourceFiles)
 			{
+				CheckCanceling();
+
 				var SourceFile = PairSourceFile.Value;
 				var SourceFileName = PairSourceFile.Key;
 
@@ -128,6 +187,8 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 				foreach (var PairDestinationFile in DestinationFiles)
 				{
+					CheckCanceling();
+
 					var DestinationFile = PairDestinationFile.Value;
 					var DestinationFileName = PairDestinationFile.Key;
 
@@ -137,12 +198,18 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 						FilesToRemove.AddLast(DestinationFile);
 					}
 				}
-
 			}
+
+			int step = 0;
+			int steps = FilesToUpdate.Count + FilesToRemove.Count + FoldersToExplore.Count;
 
 			foreach (var FileToUpdate in FilesToUpdate)
 			{
 				String FileToUpdatePathFileName = Path + "/" + FileToUpdate.Name;
+
+				CheckCanceling();
+				CallStep(GetStep(StepFrom, StepTo, step++, steps), String.Format(UpdatingFormat, FileToUpdatePathFileName));
+
 				if (FileToUpdate.Type == FileSystemEntry.EntryType.Directory)
 				{
 					Console.WriteLine("Directory: " + FileToUpdatePathFileName);
@@ -158,33 +225,87 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			foreach (var FileToRemove in FilesToRemove)
 			{
 				String FileToRemovePathFileName = Path + "/" + FileToRemove.Name;
+
+				CheckCanceling();
+				CallStep(GetStep(StepFrom, StepTo, step++, steps), String.Format(RemovingFormat, FileToRemovePathFileName));
+
 				RemoveFile(FileToRemovePathFileName);
 			}
+
 			foreach (var FolderName in FoldersToExplore)
 			{
-				SynchronizeFolder(FolderName);
+				CheckCanceling();
+
+				_SynchronizeFolder(
+					FolderName,
+					GetStep(StepFrom, StepTo, step + 0, steps),
+					GetStep(StepFrom, StepTo, step + 1, steps)
+				);
+
+				step++;
 			}
 		}
 
 		protected void CreateFolder(String PathFileName)
 		{
-			DestinationFileSystem.CreateDirectory(DestinationPath + "/" + PathFileName);
+			try
+			{
+				DestinationFileSystem.CreateDirectory(DestinationPath + "/" + PathFileName);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Error creating folder '{0}' : {1}", DestinationPath + "/" + PathFileName, e.Message);
+			}
 		}
 
 		protected void RemoveFile(String PathFileName)
 		{
-			DestinationFileSystem.DeleteFile(DestinationPath + "/" + PathFileName);
+			try
+			{
+				DestinationFileSystem.DeleteFile(DestinationPath + "/" + PathFileName);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Error deleting file '{0}' : {1}", DestinationPath + "/" + PathFileName, e.Message);
+			}
 		}
 
 		protected void CopyFile(String PathFileName)
 		{
-			Stream SourceStream = SourceFileSystem.OpenFile(SourcePath + "/" + PathFileName, FileMode.Open);
-			Stream DestinationStream = DestinationFileSystem.OpenFile(DestinationPath + "/" + PathFileName, FileMode.Create);
+			using (var SourceStream = SourceFileSystem.OpenFile(SourcePath + "/" + PathFileName, FileMode.Open))
+			using (var DestinationStream = DestinationFileSystem.OpenFile(DestinationPath + "/" + PathFileName, FileMode.Create))
 			{
                 SourceStream.CopyToFast(DestinationStream);
 			}
-			DestinationStream.Close();
-			SourceStream.Close();
+		}
+
+		public void ShowProgressForm()
+		{
+			var ProgressForm = new ProgressForm();
+
+			this.OnStep += delegate(double Value, String Details)
+			{
+				ProgressForm.SetStep(Value, Details);
+			};
+
+			ProgressForm.OnCancelClick = delegate()
+			{
+				return (MessageBox.Show("¿Está seguro de querer cancelar la sincronización?", "Atención", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes);
+			};
+
+
+			ProgressForm.Process = delegate()
+			{
+				this.SynchronizeFolder();
+			};
+
+			ProgressForm.Cancel = delegate()
+			{
+				this.Cancel();
+			};
+
+			//ProgressForm.ShowDialog();
+			ProgressForm.ExecuteProcess();
 		}
 	}
 }

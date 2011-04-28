@@ -195,6 +195,61 @@ namespace CSharpUtils.Net
 
 		#endregion
 
+		public enum ResponseCode
+		{
+			COMMAND_OK = 200,
+			COMMAND_NOT_IMPLEMENTED = 202,
+			SYSTEM_STATUS = 211,
+			DIRECTORY_STATUS = 212,
+			FILE_STATUS = 213,
+			/*
+			100	Series: The requested action is being initiated, expect another reply before proceeding with a new command.
+			110	Restart marker replay . In this case, the text is exact and not left to the particular implementation; it must read: MARK yyyy = mmmm where yyyy is User-process data stream marker, and mmmm server's equivalent marker (note the spaces between markers and "=").
+			120	Service ready in nnn minutes.
+			125	Data connection already open; transfer starting.
+			150	File status okay; about to open data connection.
+			214	Help message.On how to use the server or the meaning of a particular non-standard command. This reply is useful only to the human user.
+			215	NAME system type. Where NAME is an official system name from the registry kept by IANA.
+			220	Service ready for new user.
+			221	Service closing control connection.
+			225	Data connection open; no transfer in progress.
+			226	Closing data connection. Requested file action successful (for example, file transfer or file abort).
+			227	Entering Passive Mode (h1,h2,h3,h4,p1,p2).
+			228	Entering Long Passive Mode (long address, port).
+			229	Entering Extended Passive Mode (|||port|).
+			230	User logged in, proceed. Logged out if appropriate.
+			231	User logged out; service terminated.
+			232	Logout command noted, will complete when transfer done.
+			250	Requested file action okay, completed.
+			257	"PATHNAME" created.
+			331	User name okay, need password.
+			332	Need account for login.
+			350	Requested file action pending further information
+			421	Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
+			425	Can't open data connection.
+			426	Connection closed; transfer aborted.
+			430	Invalid username or password
+			434	Requested host unavailable.
+			450	Requested file action not taken.
+			451	Requested action aborted. Local error in processing.
+			452	Requested action not taken. Insufficient storage space in system.File unavailable (e.g., file busy).
+			500	Syntax error, command unrecognized. This may include errors such as command line too long.
+			501	Syntax error in parameters or arguments.
+			502	Command not implemented.
+			503	Bad sequence of commands.
+			504	Command not implemented for that parameter.
+			530	Not logged in.
+			532	Need account for storing files.
+			550	Requested action not taken. File unavailable (e.g., file not found, no access).
+			551	Requested action aborted. Page type unknown.
+			552	Requested file action aborted. Exceeded storage allocation (for current directory or dataset).
+			553	Requested action not taken. File name not allowed.
+			631	Integrity protected reply.
+			632	Confidentiality and integrity protected reply.
+			633	Confidentiality protected reply.
+			*/
+		}
+
 		public LinkedList<FTPEntry> ListEntries()
 		{
 			var entries = new LinkedList<FTPEntry>();
@@ -976,7 +1031,7 @@ namespace CSharpUtils.Net
 #if (FTP_DEBUG)
 				Console.Write("\r" + responseStr);
 #endif
-				throw new Exception(responseStr);
+				throw new Exception(responseStr + " : " + path);
 			}
 		}
 		/// <summary>
@@ -998,7 +1053,7 @@ namespace CSharpUtils.Net
 #if (FTP_DEBUG)
                     Console.Write("\r" + responseStr);
 #endif
-					throw new Exception(responseStr);
+					throw new Exception(responseStr + " : " + dir);
 			}
 		}
 		/// <summary>
@@ -1015,7 +1070,7 @@ namespace CSharpUtils.Net
 #if (FTP_DEBUG)
 				Console.Write("\r" + responseStr);
 #endif
-				throw new Exception(responseStr);
+				throw new Exception(responseStr + " : " + dir);
 			}
 		}
 		/// <summary>
@@ -1032,7 +1087,7 @@ namespace CSharpUtils.Net
 #if (FTP_DEBUG)
 				Console.Write("\r" + responseStr);
 #endif
-				throw new Exception(responseStr);
+				throw new Exception(responseStr + " : " + filename);
 			}
 		}
 		/// <summary>

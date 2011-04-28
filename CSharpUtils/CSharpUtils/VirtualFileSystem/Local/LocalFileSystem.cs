@@ -12,8 +12,12 @@ namespace CSharpUtils.VirtualFileSystem.Local
 
 		override protected bool CaseInsensitiveFileSystem { get { return true; } }
 
-		public LocalFileSystem(String RootPath)
+		public LocalFileSystem(String RootPath, bool CreatePath = false)
 		{
+			if (CreatePath && !Directory.Exists(RootPath))
+			{
+				Directory.CreateDirectory(RootPath);
+			}
 			this.RootPath = AbsoluteNormalizePath(RootPath);
 		}
 
