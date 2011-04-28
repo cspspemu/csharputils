@@ -59,6 +59,7 @@
     <Compile Include="SpaceAssigner\SpaceAssigner1D_SpaceTest.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DTest.cs" />
     <Compile Include="Paths.cs" />
+    <Compile Include="StreamExtensionsTest.cs" />
     <Compile Include="VirtualFileSystem\Ssh\SftpFileSystemTest.cs" />
     <Compile Include="VirtualFileSystem\Utils\SynchronizerTest.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemTest.cs" />

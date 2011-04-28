@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace CSharpUtils
 {
@@ -115,11 +116,32 @@ namespace CSharpUtils
             Stream.Write(Bytes, 0, Bytes.Length);
         }
 
+#if false
+		static ThreadLocal<byte[]> PerThreadBuffer = new ThreadLocal<byte[]>(() =>
+		{
+			return new byte[2 * 1024 * 1024];
+		});
+
+		public static void CopyToFast(this Stream FromStream, Stream ToStream)
+		{
+			//var SliceFromStream = new SliceStream(FromStream);
+			var SliceFromStream = FromStream;
+			while (true)
+			{
+				int ReadedBytesCount = SliceFromStream.Read(PerThreadBuffer.Value, 0, PerThreadBuffer.Value.Length);
+				Console.WriteLine(ReadedBytesCount);
+				ToStream.Write(PerThreadBuffer.Value, 0, ReadedBytesCount);
+				if (ReadedBytesCount < PerThreadBuffer.Value.Length) break;
+			}
+			//SliceFromStream.Dispose();
+		}
+#else
         public static void CopyToFast(this Stream FromStream, Stream ToStream)
         {
             /// TODO: Create a buffer and reuse it once for each thread.
             FromStream.CopyTo(ToStream, 2 * 1024 * 1024);
         }
+#endif
 
         public static void CopyToFile(this Stream Stream, String FileName)
         {
