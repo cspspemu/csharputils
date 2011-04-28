@@ -54,29 +54,29 @@ namespace CSharpUtils.VirtualFileSystem
 			return String.Join("/", Components);
 		}
 
-		private void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
+		public String ComparablePath(String Path)
 		{
-			String ComparePath;
-
-			// Normalize Components
-			Path = AbsoluteNormalizePath(Path, CurrentWorkingPath);
-
-			ComparePath = Path;
 			if (CaseInsensitiveFileSystem)
 			{
-				ComparePath = ComparePath.ToLower();
+				return Path.ToLower();
 			}
+			else
+			{
+				return Path;
+			}
+		}
+
+		private void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
+		{
+			// Normalize Components
+			Path = AbsoluteNormalizePath(Path, CurrentWorkingPath);
+			var ComparePath = ComparablePath(Path);
 
 			// Check MountedFileSystems.
 			foreach (var Item in MountedFileSystems)
 			{
-				var CheckMountedPath = Item.Key;
+				var CheckMountedPath = ComparablePath(Item.Key);
 				var MountInfo = Item.Value;
-
-				if (CaseInsensitiveFileSystem)
-				{
-					CheckMountedPath = CheckMountedPath.ToLower();
-				}
 
 				if (
 					ComparePath.StartsWith(CheckMountedPath) &&
@@ -85,12 +85,13 @@ namespace CSharpUtils.VirtualFileSystem
 						(ComparePath.Substring(CheckMountedPath.Length, 1) == "/")
 					)
 				) {
+					var NewAccessPath = ComparePath.Substring(CheckMountedPath.Length);
+					if (MountInfo.Path != "/")
+					{
+						NewAccessPath = MountInfo.Path + "/" + NewAccessPath;
+					}
 					// Use Mounted File System.
-					MountInfo.FileSystem.Access(
-						ComparePath.Substring(CheckMountedPath.Length),
-						out NewFileSystem,
-						out NewPath
-					);
+					MountInfo.FileSystem.Access(NewAccessPath, out NewFileSystem, out NewPath);
 					return;
 				}
 			}

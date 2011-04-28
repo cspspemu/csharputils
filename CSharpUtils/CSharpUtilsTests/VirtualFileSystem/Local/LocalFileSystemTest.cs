@@ -17,6 +17,7 @@ namespace CSharpUtilsTests
 		{
 			LocalFileSystem = new LocalFileSystem(Config.ProjectTestInputPath);
 			LocalFileSystem.Mount("/Mounted", new LocalFileSystem(Config.ProjectTestInputMountedPath));
+			LocalFileSystem.Mount("/NewMounted", new LocalFileSystem(Config.ProjectTestInputMountedPath), "/DirectoryOnMountedFileSystem");
 		}
 		[TestMethod]
 		public void GetFileTimeExistsTest()
@@ -38,6 +39,12 @@ namespace CSharpUtilsTests
 		public void MountedTest()
 		{
 			var FileTime = LocalFileSystem.GetFileTime("/Mounted/FileInMountedFileSystem.txt");
+		}
+
+		[TestMethod]
+		public void Mounted2Test()
+		{
+			var FileTime = LocalFileSystem.GetFileTime("/NewMounted/3.txt");
 		}
 
 		[TestMethod]
