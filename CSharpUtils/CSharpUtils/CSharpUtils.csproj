@@ -300,7 +300,6 @@
     <Compile Include="VirtualFileSystem\FileSystemFileStream.cs" />
     <Compile Include="VirtualFileSystem\FileSystemProxyDokanOperations.cs" />
     <Compile Include="VirtualFileSystem\FileSystemUtils.cs" />
-    <Compile Include="VirtualFileSystem\FileSytemCursor.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemEntry.cs" />
     <Compile Include="VirtualFileSystem\ImplFileSystem.cs" />
