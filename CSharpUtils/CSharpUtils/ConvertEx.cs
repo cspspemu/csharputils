@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace CSharpUtils
 {
-	public class ConvertEx
+	static public class ConvertEx
 	{
 		static public int FlexibleToInt(String String)
 		{
@@ -15,6 +15,16 @@ namespace CSharpUtils
 			int Value  =0;
 			int.TryParse(Selected, out Value);
 			return Value;
+		}
+
+		static public String GetString(this byte[] Bytes, Encoding Encoding)
+		{
+			return Encoding.GetString(Bytes);
+		}
+
+		static public String GetString(this byte[] Bytes)
+		{
+			return Bytes.GetString(Encoding.ASCII);
 		}
 	}
 }

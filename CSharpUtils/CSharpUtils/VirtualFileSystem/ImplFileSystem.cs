@@ -35,7 +35,9 @@ namespace CSharpUtils.VirtualFileSystem
 
 		internal override IEnumerable<FileSystemEntry> ImplFindFiles(string Path)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
+			return new List<FileSystemEntry>();
+			//yield return new FileSystemEntry();
 		}
 
 		internal override FileSystemFileStream ImplOpenFile(string FileName, FileMode FileMode)

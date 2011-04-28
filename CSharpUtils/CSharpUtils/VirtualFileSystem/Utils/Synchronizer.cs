@@ -14,6 +14,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			CopyNewFiles = 1,
 			UpdateOldFiles = 2,
 			DeleteOldFiles = 4,
+			ReplaceAllFiles = 8,
 			CopyNewAndUpdateOldFiles = CopyNewFiles | UpdateOldFiles,
 		}
 
@@ -21,6 +22,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 		{
 			Size = 1,
 			LastWriteTime = 2,
+			//Contents = 4,
 			SizeAndLastWriteTime = Size | LastWriteTime,
 		}
 
