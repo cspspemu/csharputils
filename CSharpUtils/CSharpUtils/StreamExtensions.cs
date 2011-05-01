@@ -11,6 +11,16 @@ namespace CSharpUtils
 {
 	static public class StreamExtensions
 	{
+        static public bool Eof(this Stream Stream)
+        {
+            return Stream.Available() <= 0;
+        }
+
+        static public long Available(this Stream Stream)
+        {
+            return Stream.Length - Stream.Position;
+        }
+
 		static public String ReadAllContentsAsString(this Stream Stream, Encoding Encoding = null)
 		{
 			if (Encoding == null) Encoding = Encoding.UTF8;
@@ -114,6 +124,11 @@ namespace CSharpUtils
         {
             byte[] Bytes = StructUtils.StructToBytes(Struct);
             Stream.Write(Bytes, 0, Bytes.Length);
+        }
+
+        public static void Align(this Stream Stream, int Align)
+        {
+            Stream.Position = MathUtils.Align(Stream.Position, Align);
         }
 
 #if false

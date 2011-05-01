@@ -25,6 +25,13 @@ namespace CSharpUtils
             return BitConverter.ToUInt32(Bytes, 0);
         }
 
+        static public float ReadSingleEndian(this BinaryReader BinaryReader, Endianness Endian)
+        {
+            byte[] Bytes = BinaryReader.ReadBytes(4);
+            if (Endian == Endianness.BigEndian) Bytes = Bytes.ReverseBytes();
+            return BitConverter.ToSingle(Bytes, 0);
+        }
+
         static public ushort ReadUint16Endian(this BinaryReader BinaryReader, Endianness Endian)
         {
             byte[] Bytes = BinaryReader.ReadBytes(2);
