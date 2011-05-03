@@ -54,6 +54,13 @@
     <Compile Include="BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
+    <Compile Include="ConsumerMemoryStream.cs" />
+    <Compile Include="Fastcgi\FascgiResponseOutputStream.cs" />
+    <Compile Include="Fastcgi\Fastcgi.cs" />
+    <Compile Include="Fastcgi\FastcgiHandler.cs" />
+    <Compile Include="Fastcgi\FastcgiPacketReader.cs" />
+    <Compile Include="Fastcgi\FastcgiPacketWriter.cs" />
+    <Compile Include="Fastcgi\FastcgiRequest.cs" />
     <Compile Include="ProduceConsumeBuffer.cs" />
     <Compile Include="ArrayUtils.cs" />
     <Compile Include="Compression\Lzx.cs" />
@@ -339,6 +346,7 @@
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

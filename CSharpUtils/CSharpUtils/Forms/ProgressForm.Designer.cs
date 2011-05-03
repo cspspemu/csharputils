@@ -70,6 +70,7 @@
 			this.Controls.Add(this.labelDetails);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.buttonCancel);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ProgressForm";

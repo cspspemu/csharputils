@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncTaskTest.cs" />
+    <Compile Include="ConsumerMemoryStreamTest.cs" />
+    <Compile Include="FastcgiHandlerTest.cs" />
     <Compile Include="LinqExExtensionsTest.cs" />
     <Compile Include="Process\ProcessTest.cs" />
     <Compile Include="DateTimeRangeTest.cs" />
