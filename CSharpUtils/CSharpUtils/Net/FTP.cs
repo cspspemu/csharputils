@@ -172,7 +172,8 @@ namespace CSharpUtils.Net
 		private long bytes_total; // upload/download info if the user wants it.
 		private long file_size; // gets set when an upload or download takes place
 		private Socket main_sock;
-		private StreamReader main_sock_LineReader;
+		//private StreamReader main_sock_LineReader;
+		private Stream main_sock_LineReader;
 		private Socket listening_sock;
 		private Socket data_sock;
 		private Stream file;
@@ -499,7 +500,8 @@ namespace CSharpUtils.Net
 
 			while (true)
 			{
-				buf = main_sock_LineReader.ReadLine();
+				//buf = main_sock_LineReader.ReadLine();
+				buf = main_sock_LineReader.ReadUntilString((byte)'\n', Encoding.ASCII, IncludeExpectedByte:false);
 
 #if (FTP_DEBUG)
 				Console.WriteLine(buf);
@@ -789,7 +791,8 @@ namespace CSharpUtils.Net
 			try
 			{
 				main_sock.Connect(server, port);
-				main_sock_LineReader = new StreamReader(new NetworkStream(main_sock));
+				//main_sock_LineReader = new StreamReader(new NetworkStream(main_sock));
+				main_sock_LineReader = new NetworkStream(main_sock);
 			}
 			catch (Exception ex)
 			{

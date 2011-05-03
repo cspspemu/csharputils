@@ -21,6 +21,31 @@ namespace CSharpUtils
             return Stream.Length - Stream.Position;
         }
 
+		static public byte[] ReadUntil(this Stream Stream, byte ExpectedByte, bool IncludeExpectedByte)
+		{
+			bool Found = false;
+			var Buffer = new MemoryStream();
+			while (!Found)
+			{
+				int b = Stream.ReadByte();
+				if (b == -1) throw (new Exception("End Of Stream"));
+
+				if (b == ExpectedByte)
+				{
+					Found = true;
+					if (!IncludeExpectedByte) break;
+				}
+
+				Buffer.WriteByte((byte)b);
+			}
+			return Buffer.ToArray();
+		}
+
+		static public String ReadUntilString(this Stream Stream, byte ExpectedByte, Encoding Encoding, bool IncludeExpectedByte)
+		{
+			return Encoding.GetString(Stream.ReadUntil(ExpectedByte, IncludeExpectedByte));
+		}
+
 		static public String ReadAllContentsAsString(this Stream Stream, Encoding Encoding = null)
 		{
 			if (Encoding == null) Encoding = Encoding.UTF8;
