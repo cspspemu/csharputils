@@ -54,6 +54,8 @@
     <Compile Include="BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
+    <Compile Include="ProduceConsumeBuffer.cs" />
+    <Compile Include="ArrayUtils.cs" />
     <Compile Include="Compression\Lzx.cs" />
     <Compile Include="ConvertEx.cs" />
     <Compile Include="DateTimeRange.cs" />
@@ -87,7 +89,6 @@
     <Compile Include="Net\DiffieHellman\TestApp.cs" />
     <Compile Include="Net\FTP.cs" />
     <Compile Include="Net\FtpClient.cs" />
-    <Compile Include="Net\SocketLineReader.cs" />
     <Compile Include="Process\Impl\IProcessBaseImpl.cs" />
     <Compile Include="Process\Impl\ProcessBaseImplFibers.cs" />
     <Compile Include="Process\Impl\ProcessBaseImplUcontext.cs" />

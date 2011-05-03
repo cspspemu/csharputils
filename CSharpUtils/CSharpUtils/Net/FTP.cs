@@ -172,11 +172,11 @@ namespace CSharpUtils.Net
 		private long bytes_total; // upload/download info if the user wants it.
 		private long file_size; // gets set when an upload or download takes place
 		private Socket main_sock;
+		private StreamReader main_sock_LineReader;
 		private Socket listening_sock;
 		private Socket data_sock;
 		private Stream file;
 		private int response;
-		private string bucket;
 
 		#endregion
 
@@ -217,7 +217,6 @@ namespace CSharpUtils.Net
 			listening_sock = null;
 			data_sock = null;
 			file = null;
-			bucket = "";
 			bytes_total = 0;
 			timeout = 10000;	// 10 seconds
 			messages = "";
@@ -490,42 +489,6 @@ namespace CSharpUtils.Net
 			main_sock.Send(cmd, cmd.Length, 0);
 		}
 
-
-		private void FillBucket()
-		{
-			Byte[] bytes = new Byte[512];
-			long bytesgot;
-
-			do
-			{
-				bytesgot = main_sock.Receive(bytes, 512, 0);
-				bucket += Encoding.ASCII.GetString(bytes, 0, (int)bytesgot);
-			}
-			while (main_sock.Available > 0);
-		}
-
-
-		private string GetLineFromBucket()
-		{
-			int i;
-			string buf = "";
-
-			if ((i = bucket.IndexOf('\n')) < 0)
-			{
-				while (i < 0)
-				{
-					FillBucket();
-					i = bucket.IndexOf('\n');
-				}
-			}
-
-			buf = bucket.Substring(0, i);
-			bucket = bucket.Substring(i + 1);
-
-			return buf;
-		}
-
-
 		// Any time a command is sent, use ReadResponse() to get the response
 		// from the server. The variable responseStr holds the entire string and
 		// the variable response holds the response number.
@@ -536,8 +499,7 @@ namespace CSharpUtils.Net
 
 			while (true)
 			{
-				//buf = GetLineFromBucket();
-				buf = GetLineFromBucket();
+				buf = main_sock_LineReader.ReadLine();
 
 #if (FTP_DEBUG)
 				Console.WriteLine(buf);
@@ -827,6 +789,7 @@ namespace CSharpUtils.Net
 			try
 			{
 				main_sock.Connect(server, port);
+				main_sock_LineReader = new StreamReader(new NetworkStream(main_sock));
 			}
 			catch (Exception ex)
 			{

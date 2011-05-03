@@ -53,10 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncTaskTest.cs" />
+    <Compile Include="LineReaderTest.cs" />
     <Compile Include="LinqExExtensionsTest.cs" />
     <Compile Include="Process\ProcessTest.cs" />
     <Compile Include="DateTimeRangeTest.cs" />
     <Compile Include="FileSystemEntryTest.cs" />
+    <Compile Include="ProduceConsumeBufferTest.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1D_SpaceTest.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DTest.cs" />
     <Compile Include="Paths.cs" />
