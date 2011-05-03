@@ -87,6 +87,7 @@
     <Compile Include="Net\DiffieHellman\TestApp.cs" />
     <Compile Include="Net\FTP.cs" />
     <Compile Include="Net\FtpClient.cs" />
+    <Compile Include="Net\SocketLineReader.cs" />
     <Compile Include="Process\Impl\IProcessBaseImpl.cs" />
     <Compile Include="Process\Impl\ProcessBaseImplFibers.cs" />
     <Compile Include="Process\Impl\ProcessBaseImplUcontext.cs" />

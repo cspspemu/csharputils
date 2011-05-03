@@ -127,10 +127,40 @@ namespace CSharpUtils.Net
 		/// Port number the FTP server is listening on
 		/// </summary>
 		public int port;
+
+		protected int _timeout;
+
+		protected void SetSocketTimeout(Socket Socket, int Timeout)
+		{
+			if (Socket != null)
+			{
+				Socket.SendTimeout = Timeout;
+				Socket.ReceiveTimeout = Timeout;
+			}
+		}
+
+		protected void SetSocketTimeout(Socket Socket)
+		{
+			SetSocketTimeout(Socket, timeout);
+		}
+
 		/// <summary>
 		/// The timeout (miliseconds) for waiting on data to arrive
 		/// </summary>
-		public int timeout;
+		public int timeout
+		{
+			set
+			{
+				_timeout = value;
+				SetSocketTimeout(main_sock);
+				SetSocketTimeout(data_sock);
+				SetSocketTimeout(listening_sock);
+			}
+			get
+			{
+				return _timeout;
+			}
+		}
 
 		#endregion
 
@@ -465,30 +495,13 @@ namespace CSharpUtils.Net
 		{
 			Byte[] bytes = new Byte[512];
 			long bytesgot;
-			int msecs_passed = 0;		// #######################################
 
-			while (main_sock.Available < 1)
-			{
-				System.Threading.Thread.Sleep(50);
-				msecs_passed += 50;
-				// this code is just a fail safe option 
-				// so the code doesn't hang if there is 
-				// no data comming.
-				if (msecs_passed > timeout)
-				{
-					Disconnect();
-					throw new Exception("Timed out waiting on server to respond.");
-				}
-			}
-
-			while (main_sock.Available > 0)
+			do
 			{
 				bytesgot = main_sock.Receive(bytes, 512, 0);
 				bucket += Encoding.ASCII.GetString(bytes, 0, (int)bytesgot);
-				// this may not be needed, gives any more data that hasn't arrived
-				// just yet a small chance to get there.
-				System.Threading.Thread.Sleep(50);
 			}
+			while (main_sock.Available > 0);
 		}
 
 
@@ -599,7 +612,12 @@ namespace CSharpUtils.Net
 #if (FTP_DEBUG)
 					Console.WriteLine("Creating socket...");
 #endif
-					data_sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+					data_sock = new Socket(
+						AddressFamily.InterNetwork,
+						SocketType.Stream,
+						ProtocolType.Tcp
+					);
+					SetSocketTimeout(data_sock);
 
 #if (FTP_DEBUG)
 					Console.WriteLine("Resolving host");
@@ -634,7 +652,12 @@ namespace CSharpUtils.Net
 #if (FTP_DEBUG)
 					Console.WriteLine("Creating listening socket...");
 #endif
-					listening_sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+					listening_sock = new Socket(
+						AddressFamily.InterNetwork,
+						SocketType.Stream,
+						ProtocolType.Tcp
+					);
+					SetSocketTimeout(listening_sock);
 
 #if (FTP_DEBUG)
 					Console.WriteLine("Binding it to local address/port");
@@ -794,7 +817,12 @@ namespace CSharpUtils.Net
 				if (main_sock.Connected)
 					return;
 
-			main_sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			main_sock = new Socket(
+				AddressFamily.InterNetwork,
+				SocketType.Stream,
+				ProtocolType.Tcp
+			);
+			SetSocketTimeout(main_sock);
 
 			try
 			{
@@ -859,34 +887,18 @@ namespace CSharpUtils.Net
 					CloseDataSocket();
 					throw new Exception(responseStr);
 			}
-			ConnectDataSocket();		// #######################################
 
-			while (data_sock.Available < 1)
+			// http://www.codethinked.com/net-40-and-systemthreadingtasks
+			// http://msmvps.com/blogs/peterritchie/archive/2007/04/26/thread-sleep-is-a-sign-of-a-poorly-designed-program.aspx
+			//data_sock.BeginReceive(
+			ConnectDataSocket();
 			{
-				System.Threading.Thread.Sleep(50);
-				msecs_passed += 50;
-				// this code is just a fail safe option 
-				// so the code doesn't hang if there is 
-				// no data comming.
-				if (msecs_passed > (timeout / 10))
+				do
 				{
-					//CloseDataSocket();
-					//throw new Exception("Timed out waiting on server to respond.");
-
-					//FILIPE MADUREIRA.
-					//If there are no files to list it gives timeout.
-					//So I wait less time and if no data is received, means that there are no files
-					break;//Maybe there are no files
-				}
+					bytesgot = data_sock.Receive(bytes, bytes.Length, 0);
+					file_list += Encoding.ASCII.GetString(bytes, 0, (int)bytesgot);
+				} while (data_sock.Available > 0);
 			}
-
-			while (data_sock.Available > 0)
-			{
-				bytesgot = data_sock.Receive(bytes, bytes.Length, 0);
-				file_list += Encoding.ASCII.GetString(bytes, 0, (int)bytesgot);
-				System.Threading.Thread.Sleep(50); // *shrug*, sometimes there is data comming but it isn't there yet.
-			}
-
 			CloseDataSocket();
 
 			ReadResponse();
