@@ -8,6 +8,7 @@ using Tamir.SharpSsh.java.lang;
 using Exception = System.Exception;
 using NullReferenceException = System.NullReferenceException;
 using ThreadInterruptedException = System.Threading.ThreadInterruptedException;
+using System.Linq;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -796,7 +797,7 @@ namespace Tamir.SharpSsh.jsch
 					byte[] result = s2cmac.doFinal();
 					io.getByte(mac_buf, 0, mac_buf.Length);
 
-					if (!System.Array.Equals(result, mac_buf))
+					if (!result.SequenceEqual(mac_buf))
 					{
 						throw new IOException("MAC Error");
 					}
