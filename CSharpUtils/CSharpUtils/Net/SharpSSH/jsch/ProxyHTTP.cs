@@ -25,13 +25,13 @@ namespace Tamir.SharpSsh.jsch
 		{
 			int port=DEFAULTPORT;
 			String host=proxy_host;
-			if(proxy_host.indexOf(':')!=-1)
+			if(proxy_host.IndexOf(':')!=-1)
 			{
 				try
 				{
-					host=proxy_host.substring(0, proxy_host.indexOf(':'));
+					host=proxy_host.Substring(0, proxy_host.IndexOf(':'));
 
-					port = System.Convert.ToInt32(proxy_host.substring(proxy_host.indexOf(':') + 1));
+					port = System.Convert.ToInt32(proxy_host.Substring(proxy_host.IndexOf(':') + 1));
 				}
 				catch(Exception e)
 				{
@@ -77,7 +77,7 @@ namespace Tamir.SharpSsh.jsch
 
 				if(user!=null && passwd!=null)
 				{
-					byte[] _code=(user+":"+passwd).getBytes();
+					byte[] _code=Encoding.UTF8.GetBytes(user + ":" + passwd);
 					_code=Util.toBase64(_code, 0, _code.Length);
 					outs.write("Proxy-Authorization: Basic ");
 					outs.write(_code);
@@ -106,10 +106,10 @@ namespace Tamir.SharpSsh.jsch
 				int code=-1;
 				try
 				{
-					foo=response.indexOf(' ');
-					int bar=response.indexOf(' ', foo+1);
-					code = System.Convert.ToInt32(response.substring(foo + 1, bar));
-					reason=response.substring(bar+1);
+					foo=response.IndexOf(' ');
+					int bar=response.IndexOf(' ', foo+1);
+					code = System.Convert.ToInt32(response.Substring(foo + 1, bar));
+					reason=response.Substring(bar+1);
 				}
 				catch(Exception e)
 				{

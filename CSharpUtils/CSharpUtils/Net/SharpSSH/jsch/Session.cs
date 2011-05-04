@@ -57,7 +57,7 @@ namespace Tamir.SharpSsh.jsch
 		internal const int SSH_MSG_CHANNEL_FAILURE=               100;
 
 		private byte[] V_S;                                 // server version
-		private byte[] V_C=("SSH-2.0-"+version).getBytes(); // client version
+		private byte[] V_C=Encoding.UTF8.GetBytes("SSH-2.0-"+version); // client version
 
 		private byte[] I_C; // the payload of the client's SSH_MSG_KEXINIT
 		private byte[] I_S; // the payload of the server's SSH_MSG_KEXINIT
@@ -331,7 +331,7 @@ namespace Tamir.SharpSsh.jsch
 					methods=usn.getMethods();
 					if(methods!=null)
 					{
-						methods=methods.toLowerCase();
+						methods=methods.ToLower();
 					}
 					else
 					{
@@ -346,14 +346,13 @@ namespace Tamir.SharpSsh.jsch
 
 					//System.Console.WriteLine("methods: "+methods);
 
-					while(!auth &&
-						methods!=null && methods.Length()>0)
+					while (!auth && methods != null && methods.Length > 0)
 					{
 
 						//System.Console.WriteLine("  methods: "+methods);
 
 						UserAuth us=null;
-						if(methods.startsWith("publickey"))
+						if (methods.StartsWith("publickey"))
 						{
 							//System.Console.WriteLine("   jsch.identities.size()="+jsch.identities.size());
 							lock(jsch.identities)
@@ -364,14 +363,14 @@ namespace Tamir.SharpSsh.jsch
 								}
 							}
 						}
-						else if(methods.startsWith("keyboard-interactive"))
+                        else if (methods.StartsWith("keyboard-interactive"))
 						{
 							if(userinfo is UIKeyboardInteractive)
 							{
 								us=new UserAuthKeyboardInteractive(userinfo);
 							}
 						}
-						else if(methods.startsWith("password"))
+                        else if (methods.StartsWith("password"))
 						{
 							us=new UserAuthPassword(userinfo);
 						}
@@ -401,9 +400,9 @@ namespace Tamir.SharpSsh.jsch
 						}
 						if(!auth)
 						{
-							int comma=methods.indexOf(",");
+							int comma=methods.IndexOf(",");
 							if(comma==-1) break;
-							methods=methods.subString(comma+1);
+							methods=methods.Substring(comma+1);
 						}
 					}
 					break;
@@ -545,16 +544,16 @@ namespace Tamir.SharpSsh.jsch
 			{
 				random.fill(buf.buffer, buf.index, 16); buf.skip(16);
 			}
-			buf.putString(getConfig("kex").getBytes());
-			buf.putString(getConfig("server_host_key").getBytes());
-			buf.putString(getConfig("cipher.c2s").getBytes());
-			buf.putString(getConfig("cipher.s2c").getBytes());
-			buf.putString(getConfig("mac.c2s").getBytes());
-			buf.putString(getConfig("mac.s2c").getBytes());
-			buf.putString(getConfig("compression.c2s").getBytes());
-			buf.putString(getConfig("compression.s2c").getBytes());
-			buf.putString(getConfig("lang.c2s").getBytes());
-			buf.putString(getConfig("lang.s2c").getBytes());
+			buf.putString(getConfig("kex"));
+			buf.putString(getConfig("server_host_key"));
+			buf.putString(getConfig("cipher.c2s"));
+			buf.putString(getConfig("cipher.s2c"));
+			buf.putString(getConfig("mac.c2s"));
+			buf.putString(getConfig("mac.s2c"));
+			buf.putString(getConfig("compression.c2s"));
+			buf.putString(getConfig("compression.s2c"));
+			buf.putString(getConfig("lang.c2s"));
+			buf.putString(getConfig("lang.s2c"));
 			buf.putByte((byte)0);
 			buf.putInt(0);
 
@@ -669,15 +668,14 @@ namespace Tamir.SharpSsh.jsch
 				}
 			}
 
-			if(shkc.equals("no") &&
-				HostKeyRepository.NOT_INCLUDED==i)
-			{
+			if (shkc == "no" && HostKeyRepository.NOT_INCLUDED==i)
+            {
 				insert=true;
 			}
 
-			if(insert)
+			if (insert)
 			{
-				lock(hkr)
+				lock (hkr)
 				{
 					hkr.add(host, K_S, userinfo);
 				}
@@ -1728,7 +1726,7 @@ namespace Tamir.SharpSsh.jsch
 		}
 		public void setClientVersion(String cv)
 		{
-			V_C=cv.getBytes();
+			V_C = Encoding.UTF8.GetBytes(cv);
 		}
 
 		public void sendIgnore() 
@@ -1740,7 +1738,7 @@ namespace Tamir.SharpSsh.jsch
 			write(packet);
 		}
 		
-		private static byte[] keepalivemsg=Encoding.UTF8.GetString("keepalive@jcraft.com").getBytes();
+		private static byte[] keepalivemsg=Encoding.UTF8.GetBytes("keepalive@jcraft.com");
 		public void sendKeepAliveMsg()
 		{
 			Buffer buf=new Buffer();
