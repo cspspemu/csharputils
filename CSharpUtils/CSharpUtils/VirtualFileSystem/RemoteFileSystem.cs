@@ -27,6 +27,11 @@ namespace CSharpUtils.VirtualFileSystem
 			this.timeout = timeout;
 		}
 
+		virtual public RemoteFileSystem EnsureConnect()
+		{
+			return this;
+		}
+
 		public String GetTempFile()
 		{
 			return Path.GetTempPath() + Guid.NewGuid().ToString() + ".tmp";

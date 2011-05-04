@@ -39,6 +39,12 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			}
 		}
 
+		override public RemoteFileSystem EnsureConnect()
+		{
+			var Ftp = this.Ftp;
+			return this;
+		}
+
 		public FtpFileSystem(string Host, int Port, string Username, string Password, int timeout = 10000)
 			:base (Host, Port, Username, Password, timeout)
 		{

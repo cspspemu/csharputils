@@ -70,7 +70,11 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			}
 		}
 
-
+		override public RemoteFileSystem EnsureConnect()
+		{
+			var csftp = this.csftp;
+			return this;
+		}
 
 		override protected String RealPath(String Path)
 		{

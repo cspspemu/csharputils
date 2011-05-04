@@ -125,7 +125,7 @@ namespace CSharpUtils.VirtualFileSystem
 			Shutdown();
 		}
 
-		public FileSystem FileSystemFromPath(String Path, bool AllowAccessingParent = false)
+		public FileSystemFromPath FileSystemFromPath(String Path, bool AllowAccessingParent = false)
 		{
 			return new FileSystemFromPath(this, Path, AllowAccessingParent);
 		}

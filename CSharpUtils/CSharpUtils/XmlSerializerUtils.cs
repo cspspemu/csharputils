@@ -23,7 +23,7 @@ namespace CSharpUtils
 		{
 			var XmlSerializer = new XmlSerializer(typeof(TType));
 
-			using (var XmlFile = File.OpenWrite(FileName))
+			using (var XmlFile = File.Open(FileName, FileMode.Create))
 			{
 				XmlSerializer.Serialize(XmlFile, Object);
 			}
