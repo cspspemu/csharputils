@@ -14,15 +14,10 @@ namespace Tamir.SharpSsh.java.io
 			fs = IO.File.OpenRead(file);
 		}
 
-		public FileInputStream(File file):this(file.info.Name)
-		{
-		}
-
 		public override void Close()
 		{
 			fs.Close();
 		}
-
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{

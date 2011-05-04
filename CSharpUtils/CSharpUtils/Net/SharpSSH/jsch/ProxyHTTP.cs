@@ -87,10 +87,10 @@ namespace Tamir.SharpSsh.jsch
 
 				int foo=0;
 
-				StringBuffer sb=new StringBuffer();
+				string sb = "";
 				while(foo>=0)
 				{
-					foo=ins.read(); if(foo!=13){sb.append((char)foo);  continue;}
+					foo=ins.read(); if(foo!=13){sb += ((char)foo);  continue;}
 					foo=ins.read(); if(foo!=10){continue;}
 					break;
 				}
@@ -99,7 +99,7 @@ namespace Tamir.SharpSsh.jsch
 					throw new System.IO.IOException(); 
 				}
 
-				String response=sb.toString(); 
+				String response = sb; 
 				String reason="Unknow reason";
 				int code=-1;
 				try

@@ -174,7 +174,6 @@
     <Compile Include="Net\Security\SspiProvider.cs" />
     <Compile Include="Net\SharpSSH\ExecTest.cs" />
     <Compile Include="Net\SharpSSH\ITransferProtocol.cs" />
-    <Compile Include="Net\SharpSSH\java\io\File.cs" />
     <Compile Include="Net\SharpSSH\java\io\FileInputStream.cs" />
     <Compile Include="Net\SharpSSH\java\io\FileOutputStream.cs" />
     <Compile Include="Net\SharpSSH\java\io\InputStream.cs" />
@@ -184,7 +183,6 @@
     <Compile Include="Net\SharpSSH\java\lang\Class.cs" />
     <Compile Include="Net\SharpSSH\java\lang\Integer.cs" />
     <Compile Include="Net\SharpSSH\java\lang\Runnable.cs" />
-    <Compile Include="Net\SharpSSH\java\lang\StringBuffer.cs" />
     <Compile Include="Net\SharpSSH\java\lang\Thread.cs" />
     <Compile Include="Net\SharpSSH\java\net\InetAddress.cs" />
     <Compile Include="Net\SharpSSH\java\net\ServerSocket.cs" />

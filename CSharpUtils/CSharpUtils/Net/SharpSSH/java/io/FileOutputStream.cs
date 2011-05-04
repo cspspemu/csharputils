@@ -13,20 +13,12 @@ namespace Tamir.SharpSsh.java.io
 		{
 		}
 
-		public FileOutputStream(File file):this(file.info.Name, false)
-		{
-		}
-
 		public FileOutputStream(string file, bool append)
 		{
 			if(append)
 				fs = new IO.FileStream(file, IO.FileMode.Append); // append
 			else
 				fs = new IO.FileStream(file, IO.FileMode.Create);
-		}
-
-		public FileOutputStream(File file, bool append):this(file.info.Name)
-		{
 		}
 
 		public override void Write(byte[] buffer, int offset, int count)

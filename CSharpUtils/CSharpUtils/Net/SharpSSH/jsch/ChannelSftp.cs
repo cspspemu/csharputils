@@ -397,14 +397,14 @@ namespace Tamir.SharpSsh.jsch
 				//System.err.println("glob_local: "+v+" dst="+dst);
 				vsize=v.size();
 
-				StringBuffer dstsb=null;
+				string dstsb="";
 				if(_isRemoteDir)
 				{
 					if(!dst.endsWith("/"))
 					{
 						dst+="/";
 					}
-					dstsb=new StringBuffer(dst);
+					dstsb = (dst);
 				}
 				else if(vsize>1)
 				{
@@ -418,10 +418,10 @@ namespace Tamir.SharpSsh.jsch
 					if(_isRemoteDir)
 					{
 						int i=_src.lastIndexOf(file_separatorc);
-						if(i==-1) dstsb.append(_src);
-						else dstsb.append(_src.substring(i + 1));
-						_dst=dstsb.toString();
-						dstsb.delete(dst.length(), _dst.length());
+						if(i==-1) dstsb += (_src);
+						else dstsb += (_src.substring(i + 1));
+						_dst=dstsb;
+						dstsb = dstsb.Remove(dst.length(), _dst.length());
 					}
 					else
 					{
@@ -441,7 +441,8 @@ namespace Tamir.SharpSsh.jsch
 						{
 							//System.err.println(eee);
 						}
-						long size_of_src=new File(_src).length();
+
+						long size_of_src = new System.IO.FileInfo(_src).Length;
 						if(size_of_src<size_of_dst)
 						{
 							throw new SftpException(SSH_FX_FAILURE, "failed to resume for "+_dst);
@@ -454,8 +455,12 @@ namespace Tamir.SharpSsh.jsch
 
 					if(monitor!=null)
 					{
-						monitor.init(SftpProgressMonitor.PUT, _src, _dst,
-						             (new File(_src)).length());
+						monitor.init(
+							SftpProgressMonitor.PUT,
+							_src,
+							_dst,
+							new System.IO.FileInfo(_src).Length
+						);
 						if(mode==RESUME)
 						{
 							monitor.count(size_of_dst);
@@ -901,16 +906,15 @@ namespace Tamir.SharpSsh.jsch
 					throw new SftpException(SSH_FX_NO_SUCH_FILE, "No such file");
 				}
 
-				File dstFile=new File(dst);
 				bool isDstDir = System.IO.Directory.Exists(dst);
-				StringBuffer dstsb=null;
+				string dstsb = "";
 				if(isDstDir)
 				{
 					if(!dst.endsWith(file_separator))
 					{
 						dst+=file_separator;
 					}
-					dstsb=new StringBuffer(dst);
+					dstsb=(dst);
 				}
 				else if(vsize>1)
 				{
@@ -931,10 +935,10 @@ namespace Tamir.SharpSsh.jsch
 					if(isDstDir)
 					{
 						int i=_src.lastIndexOf('/');
-						if(i==-1) dstsb.append(_src);
-						else dstsb.append(_src.substring(i + 1));
-						_dst=dstsb.toString();
-						dstsb.delete(dst.length(), _dst.length());
+						if(i==-1) dstsb += (_src);
+						else dstsb += (_src.substring(i + 1));
+						_dst = dstsb;
+						dstsb = dstsb.Remove(dst.length(), _dst.length());
 					}
 					else
 					{
@@ -943,8 +947,8 @@ namespace Tamir.SharpSsh.jsch
 
 					if(mode==RESUME)
 					{
-						long size_of_src=attr.getSize();
-						long size_of_dst=new File(_dst).length();
+						long size_of_src = attr.getSize();
+						long size_of_dst = new System.IO.FileInfo(_dst).Length;
 						if(size_of_dst>size_of_src)
 						{
 							throw new SftpException(SSH_FX_FAILURE, "failed to resume for "+_dst);
@@ -960,7 +964,7 @@ namespace Tamir.SharpSsh.jsch
 						monitor.init(SftpProgressMonitor.GET, _src, _dst, attr.getSize());
 						if(mode==RESUME)
 						{
-							monitor.count(new File(_dst).length());
+							monitor.count(new System.IO.FileInfo(_dst).Length);
 						}
 					}
 					FileOutputStream fos=null;
@@ -974,7 +978,7 @@ namespace Tamir.SharpSsh.jsch
 					}
 
 					//System.err.println("_get: "+_src+", "+_dst);
-					_get(_src, fos, monitor, mode, new File(_dst).length());
+					_get(_src, fos, monitor, mode, new System.IO.FileInfo(_dst).Length);
 					fos.close();
 				}
 			}
