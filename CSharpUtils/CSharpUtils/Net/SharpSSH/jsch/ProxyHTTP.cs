@@ -5,6 +5,7 @@ using Tamir.SharpSsh.java.net;
 using Tamir.SharpSsh.java.lang;
 using Tamir.SharpSsh.jsch;
 using System.IO;
+using Exception = System.Exception;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -153,7 +154,7 @@ namespace Tamir.SharpSsh.jsch
 				catch(Exception eee)
 				{
 				}
-				String message="ProxyHTTP: "+e.toString();
+				String message="ProxyHTTP: "+e.ToString();
 				throw e;
 			}
 		}

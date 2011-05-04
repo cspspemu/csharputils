@@ -2,7 +2,7 @@ using System;
 
 namespace Tamir.SharpSsh.jsch
 {
-	public class SftpException : java.Exception
+	public class SftpException : Exception
 	{
 		public int id;
 		public String message;
@@ -11,7 +11,7 @@ namespace Tamir.SharpSsh.jsch
 			this.id=id;
 			this.message=message;
 		}
-		public override String toString()
+		public override String ToString()
 		{
 			return message;
 		}

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Exception = System.Exception;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -100,7 +101,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 				catch(SftpException e)
 				{
-					throw new IOException(e.toString());
+					throw new IOException(e.ToString());
 				}
 			}
 

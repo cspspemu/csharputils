@@ -5,6 +5,7 @@ using Tamir.SharpSsh.java.io;
 using Tamir.SharpSsh.java.lang;
 using Tamir.SharpSsh.java.util;
 using Tamir.SharpSsh.java;
+using Exception = System.Exception;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -245,7 +246,7 @@ namespace Tamir.SharpSsh.jsch
 				//System.out.println(e);
 				//System.Console.WriteLine(e);
 				if(e is JSchException) throw (JSchException)e;
-				throw new JSchException(e.toString());
+				throw new JSchException(e.ToString());
 			}
 		}
 
@@ -478,7 +479,7 @@ namespace Tamir.SharpSsh.jsch
 			catch(Exception e)
 			{
 				if(e is SftpException) throw (SftpException)e;
-				throw new SftpException(SSH_FX_FAILURE, e.toString());
+				throw new SftpException(SSH_FX_FAILURE, e.ToString());
 			}
 		}
 		public void put(InputStream src, String dst) 
@@ -520,7 +521,7 @@ namespace Tamir.SharpSsh.jsch
     }
     catch(Exception e){
       if(e is SftpException) throw (SftpException)e;
-      throw new SftpException(SSH_FX_FAILURE, e.toString());
+      throw new SftpException(SSH_FX_FAILURE, e.ToString());
     }
 		}
 
@@ -679,7 +680,7 @@ namespace Tamir.SharpSsh.jsch
 			catch(Exception e)
 			{
 				if(e is SftpException) throw (SftpException)e;
-				throw new SftpException(SSH_FX_FAILURE, e.toString());
+				throw new SftpException(SSH_FX_FAILURE, e.ToString());
 			}
 		}
 
