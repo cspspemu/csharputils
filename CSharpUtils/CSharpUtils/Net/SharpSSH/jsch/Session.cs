@@ -3,12 +3,12 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using Tamir.SharpSsh.java;
 using Tamir.SharpSsh.java.util;
-using Tamir.SharpSsh.java.net;
 using Tamir.SharpSsh.java.lang;
 using Exception = System.Exception;
 using NullReferenceException = System.NullReferenceException;
 using ThreadInterruptedException = System.Threading.ThreadInterruptedException;
 using System.Linq;
+using System.Net.Sockets;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -175,8 +175,8 @@ namespace Tamir.SharpSsh.jsch
 					if(socket_factory==null)
 					{
 						socket=Util.createSocket(host, port, connectTimeout);
-						In=socket.getInputStream();
-						Out=socket.getOutputStream();
+						In=new NetworkStream(socket);
+						Out=new NetworkStream(socket);
 					}
 					else
 					{
@@ -185,7 +185,7 @@ namespace Tamir.SharpSsh.jsch
 						Out=socket_factory.getOutputStream(socket);
 					}
 					//if(timeout>0){ socket.setSoTimeout(timeout); }
-					socket.setTcpNoDelay(true);
+					socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
 					io.setInputStream(In);
 					io.setOutputStream(Out);
 				}
@@ -200,9 +200,10 @@ namespace Tamir.SharpSsh.jsch
 					}
 				}
 
-				if(connectTimeout>0 && socket!=null)
+				if (connectTimeout > 0 && socket != null)
 				{
-					socket.setSoTimeout(connectTimeout);
+					socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, connectTimeout);
+					socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, connectTimeout);
 				}
 
 				_isConnected=true;
@@ -407,9 +408,10 @@ namespace Tamir.SharpSsh.jsch
 					break;
 				}
 
-				if(connectTimeout>0 || timeout>0)
+				if (connectTimeout > 0 || timeout > 0)
 				{
-					socket.setSoTimeout(timeout);
+					socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, timeout);
+					socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, timeout);
 				}
 
 				if(auth)
@@ -1516,7 +1518,7 @@ namespace Tamir.SharpSsh.jsch
 				if(proxy==null)
 				{
 					if(socket!=null)
-						socket.close();
+						socket.Close();
 				}
 				else
 				{
@@ -1711,7 +1713,9 @@ namespace Tamir.SharpSsh.jsch
 			}
 			try
 			{
-				socket.setSoTimeout(foo);
+				socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, foo);
+				socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, foo);
+
 				timeout=foo;
 			}
 			catch(Exception e)

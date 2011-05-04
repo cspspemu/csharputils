@@ -1,11 +1,11 @@
 using Tamir.SharpSsh.java;
 using Tamir.SharpSsh.java.io;
 using Tamir.SharpSsh.java.util;
-using Tamir.SharpSsh.java.net;
 using Tamir.SharpSsh.java.lang;
 using Tamir.SharpSsh.jsch;
 using System.IO;
 using Exception = System.Exception;
+using System.Net.Sockets;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -56,8 +56,8 @@ namespace Tamir.SharpSsh.jsch
 				if(socket_factory==null)
 				{
 					socket=Util.createSocket(proxy_host, proxy_port, timeout);    
-					ins= new JStream(socket.getInputStream());
-					outs=new JStream(socket.getOutputStream());
+					ins= new JStream(new NetworkStream(socket));
+					outs=new JStream(new NetworkStream(socket));
 				}
 				else
 				{
@@ -67,9 +67,10 @@ namespace Tamir.SharpSsh.jsch
 				}
 				if(timeout>0)
 				{
-					socket.setSoTimeout(timeout);
+					socket.ReceiveTimeout = timeout;
+					socket.SendTimeout = timeout;
 				}
-				socket.setTcpNoDelay(true);
+				socket.NoDelay = true;
 
 				outs.write(new String("CONNECT "+host+":"+port+" HTTP/1.0\r\n").getBytes());
 
@@ -146,7 +147,7 @@ namespace Tamir.SharpSsh.jsch
 			}
 			catch(Exception e)
 			{
-				try{ if(socket!=null)socket.close(); }
+				try{ if(socket!=null)socket.Close(); }
 				catch(Exception eee)
 				{
 				}
@@ -163,7 +164,7 @@ namespace Tamir.SharpSsh.jsch
 			{
 				if(ins!=null)ins.close();
 				if(outs!=null)outs.close();
-				if(socket!=null)socket.close();
+				if(socket!=null)socket.Close();
 			}
 			catch(Exception e)
 			{

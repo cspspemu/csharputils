@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using System.Threading;
-using Tamir.SharpSsh.java.net;
 using Tamir.SharpSsh.java.lang;
 using String = Tamir.SharpSsh.java.String;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -48,7 +48,7 @@ namespace Tamir.SharpSsh.jsch
 		internal String host;
 		internal IPAddress boundaddress;
 		internal Runnable thread;
-		internal ServerSocket ss;
+		internal TcpListener ss;
 
 		internal static String[] getPortForwarding(Session session)
 		{
@@ -156,8 +156,8 @@ namespace Tamir.SharpSsh.jsch
 			try
 			{
 				boundaddress = Dns.GetHostByName(address).AddressList[0];
-				ss=(factory==null) ? 
-					new ServerSocket(lport, 0, boundaddress) :
+				ss=(factory==null) ?
+					new TcpListener(boundaddress, lport) :
 					factory.createServerSocket(lport, 0, boundaddress);
 			}
 			catch(Exception e)
@@ -176,10 +176,10 @@ namespace Tamir.SharpSsh.jsch
 			{
 				while(thread!=null)
 				{
-					Socket socket=ss.accept();
-					socket.setTcpNoDelay(true);
-					Stream In=socket.getInputStream();
-					Stream Out=socket.getOutputStream();
+					Socket socket = ss.AcceptSocket();
+					socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
+					Stream In=new NetworkStream(socket);
+					Stream Out=new NetworkStream(socket);
 					ChannelDirectTCPIP channel=new ChannelDirectTCPIP();
 					channel.init();
 					channel.setInputStream(In);
@@ -187,8 +187,8 @@ namespace Tamir.SharpSsh.jsch
 					session.addChannel(channel);
 					((ChannelDirectTCPIP)channel).setHost(host);
 					((ChannelDirectTCPIP)channel).setPort(rport);
-					((ChannelDirectTCPIP)channel).setOrgIPAddress(socket.getInetAddress().ToString());
-					((ChannelDirectTCPIP)channel).setOrgPort(socket.getPort());
+					((ChannelDirectTCPIP)channel).setOrgIPAddress(((IPEndPoint)socket.RemoteEndPoint).Address.ToString());
+					((ChannelDirectTCPIP)channel).setOrgPort(((IPEndPoint)socket.RemoteEndPoint).Port);
 					channel.connect();
 					if(channel.exitstatus!=-1)
 					{
@@ -207,9 +207,9 @@ namespace Tamir.SharpSsh.jsch
 		{
 			thread=null;
 			try
-			{ 
-				if(ss!=null)ss.close();
-				ss=null;
+			{
+				if (ss != null) ss.Stop();
+				ss = null;
 			}
 			catch(Exception)
 			{

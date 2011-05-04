@@ -1,6 +1,6 @@
 using System;
-using Tamir.SharpSsh.java.net;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -9,6 +9,6 @@ namespace Tamir.SharpSsh.jsch
 	/// </summary>
 	public interface ServerSocketFactory
 	{
-		ServerSocket createServerSocket(int port, int backlog, IPAddress bindAddr);
+		TcpListener createServerSocket(int port, int backlog, IPAddress bindAddr);
 	}
 }

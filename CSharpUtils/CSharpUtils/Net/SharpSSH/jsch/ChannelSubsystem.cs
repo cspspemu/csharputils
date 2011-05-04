@@ -28,7 +28,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System;
-using Tamir.SharpSsh.java.net;
 using Tamir.SharpSsh.java.lang;
 
 namespace Tamir.SharpSsh.jsch

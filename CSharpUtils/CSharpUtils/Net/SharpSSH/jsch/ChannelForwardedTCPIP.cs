@@ -1,9 +1,10 @@
 using System;
 using System.IO;
 using Tamir.SharpSsh.java.util;
-using Tamir.SharpSsh.java.net;
 using Tamir.SharpSsh.java.lang;
 using Str = Tamir.SharpSsh.java.String;
+using System.Net.Sockets;
+using System.Net;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -74,12 +75,23 @@ namespace Tamir.SharpSsh.jsch
 				}
 				else
 				{
-					Socket socket=(factory==null) ? 
-						new Socket(target, lport) : 
-						factory.createSocket(target, lport);
-					socket.setTcpNoDelay(true);
-					io.setInputStream(socket.getInputStream());
-					io.setOutputStream(socket.getOutputStream());
+					Socket socket;
+
+					if (factory == null)
+					{
+						var ep = new IPEndPoint(Dns.GetHostByName(target).AddressList[0], lport);
+						socket = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+						socket.Connect(ep);
+					}
+					else
+					{
+						socket = factory.createSocket(target, lport);
+					}
+
+					socket.NoDelay = true;
+
+					io.setInputStream(new NetworkStream(socket));
+					io.setOutputStream(new NetworkStream(socket));
 					connected=true;
 				}
 			}

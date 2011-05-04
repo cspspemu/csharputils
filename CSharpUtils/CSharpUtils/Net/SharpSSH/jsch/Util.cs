@@ -1,5 +1,7 @@
 using System;
 using System.Threading;
+using System.Net.Sockets;
+using System.Net;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -234,15 +236,26 @@ namespace Tamir.SharpSsh.jsch
 			}
 		}
 
-		internal static SharpSsh.java.net.Socket createSocket(String host, int port, int timeout) 
+		internal static Socket createSocket(String host, int port, int timeout) 
 		{
-			SharpSsh.java.net.Socket socket=null;
+			Socket socket = null;
 			String message="";
 			if(timeout==0)
 			{
 				try
 				{
-					socket=new SharpSsh.java.net.Socket(host, port);
+					/*
+					IPEndPoint ep = new IPEndPoint(Dns.GetHostByName(host).AddressList[0], port);
+					this.sock = new Sock(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+					//this.sock.Connect(ep);
+					this.sock.Connect(ep);
+					*/
+					socket = new Socket(
+						new IPEndPoint(Dns.GetHostByName(host).AddressList[0], port).AddressFamily,
+						SocketType.Stream,
+						ProtocolType.Tcp
+					);
+					socket.Connect(host, port);
 					return socket;
 				}
 				catch(Exception e)
@@ -253,7 +266,7 @@ namespace Tamir.SharpSsh.jsch
 			}
 			String _host=host;
 			int _port=port;
-			SharpSsh.java.net.Socket[] sockp=new SharpSsh.java.net.Socket[1];
+			Socket[] sockp = new Socket[1];
 			Thread currentThread=Thread.CurrentThread;
 			Exception[] ee=new Exception[1];
 			message="";
@@ -269,7 +282,7 @@ namespace Tamir.SharpSsh.jsch
 			catch(ThreadInterruptedException eee)
 			{
 			}
-			if(sockp[0]!=null && sockp[0].isConnected())
+			if(sockp[0]!=null && sockp[0].Connected)
 			{
 				socket=sockp[0];
 			}
@@ -289,12 +302,12 @@ namespace Tamir.SharpSsh.jsch
 
 		private class createSocketRun
 		{
-			SharpSsh.java.net.Socket[] sockp;
+			Socket[] sockp;
 			Exception[] ee;
 			string _host;
 			int _port;
 
-			public createSocketRun(SharpSsh.java.net.Socket[] sockp, Exception[] ee, string _host, int _port)
+			public createSocketRun(Socket[] sockp, Exception[] ee, string _host, int _port)
 			{
 				this.sockp=sockp;
 				this.ee=ee;
@@ -307,16 +320,22 @@ namespace Tamir.SharpSsh.jsch
 				sockp[0]=null;
 				try
 				{
-					sockp[0]=new SharpSsh.java.net.Socket(_host, _port);
+					var SocketEndPoint = new IPEndPoint(Dns.GetHostByName(_host).AddressList[0], _port);
+					sockp[0] = new Socket(
+						SocketEndPoint.AddressFamily,
+						SocketType.Stream,
+						ProtocolType.Tcp
+					);
+					sockp[0].Connect(SocketEndPoint);
 				}
 				catch(Exception e)
 				{
 					ee[0]=e;
-					if(sockp[0]!=null && sockp[0].isConnected())
+					if(sockp[0]!=null && sockp[0].Connected)
 					{
 						try
 						{
-							sockp[0].close();
+							sockp[0].Close();
 						}
 						catch(Exception eee){}
 					}
