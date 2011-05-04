@@ -1,7 +1,6 @@
 //using System;
 using System.Runtime.CompilerServices;
 using Tamir.Streams;
-using Tamir.SharpSsh.java;
 using Exception = System.Exception;
 using System.Text;
 using CSharpUtils;

@@ -1,5 +1,3 @@
-
-using Tamir.SharpSsh.java;
 using System;
 using System.Text;
 

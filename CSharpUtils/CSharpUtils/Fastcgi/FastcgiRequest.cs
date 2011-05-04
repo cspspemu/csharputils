@@ -9,10 +9,11 @@ namespace CSharpUtils.Fastcgi
 {
 	public class FastcgiRequest
 	{
+        public bool FinalizedRequest = false;
 		public ushort RequestId;
 		public FastcgiHandler FastcgiHandler;
-		public Stream ParamsStream;
-		public Stream StdinStream;
+		public FascgiRequestInputStream ParamsStream;
+        public FascgiRequestInputStream StdinStream;
 		public FascgiResponseOutputStream StdoutStream;
 		public FascgiResponseOutputStream StderrStream;
 
@@ -20,8 +21,8 @@ namespace CSharpUtils.Fastcgi
 		{
 			this.FastcgiHandler = FastcgiHandler;
 			this.RequestId = RequestId;
-			this.ParamsStream = new MemoryStream();
-			this.StdinStream = new MemoryStream();
+			this.ParamsStream = new FascgiRequestInputStream();
+			this.StdinStream = new FascgiRequestInputStream();
 			this.StdoutStream = new FascgiResponseOutputStream(this, Fastcgi.PacketType.FCGI_STDOUT);
 			this.StderrStream = new FascgiResponseOutputStream(this, Fastcgi.PacketType.FCGI_STDERR);
 		}
@@ -38,7 +39,7 @@ namespace CSharpUtils.Fastcgi
 				ParamsStream.Read(Value, 0, Value.Length);
 				Params[Encoding.ASCII.GetString(Key)] = Encoding.ASCII.GetString(Value);
 			}
-			ParamsStream = new MemoryStream();
+            ParamsStream = new FascgiRequestInputStream();
 		}
 
 		public Dictionary<String, String> Params = new Dictionary<string, string>();

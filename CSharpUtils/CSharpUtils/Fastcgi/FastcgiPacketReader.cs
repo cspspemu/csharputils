@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Net.Sockets;
 
 namespace CSharpUtils.Fastcgi
 {
-	public delegate void FastcgiPacketHandleDelegate(Fastcgi.PacketType Type, ushort RequestId, byte[] Content);
+	public delegate bool FastcgiPacketHandleDelegate(Fastcgi.PacketType Type, ushort RequestId, byte[] Content);
 
 	public class FastcgiPacketReader
 	{
+        public bool Debug = false;
+        public Socket Socket;
 		public Stream Stream;
 		public event FastcgiPacketHandleDelegate HandlePacket;
 
-		public FastcgiPacketReader(Stream Stream)
+		public FastcgiPacketReader(Stream Stream, bool Debug = false)
 		{
 			this.Stream = Stream;
+            this.Debug = Debug;
 		}
 
 		static public int ReadVariableInt(Stream Stream)
@@ -37,47 +41,76 @@ namespace CSharpUtils.Fastcgi
 			}
 		}
 
-		public void ReadPacket()
+        public void ReadAllPackets()
+        {
+            try
+            {
+                while (ReadPacket())
+                {
+                }
+            }
+            catch (IOException IOException)
+            {
+                Console.Error.WriteLine(IOException);
+            }
+        }
+
+		public bool ReadPacket()
 		{
 			var Header = new byte[8];
-			Stream.Read(Header, 0, 8);
-			var Version = Header[0];
+			int Readed = Stream.Read(Header, 0, 8);
+            if (Readed != 8)
+            {
+                Console.WriteLine("Header not completed");
+                return false;
+            }
+
+            var Version = Header[0];
 			var Type = (Fastcgi.PacketType)Header[1];
 			var RequestId = (ushort)((Header[2] << 8) | (Header[3] << 0));
 			var ContentLength = (Header[4] << 8) | (Header[5] << 0);
 			var PaddingLength = Header[6];
 
+            if (Version != 1)
+            {
+                Console.Error.WriteLine("Unknown Version " + Version);
+                return false;
+            }
+
+
 			var Content = new byte[ContentLength];
 			var Padding = new byte[PaddingLength];
 
-			Stream.Read(Content, 0, ContentLength);
-			Stream.Read(Padding, 0, PaddingLength);
+            if (Debug)
+            {
+                Console.WriteLine("ReadPacket(Version={0}, Type={1}, RequestId={2}, ContentLength={3}, PaddingLength={4})", Version, Type, RequestId, ContentLength, PaddingLength);
+            }
 
-			if (HandlePacket != null) HandlePacket(Type, RequestId, Content);
+            if (ContentLength > 0)
+            {
+                Readed = Stream.Read(Content, 0, ContentLength);
+                if (Readed != ContentLength)
+                {
+                    Console.WriteLine("Content not completed");
+                    return false;
+                }
+            }
+            if (PaddingLength > 0)
+            {
+                Readed = Stream.Read(Padding, 0, PaddingLength);
+                if (Readed != PaddingLength)
+                {
+                    Console.WriteLine("Padding not completed");
+                    return false;
+                }
+            }
 
-			/*
-			var Request = GetOrCreateFastcgiRequest(RequestId);
+            if (HandlePacket != null)
+            {
+                return HandlePacket(Type, RequestId, Content);
+            }
 
-			switch (Type)
-			{
-				case Fastcgi.PacketType.FCGI_DATA:
-					if (ContentLength == 0)
-					{
-						Request.ParseParamsStream();
-					}
-					else
-					{
-						Request.ParamsStream.Write(Content, 0, ContentLength);
-					}
-					break;
-				case Fastcgi.PacketType.FCGI_BEGIN_REQUEST:
-					var Role = (Role)(Content[0] | (Content[1] << 8));
-					var Flags = (Flags)(Content[2]);
-					break;
-				default:
-					throw (new Exception("Unhandled packet type: '" + Type + "'"));
-			}
-			*/
+            return true;
 		}
 	}
 }

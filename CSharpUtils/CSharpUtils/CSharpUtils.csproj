@@ -56,12 +56,14 @@
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
     <Compile Include="ConsumerMemoryStream.cs" />
+    <Compile Include="Fastcgi\FascgiRequestInputStream.cs" />
     <Compile Include="Fastcgi\FascgiResponseOutputStream.cs" />
     <Compile Include="Fastcgi\Fastcgi.cs" />
     <Compile Include="Fastcgi\FastcgiHandler.cs" />
     <Compile Include="Fastcgi\FastcgiPacketReader.cs" />
     <Compile Include="Fastcgi\FastcgiPacketWriter.cs" />
     <Compile Include="Fastcgi\FastcgiRequest.cs" />
+    <Compile Include="Fastcgi\FastcgiServer.cs" />
     <Compile Include="FieldMapping.cs" />
     <Compile Include="ProduceConsumeBuffer.cs" />
     <Compile Include="ArrayUtils.cs" />
@@ -181,7 +183,6 @@
     <Compile Include="Net\SharpSSH\JStream.cs" />
     <Compile Include="Net\SharpSSH\OutputStream.cs" />
     <Compile Include="Net\SharpSSH\Runnable.cs" />
-    <Compile Include="Net\SharpSSH\java\String.cs" />
     <Compile Include="Net\SharpSSH\jsch\Buffer.cs" />
     <Compile Include="Net\SharpSSH\jsch\Channel.cs" />
     <Compile Include="Net\SharpSSH\jsch\Channel.old.cs" />
@@ -265,7 +266,6 @@
     <Compile Include="Net\SharpSSH\jsch\UserInfo.cs" />
     <Compile Include="Net\SharpSSH\jsch\Util.cs" />
     <Compile Include="Net\SharpSSH\Scp.cs" />
-    <Compile Include="Net\SharpSSH\Scp.old.cs" />
     <Compile Include="Net\SharpSSH\SecureShell.cs" />
     <Compile Include="Net\SharpSSH\Sftp.cs" />
     <Compile Include="Net\SharpSSH\SshBase.cs" />

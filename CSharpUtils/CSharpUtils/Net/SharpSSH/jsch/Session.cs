@@ -1,7 +1,6 @@
 //using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Tamir.SharpSsh.java;
 using Exception = System.Exception;
 using NullReferenceException = System.NullReferenceException;
 using ThreadInterruptedException = System.Threading.ThreadInterruptedException;

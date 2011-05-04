@@ -21,13 +21,16 @@ namespace CSharpUtils.Fastcgi
 
 		public void DumpBuffer()
 		{
-			FastcgiRequest.FastcgiHandler.Writer.WritePacket(
-				this.FastcgiRequest.RequestId,
-				PacketType,
-				this.Buffer.ToArray()
-			);
+            if (this.Buffer.Length > 0)
+            {
+                FastcgiRequest.FastcgiHandler.Writer.WritePacket(
+                    this.FastcgiRequest.RequestId,
+                    PacketType,
+                    this.Buffer.ToArray()
+                );
 
-			this.Buffer = new MemoryStream();
+                this.Buffer = new MemoryStream();
+            }
 		}
 
 		public override bool CanRead
