@@ -758,26 +758,29 @@ namespace Tamir.SharpSsh.jsch
 		private int cipher_size=8;
 		public Buffer read(Buffer buf) 
 		{
-			int j=0;
-			while(true)
+			int j = 0;
+			while (true)
 			{
 				buf.reset();
 				io.getByte(buf.buffer, buf.index, cipher_size); buf.index+=cipher_size;
-				if(s2ccipher!=null)
+
+				if (s2ccipher!=null)
 				{
 					s2ccipher.update(buf.buffer, 0, cipher_size, buf.buffer, 0);
 				}
+
 //				j=((buf.buffer[0]<<24)&0xff000000)|
 //					((buf.buffer[1]<<16)&0x00ff0000)|
 //					((buf.buffer[2]<< 8)&0x0000ff00)|
 //					((buf.buffer[3]    )&0x000000ff);
-				j=Util.ToInt32( buf.buffer, 0 );
-				j=j-4-cipher_size+8;
-				if(j<0 || (buf.index+j)>buf.buffer.Length)
+				j = Util.ToInt32(buf.buffer, 0);
+				j = j - 4 - cipher_size + 8;
+				if (j < 0 || (buf.index + j) > buf.buffer.Length)
 				{
 					throw new IOException("invalid data");
 				}
-				if(j>0)
+
+				if (j > 0)
 				{
 					io.getByte(buf.buffer, buf.index, j); buf.index+=(j);
 					if(s2ccipher!=null)
@@ -786,20 +789,21 @@ namespace Tamir.SharpSsh.jsch
 					}
 				}
 
-				if(s2cmac!=null)
+				if (s2cmac != null)
 				{
 					s2cmac.update(seqi);
 					s2cmac.update(buf.buffer, 0, buf.index);
-					byte[] result=s2cmac.doFinal();
+					byte[] result = s2cmac.doFinal();
 					io.getByte(mac_buf, 0, mac_buf.Length);
-					if(!Arrays.equals(result, mac_buf))
+
+					if (!System.Array.Equals(result, mac_buf))
 					{
 						throw new IOException("MAC Error");
 					}
 				}
 				seqi++;
 
-				if(inflater!=null)
+				if (inflater != null)
 				{
 					//inflater.uncompress(buf);
 					int pad=buf.buffer[4];

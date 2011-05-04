@@ -193,7 +193,6 @@
     <Compile Include="Net\SharpSSH\java\RuntimeException.cs" />
     <Compile Include="Net\SharpSSH\java\String.cs" />
     <Compile Include="Net\SharpSSH\java\System.cs" />
-    <Compile Include="Net\SharpSSH\java\util\Arrays.cs" />
     <Compile Include="Net\SharpSSH\java\util\Enumeration.cs" />
     <Compile Include="Net\SharpSSH\java\util\Hashtable.cs" />
     <Compile Include="Net\SharpSSH\java\util\JavaString.cs" />
