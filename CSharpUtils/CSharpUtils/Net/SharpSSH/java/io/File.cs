@@ -47,8 +47,8 @@ namespace Tamir.SharpSsh.java.io
 			string [] dirs = Directory.GetDirectories(file);
 			string [] files = Directory.GetFiles(file);
 			java.String[] _list = new java.String[dirs.Length+files.Length];
-			System.arraycopy(dirs, 0, _list, 0, dirs.Length);
-			System.arraycopy(files, 0, _list, dirs.Length, files.Length);
+			System.Array.Copy(dirs, 0, _list, 0, dirs.Length);
+			System.Array.Copy(files, 0, _list, dirs.Length, files.Length);
 			return _list;
 		}
 

@@ -562,7 +562,7 @@ namespace Tamir.SharpSsh.jsch
 				{
 					if(i+1==pathlen)
 						break;
-					java.System.arraycopy(path, i+1, path, i, path.Length-(i+1));
+					System.Array.Copy(path, i + 1, path, i, path.Length - (i + 1));
 					pathlen--;
 					continue;
 				}
@@ -570,7 +570,7 @@ namespace Tamir.SharpSsh.jsch
 			}
 			if(pathlen==path.Length)return _path;
 			byte[] foo=new byte[pathlen];
-			java.System.arraycopy(path, 0, foo, 0, pathlen);
+			System.Array.Copy(path, 0, foo, 0, pathlen);
 			return new java.String(foo);
 		}
 	}

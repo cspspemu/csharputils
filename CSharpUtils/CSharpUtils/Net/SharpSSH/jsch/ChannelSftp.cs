@@ -641,7 +641,7 @@ namespace Tamir.SharpSsh.jsch
 									{
 										if(_ackid==seq)
 										{
-											java.System.err.println("ack error: startid="+startid+" seq="+seq+" _ackid="+_ackid);
+											System.Console.Error.WriteLine("ack error: startid=" + startid + " seq=" + seq + " _ackid=" + _ackid);
 										} 
 										else
 										{
@@ -2194,11 +2194,11 @@ namespace Tamir.SharpSsh.jsch
 			else
 			{ 
 				dir=new byte[i];
-				java.System.arraycopy(path, 0, dir, 0, i);
+				System.Array.Copy(path, 0, dir, 0, i);
 			}
 			//System.err.println("dir: "+new String(dir));
 			byte[] pattern=new byte[path.Length-i-1];
-			java.System.arraycopy(path, i+1, pattern, 0, pattern.Length);
+			System.Array.Copy(path, i + 1, pattern, 0, pattern.Length);
 			//System.err.println("file: "+new String(pattern));
 
 			sendOPENDIR(dir);
@@ -2292,10 +2292,10 @@ namespace Tamir.SharpSsh.jsch
 			else
 			{
 				dir=new byte[i];
-				Tamir.SharpSsh.java.System.arraycopy(path, 0, dir, 0, i);
+				System.Array.Copy(path, 0, dir, 0, i);
 			}
 			byte[] pattern=new byte[path.Length-i-1];
-			Tamir.SharpSsh.java.System.arraycopy(path, i+1, pattern, 0, pattern.Length);
+			System.Array.Copy(path, i + 1, pattern, 0, pattern.Length);
 			//System.out.println("dir: "+new String(dir)+" pattern: "+new String(pattern));
 			try
 			{
@@ -2526,11 +2526,10 @@ namespace Tamir.SharpSsh.jsch
 				{
 					foo=rest_length;
 					if(foo>len) foo=len;
-					java.System.arraycopy(rest_byte, 0, d, s, foo);
+					System.Array.Copy(rest_byte, 0, d, s, foo);
 					if(foo!=rest_length)
 					{
-						java.System.arraycopy(rest_byte, foo, 
-							rest_byte, 0, rest_length-foo);
+						System.Array.Copy(rest_byte, foo, rest_byte, 0, rest_length-foo);
 					}
 					if(monitor!=null)
 					{

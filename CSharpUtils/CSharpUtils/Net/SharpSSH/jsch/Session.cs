@@ -250,16 +250,16 @@ namespace Tamir.SharpSsh.jsch
 						throw new JSchException("invalid server's version String");
 					}
 					break;
-				}				
+				}
 
-				V_S=new byte[i]; Tamir.SharpSsh.java.System.arraycopy(buf.buffer, 0, V_S, 0, i);
+				V_S = new byte[i]; System.Array.Copy(buf.buffer, 0, V_S, 0, i);
 				//System.Console.WriteLine("V_S: ("+i+") ["+new String(V_S)+"]");
 
 				//io.put(V_C, 0, V_C.Length); io.put("\n".getBytes(), 0, 1);
 			{
 				// Some Cisco devices will miss to read '\n' if it is sent separately.
 				byte[] foo=new byte[V_C.Length+1];
-				Tamir.SharpSsh.java.System.arraycopy(V_C, 0, foo, 0, V_C.Length);
+				System.Array.Copy(V_C, 0, foo, 0, V_C.Length);
 				foo[foo.Length-1]=(byte)'\n';
 				io.put(foo, 0, foo.Length);
 			}
@@ -468,7 +468,7 @@ namespace Tamir.SharpSsh.jsch
 			{
 				I_S=new byte[j-1-buf.getByte()];
 			}
-			Tamir.SharpSsh.java.System.arraycopy(buf.buffer, buf.s, I_S, 0, I_S.Length);
+			System.Array.Copy(buf.buffer, buf.s, I_S, 0, I_S.Length);
 			/*
 			try{
 			byte[] tmp=new byte[I_S.Length];
@@ -903,7 +903,7 @@ namespace Tamir.SharpSsh.jsch
 			if(session_id==null)
 			{
 				session_id=new byte[H.Length];
-				Tamir.SharpSsh.java.System.arraycopy(H, 0, session_id, 0, H.Length);
+				System.Array.Copy(H, 0, session_id, 0, H.Length);
 			}
 
 			/*
@@ -960,8 +960,8 @@ namespace Tamir.SharpSsh.jsch
 					hash.update(buf.buffer, 0, buf.index);
 					byte[] foo=hash.digest();
 					byte[] bar=new byte[Es2c.Length+foo.Length];
-					Tamir.SharpSsh.java.System.arraycopy(Es2c, 0, bar, 0, Es2c.Length);
-					Tamir.SharpSsh.java.System.arraycopy(foo, 0, bar, Es2c.Length, foo.Length);
+					System.Array.Copy(Es2c, 0, bar, 0, Es2c.Length);
+					System.Array.Copy(foo, 0, bar, Es2c.Length, foo.Length);
 					Es2c=bar;
 				}
 				s2ccipher.init(Cipher.DECRYPT_MODE, Es2c, IVs2c);
@@ -982,8 +982,8 @@ namespace Tamir.SharpSsh.jsch
 					hash.update(buf.buffer, 0, buf.index);
 					byte[] foo=hash.digest();
 					byte[] bar=new byte[Ec2s.Length+foo.Length];
-					Tamir.SharpSsh.java.System.arraycopy(Ec2s, 0, bar, 0, Ec2s.Length);
-					Tamir.SharpSsh.java.System.arraycopy(foo, 0, bar, Ec2s.Length, foo.Length);
+					System.Array.Copy(Ec2s, 0, bar, 0, Ec2s.Length);
+					System.Array.Copy(foo, 0, bar, Ec2s.Length, foo.Length);
 					Ec2s=bar;
 				}
 				c2scipher.init(Cipher.ENCRYPT_MODE, Ec2s, IVc2s);
