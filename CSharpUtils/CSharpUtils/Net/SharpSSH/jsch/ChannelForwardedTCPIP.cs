@@ -163,11 +163,11 @@ namespace Tamir.SharpSsh.jsch
 				{
 					Object[] foo=(Object[])(pool.elementAt(i));
 					if(foo[0]!=session) continue;
-					if(((Integer)foo[1]).intValue()!=port) continue;
+					if(((int)foo[1])!=port) continue;
 					this.rport=port;
 					this.target=(String)foo[2];
 					if(foo[3]==null || (foo[3] is Object[])){ this.lport=-1; }
-					else{ this.lport=((Integer)foo[3]).intValue(); }
+					else{ this.lport=(int)foo[3]; }
 					if(foo.Length>=5)
 					{
 						this.factory=((SocketFactory)foo[4]);
@@ -188,8 +188,8 @@ namespace Tamir.SharpSsh.jsch
 				for(int i=0; i<pool.size(); i++)
 				{
 					Object[] bar=(Object[])(pool.elementAt(i));
-					if(bar[0]!=session) continue;
-					if(((Integer)bar[1]).intValue()!=rport) continue;
+					if (bar[0] != session) continue;
+					if ((int)bar[1] != rport) continue;
 					return bar;
 				}
 				return null;
@@ -226,8 +226,8 @@ namespace Tamir.SharpSsh.jsch
 					throw new JSchException("PortForwardingR: remote port "+port+" is already registered.");
 				}
 				Object[] foo=new Object[5];
-				foo[0]=session; foo[1]=new Integer(port);
-				foo[2]=target; foo[3]=new Integer(lport);
+				foo[0]=session; foo[1]=(port);
+				foo[2]=target; foo[3]=(lport);
 				foo[4]=factory;
 				pool.addElement(foo);
 			}
@@ -241,7 +241,7 @@ namespace Tamir.SharpSsh.jsch
 					throw new JSchException("PortForwardingR: remote port "+port+" is already registered.");
 				}
 				Object[] foo=new Object[4];
-				foo[0]=session; foo[1]=new Integer(port);
+				foo[0]=session; foo[1]=(port);
 				foo[2]=daemon; foo[3]=arg;
 				pool.addElement(foo);
 			}
@@ -258,8 +258,8 @@ namespace Tamir.SharpSsh.jsch
 				for(int i=0; i<pool.size(); i++)
 				{
 					Object[] bar=(Object[])(pool.elementAt(i));
-					if(bar[0]!=session) continue;
-					if(((Integer)bar[1]).intValue()!=rport) continue;
+					if (bar[0] != session) continue;
+					if ((int)bar[1] != rport) continue;
 					foo=bar;
 					break;
 				}
@@ -300,9 +300,9 @@ namespace Tamir.SharpSsh.jsch
 				for(int i=0; i<pool.size(); i++)
 				{
 					Object[] bar=(Object[])(pool.elementAt(i));
-					if(bar[0]==session) 
+					if (bar[0] == session) 
 					{
-						rport[count++]=((Integer)bar[1]).intValue();
+						rport[count++] = (int)bar[1];
 					}
 				}
 			}

@@ -30,7 +30,8 @@ namespace Tamir.SharpSsh.jsch
 				try
 				{
 					host=proxy_host.substring(0, proxy_host.indexOf(':'));
-					port=Integer.parseInt(proxy_host.substring(proxy_host.indexOf(':')+1));
+
+					port = System.Convert.ToInt32(proxy_host.substring(proxy_host.indexOf(':') + 1));
 				}
 				catch(Exception e)
 				{
@@ -107,7 +108,7 @@ namespace Tamir.SharpSsh.jsch
 				{
 					foo=response.indexOf(' ');
 					int bar=response.indexOf(' ', foo+1);
-					code=Integer.parseInt(response.substring(foo+1, bar));
+					code = System.Convert.ToInt32(response.substring(foo + 1, bar));
 					reason=response.substring(bar+1);
 				}
 				catch(Exception e)

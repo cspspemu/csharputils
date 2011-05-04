@@ -991,7 +991,7 @@ namespace Tamir.SharpSsh.jsch
 						{
 							deflater = (Compression)System.Activator.CreateInstance(System.Type.GetType(foo));
 							int level=6;
-							try{ level=Integer.parseInt(getConfig("compression_level"));}
+							try { level = System.Convert.ToInt32(getConfig("compression_level")); }
 							catch(Exception ee){ }
 							deflater.init(Compression.DEFLATER, level);
 						}
