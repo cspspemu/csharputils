@@ -27,6 +27,11 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 		}
 
+		static public String CombinePath(String BasePath, String PathToCombine)
+		{
+			return BasePath + "/" + PathToCombine;
+		}
+
 		static public String AbsoluteNormalizePath(String Path, String CurrentWorkingPath = "")
 		{
 			var Components = new LinkedList<String>();
@@ -66,7 +71,7 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 		}
 
-		private void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
+		virtual protected void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
 		{
 			// Normalize Components
 			Path = AbsoluteNormalizePath(Path, CurrentWorkingPath);
@@ -118,6 +123,11 @@ namespace CSharpUtils.VirtualFileSystem
 		public void Dispose()
 		{
 			Shutdown();
+		}
+
+		public FileSystem FileSystemFromPath(String Path, bool AllowAccessingParent = false)
+		{
+			return new FileSystemFromPath(this, Path, AllowAccessingParent);
 		}
 	}
 }

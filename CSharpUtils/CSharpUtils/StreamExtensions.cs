@@ -56,13 +56,31 @@ namespace CSharpUtils
 		{
             lock (Stream)
             {
-                var OldPosition = Stream.Position;
-                var Data = new byte[Stream.Length];
-                Stream.Position = 0;
-                Stream.Read(Data, 0, Data.Length);
-                Stream.Position = OldPosition;
+				/*
+				if (Stream.CanSeek)
+				{
+					var OldPosition = Stream.Position;
+					var Data = new byte[Stream.Length];
+					Stream.Position = 0;
+					Stream.Read(Data, 0, Data.Length);
+					Stream.Position = OldPosition;
+				}
+				else
+				{
+				}
                 return Data;
-            }
+				*/
+				var MemoryStream = new MemoryStream();
+				Stream.CopyTo(MemoryStream);
+				return MemoryStream.ToArray();
+			}
+		}
+
+		static public Stream ReadStream(this Stream Stream, long ToRead)
+		{
+			var ReadedStream = SliceStream.CreateWithLength(Stream, Stream.Position, ToRead);
+			Stream.Skip(ToRead);
+			return ReadedStream;
 		}
 
         static public byte[] ReadBytes(this Stream Stream, int ToRead)
@@ -77,6 +95,11 @@ namespace CSharpUtils
         {
             Stream.Write(Bytes, 0, Bytes.Length);
         }
+
+		static public String ReadString(this Stream Stream, int ToRead, Encoding Encoding = null)
+		{
+			return Stream.ReadBytes(ToRead).GetString(Encoding);
+		}
 
         static public String ReadStringz(this Stream Stream, int ToRead = -1, Encoding Encoding = null)
         {
@@ -155,6 +178,11 @@ namespace CSharpUtils
         {
             Stream.Position = MathUtils.Align(Stream.Position, Align);
         }
+
+		public static void Skip(this Stream Stream, long Count)
+		{
+			Stream.Seek(Count, SeekOrigin.Current);
+		}
 
 #if false
 		static ThreadLocal<byte[]> PerThreadBuffer = new ThreadLocal<byte[]>(() =>

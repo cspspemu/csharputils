@@ -20,7 +20,7 @@ namespace CSharpUtilsTests
 		{
 			get
 			{
-				return Directory.GetCurrentDirectory() + @"\..\..\..";
+				return System.AppDomain.CurrentDomain.BaseDirectory + @"\..\..\..";
 			}
 		}
 

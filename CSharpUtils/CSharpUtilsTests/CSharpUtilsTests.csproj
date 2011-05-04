@@ -55,6 +55,7 @@
     <Compile Include="AsyncTaskTest.cs" />
     <Compile Include="ConsumerMemoryStreamTest.cs" />
     <Compile Include="FastcgiHandlerTest.cs" />
+    <Compile Include="VirtualFileSystem\FileSystemFromPathTest.cs" />
     <Compile Include="LinqExExtensionsTest.cs" />
     <Compile Include="Process\ProcessTest.cs" />
     <Compile Include="DateTimeRangeTest.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemTest.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalFileSystemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZipArchiveTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
