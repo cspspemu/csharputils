@@ -60,9 +60,9 @@ namespace Tamir.SharpSsh.jsch
 			{
 				throw new JSchException("ChannelShell");
 			}
-			thread=new Thread(this);
-			thread.setName("Shell for "+session.host);
-			thread.start();
+			thread=new System.Threading.Thread(this.run);
+			thread.Name = "Shell for "+session.host;
+			thread.Start();
 		}
 		public override void init()
 		{

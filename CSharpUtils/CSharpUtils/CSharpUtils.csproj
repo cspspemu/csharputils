@@ -182,7 +182,6 @@
     <Compile Include="Net\SharpSSH\java\io\OutputStream.cs" />
     <Compile Include="Net\SharpSSH\java\lang\Integer.cs" />
     <Compile Include="Net\SharpSSH\java\lang\Runnable.cs" />
-    <Compile Include="Net\SharpSSH\java\lang\Thread.cs" />
     <Compile Include="Net\SharpSSH\java\net\InetAddress.cs" />
     <Compile Include="Net\SharpSSH\java\net\ServerSocket.cs" />
     <Compile Include="Net\SharpSSH\java\net\Socket.cs" />

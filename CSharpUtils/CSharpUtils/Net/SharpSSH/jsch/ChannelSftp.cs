@@ -2354,7 +2354,7 @@ namespace Tamir.SharpSsh.jsch
 		}
 		private java.util.Vector threadList=null;
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.Synchronized)]
-		protected void addRunningThread(Thread thread)
+		protected void addRunningThread(System.Threading.Thread thread)
 		{
 			if(threadList==null)threadList=new java.util.Vector();
 			threadList.add(thread);
@@ -2365,10 +2365,10 @@ namespace Tamir.SharpSsh.jsch
 			if(threadList==null)return;
 			for(int t=0;t<threadList.size();t++)
 			{
-				Thread thread=(Thread)threadList.get(t);
+				System.Threading.Thread thread = (System.Threading.Thread)threadList.get(t);
 				if(thread!=null)
-					if(thread.isAlive())
-						thread.interrupt();
+					if(thread.IsAlive)
+						thread.Interrupt();
 			}
 			threadList.clear();
 		}

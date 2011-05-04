@@ -68,7 +68,7 @@ namespace Tamir.SharpSsh.jsch
 					daemon.setChannel(this);
 					Object[] foo=getPort(session, rport);
 					daemon.setArg((Object[])foo[3]);
-					new Thread(daemon).start();
+					new System.Threading.Thread(daemon.run).Start();
 					connected=true;
 					return;
 				}
@@ -92,7 +92,7 @@ namespace Tamir.SharpSsh.jsch
 
 		public override void run()
 		{
-			thread=Thread.currentThread();
+			thread = System.Threading.Thread.CurrentThread;
 			Buffer buf=new Buffer(rmpsize);
 			Packet packet=new Packet(buf);
 			int i=0;

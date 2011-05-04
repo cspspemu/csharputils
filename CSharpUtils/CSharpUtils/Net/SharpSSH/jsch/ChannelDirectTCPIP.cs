@@ -102,7 +102,7 @@ namespace Tamir.SharpSsh.jsch
 						!_eof_remote)
 					{
 						//Thread.sleep(500);
-						Thread.Sleep(50);
+						System.Threading.Thread.Sleep(50);
 						retry--;
 					}
 				}
@@ -127,8 +127,8 @@ namespace Tamir.SharpSsh.jsch
 
 				connected=true;
 
-				thread=new Thread(this);
-				thread.start();
+				thread = new System.Threading.Thread(this.run);
+				thread.Start();
 			}
 			catch(Exception e)
 			{

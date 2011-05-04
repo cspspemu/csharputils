@@ -91,7 +91,7 @@ namespace Tamir.SharpSsh.jsch
 
 		private bool isAuthed=false;
 
-		private Thread connectThread=null;
+		private System.Threading.Thread connectThread = null;
 
 		internal bool x11_forwarding=false;
 
@@ -415,9 +415,9 @@ namespace Tamir.SharpSsh.jsch
 				if(auth)
 				{
 					isAuthed=true;
-					connectThread=new Thread(this);
-					connectThread.setName("Connect thread "+host+" session");
-					connectThread.start();
+					connectThread = new System.Threading.Thread(this.run);
+					connectThread.Name = "Connect thread " + host + " session";
+					connectThread.Start();
 					return;
 				}
 				if(auth_cancel)
@@ -1039,7 +1039,7 @@ namespace Tamir.SharpSsh.jsch
 			{
 				if(in_kex)
 				{
-					try{Thread.Sleep(10);}
+					try { System.Threading.Thread.Sleep(10); }
 					catch(ThreadInterruptedException e){};
 					continue;
 				}
@@ -1098,7 +1098,7 @@ namespace Tamir.SharpSsh.jsch
 					}
 				}
 
-				try{Thread.Sleep(100);}
+				try { System.Threading.Thread.Sleep(100); }
 				catch(ThreadInterruptedException e){};
 			}
 			_write(packet);
@@ -1131,7 +1131,7 @@ namespace Tamir.SharpSsh.jsch
 				{				
 					break;
 				}
-				try{Thread.Sleep(10);}
+				try { System.Threading.Thread.Sleep(10); }
 				catch(ThreadInterruptedException e){};
 			}
 			_write(packet);
@@ -1390,9 +1390,9 @@ namespace Tamir.SharpSsh.jsch
 								buf.putInt(channel.lwsize);
 								buf.putInt(channel.lmpsize);
 								write(packet);
-								Thread tmp=new Thread(channel);
-								tmp.setName("Channel "+ctyp+" "+host);
-								tmp.start();
+								System.Threading.Thread tmp = new System.Threading.Thread(channel.run);
+								tmp.Name = "Channel "+ctyp+" "+host;
+								tmp.Start();
 								break;
 							}
 						case SSH_MSG_CHANNEL_SUCCESS:
@@ -1431,11 +1431,11 @@ namespace Tamir.SharpSsh.jsch
 							break;
 						case SSH_MSG_REQUEST_FAILURE:
 						case SSH_MSG_REQUEST_SUCCESS:
-							Thread t=grr.getThread();
+							System.Threading.Thread t = grr.getThread();
 							if(t!=null)
 							{
 								grr.setReply(msgType==SSH_MSG_REQUEST_SUCCESS? 1 : 0);
-								t.interrupt();
+								t.Interrupt();
 							}
 							break;
 						default:
@@ -1499,8 +1499,9 @@ namespace Tamir.SharpSsh.jsch
 
 			lock(connectThread)
 			{
-				connectThread.yield();
-				connectThread.interrupt();
+				//System.Threading.Thread.Yield();
+				//connectThread.yield();
+				connectThread.Interrupt();
 				connectThread=null;
 			}
 			thread=null;
@@ -1552,9 +1553,9 @@ namespace Tamir.SharpSsh.jsch
 		public void setPortForwardingL(String boundaddress, int lport, String host, int rport, ServerSocketFactory ssf) 
 		{
 			PortWatcher pw=PortWatcher.addPort(this, boundaddress, lport, host, rport, ssf);
-			Thread tmp=new Thread(pw);
-			tmp.setName("PortWatcher Thread for "+host);
-			tmp.start();
+			System.Threading.Thread tmp = new System.Threading.Thread(pw.run);
+			tmp.Name = "PortWatcher Thread for "+host;
+			tmp.Start();
 		}
 		public void delPortForwardingL(int lport) 
 		{
@@ -1591,14 +1592,14 @@ namespace Tamir.SharpSsh.jsch
 
 		private class GlobalRequestReply
 		{
-			private Thread thread=null;
+			private System.Threading.Thread thread = null;
 			private int reply=-1;
-			internal void setThread(Thread thread)
+			internal void setThread(System.Threading.Thread thread)
 			{
 				this.thread=thread;
 				this.reply=-1;
 			}
-			internal Thread getThread(){ return thread; }
+			internal System.Threading.Thread getThread() { return thread; }
 			internal void setReply(int reply){ this.reply=reply; }
 			internal int getReply(){ return this.reply; }
 		}
@@ -1631,8 +1632,8 @@ namespace Tamir.SharpSsh.jsch
 					throw new JSchException(e.ToString());
 				}
 
-				grr.setThread(Thread.currentThread());
-				try{ Thread.Sleep(10000);}
+				grr.setThread(System.Threading.Thread.CurrentThread);
+				try { System.Threading.Thread.Sleep(10000); }
 				catch(Exception e)
 				{
 				}

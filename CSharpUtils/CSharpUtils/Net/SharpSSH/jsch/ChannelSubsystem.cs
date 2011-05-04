@@ -66,9 +66,9 @@ namespace Tamir.SharpSsh.jsch
 				if(e is JSchException){ throw (JSchException)e; }
 				throw new JSchException("ChannelSubsystem");
 			}
-			Thread thread=new Thread(this);
-			thread.setName("Subsystem for "+session.host);
-			thread.start();
+			System.Threading.Thread thread = new System.Threading.Thread(this.run);
+			thread.Name = "Subsystem for " + session.host;
+			thread.Start();
 		}
 		//public void finalize() throws Throwable{ super.finalize(); }
 		public override void init()

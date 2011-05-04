@@ -74,9 +74,9 @@ namespace Tamir.SharpSsh.jsch
 			{
 				throw new JSchException("ChannelExec");
 			}
-			thread=new Thread(this);
-			thread.setName("Exec thread "+session.getHost());
-			thread.start();
+			thread = new System.Threading.Thread(this.run);
+			thread.Name = "Exec thread " + session.getHost();
+			thread.Start();
 		}
 		public void setCommand(String foo){ command=foo;}
 		public override void init()

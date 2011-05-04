@@ -108,8 +108,8 @@ namespace Tamir.SharpSsh.jsch
 		internal int rwsize=0;         // remote initial window size
 		internal int rmpsize=0;        // remote maximum packet size
 
-		internal IO io=null;    
-		internal Thread thread=null;
+		internal IO io=null;
+		internal System.Threading.Thread thread = null;
 
 		internal bool eof_local=false;
 		internal bool _eof_remote=false;
@@ -173,8 +173,13 @@ namespace Tamir.SharpSsh.jsch
 					session.isConnected() &&
 					retry>0)
 				{
-					try{Thread.sleep(50);}
-					catch(Exception ee){}
+
+					try {
+						System.Threading.Thread.Sleep(50);
+					}
+					catch(Exception ee)
+					{
+					}
 					retry--;
 				}
 				if(!session.isConnected())

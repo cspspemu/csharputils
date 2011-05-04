@@ -135,7 +135,7 @@ namespace Tamir.SharpSsh.jsch
 
 		public override void run()
 		{
-			thread=Thread.currentThread();
+			thread = System.Threading.Thread.CurrentThread;
 			Buffer buf=new Buffer(rmpsize);
 			Packet packet=new Packet(buf);
 			int i=0;
