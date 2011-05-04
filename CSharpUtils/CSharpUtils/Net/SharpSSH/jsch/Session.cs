@@ -1686,10 +1686,9 @@ namespace Tamir.SharpSsh.jsch
 		public void setConfig(Hashtable foo)
 		{
 			if(config==null) config=new Hashtable();
-			
-			for(Enumeration e=new Enumeration(foo.Keys.GetEnumerator()) ; e.hasMoreElements() ;) 
+
+			foreach (var key in foo.Keys)
 			{
-				object key=e.nextElement();
 				config.Add(key, foo[key]);
 			}
 		}

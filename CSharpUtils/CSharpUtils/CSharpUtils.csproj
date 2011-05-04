@@ -182,8 +182,6 @@
     <Compile Include="Net\SharpSSH\java\io\OutputStream.cs" />
     <Compile Include="Net\SharpSSH\Runnable.cs" />
     <Compile Include="Net\SharpSSH\java\String.cs" />
-    <Compile Include="Net\SharpSSH\java\util\Enumeration.cs" />
-    <Compile Include="Net\SharpSSH\java\util\Hashtable.cs" />
     <Compile Include="Net\SharpSSH\java\util\Vector.cs" />
     <Compile Include="Net\SharpSSH\jsch\Buffer.cs" />
     <Compile Include="Net\SharpSSH\jsch\Channel.cs" />
