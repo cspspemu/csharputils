@@ -82,9 +82,9 @@ namespace Tamir.SharpSsh.java.net
 			sock.Close();
 		}
 
-		public InetAddress getInetAddress()
+		public IPAddress getInetAddress()
 		{
-			return new InetAddress( ((IPEndPoint) sock.RemoteEndPoint).Address );
+			return ((IPEndPoint)sock.RemoteEndPoint).Address;
 		}
 
 		public int getPort()

@@ -3,8 +3,8 @@ using System.IO;
 using System.Threading;
 using Tamir.SharpSsh.java.net;
 using Tamir.SharpSsh.java.lang;
-using InetAddress = Tamir.SharpSsh.java.net.InetAddress;
 using String = Tamir.SharpSsh.java.String;
+using System.Net;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -46,7 +46,7 @@ namespace Tamir.SharpSsh.jsch
 		internal int lport;
 		internal int rport;
 		internal String host;
-		internal InetAddress boundaddress;
+		internal IPAddress boundaddress;
 		internal Runnable thread;
 		internal ServerSocket ss;
 
@@ -73,10 +73,10 @@ namespace Tamir.SharpSsh.jsch
 		}
 		internal static PortWatcher getPort(Session session, String address, int lport)
 		{
-			InetAddress addr;
+			IPAddress addr;
 			try
 			{
-				addr=InetAddress.getByName(address);
+				addr = Dns.GetHostByName(address).AddressList[0];
 			}
 			catch(Exception)
 			{
@@ -89,9 +89,14 @@ namespace Tamir.SharpSsh.jsch
 					PortWatcher p=(PortWatcher)(pool.elementAt(i));
 					if(p.session==session && p.lport==lport)
 					{
-						if(p.boundaddress.isAnyLocalAddress() ||
-							p.boundaddress.equals(addr))
+
+						if (
+							IPAddress.IsLoopback(p.boundaddress) ||
+							p.boundaddress == addr
+						)
+						{
 							return p;
+						}
 					}
 				}
 				return null;
@@ -150,7 +155,7 @@ namespace Tamir.SharpSsh.jsch
 			this.rport=rport;
 			try
 			{
-				boundaddress=InetAddress.getByName(address);
+				boundaddress = Dns.GetHostByName(address).AddressList[0];
 				ss=(factory==null) ? 
 					new ServerSocket(lport, 0, boundaddress) :
 					factory.createServerSocket(lport, 0, boundaddress);
@@ -182,7 +187,7 @@ namespace Tamir.SharpSsh.jsch
 					session.addChannel(channel);
 					((ChannelDirectTCPIP)channel).setHost(host);
 					((ChannelDirectTCPIP)channel).setPort(rport);
-					((ChannelDirectTCPIP)channel).setOrgIPAddress(socket.getInetAddress().getHostAddress());
+					((ChannelDirectTCPIP)channel).setOrgIPAddress(socket.getInetAddress().ToString());
 					((ChannelDirectTCPIP)channel).setOrgPort(socket.getPort());
 					channel.connect();
 					if(channel.exitstatus!=-1)

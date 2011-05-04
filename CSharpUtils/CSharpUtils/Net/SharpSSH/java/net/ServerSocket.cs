@@ -9,7 +9,8 @@ namespace Tamir.SharpSsh.java.net
 	/// </summary>
 	public class ServerSocket : TcpListener
 	{
-		public ServerSocket(int port, int arg, InetAddress addr) : base(addr.addr, port)
+		public ServerSocket(int port, int arg, IPAddress addr)
+			: base(addr, port)
 		{
 			this.Start();
 		}
