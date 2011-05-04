@@ -2,11 +2,11 @@
 using System.Runtime.CompilerServices;
 using Tamir.Streams;
 using Tamir.SharpSsh.java.io;
-using Tamir.SharpSsh.java.util;
 using Tamir.SharpSsh.java;
 using Exception = System.Exception;
 using System.Text;
 using CSharpUtils;
+using System.Collections;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -283,12 +283,12 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
       
-				Vector v=glob_remote(path);
-				if(v.size()!=1)
+				ArrayList v=glob_remote(path);
+				if (v.Count != 1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				path=(String)(v.elementAt(0));
+				path=(String)(v[0]);
 				sendREALPATH(path.getBytes());
 
 				Header _header=new Header();
@@ -370,8 +370,8 @@ namespace Tamir.SharpSsh.jsch
 			//System.err.println("src: "+src+", "+dst);
 			try
 			{
-				Vector v=glob_remote(dst);
-				int vsize=v.size();
+				ArrayList v = glob_remote(dst);
+				int vsize=v.Count;
 				if(vsize!=1)
 				{
 					if(vsize==0)
@@ -381,11 +381,11 @@ namespace Tamir.SharpSsh.jsch
 						else
 							dst=Util.unquote(dst);
 					}
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
 				else
 				{
-					dst=(String)(v.elementAt(0));
+					dst=(String)(v[0]);
 				}
 
 				//System.err.println("dst: "+dst);
@@ -394,7 +394,7 @@ namespace Tamir.SharpSsh.jsch
 
 				v=glob_local(src);
 				//System.err.println("glob_local: "+v+" dst="+dst);
-				vsize=v.size();
+				vsize=v.Count;
 
 				string dstsb="";
 				if(_isRemoteDir)
@@ -412,7 +412,7 @@ namespace Tamir.SharpSsh.jsch
 
 				for(int j=0; j<vsize; j++)
 				{
-					String _src=(String)(v.elementAt(j));
+					String _src=(String)(v[j]);
 					String _dst=null;
 					if(_isRemoteDir)
 					{
@@ -506,8 +506,8 @@ namespace Tamir.SharpSsh.jsch
 		{ //throws SftpException{
     try{
       dst=remoteAbsolutePath(dst);
-      Vector v=glob_remote(dst);
-      int vsize=v.size();
+	  ArrayList v = glob_remote(dst);
+      int vsize=v.Count;
       if(vsize!=1){
         if(vsize==0){
           if(isPattern(dst))
@@ -515,10 +515,10 @@ namespace Tamir.SharpSsh.jsch
           else
             dst=Util.unquote(dst);
         }
-        throw new SftpException(SSH_FX_FAILURE, v.toString());
+        throw new SftpException(SSH_FX_FAILURE, v.ToString());
       }
       else{
-        dst=(String)(v.elementAt(0));
+        dst=(String)(v[0]);
       }
       if(isRemoteDir(dst)){
         throw new SftpException(SSH_FX_FAILURE, dst+" is a directory");
@@ -742,12 +742,12 @@ namespace Tamir.SharpSsh.jsch
 			dst=remoteAbsolutePath(dst);
 			try
 			{
-				Vector v=glob_remote(dst);
-				if(v.size()!=1)
+				ArrayList v = glob_remote(dst);
+				if(v.Count!=1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				dst=(String)(v.elementAt(0));
+				dst=(String)(v[0]);
 				if(isRemoteDir(dst))
 				{
 					throw new SftpException(SSH_FX_FAILURE, dst+" is a directory");
@@ -898,8 +898,8 @@ namespace Tamir.SharpSsh.jsch
 			dst=localAbsolutePath(dst);
 			try
 			{
-				Vector v=glob_remote(src);
-				int vsize=v.size();
+				ArrayList v = glob_remote(src);
+				int vsize=v.Count;
 				if(vsize==0)
 				{
 					throw new SftpException(SSH_FX_NO_SUCH_FILE, "No such file");
@@ -922,7 +922,7 @@ namespace Tamir.SharpSsh.jsch
 
 				for(int j=0; j<vsize; j++)
 				{
-					String _src=(String)(v.elementAt(j));
+					String _src=(String)(v[j]);
 
 					SftpATTRS attr=_stat(_src);
 					if(attr.isDir())
@@ -1003,12 +1003,12 @@ namespace Tamir.SharpSsh.jsch
 			try
 			{
 				src=remoteAbsolutePath(src);
-				Vector v=glob_remote(src);
-				if(v.size()!=1)
+				ArrayList v=glob_remote(src);
+				if(v.Count!=1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				src=(String)(v.elementAt(0));
+				src=(String)(v[0]);
 
 				if(monitor!=null)
 				{
@@ -1173,12 +1173,12 @@ namespace Tamir.SharpSsh.jsch
 			src=remoteAbsolutePath(src);
 			try
 			{
-				Vector v=glob_remote(src);
-				if(v.size()!=1)
+				ArrayList v = glob_remote(src);
+				if(v.Count!=1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				src=(String)(v.elementAt(0));
+				src=(String)(v[0]);
 
 				SftpATTRS attr=_stat(src);
 				if(monitor!=null)
@@ -1328,7 +1328,7 @@ namespace Tamir.SharpSsh.jsch
 			}
 		}
 
-		public java.util.Vector ls(String path) 
+		public ArrayList ls(String path) 
 		{ //throws SftpException{
 			try
 			{
@@ -1366,7 +1366,7 @@ namespace Tamir.SharpSsh.jsch
 
 				byte[] handle=buf.getString();         // filename
 
-				java.util.Vector v=new java.util.Vector();
+				ArrayList v = new ArrayList();
 				while(true)
 				{
 					sendREADDIR(handle);
@@ -1413,7 +1413,7 @@ namespace Tamir.SharpSsh.jsch
 						SftpATTRS attrs=SftpATTRS.getATTR(buf);
 						if(pattern==null || Util.glob(pattern, filename))
 						{
-							v.addElement(new LsEntry(new String(filename), longname, attrs));
+							v.Add(new LsEntry(new String(filename), longname, attrs));
 						}
 
 						count--; 
@@ -1435,12 +1435,12 @@ namespace Tamir.SharpSsh.jsch
 			try
 			{
 				path=remoteAbsolutePath(path);
-				Vector v=glob_remote(path);
-				if(v.size()!=1)
+				ArrayList v = glob_remote(path);
+				if(v.Count!=1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				path=(String)(v.elementAt(0));
+				path=(String)(v[0]);
 
 				sendREADLINK(path.getBytes());
 
@@ -1496,17 +1496,17 @@ namespace Tamir.SharpSsh.jsch
 				oldpath=remoteAbsolutePath(oldpath);
 				newpath=remoteAbsolutePath(newpath);
 
-				Vector v=glob_remote(oldpath);
-				int vsize=v.size();
+				ArrayList v = glob_remote(oldpath);
+				int vsize=v.Count;
 				if(vsize!=1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				oldpath=(String)(v.elementAt(0));
+				oldpath=(String)(v[0]);
 
 				if(isPattern(newpath))
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
 
 				newpath=Util.unquote(newpath);
@@ -1548,23 +1548,23 @@ namespace Tamir.SharpSsh.jsch
 				oldpath=remoteAbsolutePath(oldpath);
 				newpath=remoteAbsolutePath(newpath);
 
-				Vector v=glob_remote(oldpath);
-				int vsize=v.size();
+				ArrayList v = glob_remote(oldpath);
+				int vsize=v.Count;
 				if(vsize!=1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				oldpath=(String)(v.elementAt(0));
+				oldpath=(String)(v[0]);
 
 				v=glob_remote(newpath);
-				vsize=v.size();
+				vsize=v.Count;
 				if(vsize>=2)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
 				if(vsize==1)
 				{
-					newpath=(String)(v.elementAt(0));
+					newpath=(String)(v[0]);
 				}
 				else
 				{  // vsize==0
@@ -1603,13 +1603,13 @@ namespace Tamir.SharpSsh.jsch
 			try
 			{
 				path=remoteAbsolutePath(path);
-				Vector v=glob_remote(path);
-				int vsize=v.size();
+				ArrayList v = glob_remote(path);
+				int vsize=v.Count;
 				Header _header=new Header();
 
 				for(int j=0; j<vsize; j++)
 				{
-					path=(String)(v.elementAt(j));
+					path=(String)(v[j]);
 					sendREMOVE(path.getBytes());
 
 					_header=header(buf, _header);
@@ -1670,11 +1670,11 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
 
-				Vector v=glob_remote(path);
-				int vsize=v.size();
+				ArrayList v = glob_remote(path);
+				int vsize=v.Count;
 				for(int j=0; j<vsize; j++)
 				{
-					path=(String)(v.elementAt(j));
+					path=(String)(v[j]);
 					
 					SftpATTRS attr=_stat(path);
 					
@@ -1695,11 +1695,11 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
 
-				Vector v=glob_remote(path);
-				int vsize=v.size();
+				ArrayList v = glob_remote(path);
+				int vsize=v.Count;
 				for(int j=0; j<vsize; j++)
 				{
-					path=(String)(v.elementAt(j));
+					path=(String)(v[j]);
 
 					SftpATTRS attr=_stat(path);
 					
@@ -1720,11 +1720,11 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
 
-				Vector v=glob_remote(path);
-				int vsize=v.size();
+				ArrayList v = glob_remote(path);
+				int vsize=v.Count;
 				for(int j=0; j<vsize; j++)
 				{
-					path=(String)(v.elementAt(j));
+					path=(String)(v[j]);
 
 					SftpATTRS attr=_stat(path);
 					
@@ -1745,11 +1745,11 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
 
-				Vector v=glob_remote(path);
-				int vsize=v.size();
+				ArrayList v = glob_remote(path);
+				int vsize=v.Count;
 				for(int j=0; j<vsize; j++)
 				{
-					path=(String)(v.elementAt(j));
+					path=(String)(v[j]);
 					
 					SftpATTRS attr=_stat(path);
 					
@@ -1771,13 +1771,13 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
 
-				Vector v=glob_remote(path);
-				int vsize=v.size();
+				ArrayList v = glob_remote(path);
+				int vsize=v.Count;
 				Header _header=new Header();
 
 				for(int j=0; j<vsize; j++)
 				{
-					path=(String)(v.elementAt(j));
+					path=(String)(v[j]);
 					sendRMDIR(path.getBytes());
 
 					_header=header(buf, _header);
@@ -1844,12 +1844,12 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
 
-				Vector v=glob_remote(path);
-				if(v.size()!=1)
+				ArrayList v = glob_remote(path);
+				if(v.Count!=1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				path=(String)(v.elementAt(0));
+				path=(String)(v[0]);
 				return _stat(path);
 			}
 			catch(Exception e)
@@ -1866,12 +1866,12 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
 
-				Vector v=glob_remote(path);
-				if(v.size()!=1)
+				ArrayList v=glob_remote(path);
+				if(v.Count!=1)
 				{
-					throw new SftpException(SSH_FX_FAILURE, v.toString());
+					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
-				path=(String)(v.elementAt(0));
+				path=(String)(v[0]);
 
 				return _lstat(path);
 			}
@@ -1922,11 +1922,11 @@ namespace Tamir.SharpSsh.jsch
 			{
 				path=remoteAbsolutePath(path);
 
-				Vector v=glob_remote(path);
-				int vsize=v.size();
+				ArrayList v = glob_remote(path);
+				int vsize=v.Count;
 				for(int j=0; j<vsize; j++)
 				{
-					path=(String)(v.elementAt(j));
+					path=(String)(v[j]);
 					_setStat(path, attr);
 				}
 			}
@@ -2181,19 +2181,19 @@ namespace Tamir.SharpSsh.jsch
 			buf.putInt(length);
 			buf.putByte(type);
 		}
-		private Vector glob_remote(String _path)
+		private ArrayList glob_remote(String _path)
 		{
 			//throws Exception{
 			//System.err.println("glob_remote: "+_path);
-			Vector v=new Vector();
+			ArrayList v = new ArrayList();
 			byte[] path=_path.getBytes();
 			if(!isPattern(path))
 			{
-				v.addElement(Util.unquote(_path)); return v;
+				v.Add(Util.unquote(_path)); return v;
 			}
 			int i=path.Length-1;
 			while(i>=0){if(path[i]=='/')break;i--;}
-			if(i<0){ v.addElement(Util.unquote(_path)); return v;}
+			if(i<0){ v.Add(Util.unquote(_path)); return v;}
 			byte[] dir;
 			if(i==0){dir=new byte[]{(byte)'/'};}
 			else
@@ -2272,7 +2272,7 @@ namespace Tamir.SharpSsh.jsch
 
 					if(Util.glob(pattern, filename))
 					{
-						v.addElement(new String(dir)+"/"+new String(filename));
+						v.Add(new String(dir)+"/"+new String(filename));
 					}
 					count--; 
 				}
@@ -2282,16 +2282,16 @@ namespace Tamir.SharpSsh.jsch
 			return null;
 		}
 
-		private Vector glob_local(String _path) 
+		private ArrayList glob_local(String _path) 
 		{ //throws Exception{
 			//System.out.println("glob_local: "+_path);
-			Vector v=new Vector();
+			ArrayList v = new ArrayList();
 			byte[] path=_path.getBytes();
 			int i=path.Length-1;
 			while(i>=0){if(path[i]=='*' || path[i]=='?')break;i--;}
-			if(i<0){ v.addElement(_path); return v;}
+			if(i<0){ v.Add(_path); return v;}
 			while(i>=0){if(path[i]==file_separatorc)break;i--;}
-			if(i<0){ v.addElement(_path); return v;}
+			if(i<0){ v.Add(_path); return v;}
 			byte[] dir;
 			if(i==0){dir=new byte[]{(byte)file_separatorc};}
 			else
@@ -2310,7 +2310,7 @@ namespace Tamir.SharpSsh.jsch
 					//System.out.println("children: "+children[j]);
 					if(Util.glob(pattern, Encoding.UTF8.GetBytes(child)))
 					{
-						v.addElement(new String(dir) + file_separator + child);
+						v.Add(new String(dir) + file_separator + child);
 					}
 				}
 			}
@@ -2351,25 +2351,26 @@ namespace Tamir.SharpSsh.jsch
 			clearRunningThreads();
 			base.disconnect();
 		}
-		private java.util.Vector threadList=null;
+		private ArrayList threadList = null;
+
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.Synchronized)]
 		protected void addRunningThread(System.Threading.Thread thread)
 		{
-			if(threadList==null)threadList=new java.util.Vector();
-			threadList.add(thread);
+			if (threadList == null) threadList = new ArrayList();
+			threadList.Add(thread);
 		}
 		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.Synchronized)]
 		protected void clearRunningThreads()
 		{
 			if(threadList==null)return;
-			for(int t=0;t<threadList.size();t++)
+			for(int t=0;t<threadList.Count;t++)
 			{
-				System.Threading.Thread thread = (System.Threading.Thread)threadList.get(t);
+				System.Threading.Thread thread = (System.Threading.Thread)threadList[t];
 				if(thread!=null)
 					if(thread.IsAlive)
 						thread.Interrupt();
 			}
-			threadList.clear();
+			threadList.Clear();
 		}
 		private bool isPattern(String path)
 		{

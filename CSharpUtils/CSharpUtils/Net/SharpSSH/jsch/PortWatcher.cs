@@ -4,6 +4,7 @@ using System.Threading;
 using String = Tamir.SharpSsh.java.String;
 using System.Net;
 using System.Net.Sockets;
+using System.Collections;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -38,7 +39,7 @@ namespace Tamir.SharpSsh.jsch
 
 	class PortWatcher : Runnable
 	{
-		private static Tamir.SharpSsh.java.util.Vector pool=new Tamir.SharpSsh.java.util.Vector();
+		private static ArrayList pool = new ArrayList();
 
 
 		internal Session session;
@@ -51,22 +52,22 @@ namespace Tamir.SharpSsh.jsch
 
 		internal static String[] getPortForwarding(Session session)
 		{
-			java.util.Vector foo=new java.util.Vector();
+			ArrayList foo = new ArrayList();
 			lock(pool)
 			{
-				for(int i=0; i<pool.size(); i++)
+				for(int i=0; i<pool.Count; i++)
 				{
-					PortWatcher p=(PortWatcher)(pool.elementAt(i));
+					PortWatcher p=(PortWatcher)(pool[i]);
 					if(p.session==session)
 					{
-						foo.addElement(p.lport+":"+p.host+":"+p.rport);
+						foo.Add(p.lport + ":" + p.host + ":" + p.rport);
 					}
 				}
 			}
-			String[] bar=new String[foo.size()];
-			for(int i=0; i<foo.size(); i++)
+			String[] bar=new String[foo.Count];
+			for(int i = 0; i < foo.Count; i++)
 			{
-				bar[i]=(String)(foo.elementAt(i));
+				bar[i] = (String)(foo[i]);
 			}
 			return bar;
 		}
@@ -83,9 +84,9 @@ namespace Tamir.SharpSsh.jsch
 			}
 			lock(pool)
 			{
-				for(int i=0; i<pool.size(); i++)
+				for(int i=0; i<pool.Count; i++)
 				{
-					PortWatcher p=(PortWatcher)(pool.elementAt(i));
+					PortWatcher p=(PortWatcher)(pool[i]);
 					if(p.session==session && p.lport==lport)
 					{
 
@@ -108,7 +109,7 @@ namespace Tamir.SharpSsh.jsch
 				throw new JSchException("PortForwardingL: local port "+ address+":"+lport+" is already registered.");
 			}
 			PortWatcher pw=new PortWatcher(session, address, lport, host, rport, ssf);
-			pool.addElement(pw);
+			pool.Add(pw);
 			return pw;
 		}
 		internal static void delPort(Session session, String address, int lport) 
@@ -119,17 +120,17 @@ namespace Tamir.SharpSsh.jsch
 				throw new JSchException("PortForwardingL: local port "+address+":"+lport+" is not registered.");
 			}
 			pw.delete();
-			pool.removeElement(pw);
+			pool.Remove(pw);
 		}
 		internal static void delPort(Session session)
 		{
 			lock(pool)
 			{
-				PortWatcher[] foo=new PortWatcher[pool.size()];
+				PortWatcher[] foo=new PortWatcher[pool.Count];
 				int count=0;
-				for(int i=0; i<pool.size(); i++)
+				for (int i = 0; i < pool.Count; i++)
 				{
-					PortWatcher p=(PortWatcher)(pool.elementAt(i));
+					PortWatcher p=(PortWatcher)(pool[i]);
 					if(p.session==session) 
 					{
 						p.delete();
@@ -139,7 +140,7 @@ namespace Tamir.SharpSsh.jsch
 				for(int i=0; i<count; i++)
 				{
 					PortWatcher p=foo[i];
-					pool.removeElement(p);
+					pool.Remove(p);
 				}
 			}
 		}

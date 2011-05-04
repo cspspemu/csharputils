@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using Tamir.SharpSsh.java.util;
 using Str = Tamir.SharpSsh.java.String;
 using System.Net.Sockets;
 using System.Net;
+using System.Collections;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -39,7 +39,7 @@ namespace Tamir.SharpSsh.jsch
 	public class ChannelForwardedTCPIP : Channel
 	{
 
-		internal static java.util.Vector pool=new java.util.Vector();
+		internal static ArrayList pool = new ArrayList();
 
 		//  static private final int LOCAL_WINDOW_SIZE_MAX=0x20000;
 		static private int LOCAL_WINDOW_SIZE_MAX=0x100000;
@@ -158,9 +158,9 @@ namespace Tamir.SharpSsh.jsch
 
 			lock(pool)
 			{
-				for(int i=0; i<pool.size(); i++)
+				for(int i=0; i<pool.Count; i++)
 				{
-					Object[] foo=(Object[])(pool.elementAt(i));
+					Object[] foo=(Object[])(pool[i]);
 					if(foo[0]!=session) continue;
 					if(((int)foo[1])!=port) continue;
 					this.rport=port;
@@ -184,9 +184,9 @@ namespace Tamir.SharpSsh.jsch
 		{
 			lock(pool)
 			{
-				for(int i=0; i<pool.size(); i++)
+				for(int i=0; i<pool.Count; i++)
 				{
-					Object[] bar=(Object[])(pool.elementAt(i));
+					Object[] bar=(Object[])(pool[i]);
 					if (bar[0] != session) continue;
 					if ((int)bar[1] != rport) continue;
 					return bar;
@@ -197,21 +197,21 @@ namespace Tamir.SharpSsh.jsch
 
 		internal static String[] getPortForwarding(Session session)
 		{
-			java.util.Vector foo=new java.util.Vector();
+			ArrayList foo = new ArrayList();
 			lock(pool)
 			{
-				for(int i=0; i<pool.size(); i++)
+				for(int i=0; i<pool.Count; i++)
 				{
-					Object[] bar=(Object[])(pool.elementAt(i));
+					Object[] bar=(Object[])(pool[i]);
 					if(bar[0]!=session) continue;
-					if(bar[3]==null){ foo.addElement(bar[1]+":"+bar[2]+":"); }
-					else{ foo.addElement(bar[1]+":"+bar[2]+":"+bar[3]); }
+					if(bar[3]==null){ foo.Add(bar[1]+":"+bar[2]+":"); }
+					else{ foo.Add(bar[1]+":"+bar[2]+":"+bar[3]); }
 				}
 			}
-			String[] bar2=new String[foo.size()];
-			for(int i=0; i<foo.size(); i++)
+			String[] bar2=new String[foo.Count];
+			for (int i = 0; i < foo.Count; i++)
 			{
-				bar2[i]=(String)(foo.elementAt(i));
+				bar2[i]=(String)(foo[i]);
 			}
 			return bar2;
 		}
@@ -228,7 +228,7 @@ namespace Tamir.SharpSsh.jsch
 				foo[0]=session; foo[1]=(port);
 				foo[2]=target; foo[3]=(lport);
 				foo[4]=factory;
-				pool.addElement(foo);
+				pool.Add(foo);
 			}
 		}
 		internal static void addPort(Session session, int port, String daemon, Object[] arg) 
@@ -242,7 +242,7 @@ namespace Tamir.SharpSsh.jsch
 				Object[] foo=new Object[4];
 				foo[0]=session; foo[1]=(port);
 				foo[2]=daemon; foo[3]=arg;
-				pool.addElement(foo);
+				pool.Add(foo);
 			}
 		}
 		internal static void delPort(ChannelForwardedTCPIP c)
@@ -254,16 +254,16 @@ namespace Tamir.SharpSsh.jsch
 			lock(pool)
 			{
 				Object[] foo=null;
-				for(int i=0; i<pool.size(); i++)
+				for(int i=0; i<pool.Count; i++)
 				{
-					Object[] bar=(Object[])(pool.elementAt(i));
+					Object[] bar=(Object[])(pool[i]);
 					if (bar[0] != session) continue;
 					if ((int)bar[1] != rport) continue;
 					foo=bar;
 					break;
 				}
 				if(foo==null)return;
-				pool.removeElement(foo);	
+				pool.Remove(foo);	
 			}
 
 			Buffer buf=new Buffer(100); // ??
@@ -295,10 +295,10 @@ namespace Tamir.SharpSsh.jsch
 			int count=0;
 			lock(pool)
 			{
-				rport=new int[pool.size()];
-				for(int i=0; i<pool.size(); i++)
+				rport=new int[pool.Count];
+				for(int i=0; i<pool.Count; i++)
 				{
-					Object[] bar=(Object[])(pool.elementAt(i));
+					Object[] bar=(Object[])(pool[i]);
 					if (bar[0] == session) 
 					{
 						rport[count++] = (int)bar[1];

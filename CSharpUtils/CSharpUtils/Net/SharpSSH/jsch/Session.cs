@@ -2,7 +2,6 @@
 using System.IO;
 using System.Runtime.CompilerServices;
 using Tamir.SharpSsh.java;
-using Tamir.SharpSsh.java.util;
 using Exception = System.Exception;
 using NullReferenceException = System.NullReferenceException;
 using ThreadInterruptedException = System.Threading.ThreadInterruptedException;
@@ -357,7 +356,7 @@ namespace Tamir.SharpSsh.jsch
 							//System.Console.WriteLine("   jsch.identities.size()="+jsch.identities.size());
 							lock(jsch.identities)
 							{
-								if(jsch.identities.size()>0)
+								if(jsch.identities.Count>0)
 								{
 									us=new UserAuthPublicKey(userinfo);
 								}

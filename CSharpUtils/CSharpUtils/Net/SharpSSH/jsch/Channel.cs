@@ -4,6 +4,7 @@ using System.IO;
 using Tamir.Streams;
 using System.Runtime.CompilerServices;
 using Str = Tamir.SharpSsh.java.String;
+using System.Collections;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -39,8 +40,8 @@ namespace Tamir.SharpSsh.jsch
 
 	public abstract class Channel : Runnable
 	{
-		internal static int index=0; 
-		private static java.util.Vector pool=new java.util.Vector();
+		internal static int index=0;
+		private static ArrayList pool = new ArrayList();
 		internal static Channel getChannel(String type)
 		{
 			if(type.Equals("session"))
@@ -81,9 +82,9 @@ namespace Tamir.SharpSsh.jsch
 		{
 			lock(pool)
 			{
-				for(int i=0; i<pool.size(); i++)
+				for(int i=0; i<pool.Count; i++)
 				{
-					Channel c=(Channel)(pool.elementAt(i));
+					Channel c=(Channel)(pool[i]);
 					if(c.id==id && c.session==session) return c;
 				}
 			}
@@ -93,7 +94,7 @@ namespace Tamir.SharpSsh.jsch
 		{
 			lock(pool)
 			{
-				pool.removeElement(c);
+				pool.Remove(c);
 			}
 		}
 
@@ -127,7 +128,7 @@ namespace Tamir.SharpSsh.jsch
 			lock(pool)
 			{
 				id=index++;
-				pool.addElement(this);
+				pool.Add(this);
 			}
 		}
 		internal virtual void setRecipient(int foo)
@@ -421,12 +422,12 @@ namespace Tamir.SharpSsh.jsch
 			int count=0;
 			lock(pool)
 			{
-				channels=new Channel[pool.size()];
-				for(int i=0; i<pool.size(); i++)
+				channels=new Channel[pool.Count];
+				for (int i = 0; i < pool.Count; i++)
 				{
 					try
 					{
-						Channel c=((Channel)(pool.elementAt(i)));
+						Channel c=((Channel)(pool[i]));
 						if(c.session==session)
 						{
 							channels[count++]=c;

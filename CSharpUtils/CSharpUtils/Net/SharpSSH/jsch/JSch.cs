@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -87,9 +88,9 @@ namespace Tamir.SharpSsh.jsch
 
 			config.Add("StrictHostKeyChecking",  "ask");
 		}
-	
-		internal Tamir.SharpSsh.java.util.Vector pool=new Tamir.SharpSsh.java.util.Vector();
-		internal Tamir.SharpSsh.java.util.Vector identities=new Tamir.SharpSsh.java.util.Vector();
+
+		internal ArrayList pool = new ArrayList();
+		internal ArrayList identities = new ArrayList();
 		//private KnownHosts known_hosts=null;
 		private HostKeyRepository known_hosts=null;
 
@@ -115,7 +116,15 @@ namespace Tamir.SharpSsh.jsch
 		{
 			lock(pool)
 			{
-				return pool.remove(session);
+				try
+				{
+					pool.Remove(session);
+					return true;
+				}
+				catch (NotSupportedException)
+				{
+					return false;
+				}
 			}
 		}
 
