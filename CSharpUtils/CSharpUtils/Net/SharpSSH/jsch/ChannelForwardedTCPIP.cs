@@ -64,8 +64,7 @@ namespace Tamir.SharpSsh.jsch
 				io=new IO();
 				if(lport==-1)
 				{
-					Class c=Class.forName(target);
-					ForwardedTCPIPDaemon daemon=(ForwardedTCPIPDaemon)c.newInstance();
+					ForwardedTCPIPDaemon daemon = (ForwardedTCPIPDaemon)Activator.CreateInstance(Type.GetType(target));
 					daemon.setChannel(this);
 					Object[] foo=getPort(session, rport);
 					daemon.setArg((Object[])foo[3]);

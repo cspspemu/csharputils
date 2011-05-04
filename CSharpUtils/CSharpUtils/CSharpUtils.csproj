@@ -180,7 +180,6 @@
     <Compile Include="Net\SharpSSH\java\io\InputStreamWrapper.cs" />
     <Compile Include="Net\SharpSSH\java\io\JStream.cs" />
     <Compile Include="Net\SharpSSH\java\io\OutputStream.cs" />
-    <Compile Include="Net\SharpSSH\java\lang\Class.cs" />
     <Compile Include="Net\SharpSSH\java\lang\Integer.cs" />
     <Compile Include="Net\SharpSSH\java\lang\Runnable.cs" />
     <Compile Include="Net\SharpSSH\java\lang\Thread.cs" />

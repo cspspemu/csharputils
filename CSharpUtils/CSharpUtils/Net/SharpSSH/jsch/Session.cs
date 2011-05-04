@@ -142,8 +142,7 @@ namespace Tamir.SharpSsh.jsch
 			{
 				try
 				{
-					Class c=Class.forName(getConfig("random"));
-					random=(Random)(c.newInstance());
+					random = (Random)System.Activator.CreateInstance(System.Type.GetType(getConfig("random")));
 				}
 				catch(Exception e)
 				{
@@ -507,8 +506,7 @@ namespace Tamir.SharpSsh.jsch
 			KeyExchange kex=null;
 			try
 			{
-				Class c=Class.forName(getConfig(guess[KeyExchange.PROPOSAL_KEX_ALGS]));
-				kex=(KeyExchange)(c.newInstance());
+				kex = (KeyExchange)System.Activator.CreateInstance(System.Type.GetType(getConfig(guess[KeyExchange.PROPOSAL_KEX_ALGS])));
 			}
 			catch(Exception e){ System.Console.Error.WriteLine("kex: "+e); }
 			kex._guess=guess;
@@ -943,10 +941,7 @@ namespace Tamir.SharpSsh.jsch
 
 			try
 			{
-				Class c;
-
-				c=Class.forName(getConfig(guess[KeyExchange.PROPOSAL_ENC_ALGS_STOC]));
-				s2ccipher=(Cipher)(c.newInstance());
+				s2ccipher = (Cipher)System.Activator.CreateInstance(System.Type.GetType(getConfig(guess[KeyExchange.PROPOSAL_ENC_ALGS_STOC])));
 				while(s2ccipher.getBlockSize()>Es2c.Length)
 				{
 					buf.reset();
@@ -962,13 +957,11 @@ namespace Tamir.SharpSsh.jsch
 				}
 				s2ccipher.init(Cipher.DECRYPT_MODE, Es2c, IVs2c);
 				cipher_size=s2ccipher.getIVSize();
-				c=Class.forName(getConfig(guess[KeyExchange.PROPOSAL_MAC_ALGS_STOC]));
-				s2cmac=(MAC)(c.newInstance());
+				s2cmac = (MAC)System.Activator.CreateInstance(System.Type.GetType(getConfig(guess[KeyExchange.PROPOSAL_MAC_ALGS_STOC])));
 				s2cmac.init(MACs2c);
 				mac_buf=new byte[s2cmac.getBlockSize()];
 
-				c=Class.forName(getConfig(guess[KeyExchange.PROPOSAL_ENC_ALGS_CTOS]));
-				c2scipher=(Cipher)(c.newInstance());
+				c2scipher = (Cipher)System.Activator.CreateInstance(System.Type.GetType(getConfig(guess[KeyExchange.PROPOSAL_ENC_ALGS_CTOS])));
 				while(c2scipher.getBlockSize()>Ec2s.Length)
 				{
 					buf.reset();
@@ -984,8 +977,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 				c2scipher.init(Cipher.ENCRYPT_MODE, Ec2s, IVc2s);
 
-				c=Class.forName(getConfig(guess[KeyExchange.PROPOSAL_MAC_ALGS_CTOS]));
-				c2smac=(MAC)(c.newInstance());
+				c2smac = (MAC)System.Activator.CreateInstance(System.Type.GetType(getConfig(guess[KeyExchange.PROPOSAL_MAC_ALGS_CTOS])));
 				c2smac.init(MACc2s);
 
 				if(!guess[KeyExchange.PROPOSAL_COMP_ALGS_CTOS].equals("none"))
@@ -995,8 +987,7 @@ namespace Tamir.SharpSsh.jsch
 					{
 						try
 						{
-							c=Class.forName(foo);
-							deflater=(Compression)(c.newInstance());
+							deflater = (Compression)System.Activator.CreateInstance(System.Type.GetType(foo));
 							int level=6;
 							try{ level=Integer.parseInt(getConfig("compression_level"));}
 							catch(Exception ee){ }
@@ -1022,8 +1013,7 @@ namespace Tamir.SharpSsh.jsch
 					{
 						try
 						{
-							c=Class.forName(foo);
-							inflater=(Compression)(c.newInstance());
+							inflater = (Compression)System.Activator.CreateInstance(System.Type.GetType(foo));
 							inflater.init(Compression.INFLATER, 0);
 						}
 						catch(Exception ee)
