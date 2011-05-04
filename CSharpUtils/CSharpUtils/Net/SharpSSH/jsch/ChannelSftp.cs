@@ -6,6 +6,8 @@ using Tamir.SharpSsh.java.lang;
 using Tamir.SharpSsh.java.util;
 using Tamir.SharpSsh.java;
 using Exception = System.Exception;
+using System.Text;
+using CSharpUtils;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -161,8 +163,8 @@ namespace Tamir.SharpSsh.jsch
 		o  Implementation changes, no actual protocol changes.
 		*/
 
-		private static  String file_separator=java.io.File.separator;
-		private static  char file_separatorc=java.io.File.separatorChar;
+		private static String file_separator = System.IO.Path.DirectorySeparatorChar.ToString();
+		private static char file_separatorc = System.IO.Path.DirectorySeparatorChar;
 
 		private String cwd;
 		private String home;
@@ -239,7 +241,7 @@ namespace Tamir.SharpSsh.jsch
 				str=buf.getString();         // logname
 				//    SftpATTRS.getATTR(buf);      // attrs
 
-				lcwd=new File(".").getCanonicalPath();
+				lcwd = System.IO.Path.GetFullPath(".");
 			}
 			catch(Exception e)
 			{
@@ -255,11 +257,11 @@ namespace Tamir.SharpSsh.jsch
 		public void lcd(String path) 
 		{ //throws SftpException{
 			path=localAbsolutePath(path);
-			if((new File(path)).isDirectory())
+			if (System.IO.Directory.Exists(path))
 			{
 				try
 				{
-					path=(new File(path)).getCanonicalPath();
+					path = System.IO.Path.GetFullPath(path);
 				}
 				catch(Exception){}
 				lcwd=path;
@@ -900,7 +902,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 
 				File dstFile=new File(dst);
-				bool isDstDir=dstFile.isDirectory();
+				bool isDstDir = System.IO.Directory.Exists(dst);
 				StringBuffer dstsb=null;
 				if(isDstDir)
 				{
@@ -2299,13 +2301,13 @@ namespace Tamir.SharpSsh.jsch
 			//System.out.println("dir: "+new String(dir)+" pattern: "+new String(pattern));
 			try
 			{
-				String[] children=(new File(new String(dir))).list();
-				for(int j=0; j<children.Length; j++)
+				var children = System.IO.Directory.GetFileSystemEntries(dir.GetString(Encoding.UTF8));
+				foreach (var child in children)
 				{
 					//System.out.println("children: "+children[j]);
-					if(Util.glob(pattern, children[j].getBytes()))
+					if(Util.glob(pattern, Encoding.UTF8.GetBytes(child)))
 					{
-						v.addElement(new String(dir)+file_separator+children[j]);
+						v.addElement(new String(dir) + file_separator + child);
 					}
 				}
 			}
@@ -2331,7 +2333,7 @@ namespace Tamir.SharpSsh.jsch
 
 		private static bool isLocalAbsolutePath(String path)
 		{
-			return (new File(path)).isAbsolute();
+			return System.IO.Path.IsPathRooted(path);
 		}
 
 		/*

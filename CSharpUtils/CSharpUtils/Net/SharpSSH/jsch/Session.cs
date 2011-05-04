@@ -393,10 +393,6 @@ namespace Tamir.SharpSsh.jsch
 								auth_cancel=false;
 								continue;//loop;
 							}
-							catch(RuntimeException ee)
-							{
-								throw ee;
-							}
 							catch(Exception ee)
 							{
 								System.Console.WriteLine("ee: "+ee); // SSH_MSG_DISCONNECT: 2 Too many authentication failures
@@ -450,7 +446,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 				_isConnected=false;
 				//e.printStackTrace();
-				if(e is RuntimeException) throw (RuntimeException)e;
+				//if(e is Exception) throw (Exception)e;
 				if(e is JSchException) throw (JSchException)e;
 				throw new JSchException("Session.connect: "+e);
 			}

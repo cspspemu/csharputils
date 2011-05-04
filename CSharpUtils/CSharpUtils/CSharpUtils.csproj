@@ -189,10 +189,7 @@
     <Compile Include="Net\SharpSSH\java\net\InetAddress.cs" />
     <Compile Include="Net\SharpSSH\java\net\ServerSocket.cs" />
     <Compile Include="Net\SharpSSH\java\net\Socket.cs" />
-    <Compile Include="Net\SharpSSH\java\Platform.cs" />
-    <Compile Include="Net\SharpSSH\java\RuntimeException.cs" />
     <Compile Include="Net\SharpSSH\java\String.cs" />
-    <Compile Include="Net\SharpSSH\java\System.cs" />
     <Compile Include="Net\SharpSSH\java\util\Enumeration.cs" />
     <Compile Include="Net\SharpSSH\java\util\Hashtable.cs" />
     <Compile Include="Net\SharpSSH\java\util\JavaString.cs" />

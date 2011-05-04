@@ -144,10 +144,6 @@ namespace Tamir.SharpSsh.jsch
 					if(count==0)break;
 				}
 			}
-			catch(RuntimeException e)
-			{
-				throw e;
-			}
 			catch(Exception e)
 			{
 				try{ if(socket!=null)socket.close(); }
