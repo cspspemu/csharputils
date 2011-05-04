@@ -64,7 +64,7 @@ namespace Tamir.SharpSsh.jsch
 
 		public const int STATE_END=0;
 
-		public Tamir.SharpSsh.java.String[] _guess=null;
+		public String[] _guess=null;
 		protected Session session=null;
 		protected HASH sha=null;
 		protected byte[] K=null;
@@ -88,10 +88,10 @@ namespace Tamir.SharpSsh.jsch
 		} 
 		*/
 
-		internal static Tamir.SharpSsh.java.String[] guess(byte[]I_S, byte[]I_C)
+		internal static String[] guess(byte[]I_S, byte[]I_C)
 		{
 			//System.out.println("guess: ");
-			Tamir.SharpSsh.java.String[] guess=new Tamir.SharpSsh.java.String[PROPOSAL_MAX];
+			String[] guess=new String[PROPOSAL_MAX];
 			Buffer sb=new Buffer(I_S); sb.setOffSet(17);
 			Buffer cb=new Buffer(I_C); cb.setOffSet(17);
 
@@ -100,12 +100,12 @@ namespace Tamir.SharpSsh.jsch
 				byte[] sp=sb.getString();  // server proposal
 				byte[] cp=cb.getString();  // client proposal
 
-				//System.out.println("server-proposal: |"+new String(sp)+"|");
-				//System.out.println("client-proposal: |"+new String(cp)+"|");
+				//System.out.println("server-proposal: |"+Encoding.UTF8.GetString(sp)+"|");
+				//System.out.println("client-proposal: |"+Encoding.UTF8.GetString(cp)+"|");
 
 				int j=0;
 				int k=0;
-				//System.out.println(new String(cp));
+				//System.out.println(Encoding.UTF8.GetString(cp));
 			//loop(using BREAK instead):
 				while(j<cp.Length)
 				{
@@ -119,7 +119,7 @@ namespace Tamir.SharpSsh.jsch
 					{
 						while(l<sp.Length && sp[l]!=',')l++; 
 						if(m==l) return null;
-						//System.out.println("  "+new String(sp, m, l-m));
+						//System.out.println("  "+Encoding.UTF8.GetString(sp, m, l-m));
 						if(algorithm.Equals(Util.getString(sp, m, l-m)))
 						{
 							guess[i]=algorithm;

@@ -4,6 +4,8 @@ using Tamir.SharpSsh.jsch;
 using System.IO;
 using Exception = System.Exception;
 using System.Net.Sockets;
+using System;
+using System.Text;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -71,18 +73,18 @@ namespace Tamir.SharpSsh.jsch
 				}
 				socket.NoDelay = true;
 
-				outs.write(new String("CONNECT "+host+":"+port+" HTTP/1.0\r\n").getBytes());
+				outs.write("CONNECT "+host+":"+port+" HTTP/1.0\r\n");
 
 				if(user!=null && passwd!=null)
 				{
 					byte[] _code=(user+":"+passwd).getBytes();
 					_code=Util.toBase64(_code, 0, _code.Length);
-					outs.write(new String("Proxy-Authorization: Basic ").getBytes());
+					outs.write("Proxy-Authorization: Basic ");
 					outs.write(_code);
-					outs.write(new String("\r\n").getBytes());
+					outs.write("\r\n");
 				}
 
-				outs.write(new String("\r\n").getBytes());
+				outs.write("\r\n");
 				outs.flush();
 
 				int foo=0;

@@ -1,5 +1,4 @@
 using System;
-using Str = Tamir.SharpSsh.java.String;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -52,9 +51,9 @@ namespace Tamir.SharpSsh.jsch
 			packet.reset();
 			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
 			buf.putInt(channel.getRecipient());
-			buf.putString(new Str("exec").getBytes());
+			buf.putString("exec");
 			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putString(new Str(command).getBytes());
+			buf.putString(command);
 			session.write(packet);
 		}
 		public bool waitForReply(){ return false; }

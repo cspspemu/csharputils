@@ -1,4 +1,5 @@
 using Tamir.SharpSsh.java;
+using System;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -105,7 +106,7 @@ namespace Tamir.SharpSsh.jsch
 						//System.out.println("UserAuthNONE: "+methods+
 						//		   " partial_success:"+(partial_success!=0));
 						//	if(partial_success!=0){
-						//	  throw new JSchPartialAuthException(new String(foo));
+						//	  throw new JSchPartialAuthException(Encoding.UTF8.GetString(foo));
 						//	}
 						break;
 					}

@@ -7,6 +7,7 @@ namespace Tamir.SharpSsh.java
 	/// <summary>
 	/// Summary description for String.
 	/// </summary>
+	/*
 	public class String
 	{
 		string s;
@@ -30,7 +31,7 @@ namespace Tamir.SharpSsh.java
 		public static implicit operator String (string s1) 
 		{
 			if(s1==null) return null;
-			return new String(s1);
+			return Encoding.UTF8.GetString(s1);
 		}
 
 		public static implicit operator Str (String s1) 
@@ -174,4 +175,5 @@ namespace Tamir.SharpSsh.java
 			return Text.Encoding.UTF8.GetBytes( str );
 		}
 	}
+	*/
 }

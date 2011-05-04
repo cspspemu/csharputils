@@ -6,6 +6,7 @@ using Exception = System.Exception;
 using System.Text;
 using CSharpUtils;
 using System.Collections;
+using System;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -223,7 +224,7 @@ namespace Tamir.SharpSsh.jsch
 				//System.Console.WriteLine("server_version="+server_version+", type="+type+", length="+length+", i="+i);
 				
 				// send SSH_FXP_REALPATH
-				sendREALPATH(new String(".").getBytes());
+				sendREALPATH(".");
 
 				// receive SSH_FXP_NAME
 				_header=header(buf, _header);
@@ -235,7 +236,7 @@ namespace Tamir.SharpSsh.jsch
 				//System.Console.WriteLine("type="+type+", length="+length+", i="+i);
 				str=buf.getString();         // filename
 				//System.Console.WriteLine("str.length="+str.Length);
-				home=cwd=new String(str);
+				home=cwd=str;
 				str=buf.getString();         // logname
 				//    SftpATTRS.getATTR(buf);      // attrs
 
@@ -288,7 +289,7 @@ namespace Tamir.SharpSsh.jsch
 					throw new SftpException(SSH_FX_FAILURE, v.ToString());
 				}
 				path=(String)(v[0]);
-				sendREALPATH(path.getBytes());
+				sendREALPATH(Encoding.UTF8.GetBytes(path));
 
 				Header _header=new Header();
 				_header=header(buf, _header);
@@ -311,22 +312,21 @@ namespace Tamir.SharpSsh.jsch
 				byte[] str=buf.getString();
 				if(str!=null && str[0]!='/')
 				{
-					str=(cwd+"/"+new String(str)).getBytes();
+					str=Encoding.UTF8.GetBytes(cwd + "/" + str);
 				}
 				str=buf.getString();         // logname
 				i=buf.getInt();              // attrs
 
-				String newpwd=new String(str);
-				SftpATTRS attr=_stat(newpwd);
-				if((attr.getFlags()&SftpATTRS.SSH_FILEXFER_ATTR_PERMISSIONS)==0)
+				String newpwd = Encoding.UTF8.GetString(str);
+				SftpATTRS attr = _stat(newpwd);
+				if ((attr.getFlags()&SftpATTRS.SSH_FILEXFER_ATTR_PERMISSIONS)==0)
 				{
-					throw new SftpException(SSH_FX_FAILURE, 
-					                        "Can't change directory: "+path);
+					throw new SftpException(SSH_FX_FAILURE, "Can't change directory: "+path);
 				}
-				if(!attr.isDir())
+
+				if (!attr.isDir())
 				{
-					throw new SftpException(SSH_FX_FAILURE, 
-					                        "Can't change directory: "+path);
+					throw new SftpException(SSH_FX_FAILURE, "Can't change directory: "+path);
 				}
 				cwd=newpwd;
 			}
@@ -398,7 +398,7 @@ namespace Tamir.SharpSsh.jsch
 				string dstsb="";
 				if(_isRemoteDir)
 				{
-					if(!dst.endsWith("/"))
+					if(!dst.EndsWith("/"))
 					{
 						dst+="/";
 					}
@@ -556,8 +556,8 @@ namespace Tamir.SharpSsh.jsch
 						throw new SftpException(SSH_FX_FAILURE, "failed to resume for "+dst);
 					}
 				}
-				if(mode==OVERWRITE){ sendOPENW(dst.getBytes()); }
-				else{ sendOPENA(dst.getBytes()); }
+				if(mode==OVERWRITE){ sendOPENW(Encoding.UTF8.GetBytes(dst)); }
+				else{ sendOPENA(Encoding.UTF8.GetBytes(dst)); }
 
 				Header _header=new Header();
 				_header=header(buf, _header);
@@ -766,8 +766,8 @@ namespace Tamir.SharpSsh.jsch
 					}
 				}
 
-				if(mode==OVERWRITE){ sendOPENW(dst.getBytes()); }
-				else{ sendOPENA(dst.getBytes()); }
+				if(mode==OVERWRITE){ sendOPENW(Encoding.UTF8.GetBytes(dst)); }
+				else{ sendOPENA(Encoding.UTF8.GetBytes(dst)); }
 
 				Header _header=new Header();
 				_header=header(buf, _header);
@@ -908,7 +908,7 @@ namespace Tamir.SharpSsh.jsch
 				string dstsb = "";
 				if(isDstDir)
 				{
-					if(!dst.endsWith(file_separator))
+					if(!dst.EndsWith(file_separator))
 					{
 						dst+=file_separator;
 					}
@@ -1339,12 +1339,12 @@ namespace Tamir.SharpSsh.jsch
 				if(isPattern(dir) || 
 					((attr=stat(dir))!=null && !attr.isDir()))
 				{
-					int foo=path.lastIndexOf('/');
-					dir=path.substring(0, ((foo==0)?1:foo));
-					pattern=path.substring(foo+1).getBytes();
+					int foo=path.LastIndexOf('/');
+					dir=path.Substring(0, ((foo==0)?1:foo));
+					pattern=Encoding.UTF8.GetBytes(path.Substring(foo+1));
 				}
 
-				sendOPENDIR(dir.getBytes());
+				sendOPENDIR(Encoding.UTF8.GetBytes(dir));
 
 				Header _header=new Header();
 				_header=header(buf, _header);
@@ -1407,12 +1407,12 @@ namespace Tamir.SharpSsh.jsch
 						}
 						byte[] filename=buf.getString();
 						str=buf.getString();
-						String longname=new String(str);
+						String longname=Encoding.UTF8.GetString(str);
 
 						SftpATTRS attrs=SftpATTRS.getATTR(buf);
 						if(pattern==null || Util.glob(pattern, filename))
 						{
-							v.Add(new LsEntry(new String(filename), longname, attrs));
+							v.Add(new LsEntry(Encoding.UTF8.GetString(filename), longname, attrs));
 						}
 
 						count--; 
@@ -1466,7 +1466,7 @@ namespace Tamir.SharpSsh.jsch
 						longname=buf.getString();
 						SftpATTRS.getATTR(buf);
 					}
-					return new String(filename);
+					return Encoding.UTF8.GetString(filename);
 				}
 
 				i=buf.getInt();
@@ -1510,7 +1510,7 @@ namespace Tamir.SharpSsh.jsch
 
 				newpath=Util.unquote(newpath);
 
-				sendSYMLINK(oldpath.getBytes(), newpath.getBytes());
+				sendSYMLINK(oldpath, newpath);
 
 				Header _header=new Header();
 				_header=header(buf, _header);
@@ -1572,7 +1572,7 @@ namespace Tamir.SharpSsh.jsch
 					newpath=Util.unquote(newpath);
 				}
 
-				sendRENAME(oldpath.getBytes(), newpath.getBytes());
+				sendRENAME(Encoding.UTF8.GetBytes(oldpath), Encoding.UTF8.GetBytes(newpath));
 
 				Header _header=new Header();
 				_header=header(buf, _header);
@@ -1638,7 +1638,7 @@ namespace Tamir.SharpSsh.jsch
 		{
 			try
 			{
-				sendSTAT(path.getBytes());
+				sendSTAT(path);
 
 				Header _header=new Header();
 				_header=header(buf, _header);
@@ -1940,7 +1940,7 @@ namespace Tamir.SharpSsh.jsch
 			//throws SftpException{
 			try
 			{
-				sendSETSTAT(path.getBytes(), attr);
+				sendSETSTAT(path, attr);
 
 				Header _header=new Header();
 				_header=header(buf, _header);
@@ -2023,15 +2023,15 @@ namespace Tamir.SharpSsh.jsch
 			session.write(packet, this, 5+4);
 		}
 
-		private void sendREALPATH(byte[] path) 
+		private void sendREALPATH(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_REALPATH, path);
 		}
-		private void sendSTAT(byte[] path) 
+		private void sendSTAT(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_STAT, path);
 		}
-		private void sendLSTAT(byte[] path) 
+		private void sendLSTAT(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_LSTAT, path);
 		}
@@ -2039,7 +2039,7 @@ namespace Tamir.SharpSsh.jsch
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_FSTAT, handle);
 		}
-		private void sendSETSTAT(byte[] path, SftpATTRS attr) 
+		private void sendSETSTAT(String path, SftpATTRS attr) 
 		{ //throws Exception{
 			packet.reset();
 			putHEAD(SSH_FXP_SETSTAT, 9+path.Length+attr.Length());
@@ -2048,11 +2048,11 @@ namespace Tamir.SharpSsh.jsch
 			attr.dump(buf);
 			session.write(packet, this, 9+path.Length+attr.Length()+4);
 		}
-		private void sendREMOVE(byte[] path) 
+		private void sendREMOVE(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_REMOVE, path);
 		}
-		private void sendMKDIR(byte[] path, SftpATTRS attr) 
+		private void sendMKDIR(String path, SftpATTRS attr) 
 		{ //throws Exception{
 			packet.reset();
 			putHEAD(SSH_FXP_MKDIR, 9+path.Length+(attr!=null?attr.Length():4));
@@ -2062,47 +2062,47 @@ namespace Tamir.SharpSsh.jsch
 			else buf.putInt(0);
 			session.write(packet, this, 9+path.Length+(attr!=null?attr.Length():4)+4);
 		}
-		private void sendRMDIR(byte[] path) 
+		private void sendRMDIR(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_RMDIR, path);
 		}
-		private void sendSYMLINK(byte[] p1, byte[] p2) 
+		private void sendSYMLINK(String p1, String p2) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_SYMLINK, p1, p2);
 		}
-		private void sendREADLINK(byte[] path) 
+		private void sendREADLINK(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_READLINK, path);
 		}
-		private void sendOPENDIR(byte[] path) 
+		private void sendOPENDIR(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_OPENDIR, path);
 		}
-		private void sendREADDIR(byte[] path) 
+		private void sendREADDIR(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_READDIR, path);
 		}
-		private void sendRENAME(byte[] p1, byte[] p2) 
+		private void sendRENAME(String p1, String p2) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_RENAME, p1, p2);
 		}
-		private void sendCLOSE(byte[] path) 
+		private void sendCLOSE(String path) 
 		{ //throws Exception{
 			sendPacketPath(SSH_FXP_CLOSE, path);
 		}
-		private void sendOPENR(byte[] path) 
+		private void sendOPENR(String path) 
 		{ //throws Exception{
 			sendOPEN(path, SSH_FXF_READ);
 		}
-		private void sendOPENW(byte[] path) 
+		private void sendOPENW(String path) 
 		{ //throws Exception{
 			sendOPEN(path, SSH_FXF_WRITE|SSH_FXF_CREAT|SSH_FXF_TRUNC);
 		}
-		private void sendOPENA(byte[] path) 
+		private void sendOPENA(String path) 
 		{ //throws Exception{
 			sendOPEN(path, SSH_FXF_WRITE|/*SSH_FXF_APPEND|*/SSH_FXF_CREAT);
 		}
-		private void sendOPEN(byte[] path, int mode) 
+		private void sendOPEN(String path, int mode) 
 		{ //throws Exception{
 			packet.reset();
 			putHEAD(SSH_FXP_OPEN, 17+path.Length);
@@ -2111,6 +2111,21 @@ namespace Tamir.SharpSsh.jsch
 			buf.putInt(mode);
 			buf.putInt(0);           // attrs
 			session.write(packet, this, 17+path.Length+4);
+		}
+		private void sendPacketPath(byte fxp, String path)
+		{
+			sendPacketPath(
+				fxp,
+				Encoding.UTF8.GetBytes(path)
+			);
+		}
+		private void sendPacketPath(byte fxp, String p1, String p2)
+		{
+			sendPacketPath(
+				fxp,
+				Encoding.UTF8.GetBytes(p1),
+				Encoding.UTF8.GetBytes(p2)
+			);
 		}
 		private void sendPacketPath(byte fxp, byte[] path) 
 		{ //throws Exception{
@@ -2200,10 +2215,10 @@ namespace Tamir.SharpSsh.jsch
 				dir=new byte[i];
 				System.Array.Copy(path, 0, dir, 0, i);
 			}
-			//System.err.println("dir: "+new String(dir));
+			//System.err.println("dir: "+Encoding.UTF8.GetString(dir));
 			byte[] pattern=new byte[path.Length-i-1];
 			System.Array.Copy(path, i + 1, pattern, 0, pattern.Length);
-			//System.err.println("file: "+new String(pattern));
+			//System.err.println("file: "+Encoding.UTF8.GetString(pattern));
 
 			sendOPENDIR(dir);
 
@@ -2265,13 +2280,13 @@ namespace Tamir.SharpSsh.jsch
 					}
 
 					byte[] filename=buf.getString();
-					//System.err.println("filename: "+new String(filename));
+					//System.err.println("filename: "+Encoding.UTF8.GetString(filename));
 					str=buf.getString();
 					SftpATTRS attrs=SftpATTRS.getATTR(buf);
 
 					if(Util.glob(pattern, filename))
 					{
-						v.Add(new String(dir)+"/"+new String(filename));
+						v.Add(Encoding.UTF8.GetString(dir) + "/" + Encoding.UTF8.GetString(filename));
 					}
 					count--; 
 				}
@@ -2285,7 +2300,7 @@ namespace Tamir.SharpSsh.jsch
 		{ //throws Exception{
 			//System.out.println("glob_local: "+_path);
 			ArrayList v = new ArrayList();
-			byte[] path=_path.getBytes();
+			byte[] path=Encoding.UTF8.GetBytes(_path);
 			int i=path.Length-1;
 			while(i>=0){if(path[i]=='*' || path[i]=='?')break;i--;}
 			if(i<0){ v.Add(_path); return v;}
@@ -2300,7 +2315,7 @@ namespace Tamir.SharpSsh.jsch
 			}
 			byte[] pattern=new byte[path.Length-i-1];
 			System.Array.Copy(path, i + 1, pattern, 0, pattern.Length);
-			//System.out.println("dir: "+new String(dir)+" pattern: "+new String(pattern));
+			//System.out.println("dir: "+Encoding.UTF8.GetString(dir)+" pattern: "+Encoding.UTF8.GetString(pattern));
 			try
 			{
 				var children = System.IO.Directory.GetFileSystemEntries(dir.GetString(Encoding.UTF8));
@@ -2309,7 +2324,7 @@ namespace Tamir.SharpSsh.jsch
 					//System.out.println("children: "+children[j]);
 					if(Util.glob(pattern, Encoding.UTF8.GetBytes(child)))
 					{
-						v.Add(new String(dir) + file_separator + child);
+						v.Add(Encoding.UTF8.GetString(dir) + file_separator + child);
 					}
 				}
 			}
@@ -2325,7 +2340,7 @@ namespace Tamir.SharpSsh.jsch
 			{
 				byte[] str=buf.getString();
 				//byte[] tag=buf.getString();
-				throw new SftpException(i, new String(str));
+				throw new SftpException(i, Encoding.UTF8.GetString(str));
 			}
 			else
 			{
@@ -2393,7 +2408,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 				i--;
 			}
-			//System.err.println("isPattern: ["+(new String(path))+"] "+(!(i<0)));
+			//System.err.println("isPattern: ["+(Encoding.UTF8.GetString(path))+"] "+(!(i<0)));
 			return !(i<0);
 		}
 
@@ -2445,15 +2460,15 @@ namespace Tamir.SharpSsh.jsch
 
 		private String remoteAbsolutePath(String path)
 		{
-			if(path.charAt(0)=='/') return path;
-			if(cwd.endsWith("/")) return cwd+path;
+			if(path[0]=='/') return path;
+			if(cwd.EndsWith("/")) return cwd+path;
 			return cwd+"/"+path;
 		}
 
 		private String localAbsolutePath(String path)
 		{
 			if(isLocalAbsolutePath(path)) return path;
-			if(lcwd.endsWith(file_separator)) return lcwd+path;
+			if(lcwd.EndsWith(file_separator)) return lcwd+path;
 			return lcwd+file_separator+path;
 		}
 

@@ -533,7 +533,7 @@ namespace Mono.Xml {
 							int x = -1;
 							if (Char.IsNumber((char)currCh) || "abcdef".IndexOf(Char.ToLower((char)currCh)) != -1) {
 								try {
-									x = Int32.Parse(new string((char)currCh, 1), style);
+									x = Int32.Parse("" + (char)currCh, style);
 								} catch (FormatException) {x = -1;}
 							}
 							if (x == -1) break;

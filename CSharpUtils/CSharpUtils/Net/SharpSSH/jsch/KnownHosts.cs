@@ -500,12 +500,12 @@ namespace Tamir.SharpSsh.jsch
 
 			public String getHost(){ return host; }
 			public String getType(){
-			if(type==SSHDSS){ return new String(sshdss); }
-			if(type==SSHRSA){ return new String(sshrsa);}
+			if(type==SSHDSS){ return Encoding.UTF8.GetString(sshdss); }
+			if(type==SSHRSA){ return Encoding.UTF8.GetString(sshrsa);}
 			return "UNKNOWN";
 			}
 			public String getKey(){
-			return new String(Util.toBase64(key, 0, key.length));
+			return Encoding.UTF8.GetString(Util.toBase64(key, 0, key.length));
 			}
 			public String getFingerPrint(){
 			HASH hash=null;

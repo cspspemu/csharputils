@@ -1,5 +1,7 @@
 
 using Tamir.SharpSsh.java;
+using System;
+using System.Text;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -56,9 +58,9 @@ namespace Tamir.SharpSsh.jsch
 			packet.reset();
 			buf.putByte((byte)Session.SSH_MSG_CHANNEL_REQUEST);
 			buf.putInt(channel.getRecipient());
-			buf.putString( new String( "subsystem" ).getBytes());
+			buf.putString("subsystem");
 			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putString(subsystem.getBytes());
+			buf.putString(subsystem);
 			session.write(packet);
 
 			if(reply)

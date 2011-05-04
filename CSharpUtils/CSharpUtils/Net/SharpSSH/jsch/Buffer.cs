@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -62,6 +63,10 @@ namespace Tamir.SharpSsh.jsch
 		{
 			Array.Copy(foo, begin, buffer, index, length);
 			index+=length;
+		}
+		public void putString(String foo)
+		{
+			putString(Encoding.UTF8.GetBytes(foo));
 		}
 		public void putString(byte[] foo)
 		{

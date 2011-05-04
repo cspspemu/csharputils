@@ -411,7 +411,7 @@
 //		}
 //
 //		//  public String toString(){
-//		//      return "Channel: type="+new String(type)+",id="+id+",recipient="+recipient+",window_size="+window_size+",packet_size="+packet_size;
+//		//      return "Channel: type="+Encoding.UTF8.GetString(type)+",id="+id+",recipient="+recipient+",window_size="+window_size+",packet_size="+packet_size;
 //		//  }
 //
 //		/*

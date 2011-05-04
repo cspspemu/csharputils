@@ -1,5 +1,6 @@
 using System;
 using IO = System.IO;
+using System.Text;
 
 namespace Tamir.Streams
 {
@@ -67,6 +68,11 @@ namespace Tamir.Streams
 		public void write(byte[] buffer)
 		{
 			Write(buffer, 0, buffer.Length);
+		}
+
+		public void write(String String)
+		{
+			write(Encoding.UTF8.GetBytes(String));
 		}
 
 		public override bool CanRead

@@ -154,7 +154,7 @@ namespace Tamir.SharpSsh.jsch
 		private static bool glob(byte[] pattern, int pattern_index,
 			byte[] name, int name_index)
 		{
-			//System.out.println("glob: "+new String(pattern)+", "+new String(name));
+			//System.out.println("glob: "+Encoding.UTF8.GetString(pattern)+", "+Encoding.UTF8.GetString(name));
 			int patternlen=pattern.Length;
 			if(patternlen==0)
 				return false;
@@ -570,27 +570,21 @@ namespace Tamir.SharpSsh.jsch
 			s.Close();
 		}
 
-		internal static java.String unquote(java.String _path)
+		internal static String unquote(String path)
 		{
-			byte[] path=_path.getBytes();
-			int pathlen=path.Length;
-			int i=0;
-			while(i<pathlen)
+			String ret = "";
+			for (int n = 0; n < path.Length; n++)
 			{
-				if(path[i]=='\\')
+				if (path[n] == '\\')
 				{
-					if(i+1==pathlen)
-						break;
-					System.Array.Copy(path, i + 1, path, i, path.Length - (i + 1));
-					pathlen--;
-					continue;
+					ret += path[++n];
 				}
-				i++;
+				else
+				{
+					ret += path[n];
+				}
 			}
-			if(pathlen==path.Length)return _path;
-			byte[] foo=new byte[pathlen];
-			System.Array.Copy(path, 0, foo, 0, pathlen);
-			return new java.String(foo);
+			return ret;
 		}
 	}
 }

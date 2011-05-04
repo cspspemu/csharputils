@@ -197,7 +197,7 @@ namespace Tamir.SharpSsh.jsch
 					_buf.getInt();  // 0x3f6ff9be
 					_buf.getInt();
 					byte[]_type=_buf.getString();
-					//System.out.println("type: "+new String(_type)); 
+					//System.out.println("type: "+Encoding.UTF8.GetString(_type)); 
 					byte[] _cipher=_buf.getString();
 					String s_cipher=System.Text.Encoding.Default.GetString(_cipher);
 					//System.out.println("cipher: "+cipher); 

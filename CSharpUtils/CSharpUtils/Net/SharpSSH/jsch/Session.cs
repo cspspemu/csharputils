@@ -8,6 +8,8 @@ using ThreadInterruptedException = System.Threading.ThreadInterruptedException;
 using System.Linq;
 using System.Net.Sockets;
 using System.Collections;
+using System;
+using System.Text;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -190,7 +192,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 				else
 				{
-					lock(proxy)
+					lock (proxy)
 					{
 						proxy.connect(socket_factory, host, port, connectTimeout);
 						io.setInputStream(proxy.getInputStream());
@@ -237,7 +239,7 @@ namespace Tamir.SharpSsh.jsch
 						(buf.buffer[0]!='S'||buf.buffer[1]!='S'||
 						buf.buffer[2]!='H'||buf.buffer[3]!='-'))
 					{
-						//System.err.println(new String(buf.buffer, 0, i);
+						//System.err.println(Encoding.UTF8.GetString(buf.buffer, 0, i);
 						continue;
 					}
 
@@ -252,7 +254,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 
 				V_S = new byte[i]; System.Array.Copy(buf.buffer, 0, V_S, 0, i);
-				//System.Console.WriteLine("V_S: ("+i+") ["+new String(V_S)+"]");
+				//System.Console.WriteLine("V_S: ("+i+") ["+Encoding.UTF8.GetString(V_S)+"]");
 
 				//io.put(V_C, 0, V_C.Length); io.put("\n".getBytes(), 0, 1);
 			{
@@ -435,8 +437,8 @@ namespace Tamir.SharpSsh.jsch
 						packet.reset();
 						buf.putByte((byte)SSH_MSG_DISCONNECT);
 						buf.putInt(3);
-						buf.putString(new String(e.ToString()).getBytes());
-						buf.putString(new String("en").getBytes());
+						buf.putString(e.ToString());
+						buf.putString("en");
 						write(packet);
 						disconnect();
 					}
@@ -472,16 +474,16 @@ namespace Tamir.SharpSsh.jsch
 			Buffer tmpb=new Buffer(tmp);
 			System.Console.WriteLine("I_S: len="+I_S.Length);
 			tmpb.setOffSet(17);
-			System.Console.WriteLine("kex: "+new String(tmpb.getString()));
-			System.Console.WriteLine("server_host_key: "+new String(tmpb.getString()));
-			System.Console.WriteLine("cipher.c2s: "+new String(tmpb.getString()));
-			System.Console.WriteLine("cipher.s2c: "+new String(tmpb.getString()));
-			System.Console.WriteLine("mac.c2s: "+new String(tmpb.getString()));
-			System.Console.WriteLine("mac.s2c: "+new String(tmpb.getString()));
-			System.Console.WriteLine("compression.c2s: "+new String(tmpb.getString()));
-			System.Console.WriteLine("compression.s2c: "+new String(tmpb.getString()));
-			System.Console.WriteLine("lang.c2s: "+new String(tmpb.getString()));
-			System.Console.WriteLine("lang.s2c: "+new String(tmpb.getString()));
+			System.Console.WriteLine("kex: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("server_host_key: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("cipher.c2s: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("cipher.s2c: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("mac.c2s: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("mac.s2c: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("compression.c2s: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("compression.s2c: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("lang.c2s: "+Encoding.UTF8.GetString(tmpb.getString()));
+			System.Console.WriteLine("lang.s2c: "+Encoding.UTF8.GetString(tmpb.getString()));
 			System.Console.WriteLine("?: "+(tmpb.getByte()&0xff));
 			System.Console.WriteLine("??: "+tmpb.getInt());
 			}
@@ -498,8 +500,8 @@ namespace Tamir.SharpSsh.jsch
 			}
 
 			if(!isAuthed &&
-				(guess[KeyExchange.PROPOSAL_ENC_ALGS_CTOS].equals("none") ||
-				(guess[KeyExchange.PROPOSAL_ENC_ALGS_STOC].equals("none"))))
+				(guess[KeyExchange.PROPOSAL_ENC_ALGS_CTOS] == ("none") ||
+				(guess[KeyExchange.PROPOSAL_ENC_ALGS_STOC] == ("none"))))
 			{
 				throw new JSchException("NONE Cipher should not be chosen before authentification is successed.");
 			}
@@ -592,7 +594,7 @@ namespace Tamir.SharpSsh.jsch
 
 			bool insert=false;
 
-			if((shkc.equals("ask") || shkc.equals("yes")) &&
+			if((shkc == ("ask") || shkc == ("yes")) &&
 				i==HostKeyRepository.CHANGED)
 			{
 				String file=null;
@@ -629,7 +631,7 @@ namespace Tamir.SharpSsh.jsch
 					lock(hkr)
 					{
 						hkr.remove(host, 
-								  (key_type.equals("DSA") ? "ssh-dss" : "ssh-rsa"), 
+								  (key_type == ("DSA") ? "ssh-dss" : "ssh-rsa"), 
 								   null);
 						insert=true;
 					}
@@ -638,10 +640,10 @@ namespace Tamir.SharpSsh.jsch
 
 			//    bool insert=false;
 
-			if((shkc.equals("ask") || shkc.equals("yes")) &&
+			if((shkc == ("ask") || shkc == ("yes")) &&
 				(i!=HostKeyRepository.OK) && !insert)
 			{
-				if(shkc.equals("yes"))
+				if(shkc == ("yes"))
 				{
 					throw new JSchException("reject HostKey: "+host);
 				}
@@ -829,13 +831,14 @@ namespace Tamir.SharpSsh.jsch
 					/*
 						System.Console.Error.WriteLine("SSH_MSG_DISCONNECT:"+
 											   " "+reason_code+
-								   " "+new String(description)+
-								   " "+new String(language_tag));
+								   " "+Encoding.UTF8.GetString(description)+
+								   " "+Encoding.UTF8.GetString(language_tag));
 					*/
-					throw new JSchException("SSH_MSG_DISCONNECT:"+
+					throw new JSchException(
+						"SSH_MSG_DISCONNECT:"+
 						" "+reason_code+
-						" "+new String(description)+
-						" "+new String(language_tag));
+						" "+description+
+						" "+language_tag);
 					//break;
 				}
 				else if(type==SSH_MSG_IGNORE)
@@ -850,8 +853,8 @@ namespace Tamir.SharpSsh.jsch
 						byte[] message=buf.getString();
 						byte[] language_tag=buf.getString();
 						System.Console.Error.WriteLine("SSH_MSG_DEBUG:"+
-								   " "+new String(message)+
-								   " "+new String(language_tag));
+								   " "+Encoding.UTF8.GetString(message)+
+								   " "+Encoding.UTF8.GetString(language_tag));
 					*/
 				}
 				else if(type==SSH_MSG_CHANNEL_WINDOW_ADJUST)
@@ -981,7 +984,7 @@ namespace Tamir.SharpSsh.jsch
 				c2smac = (MAC)System.Activator.CreateInstance(System.Type.GetType(getConfig(guess[KeyExchange.PROPOSAL_MAC_ALGS_CTOS])));
 				c2smac.init(MACc2s);
 
-				if(!guess[KeyExchange.PROPOSAL_COMP_ALGS_CTOS].equals("none"))
+				if(!(guess[KeyExchange.PROPOSAL_COMP_ALGS_CTOS] == "none"))
 				{
 					String foo=getConfig(guess[KeyExchange.PROPOSAL_COMP_ALGS_CTOS]);
 					if(foo!=null)
@@ -1007,7 +1010,7 @@ namespace Tamir.SharpSsh.jsch
 						deflater=null;
 					}
 				}
-				if(!guess[KeyExchange.PROPOSAL_COMP_ALGS_STOC].equals("none"))
+				if(guess[KeyExchange.PROPOSAL_COMP_ALGS_STOC] != "none")
 				{
 					String foo=getConfig(guess[KeyExchange.PROPOSAL_COMP_ALGS_STOC]);
 					if(foo!=null)
@@ -1238,7 +1241,7 @@ namespace Tamir.SharpSsh.jsch
 							channel=Channel.getChannel(i, this);
 							buf.getInt();                   // data_type_code == 1
 							foo=buf.getString(start, length);
-							//System.Console.WriteLine("stderr: "+new String(foo,start[0],length[0]));
+							//System.Console.WriteLine("stderr: "+Encoding.UTF8.GetString(foo,start[0],length[0]));
 							if(channel==null)
 							{
 								break;
@@ -1345,7 +1348,7 @@ namespace Tamir.SharpSsh.jsch
 							if(channel!=null)
 							{
 								byte reply_type=(byte)SSH_MSG_CHANNEL_FAILURE;
-								if((new String(foo)).equals("exit-status"))
+								if((Encoding.UTF8.GetString(foo)) == "exit-status")
 								{
 									i=buf.getInt();             // exit-status
 									channel.setExitStatus(i);
@@ -1369,11 +1372,9 @@ namespace Tamir.SharpSsh.jsch
 							buf.getInt();
 							buf.getShort();
 							foo=buf.getString();
-							String ctyp=new String(foo);
+							String ctyp=Encoding.UTF8.GetString(foo);
 							//System.Console.WriteLine("type="+ctyp);
-							if(!new String("forwarded-tcpip").equals(ctyp) &&
-								!(new String("x11").equals(ctyp) && x11_forwarding))
-							{
+							if(!("forwarded-tcpip" == ctyp) && !("x11" == ctyp) && x11_forwarding) {
 								System.Console.WriteLine("Session.run: CHANNEL OPEN "+ctyp);
 								throw new IOException("Session.run: CHANNEL OPEN "+ctyp);
 							}
@@ -1621,10 +1622,10 @@ namespace Tamir.SharpSsh.jsch
 					// uint32  port number to bind
 					packet.reset();
 					buf.putByte((byte) SSH_MSG_GLOBAL_REQUEST);
-					buf.putString( new String( "tcpip-forward" ).getBytes());
+					buf.putString( "tcpip-forward" );
 					//      buf.putByte((byte)0);
 					buf.putByte((byte)1);
-					buf.putString(new String("0.0.0.0").getBytes());
+					buf.putString("0.0.0.0");
 					buf.putInt(rport);
 					write(packet);
 				}
@@ -1719,11 +1720,11 @@ namespace Tamir.SharpSsh.jsch
 		}
 		public String getServerVersion()
 		{
-			return new String(V_S);
+			return Encoding.UTF8.GetString(V_S);
 		}
 		public String getClientVersion()
 		{
-			return new String(V_C);
+			return Encoding.UTF8.GetString(V_C);
 		}
 		public void setClientVersion(String cv)
 		{
@@ -1739,7 +1740,7 @@ namespace Tamir.SharpSsh.jsch
 			write(packet);
 		}
 		
-		private static byte[] keepalivemsg=new String("keepalive@jcraft.com").getBytes();
+		private static byte[] keepalivemsg=Encoding.UTF8.GetString("keepalive@jcraft.com").getBytes();
 		public void sendKeepAliveMsg()
 		{
 			Buffer buf=new Buffer();

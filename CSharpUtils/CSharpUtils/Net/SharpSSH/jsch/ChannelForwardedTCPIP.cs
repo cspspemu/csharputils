@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using Str = Tamir.SharpSsh.java.String;
 using System.Net.Sockets;
 using System.Net;
 using System.Collections;
+using System.Text;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -150,9 +150,9 @@ namespace Tamir.SharpSsh.jsch
 			int orgport=buf.getInt();
 
 			/*
-			System.out.println("addr: "+new String(addr));
+			System.out.println("addr: "+Encoding.UTF8.GetString(addr));
 			System.out.println("port: "+port);
-			System.out.println("orgaddr: "+new String(orgaddr));
+			System.out.println("orgaddr: "+Encoding.UTF8.GetString(orgaddr));
 			System.out.println("orgport: "+orgport);
 			*/
 
@@ -278,9 +278,9 @@ namespace Tamir.SharpSsh.jsch
 				// uint32  port number to bind
 				packet.reset();
 				buf.putByte((byte) 80/*SSH_MSG_GLOBAL_REQUEST*/);
-				buf.putString(new Str("cancel-tcpip-forward").getBytes());
+				buf.putString(Encoding.UTF8.GetBytes("cancel-tcpip-forward"));
 				buf.putByte((byte)0);
-				buf.putString(new Str("0.0.0.0").getBytes());
+				buf.putString(Encoding.UTF8.GetBytes("0.0.0.0"));
 				buf.putInt(rport);
 				session.write(packet);
 			}

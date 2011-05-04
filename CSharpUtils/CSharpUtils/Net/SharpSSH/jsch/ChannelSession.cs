@@ -1,5 +1,5 @@
 using System;
-using Str = Tamir.SharpSsh.java.String;
+using System.Text;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -33,7 +33,7 @@ namespace Tamir.SharpSsh.jsch
 	*/
 	public class ChannelSession : Channel
 	{
-		private static byte[] _session=new Str("session").getBytes();
+		private static byte[] _session=Encoding.UTF8.GetBytes("session");
 		public ChannelSession():base()
 		{
 			type=_session;

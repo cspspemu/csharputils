@@ -245,7 +245,7 @@ namespace Tamir.SharpSsh.jsch
 						buf.getInt(); buf.getByte(); buf.getByte(); 
 						byte[] foo=buf.getString();
 						int partial_success=buf.getByte();
-						//System.out.println(new String(foo)+
+						//System.out.println(Encoding.UTF8.GetString(foo)+
 						//                   " partial_success:"+(partial_success!=0));
 						if(partial_success!=0)
 						{

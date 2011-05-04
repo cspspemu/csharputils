@@ -3,8 +3,8 @@ using System.Net;
 using System.IO;
 using Tamir.Streams;
 using System.Runtime.CompilerServices;
-using Str = Tamir.SharpSsh.java.String;
 using System.Collections;
+using System.Text;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -100,7 +100,7 @@ namespace Tamir.SharpSsh.jsch
 
 		internal int id;
 		internal int recipient=-1;
-		internal byte[] type=new Str("foo").getBytes();
+		internal byte[] type = Encoding.UTF8.GetBytes("foo");
 		internal int lwsize_max=0x100000;
 		internal int lwsize=0x100000;  // local initial window size
 		internal int lmpsize=0x4000;     // local maximum packet size
@@ -499,7 +499,7 @@ namespace Tamir.SharpSsh.jsch
 		}
 
 		//  public String toString(){
-		//      return "Channel: type="+new String(type)+",id="+id+",recipient="+recipient+",window_size="+window_size+",packet_size="+packet_size;
+		//      return "Channel: type="+Encoding.UTF8.GetString(type)+",id="+id+",recipient="+recipient+",window_size="+window_size+",packet_size="+packet_size;
 		//  }
 
 		/*
