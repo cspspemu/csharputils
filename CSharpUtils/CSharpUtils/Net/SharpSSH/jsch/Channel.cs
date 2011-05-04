@@ -3,7 +3,6 @@ using System.Net;
 using System.IO;
 using Tamir.Streams;
 using System.Runtime.CompilerServices;
-using Tamir.SharpSsh.java.lang;
 using Str = Tamir.SharpSsh.java.String;
 
 namespace Tamir.SharpSsh.jsch
@@ -38,7 +37,7 @@ namespace Tamir.SharpSsh.jsch
 	*/
 
 
-	public abstract class Channel : Tamir.SharpSsh.java.lang.Runnable
+	public abstract class Channel : Runnable
 	{
 		internal static int index=0; 
 		private static java.util.Vector pool=new java.util.Vector();

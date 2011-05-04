@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Threading;
-using Tamir.SharpSsh.java.lang;
 using String = Tamir.SharpSsh.java.String;
 using System.Net;
 using System.Net.Sockets;
@@ -37,7 +36,7 @@ namespace Tamir.SharpSsh.jsch
 	EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
 
-	class PortWatcher : Tamir.SharpSsh.java.lang.Runnable
+	class PortWatcher : Runnable
 	{
 		private static Tamir.SharpSsh.java.util.Vector pool=new Tamir.SharpSsh.java.util.Vector();
 

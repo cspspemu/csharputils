@@ -3,12 +3,12 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using Tamir.SharpSsh.java;
 using Tamir.SharpSsh.java.util;
-using Tamir.SharpSsh.java.lang;
 using Exception = System.Exception;
 using NullReferenceException = System.NullReferenceException;
 using ThreadInterruptedException = System.Threading.ThreadInterruptedException;
 using System.Linq;
 using System.Net.Sockets;
+using System.Collections;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -991,7 +991,7 @@ namespace Tamir.SharpSsh.jsch
 						{
 							deflater = (Compression)System.Activator.CreateInstance(System.Type.GetType(foo));
 							int level=6;
-							try { level = System.Convert.ToInt32(getConfig("compression_level")); }
+							try{ level=System.Convert.ToInt32(getConfig("compression_level"));}
 							catch(Exception ee){ }
 							deflater.init(Compression.DEFLATER, level);
 						}
@@ -1661,7 +1661,7 @@ namespace Tamir.SharpSsh.jsch
 			System.Object foo=null;
 			if(config!=null)
 			{
-				foo=config.get(name);
+				foo = config[name];
 				if(foo is String) return (String)foo;
 				if(foo is string) return (string)foo;
 			}
@@ -1683,18 +1683,14 @@ namespace Tamir.SharpSsh.jsch
 		public void setX11Port(int port){ ChannelX11.setPort(port); }
 		public void setX11Cookie(String cookie){ ChannelX11.setCookie(cookie); }
 
-		public void setConfig(System.Collections.Hashtable foo)
-		{
-			setConfig( new Hashtable( foo ) );
-		}
-
 		public void setConfig(Hashtable foo)
 		{
 			if(config==null) config=new Hashtable();
-			for(Enumeration e=foo.keys() ; e.hasMoreElements() ;) 
+			
+			for(Enumeration e=new Enumeration(foo.Keys.GetEnumerator()) ; e.hasMoreElements() ;) 
 			{
 				object key=e.nextElement();
-				config.put(key, (foo.get(key)));
+				config.Add(key, foo[key]);
 			}
 		}
 		public void setSocketFactory(SocketFactory foo){ socket_factory=foo;}

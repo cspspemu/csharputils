@@ -1,6 +1,5 @@
 
 using Tamir.SharpSsh.java;
-using Tamir.SharpSsh.java.lang;
 
 namespace Tamir.SharpSsh.jsch
 {

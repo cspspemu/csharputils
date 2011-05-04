@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Tamir.SharpSsh.java.util;
-using Tamir.SharpSsh.java.lang;
 using Str = Tamir.SharpSsh.java.String;
 using System.Net.Sockets;
 using System.Net;

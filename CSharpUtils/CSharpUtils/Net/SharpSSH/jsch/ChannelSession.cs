@@ -1,5 +1,4 @@
 using System;
-using Tamir.SharpSsh.java.lang;
 using Str = Tamir.SharpSsh.java.String;
 
 namespace Tamir.SharpSsh.jsch

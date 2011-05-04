@@ -1,6 +1,6 @@
 using System;
 
-namespace Tamir.SharpSsh.java.lang
+namespace Tamir.SharpSsh
 {
 	/// <summary>
 	/// Summary description for Runnable.
