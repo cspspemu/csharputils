@@ -1,4 +1,4 @@
-using Tamir.SharpSsh.java.io;
+using Tamir.SharpSsh;
 
 namespace Tamir.Streams
 {

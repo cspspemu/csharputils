@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Tamir.SharpSsh.java.io;
+using Tamir.Streams;
 
 namespace Tamir.SharpSsh.jsch
 {

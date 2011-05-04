@@ -25,7 +25,7 @@ namespace Tamir.Streams
 	 * @see     java.io.PipedInputStream
 	 * @since   JDK1.0
 	 */
-	public class PipedOutputStream : Tamir.SharpSsh.java.io.OutputStream
+	public class PipedOutputStream : OutputStream
 	{
 
 		/* REMIND: identification of the read and write sides needs to be

@@ -1,5 +1,5 @@
 using Tamir.SharpSsh.java;
-using Tamir.SharpSsh.java.io;
+using Tamir.Streams;
 using Tamir.SharpSsh.jsch;
 using System.IO;
 using Exception = System.Exception;

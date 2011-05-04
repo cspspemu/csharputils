@@ -1,10 +1,11 @@
 using System;
 using System.IO;
 using Exception = System.Exception;
+using Tamir.Streams;
 
 namespace Tamir.SharpSsh.jsch
 {
-	internal class OutputStreamPut : java.io.OutputStream
+	internal class OutputStreamPut : OutputStream
 	{
 		ChannelSftp sftp;
 		byte[] handle;

@@ -28,6 +28,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 using System;
+using Tamir.Streams;
 
 namespace Tamir.SharpSsh.jsch
 {
@@ -78,7 +79,7 @@ namespace Tamir.SharpSsh.jsch
 		{
 			setExtOutputStream(outs);
 		}
-		public java.io.InputStream getErrStream() 
+		public InputStream getErrStream() 
 		{
 			return getExtInputStream();
 		}

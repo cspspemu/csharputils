@@ -1,7 +1,6 @@
 //using System;
 using System.Runtime.CompilerServices;
 using Tamir.Streams;
-using Tamir.SharpSsh.java.io;
 using Tamir.SharpSsh.java;
 using Exception = System.Exception;
 using System.Text;
@@ -1207,7 +1206,7 @@ namespace Tamir.SharpSsh.jsch
 
 				byte[] handle=buf.getString();         // filename
 
-				java.io.InputStream ins=new InputStreamGet(this, handle, monitor);
+				InputStream ins=new InputStreamGet(this, handle, monitor);
 				//  long offset=0;
 				//  bool closed=false;
 				//  int rest_length=0;

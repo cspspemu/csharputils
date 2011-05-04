@@ -32,7 +32,7 @@ namespace Tamir.Streams
  * @see     java.io.PipedOutputStream
  * @since   JDK1.0
  */
-	public class PipedInputStream : Tamir.SharpSsh.java.io.InputStream
+	public class PipedInputStream : InputStream
 	{
 		internal bool closedByWriter = false;
 		internal volatile bool closedByReader = false;

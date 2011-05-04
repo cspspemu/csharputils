@@ -239,7 +239,7 @@ namespace Tamir.SharpSsh.jsch
 		{
 			io.setExtOutputStream(Out, dontclose);
 		}
-		public virtual java.io.InputStream getInputStream()  
+		public virtual InputStream getInputStream()  
 		{
 			PipedInputStream In=
 				new MyPipedInputStream(
@@ -248,7 +248,7 @@ namespace Tamir.SharpSsh.jsch
 			io.setOutputStream(new PassiveOutputStream(In), false);
 			return In;
 		}
-		public virtual java.io.InputStream getExtInputStream()  
+		public virtual InputStream getExtInputStream()  
 		{
 			PipedInputStream In=
 				new MyPipedInputStream(
