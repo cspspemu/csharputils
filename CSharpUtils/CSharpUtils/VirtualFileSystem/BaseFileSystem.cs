@@ -129,5 +129,17 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			return new FileSystemFromPath(this, Path, AllowAccessingParent);
 		}
+
+		public virtual void TryInitialize()
+		{
+		}
+
+		public virtual String Title
+		{
+			get
+			{
+				return "BaseFileSystem";
+			}
+		}
 	}
 }

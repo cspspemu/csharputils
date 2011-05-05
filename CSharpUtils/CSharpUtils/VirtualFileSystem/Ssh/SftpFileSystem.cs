@@ -170,6 +170,14 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 				throw (new Exception("Can't upload sftp file '" + RemoteFile + "' : " + e.Message, e));
 			}
 		}
+
+		public override String Title
+		{
+			get
+			{
+				return String.Format("sftp://{0}@{1}/{2}", Username, Host, RootPath);
+			}
+		}
 	}
 
 	class DirectPasswordUserInfo : UserInfo

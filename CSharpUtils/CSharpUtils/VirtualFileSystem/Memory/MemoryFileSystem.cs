@@ -14,5 +14,13 @@ namespace CSharpUtils.VirtualFileSystem.Memory
 		{
 			throw(new NotImplementedException());
 		}
+
+		public override String Title
+		{
+			get
+			{
+				return String.Format("memory://");
+			}
+		}
 	}
 }

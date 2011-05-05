@@ -104,5 +104,13 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			base.ImplCloseFile(FileStream);
 		}
 		 * */
+
+		public override String Title
+		{
+			get
+			{
+				return "local://" + RootPath;
+			}
+		}
 	}
 }

@@ -138,5 +138,14 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			Ftp.MakeDir(Path);
 			//Directory.CreateDirectory(Path);
 		}
+
+		public override String Title
+		{
+			get
+			{
+				return String.Format("ftp://{0}@{1}/{2}", Username, Host, RootPath);
+			}
+		}
+
 	}
 }

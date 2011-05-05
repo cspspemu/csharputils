@@ -15,6 +15,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 		String RemovingFormat = "Removing {0}...";
 		String UpdatingFormat = "Updating {0}...";
 		String SynchronizingFormat = "Synchronizing {0}...";
+		String ConnectingToFormat = "Connecting to {0}...";
 
 		public enum SynchronizationMode
 		{
@@ -300,8 +301,8 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 				try
 				{
-					var SourceRemoteFileSystem = SourceFileSystem as RemoteFileSystem;
-					if (SourceRemoteFileSystem != null) SourceRemoteFileSystem.EnsureConnect();
+					CallStep(0, String.Format(ConnectingToFormat, SourceFileSystem.Title));
+					SourceFileSystem.TryInitialize();
 				}
 				catch (Exception Exception)
 				{
@@ -315,8 +316,8 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 				try
 				{
-					var DestinationRemoteFileSystem = DestinationFileSystem as RemoteFileSystem;
-					if (DestinationRemoteFileSystem != null) DestinationRemoteFileSystem.EnsureConnect();
+					CallStep(0, String.Format(ConnectingToFormat, DestinationFileSystem.Title));
+					DestinationFileSystem.TryInitialize();
 				}
 				catch (Exception Exception)
 				{
@@ -326,6 +327,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 					}
 				}
 
+				Console.WriteLine("Started SynchronizeFolder ({0} -> {1})...", SourceFileSystem, DestinationFileSystem);
 				this.SynchronizeFolder();
 			};
 

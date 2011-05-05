@@ -14,6 +14,11 @@ namespace CSharpUtils.VirtualFileSystem
 			this.ParentFileSystem = ParentFileSystem;
 		}
 
+		public override void TryInitialize()
+		{
+			this.ParentFileSystem.TryInitialize();
+		}
+
 		internal override void ImplSetFileTime(string Path, FileSystemEntry.FileTime FileTime)
 		{
 			this.ParentFileSystem.ImplSetFileTime(Path, FileTime);
@@ -67,6 +72,14 @@ namespace CSharpUtils.VirtualFileSystem
 		internal override void ImplCreateDirectory(string Path, int Mode = 0777)
 		{
 			this.ParentFileSystem.ImplCreateDirectory(Path, Mode);
+		}
+
+		public override String Title
+		{
+			get
+			{
+				return this.ParentFileSystem.Title;
+			}
 		}
 	}
 }

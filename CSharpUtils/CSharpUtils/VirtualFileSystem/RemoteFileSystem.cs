@@ -27,6 +27,11 @@ namespace CSharpUtils.VirtualFileSystem
 			this.timeout = timeout;
 		}
 
+		public override void TryInitialize()
+		{
+			EnsureConnect();
+		}
+
 		virtual public RemoteFileSystem EnsureConnect()
 		{
 			return this;
@@ -57,6 +62,14 @@ namespace CSharpUtils.VirtualFileSystem
 		override internal FileSystemFileStream ImplOpenFile(string FileName, System.IO.FileMode FileMode)
 		{
 			return new RemoteFileSystemFileStream(this, RealPath(FileName), FileMode);
+		}
+
+		public override string Title
+		{
+			get
+			{
+				return "RemoteFileSystem";
+			}
 		}
 	}
 }

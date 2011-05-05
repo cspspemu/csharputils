@@ -25,5 +25,14 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 			base.Access(CombinePath(AccessPath, Path), out NewFileSystem, out NewPath);
 		}
+
+		public override String Title
+		{
+			get
+			{
+				return ParentFileSystem.Title + "/" + AccessPath;
+			}
+		}
+
 	}
 }
