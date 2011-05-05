@@ -11,7 +11,7 @@ namespace CSharpUtils.Fastcgi
 {
     public class FastcgiServer
     {
-        bool Debug = true;
+        bool Debug = false;
         int Count = 0;
 
         public void Listen(ushort Port)

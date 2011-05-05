@@ -50,9 +50,12 @@ namespace CSharpUtils.Fastcgi
                 {
                 }
             }
-            catch (IOException IOException)
+            catch (Exception Exception)
             {
-                Console.Error.WriteLine(IOException);
+                if (Debug)
+                {
+                    Console.Error.WriteLine(Exception);
+                }
             }
         }
 

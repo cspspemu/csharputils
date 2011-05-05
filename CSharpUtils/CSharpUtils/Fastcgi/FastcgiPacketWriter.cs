@@ -84,10 +84,12 @@ namespace CSharpUtils.Fastcgi
                 }
                 return true;
             }
-            catch (IOException)
+            catch (Exception Exception)
             {
-                //Console.WriteLine("WritePacket(RequestId=" + RequestId + ", Type=" + Type + ", Contents=" + Contents.Length + ", Padding=" + PaddingLength + ")");
-                //Console.Error.WriteLine(IOException.Message);
+                if (Debug)
+                {
+                    Console.Error.WriteLine(Exception);
+                }
                 return false;
             }
 		}
