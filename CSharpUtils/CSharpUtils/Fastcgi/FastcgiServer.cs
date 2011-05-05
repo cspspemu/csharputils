@@ -11,6 +11,7 @@ namespace CSharpUtils.Fastcgi
 {
     public class FastcgiServer
     {
+        bool Debug = true;
         int Count = 0;
 
         public void Listen(ushort Port)
@@ -19,29 +20,38 @@ namespace CSharpUtils.Fastcgi
             TcpListener.Start();
             while (true)
             {
-                //Console.WriteLine("Waiting a connection...");
-                var Socket = TcpListener.AcceptSocket();
-                new Thread(() =>
+                if (Debug)
                 {
-                    var FastcgiHandler = new FastcgiHandler(Socket, false);
-                    FastcgiHandler.HandleFastcgiRequest += (FastcgiRequest) =>
-                    {
-                        using (var TextWriter = new StreamWriter(FastcgiRequest.StdoutStream))
-                        {
-                            String Output = "<html><body>Hello World!</body></html>";
+                    Console.WriteLine("Waiting a connection...");
+                }
+                var AcceptedSocket = TcpListener.AcceptSocket();
 
-                            TextWriter.WriteLine("X-Dynamic: C#");
-                            TextWriter.WriteLine("Content-Type: text/html; charset=utf-8");
-                            TextWriter.WriteLine("");
-                            TextWriter.WriteLine(Count++);
-                        }
-                        //TextWriter.Flush();
-                    };
-                    FastcgiHandler.Reader.ReadAllPackets();
-
-                    //Console.WriteLine("End of ReadAllPackets");
-                }).Start();
+                ThreadPool.QueueUserWorkItem(HandleAcceptedSocket, AcceptedSocket);
             }
+        }
+
+        public void HandleAcceptedSocket(Object _Socket)
+        {
+            var Socket = (Socket)_Socket;
+            if (Debug)
+            {
+                Console.WriteLine("HandleAcceptedSocket: " + Socket);
+            }
+            var FastcgiHandler = new FastcgiHandler(Socket, Debug);
+            FastcgiHandler.HandleFastcgiRequest += (FastcgiRequest) =>
+            {
+                using (var TextWriter = new StreamWriter(FastcgiRequest.StdoutStream))
+                {
+                    //String Output = "<html><body>Hello World!</body></html>";
+
+                    TextWriter.WriteLine("X-Dynamic: C#");
+                    TextWriter.WriteLine("Content-Type: text/html; charset=utf-8");
+                    TextWriter.WriteLine("");
+                    TextWriter.WriteLine(Count++);
+                }
+                //TextWriter.Flush();
+            };
+            FastcgiHandler.Reader.ReadAllPackets();
         }
     }
 }

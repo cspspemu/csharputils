@@ -13,12 +13,13 @@ namespace CSharpUtils.Fastcgi
 	{
         public bool Debug = false;
         public Socket Socket;
-		public Stream Stream;
 		public event FastcgiPacketHandleDelegate HandlePacket;
+        static public byte[] Padding = new byte[8];
+        public byte[] Header = new byte[8];
 
-		public FastcgiPacketReader(Stream Stream, bool Debug = false)
+		public FastcgiPacketReader(Socket Socket, bool Debug = false)
 		{
-			this.Stream = Stream;
+            this.Socket = Socket;
             this.Debug = Debug;
 		}
 
@@ -57,8 +58,7 @@ namespace CSharpUtils.Fastcgi
 
 		public bool ReadPacket()
 		{
-			var Header = new byte[8];
-			int Readed = Stream.Read(Header, 0, 8);
+			int Readed = Socket.Receive(Header, 8, SocketFlags.None);
             if (Readed != 8)
             {
                 Console.WriteLine("Header not completed");
@@ -79,7 +79,6 @@ namespace CSharpUtils.Fastcgi
 
 
 			var Content = new byte[ContentLength];
-			var Padding = new byte[PaddingLength];
 
             if (Debug)
             {
@@ -88,7 +87,7 @@ namespace CSharpUtils.Fastcgi
 
             if (ContentLength > 0)
             {
-                Readed = Stream.Read(Content, 0, ContentLength);
+                Readed = Socket.Receive(Content, ContentLength, SocketFlags.None);
                 if (Readed != ContentLength)
                 {
                     Console.WriteLine("Content not completed");
@@ -97,7 +96,7 @@ namespace CSharpUtils.Fastcgi
             }
             if (PaddingLength > 0)
             {
-                Readed = Stream.Read(Padding, 0, PaddingLength);
+                Readed = Socket.Receive(Padding, PaddingLength, SocketFlags.None);
                 if (Readed != PaddingLength)
                 {
                     Console.WriteLine("Padding not completed");
@@ -107,6 +106,10 @@ namespace CSharpUtils.Fastcgi
 
             if (HandlePacket != null)
             {
+                if (Debug)
+                {
+                    Console.WriteLine("Calling HandlePacket");
+                }
                 return HandlePacket(Type, RequestId, Content);
             }
 

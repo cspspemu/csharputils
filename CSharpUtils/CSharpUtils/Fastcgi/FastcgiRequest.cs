@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Pipes;
+using System.Threading;
 
 namespace CSharpUtils.Fastcgi
 {
 	public class FastcgiRequest
 	{
+        public bool Processing;
         public bool FinalizedRequest = false;
 		public ushort RequestId;
 		public FastcgiHandler FastcgiHandler;

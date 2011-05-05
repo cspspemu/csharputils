@@ -14,6 +14,8 @@ namespace CSharpUtils.Fastcgi
 		public FastcgiPacketReader Reader;
 		public FastcgiPacketWriter Writer;
 
+        static byte[] Dummy = new byte[0];
+
         public delegate void HandleFastcgiRequestDelegate(FastcgiRequest FastcgiRequest);
 
         public event HandleFastcgiRequestDelegate HandleFastcgiRequest;
@@ -23,21 +25,9 @@ namespace CSharpUtils.Fastcgi
         public FastcgiHandler(Socket Socket, bool Debug = false)
         {
             Socket.Blocking = true;
-            Init(new NetworkStream(Socket), new NetworkStream(Socket), Debug);
-            this.Writer.Socket = Socket;
-        }
-
-        public FastcgiHandler(Stream InputStream, Stream OutputStream, bool Debug = false)
-		{
-            Init(InputStream, OutputStream, Debug);
-		}
-
-        protected void Init(Stream InputStream, Stream OutputStream, bool Debug = false)
-        {
-            this.Reader = new FastcgiPacketReader(InputStream, Debug);
-            this.Writer = new FastcgiPacketWriter(OutputStream, Debug);
-
-            this.Reader.HandlePacket += new FastcgiPacketHandleDelegate(Reader_HandlePacket);
+            this.Writer = new FastcgiPacketWriter(Socket, Debug);
+            this.Reader = new FastcgiPacketReader(Socket, Debug);
+            this.Reader.HandlePacket += Reader_HandlePacket;
         }
 
         bool Reader_HandlePacket(Fastcgi.PacketType Type, ushort RequestId, byte[] Content)
@@ -86,48 +76,54 @@ namespace CSharpUtils.Fastcgi
                 Console.WriteLine("     : FinalizedRequest(" + Request.FinalizedRequest + ")");
             }
 
+            if (Request.ParamsStream.Finalized && Request.Processing == false)
+            {
+                Request.Processing = true;
+                ThreadPool.QueueUserWorkItem(HandleRequest, Request);
+            }
+            
+
             if (Request.FinalizedRequest)
             {
-                if (HandleFastcgiRequest != null)
-                {
-                    new Thread(() =>
-                    {
-                        int Result = 0;
-                        try
-                        {
-                            HandleFastcgiRequest(Request);
-                            Result = 0;
-                        }
-                        catch (Exception Exception)
-                        {
-                            Result = -1;
-                            Console.Error.WriteLine(Exception);
-                        }
-                        Request.StdoutStream.Flush();
-                        Request.StderrStream.Flush();
-                        Writer.WritePacket(RequestId, Fastcgi.PacketType.FCGI_STDOUT, new byte[0]);
-                        Writer.WritePacketEndRequest(RequestId, Result, Fastcgi.ProtocolStatus.FCGI_REQUEST_COMPLETE);
-                        Writer.Stream.Flush();
-                        if (Debug)
-                        {
-                            Console.WriteLine("Completed Request(RequestId={0}, Result={1})", RequestId, Result);
-                        }
-
-                        lock (Requests)
-                        {
-                            Requests.Remove(RequestId);
-                            if (Requests.Count == 0)
-                            {
-                                Writer.Socket.Close();
-                            }
-                        }
-                    }).Start();
-                }
                 return false;
             }
             else
             {
                 return true;
+            }
+        }
+
+        public void HandleRequest(Object _Request)
+        {
+            var Request = (FastcgiRequest)_Request;
+
+            int Result = 0;
+            try
+            {
+                HandleFastcgiRequest(Request);
+                Result = 0;
+            }
+            catch (Exception Exception)
+            {
+                Result = -1;
+                Console.Error.WriteLine(Exception);
+            }
+            Request.StdoutStream.Flush();
+            Request.StderrStream.Flush();
+            Writer.WritePacket(Request.RequestId, Fastcgi.PacketType.FCGI_STDOUT, Dummy, 0, 0);
+            Writer.WritePacketEndRequest(Request.RequestId, Result, Fastcgi.ProtocolStatus.FCGI_REQUEST_COMPLETE);
+            if (Debug)
+            {
+                Console.WriteLine("Completed Request(RequestId={0}, Result={1})", Request.RequestId, Result);
+            }
+
+            lock (Requests)
+            {
+                Requests.Remove(Request.RequestId);
+                if (Requests.Count == 0)
+                {
+                    Writer.Socket.Close();
+                }
             }
         }
 

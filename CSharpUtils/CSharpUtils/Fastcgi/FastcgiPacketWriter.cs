@@ -11,12 +11,13 @@ namespace CSharpUtils.Fastcgi
 	{
         public bool Debug = false;
         public Socket Socket;
-		public Stream Stream;
+        byte[] Header = new byte[8];
+        byte[] TempContents = new byte[8];
         static byte[] Padding = new byte[8];
 
-		public FastcgiPacketWriter(Stream Stream, bool Debug = false)
+        public FastcgiPacketWriter(Socket Socket, bool Debug = false)
 		{
-			this.Stream = Stream;
+            this.Socket = Socket;
             this.Debug = Debug;
 		}
 
@@ -31,29 +32,26 @@ namespace CSharpUtils.Fastcgi
 
 		public bool WritePacketEndRequest(ushort RequestId, int AppStatus, Fastcgi.ProtocolStatus ProtocolStatus)
 		{
-			var Header = new byte[8] {
-				(byte)((AppStatus >> 24) & 0xFF),
-				(byte)((AppStatus >> 16) & 0xFF),
-				(byte)((AppStatus >>  8) & 0xFF),
-				(byte)((AppStatus >>  0) & 0xFF),
-				(byte)(ProtocolStatus),
-				0, 0, 0,
-                //0x74, 0x20, 0x61,
-			};
+            TempContents[0] = (byte)((AppStatus >> 24) & 0xFF);
+            TempContents[1] = (byte)((AppStatus >> 16) & 0xFF);
+            TempContents[2] = (byte)((AppStatus >> 8) & 0xFF);
+            TempContents[3] = (byte)((AppStatus >> 0) & 0xFF);
+            TempContents[4] = (byte)(ProtocolStatus);
+            TempContents[5] = 0;
+            TempContents[6] = 0;
+            TempContents[7] = 0;
 
             if (Debug)
             {
-                Console.WriteLine("WritePacketEndRequest(" + Header.Implode(",") + ")");
+                Console.WriteLine("WritePacketEndRequest(" + TempContents.Implode(",") + ")");
             }
 
-			return WritePacket(RequestId, Fastcgi.PacketType.FCGI_END_REQUEST, Header);
+            return WritePacket(RequestId, Fastcgi.PacketType.FCGI_END_REQUEST, TempContents, 0, 8);
 		}
 
-		public bool WritePacket(ushort RequestId, Fastcgi.PacketType Type, byte[] Contents)
+		public bool WritePacket(ushort RequestId, Fastcgi.PacketType Type, byte[] Contents, int ContentsOffset, int ContentsLength)
 		{
-			int ContentsLength = Contents.Length;
-
-            int PaddingLength = (8 - Contents.Length & 7) & 7;
+            int PaddingLength = (8 - ContentsLength & 7) & 7;
 
             if (Debug)
             {
@@ -64,31 +62,29 @@ namespace CSharpUtils.Fastcgi
                 }
             }
 
-			var Header = new byte[8] {
-				1,
-				(byte)Type,
-				(byte)((RequestId      >> 8) & 0xFF),
-				(byte)((RequestId      >> 0) & 0xFF),
-				(byte)((ContentsLength >> 8) & 0xFF),
-				(byte)((ContentsLength >> 0) & 0xFF),
-				(byte)PaddingLength,
-				0
-			};
+            Header[0] = 1;
+            Header[1] = (byte)Type;
+            Header[2] = (byte)((RequestId      >> 8) & 0xFF);
+            Header[3] = (byte)((RequestId      >> 0) & 0xFF);
+            Header[4] = (byte)((ContentsLength >> 8) & 0xFF);
+            Header[5] = (byte)((ContentsLength >> 0) & 0xFF);
+            Header[6] = (byte)PaddingLength;
+            Header[7] = 0;
 
             try
             {
-                Stream.Write(Header, 0, 8);
+                Socket.Send(Header, 0, 8, SocketFlags.None);
                 if (ContentsLength > 0)
                 {
-                    Stream.Write(Contents, 0, ContentsLength);
+                    Socket.Send(Contents, ContentsOffset, ContentsLength, SocketFlags.None);
                 }
                 if (PaddingLength > 0)
                 {
-                    Stream.Write(Padding, 0, PaddingLength);
+                    Socket.Send(Padding, 0, PaddingLength, SocketFlags.None);
                 }
                 return true;
             }
-            catch (IOException IOException)
+            catch (IOException)
             {
                 //Console.WriteLine("WritePacket(RequestId=" + RequestId + ", Type=" + Type + ", Contents=" + Contents.Length + ", Padding=" + PaddingLength + ")");
                 //Console.Error.WriteLine(IOException.Message);
