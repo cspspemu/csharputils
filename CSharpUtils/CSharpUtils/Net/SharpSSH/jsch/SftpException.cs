@@ -4,16 +4,16 @@ namespace Tamir.SharpSsh.jsch
 {
 	public class SftpException : Exception
 	{
-		public int id;
-		public String message;
-		public SftpException (int id, String message):base() 
+		public int Id;
+
+		public SftpException (int Id, String Message, Exception innerException = null) : base(Message, innerException) 
 		{
-			this.id=id;
-			this.message=message;
+			this.Id = Id;
 		}
+
 		public override String ToString()
 		{
-			return message;
+			return this.Id + " : " + this.Message + " : " + this.InnerException;
 		}
 	}
 }

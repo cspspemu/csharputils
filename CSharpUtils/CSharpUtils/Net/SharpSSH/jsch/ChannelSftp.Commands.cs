@@ -1083,109 +1083,111 @@ namespace Tamir.SharpSsh.jsch
             }
         }
 
-        public IEnumerable<LsEntry> ListEntries(String RemotePath)
-        {
-            try
-            {
-                RemotePath = RemoteAbsolutePath(RemotePath);
+		public List<LsEntry> ListEntries(String path)
+		{ //throws SftpException{
+			try
+			{
+				path = RemoteAbsolutePath(path);
 
-                String dir = RemotePath;
-                byte[] pattern = null;
-                SftpATTRS attr = null;
-                if (IsPattern(dir) || ((attr = stat(dir)) != null && !attr.IsDirectory))
-                {
-                    int foo = RemotePath.LastIndexOf('/');
-                    dir = RemotePath.Substring(0, ((foo == 0) ? 1 : foo));
-                    pattern = Encoding.UTF8.GetBytes(RemotePath.Substring(foo + 1));
-                }
+				String dir = path;
+				byte[] pattern = null;
+				SftpATTRS attr = null;
+				if (IsPattern(dir) ||
+					((attr = stat(dir)) != null && !attr.IsDirectory))
+				{
+					int foo = path.LastIndexOf('/');
+					dir = path.Substring(0, ((foo == 0) ? 1 : foo));
+					pattern = Encoding.UTF8.GetBytes(path.Substring(foo + 1));
+				}
 
-                sendOPENDIR(dir);
+				sendOPENDIR(Encoding.UTF8.GetBytes(dir));
 
-                Header _header = new Header();
-                ReadHeader(buf, _header);
-                int length = _header.length;
-                int type = _header.type;
-                buf.Rewind();
-                fill(buf.buffer, 0, length);
+				Header _header = new Header();
+				_header = ReadHeader(buf, _header);
+				int length = _header.length;
+				int type = _header.type;
+				buf.Rewind();
+				fill(buf.buffer, 0, length);
 
-                if (type != SSH_FXP_STATUS && type != SSH_FXP_HANDLE)
-                {
-                    throw new SftpException(SSH_FX_FAILURE, "");
-                }
+				if (type != SSH_FXP_STATUS && type != SSH_FXP_HANDLE)
+				{
+					throw new SftpException(SSH_FX_FAILURE, "");
+				}
+				if (type == SSH_FXP_STATUS)
+				{
+					int i = buf.ReadInt();
+					throwStatusError(buf, i);
+				}
 
-                if (type == SSH_FXP_STATUS)
-                {
-                    int i = buf.ReadInt();
-                    throwStatusError(buf, i);
-                }
+				byte[] handle = buf.ReadString();         // filename
 
-                byte[] handle = buf.ReadString();         // filename
+				var List = new List<LsEntry>();
+				while (true)
+				{
+					sendREADDIR(handle);
 
-                List<LsEntry> List = new List<LsEntry>();
-                while (true)
-                {
-                    sendREADDIR(handle);
+					_header = ReadHeader(buf, _header);
+					length = _header.length;
+					type = _header.type;
+					if (type != SSH_FXP_STATUS && type != SSH_FXP_NAME)
+					{
+						throw new SftpException(SSH_FX_FAILURE, "");
+					}
+					if (type == SSH_FXP_STATUS)
+					{
+						buf.Rewind();
+						fill(buf.buffer, 0, length);
+						int i = buf.ReadInt();
+						if (i == SSH_FX_EOF)
+							break;
+						throwStatusError(buf, i);
+					}
 
-                    ReadHeader(buf, _header);
-                    length = _header.length;
-                    type = _header.type;
+					buf.Rewind();
+					fill(buf.buffer, 0, 4); length -= 4;
+					int count = buf.ReadInt();
 
-                    if (type != SSH_FXP_STATUS && type != SSH_FXP_NAME)
-                    {
-                        throw new SftpException(SSH_FX_FAILURE, "");
-                    }
+					byte[] str;
+					//int flags;
 
-                    if (type == SSH_FXP_STATUS)
-                    {
-                        buf.Rewind();
-                        fill(buf.buffer, 0, length);
-                        int i = buf.ReadInt();
-                        if (i == SSH_FX_EOF) break;
-                        throwStatusError(buf, i);
-                    }
+					buf.Reset();
+					while (count > 0)
+					{
+						if (length > 0)
+						{
+							buf.Shift();
+							int j = (buf.buffer.Length > (buf.index + length)) ? length : (buf.buffer.Length - buf.index);
+							int i = fill(buf.buffer, buf.index, j);
+							buf.index += i;
+							length -= i;
+						}
+						byte[] filename = buf.ReadString();
+						str = buf.ReadString();
+						String longname = Encoding.UTF8.GetString(str);
 
-                    buf.Rewind();
-                    fill(buf.buffer, 0, 4); length -= 4;
+						SftpATTRS attrs = SftpATTRS.getATTR(buf);
+						if (pattern == null || Util.glob(pattern, filename))
+						{
+							List.Add(new LsEntry()
+							{
+								FileName = Encoding.UTF8.GetString(filename),
+								LongName = longname,
+								Attributes = attrs,
+							});
+						}
 
-                    byte[] str;
-                    //int flags;
-
-                    buf.Reset();
-                    foreach (var Index in ArrayUtils.Range(buf.ReadInt()))
-                    {
-                        if (length > 0)
-                        {
-                            buf.Shift();
-                            int j = (buf.buffer.Length > (buf.index + length)) ? length : (buf.buffer.Length - buf.index);
-                            int i = fill(buf.buffer, buf.index, j);
-                            buf.index += i;
-                            length -= i;
-                        }
-                        byte[] filename = buf.ReadString();
-                        str = buf.ReadString();
-                        String longname = Encoding.UTF8.GetString(str);
-
-                        SftpATTRS attrs = SftpATTRS.getATTR(buf);
-                        if (pattern == null || Util.glob(pattern, filename))
-                        {
-                            List.Add(new LsEntry()
-                            {
-                                FileName = Encoding.UTF8.GetString(filename),
-                                LongName = longname,
-                                Attributes = attrs
-                            });
-                        }
-                    }
-                }
-                _sendCLOSE(handle, _header);
-                return List;
-            }
-            catch (Exception e)
-            {
-                if (e is SftpException) throw (SftpException)e;
-                throw new SftpException(SSH_FX_FAILURE, "");
-            }
-        }
+						count--;
+					}
+				}
+				_sendCLOSE(handle, _header);
+				return List;
+			}
+			catch (Exception e)
+			{
+				if (e is SftpException) throw (SftpException)e;
+				throw new SftpException(SSH_FX_FAILURE, "");
+			}
+		}
 
         public String ReadLink(String path)
         {
