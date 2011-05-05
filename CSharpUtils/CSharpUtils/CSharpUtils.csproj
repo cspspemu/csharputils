@@ -319,6 +319,7 @@
     <Compile Include="VirtualFileSystem\FileSystemFileStreamStream.cs" />
     <Compile Include="VirtualFileSystem\Local\LocalTemporalFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Memory\MemoryFileSystem.cs" />
+    <Compile Include="VirtualFileSystem\NodeFileSystem.cs" />
     <Compile Include="VirtualFileSystem\ProxyFileSystem.cs" />
     <Compile Include="VirtualFileSystem\ProxyReadOnlyFilesystem.cs" />
     <Compile Include="VirtualFileSystem\RemoteFileSystem.cs" />

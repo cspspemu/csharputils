@@ -6,13 +6,19 @@ using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem.Memory
 {
-	class MemoryFileSystem : ImplFileSystem
+	public class MemoryFileSystem : NodeFileSystem
 	{
-		//Dictionary<String, FileSystemFileStream> Files;
-
-		public MemoryFileSystem()
+		public void AddFile(String AddFileName, Stream Contents)
 		{
-			throw(new NotImplementedException());
+			AddFileName = AbsoluteNormalizePath(AddFileName);
+			var Node = RootNode.Access(AddFileName, true);
+			Node.Time = new FileSystemEntry.FileTime()
+			{
+				CreationTime = DateTime.Now,
+				LastAccessTime = DateTime.Now,
+				LastWriteTime = DateTime.Now,
+			};
+			Node.FileSystemFileStream = new FileSystemFileStreamStream(this, Contents);
 		}
 
 		public override String Title

@@ -55,6 +55,7 @@
     <Compile Include="AsyncTaskTest.cs" />
     <Compile Include="ConsumerMemoryStreamTest.cs" />
     <Compile Include="FastcgiHandlerTest.cs" />
+    <Compile Include="MemoryFileSystemTest.cs" />
     <Compile Include="TemplateTest.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFromPathTest.cs" />
     <Compile Include="LinqExExtensionsTest.cs" />
