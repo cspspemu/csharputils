@@ -62,6 +62,9 @@
     <Compile Include="Fastcgi\FastcgiHandler.cs" />
     <Compile Include="Fastcgi\FastcgiPacketReader.cs" />
     <Compile Include="Fastcgi\FastcgiPacketWriter.cs" />
+    <Compile Include="Fastcgi\FastcgiPipeStream.cs" />
+    <Compile Include="Fastcgi\FastcgiPipeSocket.cs" />
+    <Compile Include="Fastcgi\IFastcgiPipe.cs" />
     <Compile Include="Fastcgi\FastcgiRequest.cs" />
     <Compile Include="Fastcgi\FastcgiServer.cs" />
     <Compile Include="FieldMapping.cs" />

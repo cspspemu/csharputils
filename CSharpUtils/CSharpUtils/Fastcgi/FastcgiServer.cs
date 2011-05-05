@@ -16,7 +16,9 @@ namespace CSharpUtils.Fastcgi
 
         public void Listen(ushort Port)
         {
-            var TcpListener = new TcpListener(IPAddress.Parse("0.0.0.0"), Port);
+            String Address = "0.0.0.0";
+            var TcpListener = new TcpListener(IPAddress.Parse(Address), Port);
+            Console.WriteLine("Listen at {0}:{1}", Address, Port);
             TcpListener.Start();
             while (true)
             {
@@ -24,6 +26,8 @@ namespace CSharpUtils.Fastcgi
                 {
                     Console.WriteLine("Waiting a connection...");
                 }
+
+                //System.GC.Collect();
                 var AcceptedSocket = TcpListener.AcceptSocket();
 
                 ThreadPool.QueueUserWorkItem(HandleAcceptedSocket, AcceptedSocket);
@@ -37,7 +41,7 @@ namespace CSharpUtils.Fastcgi
             {
                 Console.WriteLine("HandleAcceptedSocket: " + Socket);
             }
-            var FastcgiHandler = new FastcgiHandler(Socket, Debug);
+            var FastcgiHandler = new FastcgiHandler(new FastcgiPipeSocket(Socket), Debug);
             FastcgiHandler.HandleFastcgiRequest += (FastcgiRequest) =>
             {
                 using (var TextWriter = new StreamWriter(FastcgiRequest.StdoutStream))

@@ -10,14 +10,14 @@ namespace CSharpUtils.Fastcgi
 	public class FastcgiPacketWriter
 	{
         public bool Debug = false;
-        public Socket Socket;
+        public IFastcgiPipe FastcgiPipe;
         byte[] Header = new byte[8];
         byte[] TempContents = new byte[8];
         static byte[] Padding = new byte[8];
 
-        public FastcgiPacketWriter(Socket Socket, bool Debug = false)
+        public FastcgiPacketWriter(IFastcgiPipe FastcgiPipe, bool Debug = false)
 		{
-            this.Socket = Socket;
+            this.FastcgiPipe = FastcgiPipe;
             this.Debug = Debug;
 		}
 
@@ -73,14 +73,14 @@ namespace CSharpUtils.Fastcgi
 
             try
             {
-                Socket.Send(Header, 0, 8, SocketFlags.None);
+                FastcgiPipe.Write(Header, 0, 8);
                 if (ContentsLength > 0)
                 {
-                    Socket.Send(Contents, ContentsOffset, ContentsLength, SocketFlags.None);
+                    FastcgiPipe.Write(Contents, ContentsOffset, ContentsLength);
                 }
                 if (PaddingLength > 0)
                 {
-                    Socket.Send(Padding, 0, PaddingLength, SocketFlags.None);
+                    FastcgiPipe.Write(Padding, 0, PaddingLength);
                 }
                 return true;
             }

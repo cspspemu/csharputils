@@ -22,11 +22,10 @@ namespace CSharpUtils.Fastcgi
 
         protected Dictionary<ushort, FastcgiRequest> Requests = new Dictionary<ushort, FastcgiRequest>();
 
-        public FastcgiHandler(Socket Socket, bool Debug = false)
+        public FastcgiHandler(IFastcgiPipe FastcgiPipe, bool Debug = false)
         {
-            Socket.Blocking = true;
-            this.Writer = new FastcgiPacketWriter(Socket, Debug);
-            this.Reader = new FastcgiPacketReader(Socket, Debug);
+            this.Writer = new FastcgiPacketWriter(FastcgiPipe, Debug);
+            this.Reader = new FastcgiPacketReader(FastcgiPipe, Debug);
             this.Reader.HandlePacket += Reader_HandlePacket;
         }
 
@@ -122,7 +121,7 @@ namespace CSharpUtils.Fastcgi
                 Requests.Remove(Request.RequestId);
                 if (Requests.Count == 0)
                 {
-                    Writer.Socket.Close();
+                    Writer.FastcgiPipe.Close();
                 }
             }
         }

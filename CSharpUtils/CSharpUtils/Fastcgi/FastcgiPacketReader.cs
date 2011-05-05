@@ -12,14 +12,14 @@ namespace CSharpUtils.Fastcgi
 	public class FastcgiPacketReader
 	{
         public bool Debug = false;
-        public Socket Socket;
+        public IFastcgiPipe FastcgiPipe;
 		public event FastcgiPacketHandleDelegate HandlePacket;
         static public byte[] Padding = new byte[8];
         public byte[] Header = new byte[8];
 
-		public FastcgiPacketReader(Socket Socket, bool Debug = false)
+        public FastcgiPacketReader(IFastcgiPipe FastcgiPipe, bool Debug = false)
 		{
-            this.Socket = Socket;
+            this.FastcgiPipe = FastcgiPipe;
             this.Debug = Debug;
 		}
 
@@ -61,7 +61,7 @@ namespace CSharpUtils.Fastcgi
 
 		public bool ReadPacket()
 		{
-			int Readed = Socket.Receive(Header, 8, SocketFlags.None);
+            int Readed = FastcgiPipe.Read(Header, 0, 8);
             if (Readed != 8)
             {
                 Console.WriteLine("Header not completed");
@@ -90,7 +90,7 @@ namespace CSharpUtils.Fastcgi
 
             if (ContentLength > 0)
             {
-                Readed = Socket.Receive(Content, ContentLength, SocketFlags.None);
+                Readed = FastcgiPipe.Read(Content, 0, ContentLength);
                 if (Readed != ContentLength)
                 {
                     Console.WriteLine("Content not completed");
@@ -99,7 +99,7 @@ namespace CSharpUtils.Fastcgi
             }
             if (PaddingLength > 0)
             {
-                Readed = Socket.Receive(Padding, PaddingLength, SocketFlags.None);
+                Readed = FastcgiPipe.Read(Padding, 0, PaddingLength);
                 if (Readed != PaddingLength)
                 {
                     Console.WriteLine("Padding not completed");
