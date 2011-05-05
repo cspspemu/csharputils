@@ -79,11 +79,24 @@ namespace CSharpUtils.VirtualFileSystem
 
 			protected Node AccessChild(String Name, bool CreateNode = false)
 			{
+				if ((Name == "") || (Name == "."))
+				{
+					return this;
+				}
+				if (Name == "..")
+				{
+					return Parent;
+				}
+
 				if (!Childs.ContainsKey(Name))
 				{
 					if (CreateNode)
 					{
 						Childs[Name] = new Node(this.NodeFileSystem, this, Name);
+					}
+					else
+					{
+						throw(new Exception(String.Format("Can't Access To '{0}/{1}'", FullName, Name)));
 					}
 				}
 				return Childs[Name];
@@ -95,6 +108,14 @@ namespace CSharpUtils.VirtualFileSystem
 				// Has components
 				if ((Index = Path.IndexOf('/')) >= 0)
 				{
+					if (Index == 0)
+					{
+						//Console.WriteLine("[1]");
+					}
+					if (Index == Path.Length - 1)
+					{
+						//Console.WriteLine("[2]");
+					}
 					return AccessChild(Path.Substring(0, Index), CreateNode).Access(Path.Substring(Index + 1), CreateNode);
 				}
 				// No more components
@@ -106,9 +127,6 @@ namespace CSharpUtils.VirtualFileSystem
 		}
 
 		public Node RootNode;
-
-		Dictionary<String, List<String>> Folders = new Dictionary<string, List<String>>();
-		Dictionary<String, FileSystemFileStream> Files = new Dictionary<string, FileSystemFileStream>();
 
 		public NodeFileSystem()
 		{
