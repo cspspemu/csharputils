@@ -296,6 +296,36 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 			ProgressForm.Process = delegate()
 			{
+				RetrySource:
+
+				try
+				{
+					var SourceRemoteFileSystem = SourceFileSystem as RemoteFileSystem;
+					if (SourceRemoteFileSystem != null) SourceRemoteFileSystem.EnsureConnect();
+				}
+				catch (Exception Exception)
+				{
+					if (MessageBox.Show(Exception.Message, "Can't connect to local FileSystem", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Retry)
+					{
+						goto RetrySource;
+					}
+				}
+			
+				RetryDestination:
+
+				try
+				{
+					var DestinationRemoteFileSystem = DestinationFileSystem as RemoteFileSystem;
+					if (DestinationRemoteFileSystem != null) DestinationRemoteFileSystem.EnsureConnect();
+				}
+				catch (Exception Exception)
+				{
+					if (MessageBox.Show(Exception.Message, "Can't connect to remote FileSystem", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Retry)
+					{
+						goto RetryDestination;
+					}
+				}
+
 				this.SynchronizeFolder();
 			};
 
