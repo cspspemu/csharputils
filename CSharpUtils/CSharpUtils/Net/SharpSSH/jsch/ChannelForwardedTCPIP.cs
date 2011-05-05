@@ -123,10 +123,10 @@ namespace Tamir.SharpSsh.jsch
 					}
 					packet.reset();
 					if(_close)break;
-					buf.putByte((byte)Session.SSH_MSG_CHANNEL_DATA);
-					buf.putInt(recipient);
-					buf.putInt(i);
-					buf.skip(i);
+					buf.WriteByte((byte)Session.SSH_MSG_CHANNEL_DATA);
+					buf.WriteInt(recipient);
+					buf.WriteInt(i);
+					buf.Skip(i);
 					session.write(packet, this, i);
 				}
 			}
@@ -141,13 +141,13 @@ namespace Tamir.SharpSsh.jsch
 		}
 		internal override void getData(Buffer buf)
 		{
-			setRecipient(buf.getInt());
-			setRemoteWindowSize(buf.getInt());
-			setRemotePacketSize(buf.getInt());
-			byte[] addr=buf.getString();
-			int port=buf.getInt();
-			byte[] orgaddr=buf.getString();
-			int orgport=buf.getInt();
+			setRecipient(buf.ReadInt());
+			setRemoteWindowSize(buf.ReadInt());
+			setRemotePacketSize(buf.ReadInt());
+			byte[] addr=buf.ReadString();
+			int port=buf.ReadInt();
+			byte[] orgaddr=buf.ReadString();
+			int orgport=buf.ReadInt();
 
 			/*
 			System.out.println("addr: "+Encoding.UTF8.GetString(addr));
@@ -277,11 +277,11 @@ namespace Tamir.SharpSsh.jsch
 				// string  address_to_bind (e.g. "127.0.0.1")
 				// uint32  port number to bind
 				packet.reset();
-				buf.putByte((byte) 80/*SSH_MSG_GLOBAL_REQUEST*/);
-				buf.putString(Encoding.UTF8.GetBytes("cancel-tcpip-forward"));
-				buf.putByte((byte)0);
-				buf.putString(Encoding.UTF8.GetBytes("0.0.0.0"));
-				buf.putInt(rport);
+				buf.WriteByte((byte) 80/*SSH_MSG_GLOBAL_REQUEST*/);
+				buf.WriteString(Encoding.UTF8.GetBytes("cancel-tcpip-forward"));
+				buf.WriteByte((byte)0);
+				buf.WriteString(Encoding.UTF8.GetBytes("0.0.0.0"));
+				buf.WriteInt(rport);
 				session.write(packet);
 			}
 			catch(Exception e)

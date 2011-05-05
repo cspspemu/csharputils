@@ -61,10 +61,10 @@ namespace Tamir.SharpSsh.jsch
 			// string    service name ("ssh-connection")
 			// string    "none"
 			packet.reset();
-			buf.putByte((byte)Session.SSH_MSG_USERAUTH_REQUEST);
-			buf.putString(_username);
-			buf.putString(Util.getBytes("ssh-connection"));
-			buf.putString(Util.getBytes("none"));
+			buf.WriteByte((byte)Session.SSH_MSG_USERAUTH_REQUEST);
+			buf.WriteString(_username);
+			buf.WriteString(Util.getBytes("ssh-connection"));
+			buf.WriteString(Util.getBytes("none"));
 			session.write(packet);
 
 			loop:
@@ -81,9 +81,9 @@ namespace Tamir.SharpSsh.jsch
 					}
 					if(buf.buffer[5]==Session.SSH_MSG_USERAUTH_BANNER)
 					{
-						buf.getInt(); buf.getByte(); buf.getByte();
-						byte[] _message=buf.getString();
-						byte[] lang=buf.getString();
+						buf.ReadInt(); buf.ReadByte(); buf.ReadByte();
+						byte[] _message=buf.ReadString();
+						byte[] lang=buf.ReadString();
 						String message=null;
 						try{ message=Util.getStringUTF8(_message); }
 						catch
@@ -98,9 +98,9 @@ namespace Tamir.SharpSsh.jsch
 					}
 					if(buf.buffer[5]==Session.SSH_MSG_USERAUTH_FAILURE)
 					{
-						buf.getInt(); buf.getByte(); buf.getByte(); 
-						byte[] foo=buf.getString();
-						int partial_success=buf.getByte();
+						buf.ReadInt(); buf.ReadByte(); buf.ReadByte(); 
+						byte[] foo=buf.ReadString();
+						int partial_success=buf.ReadByte();
 						methods=Util.getString(foo);
 						//System.out.println("UserAuthNONE: "+methods+
 						//		   " partial_success:"+(partial_success!=0));

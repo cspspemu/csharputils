@@ -130,8 +130,8 @@ namespace Tamir.SharpSsh.jsch
 			e=dh.getE();
 
 			packet.reset();
-			buf.putByte((byte)SSH_MSG_KEXDH_INIT);
-			buf.putMPInt(e);
+			buf.WriteByte((byte)SSH_MSG_KEXDH_INIT);
+			buf.WriteMPInt(e);
 			session.write(packet);
 
 			state=SSH_MSG_KEXDH_REPLY;
@@ -149,9 +149,9 @@ namespace Tamir.SharpSsh.jsch
 					// string    server public host key and certificates (K_S)
 					// mpint     f
 					// string    signature of H
-					j=_buf.getInt();
-					j=_buf.getByte();
-					j=_buf.getByte();
+					j=_buf.ReadInt();
+					j=_buf.ReadByte();
+					j=_buf.ReadByte();
 					if(j!=31)
 					{
 						Console.WriteLine("type: must be 31 "+j);
@@ -159,7 +159,7 @@ namespace Tamir.SharpSsh.jsch
 						break;
 					}
 
-					K_S=_buf.getString();
+					K_S=_buf.ReadString();
 					// K_S is server_key_blob, which includes ....
 					// string ssh-dss
 					// impint p of dsa
@@ -167,8 +167,8 @@ namespace Tamir.SharpSsh.jsch
 					// impint g of dsa
 					// impint pub_key of dsa
 					//System.out.print("K_S: "); //dump(K_S, 0, K_S.length);
-					byte[] f=_buf.getMPInt();
-					byte[] sig_of_H=_buf.getString();
+					byte[] f=_buf.ReadMPInt();
+					byte[] sig_of_H=_buf.ReadString();
 					/*
 			  for(int ii=0; ii<sig_of_H.length;ii++){
 				System.out.print(Integer.toHexString(sig_of_H[ii]&0xff));
@@ -192,14 +192,14 @@ namespace Tamir.SharpSsh.jsch
 					// mpint     K, the shared secret
 					// This value is called the exchange hash, and it is used to authenti-
 					// cate the key exchange.
-					buf.reset();
-					buf.putString(V_C); buf.putString(V_S);
-					buf.putString(I_C); buf.putString(I_S);
-					buf.putString(K_S);
-					buf.putMPInt(e); buf.putMPInt(f);
-					buf.putMPInt(K);
-					byte[] foo=new byte[buf.getLength()];
-					buf.getByte(foo);
+					buf.Reset();
+					buf.WriteString(V_C); buf.WriteString(V_S);
+					buf.WriteString(I_C); buf.WriteString(I_S);
+					buf.WriteString(K_S);
+					buf.WriteMPInt(e); buf.WriteMPInt(f);
+					buf.WriteMPInt(K);
+					byte[] foo=new byte[buf.Length];
+					buf.ReadByte(foo);
 					sha.update(foo, 0, foo.Length);
 					H=sha.digest();
 					//System.out.print("H -> "); //dump(H, 0, H.length);

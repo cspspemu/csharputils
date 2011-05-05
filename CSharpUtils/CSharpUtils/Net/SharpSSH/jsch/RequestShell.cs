@@ -44,10 +44,10 @@ namespace Tamir.SharpSsh.jsch
 			// string request type       // "shell"
 			// boolean want reply        // 0
 			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString(Util.getBytes("shell"));
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
+			buf.WriteByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
+			buf.WriteInt(channel.getRecipient());
+			buf.WriteString(Util.getBytes("shell"));
+			buf.WriteByte((byte)(waitForReply() ? 1 : 0));
 			session.write(packet);
 		}
 		public bool waitForReply(){ return false; }

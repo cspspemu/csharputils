@@ -68,6 +68,7 @@
     <Compile Include="Fastcgi\FastcgiRequest.cs" />
     <Compile Include="Fastcgi\FastcgiServer.cs" />
     <Compile Include="FieldMapping.cs" />
+    <Compile Include="Net\SharpSSH\jsch\ChannelSftp.Commands.cs" />
     <Compile Include="ProduceConsumeBuffer.cs" />
     <Compile Include="ArrayUtils.cs" />
     <Compile Include="Compression\Lzx.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="StructUtils.cs" />
+    <Compile Include="Templates\Template.cs" />
     <Compile Include="TimeSampler.cs" />
     <Compile Include="VirtualFileSystem\BaseFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanNet.cs" />

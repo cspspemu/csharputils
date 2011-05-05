@@ -49,11 +49,11 @@ namespace Tamir.SharpSsh.jsch
 			// boolean want reply        // 0
 			// string command
 			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString("exec");
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putString(command);
+			buf.WriteByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
+			buf.WriteInt(channel.getRecipient());
+			buf.WriteString("exec");
+			buf.WriteByte((byte)(waitForReply() ? 1 : 0));
+			buf.WriteString(command);
 			session.write(packet);
 		}
 		public bool waitForReply(){ return false; }

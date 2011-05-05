@@ -37,5 +37,18 @@ namespace CSharpUtils
 		{
 			return This.Slice(Start, This.Length - Start);
 		}
-	}
+
+        static public IEnumerable<int> Range(int From, int To)
+        {
+            for (int n = From; n < To; n++)
+            {
+                yield return n;
+            }
+        }
+
+        static public IEnumerable<int> Range(int To)
+        {
+            return Range(0, To);
+        }
+    }
 }

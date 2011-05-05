@@ -1,6 +1,8 @@
 using System;
 using Tamir.SharpSsh.jsch;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 /* 
  * Sftp.cs
@@ -132,21 +134,16 @@ namespace Tamir.SharpSsh
 
 		//MkDir
 
-		public override  void Mkdir(string directory)
+		public override void Mkdir(string directory)
 		{
 			SftpChannel.mkdir(directory);
 		}
 
 		//Ls
 
-		public ArrayList GetFileList(string path)
+		public IEnumerable<String> GetFileList(string path)
 		{
-			ArrayList list = new ArrayList();
-			foreach(Tamir.SharpSsh.jsch.ChannelSftp.LsEntry entry in SftpChannel.ls(path))
-			{
-				list.Add(entry.getFilename().ToString());
-			}
-			return list;
+            return SftpChannel.ListEntries(path).Select(LsEntry => LsEntry.FileName);
 		}
 
 		#region ProgressMonitor Implementation

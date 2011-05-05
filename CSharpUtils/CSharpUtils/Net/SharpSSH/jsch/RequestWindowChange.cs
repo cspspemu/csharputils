@@ -58,14 +58,14 @@ namespace Tamir.SharpSsh.jsch
 			//uint32    terminal width, pixels
 			//uint32    terminal height, pixels
 			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString(Util.getBytes("window-change"));
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putInt(width_columns);
-			buf.putInt(height_rows);
-			buf.putInt(width_pixels);
-			buf.putInt(height_pixels);
+			buf.WriteByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
+			buf.WriteInt(channel.getRecipient());
+			buf.WriteString(Util.getBytes("window-change"));
+			buf.WriteByte((byte)(waitForReply() ? 1 : 0));
+			buf.WriteInt(width_columns);
+			buf.WriteInt(height_rows);
+			buf.WriteInt(width_pixels);
+			buf.WriteInt(height_pixels);
 			session.write(packet);
 		}
 		public bool waitForReply(){ return false; }

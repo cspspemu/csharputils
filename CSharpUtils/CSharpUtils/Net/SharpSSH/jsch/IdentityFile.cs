@@ -194,31 +194,31 @@ namespace Tamir.SharpSsh.jsch
 				{
 
 					Buffer _buf=new Buffer(encoded_data);
-					_buf.getInt();  // 0x3f6ff9be
-					_buf.getInt();
-					byte[]_type=_buf.getString();
+					_buf.ReadInt();  // 0x3f6ff9be
+					_buf.ReadInt();
+					byte[]_type=_buf.ReadString();
 					//System.out.println("type: "+Encoding.UTF8.GetString(_type)); 
-					byte[] _cipher=_buf.getString();
+					byte[] _cipher=_buf.ReadString();
 					String s_cipher=System.Text.Encoding.Default.GetString(_cipher);
 					//System.out.println("cipher: "+cipher); 
 					if(s_cipher.Equals("3des-cbc"))
 					{
-						_buf.getInt();
-						byte[] foo=new byte[encoded_data.Length-_buf.getOffSet()];
-						_buf.getByte(foo);
+						_buf.ReadInt();
+						byte[] foo=new byte[encoded_data.Length-_buf.Offset];
+						_buf.ReadByte(foo);
 						encoded_data=foo;
 						encrypted=true;
 						throw new JSchException("unknown privatekey format: "+identity);
 					}
 					else if(s_cipher.Equals("none"))
 					{
-						_buf.getInt();
+						_buf.ReadInt();
 						//_buf.getInt();
 
 						encrypted=false;
 
-						byte[] foo=new byte[encoded_data.Length-_buf.getOffSet()];
-						_buf.getByte(foo);
+						byte[] foo=new byte[encoded_data.Length-_buf.Offset];
+						_buf.ReadByte(foo);
 						encoded_data=foo;
 					}
 
@@ -390,9 +390,9 @@ namespace Tamir.SharpSsh.jsch
 			Buffer buf=new Buffer("ssh-rsa".Length+4+
 				e_array.Length+4+ 
 				n_array.Length+4);
-			buf.putString( System.Text.Encoding.Default.GetBytes( "ssh-rsa" ) );
-			buf.putString(e_array);
-			buf.putString(n_array);
+			buf.WriteString( System.Text.Encoding.Default.GetBytes( "ssh-rsa" ) );
+			buf.WriteString(e_array);
+			buf.WriteString(n_array);
 			return buf.buffer;
 		}
 
@@ -404,11 +404,11 @@ namespace Tamir.SharpSsh.jsch
 				Q_array.Length+4+ 
 				G_array.Length+4+ 
 				pub_array.Length+4);
-			buf.putString(System.Text.Encoding.Default.GetBytes("ssh-dss"));
-			buf.putString(P_array);
-			buf.putString(Q_array);
-			buf.putString(G_array);
-			buf.putString(pub_array);
+			buf.WriteString(System.Text.Encoding.Default.GetBytes("ssh-dss"));
+			buf.WriteString(P_array);
+			buf.WriteString(Q_array);
+			buf.WriteString(G_array);
+			buf.WriteString(pub_array);
 			return buf.buffer;
 		}
 
@@ -441,8 +441,8 @@ namespace Tamir.SharpSsh.jsch
 				byte[] sig = rsa.sign();
 				Buffer buf=new Buffer("ssh-rsa".Length+4+
 					sig.Length+4);
-				buf.putString( System.Text.Encoding.Default.GetBytes( "ssh-rsa" ));
-				buf.putString(sig);
+				buf.WriteString( System.Text.Encoding.Default.GetBytes( "ssh-rsa" ));
+				buf.WriteString(sig);
 				return buf.buffer;
 			}
 			catch(Exception e)
@@ -497,8 +497,8 @@ namespace Tamir.SharpSsh.jsch
 				byte[] sig = dsa.sign();
 				Buffer buf=new Buffer("ssh-dss".Length+4+
 					sig.Length+4);
-				buf.putString( System.Text.Encoding.Default.GetBytes( "ssh-dss" ) );
-				buf.putString(sig);
+				buf.WriteString( System.Text.Encoding.Default.GetBytes( "ssh-dss" ) );
+				buf.WriteString(sig);
 				return buf.buffer;
 			}
 			catch(Exception e)
@@ -554,17 +554,17 @@ namespace Tamir.SharpSsh.jsch
 				if(keytype==FSECURE)
 				{              // FSecure   
 					Buffer buf=new Buffer(plain);
-					int foo=buf.getInt();
+					int foo=buf.ReadInt();
 					if(plain.Length!=foo+4)
 					{
 						return false;
 					}
-					e_array=buf.getMPIntBits();
-					d_array=buf.getMPIntBits();
-					n_array=buf.getMPIntBits();
-					byte[] u_array=buf.getMPIntBits();
-					p_array=buf.getMPIntBits();
-					q_array=buf.getMPIntBits();
+					e_array=buf.ReadMPIntBits();
+					d_array=buf.ReadMPIntBits();
+					n_array=buf.ReadMPIntBits();
+					byte[] u_array=buf.ReadMPIntBits();
+					p_array=buf.ReadMPIntBits();
+					q_array=buf.ReadMPIntBits();
 					return true;
 				}
 
@@ -780,16 +780,16 @@ namespace Tamir.SharpSsh.jsch
 				if(keytype==FSECURE)
 				{              // FSecure   
 					Buffer buf=new Buffer(plain);
-					int foo=buf.getInt();
+					int foo=buf.ReadInt();
 					if(plain.Length!=foo+4)
 					{
 						return false;
 					}
-					P_array=buf.getMPIntBits();
-					G_array=buf.getMPIntBits();
-					Q_array=buf.getMPIntBits();
-					pub_array=buf.getMPIntBits();
-					prv_array=buf.getMPIntBits();
+					P_array=buf.ReadMPIntBits();
+					G_array=buf.ReadMPIntBits();
+					Q_array=buf.ReadMPIntBits();
+					pub_array=buf.ReadMPIntBits();
+					prv_array=buf.ReadMPIntBits();
 					return true;
 				}
 

@@ -114,23 +114,23 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 
 		override internal IEnumerable<FileSystemEntry> ImplFindFiles(String Path)
 		{
-			foreach (var i in csftp.ls(RealPath(Path)))
+			foreach (var i in csftp.ListEntries(RealPath(Path)))
 			{
 				var LsEntry = (Tamir.SharpSsh.jsch.ChannelSftp.LsEntry)i;
-				var FileSystemEntry = new FileSystemEntry(this, Path + "/" + LsEntry.getFilename());
-				FileSystemEntry.Size = LsEntry.getAttrs().getSize();
-				FileSystemEntry.GroupId = LsEntry.getAttrs().getGId();
-				FileSystemEntry.UserId = LsEntry.getAttrs().getUId();
-				if (LsEntry.getAttrs().isDir()) {
+				var FileSystemEntry = new FileSystemEntry(this, Path + "/" + LsEntry.FileName);
+				FileSystemEntry.Size = LsEntry.Attributes.Size;
+				FileSystemEntry.GroupId = LsEntry.Attributes.getGId();
+				FileSystemEntry.UserId = LsEntry.Attributes.getUId();
+				if (LsEntry.Attributes.IsDirectory) {
 					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Directory;
-				} else if (LsEntry.getAttrs().isLink()) {
+				} else if (LsEntry.Attributes.IsLink) {
 					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.Link;
 				} else {
 					FileSystemEntry.Type = VirtualFileSystem.FileSystemEntry.EntryType.File;
 				}
-				FileSystemEntry.Time.CreationTime = LsEntry.getAttrs().getMTime();
-				FileSystemEntry.Time.LastWriteTime = LsEntry.getAttrs().getMTime();
-				FileSystemEntry.Time.LastAccessTime = LsEntry.getAttrs().getATime();
+				FileSystemEntry.Time.CreationTime = LsEntry.Attributes.getMTime();
+				FileSystemEntry.Time.LastWriteTime = LsEntry.Attributes.getMTime();
+				FileSystemEntry.Time.LastAccessTime = LsEntry.Attributes.getATime();
 				//Console.WriteLine("FILE(" + LsEntry.getFilename() + ") : (" + LsEntry.getAttrs().getPermissions() + ") (" + String.Join(",", LsEntry.getAttrs().getExtended()) + ")");
 				//Console.WriteLine(String.Format("FILE({}) : ({})", LsEntry.getFilename(), Convert.ToString(LsEntry.getAttrs().getPermissions(), 2)));
 				//Console.WriteLine("FILE(" + LsEntry.getFilename() + ") : (" + Convert.ToString(LsEntry.getAttrs().getPermissions(), 2) + ")");

@@ -92,13 +92,13 @@ namespace Tamir.SharpSsh.jsch
 		{
 			//System.out.println("guess: ");
 			String[] guess=new String[PROPOSAL_MAX];
-			Buffer sb=new Buffer(I_S); sb.setOffSet(17);
-			Buffer cb=new Buffer(I_C); cb.setOffSet(17);
+			Buffer sb=new Buffer(I_S); sb.Offset = 17;
+			Buffer cb=new Buffer(I_C); cb.Offset = 17;
 
 			for(int i=0; i<PROPOSAL_MAX; i++)
 			{
-				byte[] sp=sb.getString();  // server proposal
-				byte[] cp=cb.getString();  // client proposal
+				byte[] sp=sb.ReadString();  // server proposal
+				byte[] cp=cb.ReadString();  // client proposal
 
 				//System.out.println("server-proposal: |"+Encoding.UTF8.GetString(sp)+"|");
 				//System.out.println("client-proposal: |"+Encoding.UTF8.GetString(cp)+"|");

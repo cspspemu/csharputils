@@ -51,37 +51,37 @@ namespace Tamir.SharpSsh.jsch
 			s=0;
 		}
 		public Buffer():this(1024*10*2){ }
-		public void putByte(byte foo)
+		public void WriteByte(byte foo)
 		{
 			buffer[index++]=foo;
 		}
-		public void putByte(byte[] foo) 
+		public void WriteByte(byte[] foo) 
 		{
-			putByte(foo, 0, foo.Length);
+			WriteByte(foo, 0, foo.Length);
 		}
-		public void putByte(byte[] foo, int begin, int length) 
+		public void WriteByte(byte[] foo, int begin, int length) 
 		{
 			Array.Copy(foo, begin, buffer, index, length);
 			index+=length;
 		}
-		public void putString(String foo)
+		public void WriteString(String foo)
 		{
-			putString(Encoding.UTF8.GetBytes(foo));
+			WriteString(Encoding.UTF8.GetBytes(foo));
 		}
-		public void putString(byte[] foo)
+		public void WriteString(byte[] foo)
 		{
-			putString(foo, 0, foo.Length);
+			WriteString(foo, 0, foo.Length);
 		}
-		public void putString(byte[] foo, int begin, int length) 
+		public void WriteString(byte[] foo, int begin, int length) 
 		{
-			putInt(length);
-			putByte(foo, begin, length);
+			WriteInt(length);
+			WriteByte(foo, begin, length);
 		}
-		public void putInt(int v)
+		public void WriteInt(int v)
 		{
-			putInt((uint)v);
+			WriteInt((uint)v);
 		}
-		public void putInt(uint v) 
+		public void WriteInt(uint v) 
 		{
 			uint val = (uint)v;
 			tmp[0]=(byte)(val >> 24);
@@ -91,7 +91,7 @@ namespace Tamir.SharpSsh.jsch
 			Array.Copy(tmp, 0, buffer, index, 4);
 			index+=4;
 		}
-		public void putLong(long v) 
+		public void WriteLong(long v) 
 		{
 			ulong val = (ulong)v;
 			tmp[0]=(byte)(val >> 56);
@@ -106,11 +106,11 @@ namespace Tamir.SharpSsh.jsch
 			Array.Copy(tmp, 0, buffer, index+4, 4);
 			index+=8;
 		}
-		internal void skip(int n) 
+		internal void Skip(int n) 
 		{
 			index+=n;
 		}
-		internal void putPad(int n) 
+		internal void WritePadding(int n) 
 		{
 			while(n>0)
 			{
@@ -118,83 +118,89 @@ namespace Tamir.SharpSsh.jsch
 				n--;
 			}
 		}
-		public void putMPInt(byte[] foo)
+		public void WriteMPInt(byte[] foo)
 		{
 			int i=foo.Length;
 			if((foo[0]&0x80)!=0)
 			{
 				i++;
-				putInt(i);
-				putByte((byte)0);
+				WriteInt(i);
+				WriteByte((byte)0);
 			}
 			else
 			{
-				putInt(i);
+				WriteInt(i);
 			}
-			putByte(foo);
+			WriteByte(foo);
 		}
-		public int getLength()
+		public int Length
 		{
-			return index-s;
+            get
+            {
+                return index - s;
+            }
 		}
-		public int getOffSet()
+		public int Offset
 		{
-			return s;
+            set
+            {
+                this.s = value;
+            }
+            get
+            {
+			    return s;
+            }
 		}
-		public void setOffSet(int s)
+		public long ReadLong()
 		{
-			this.s=s;
-		}
-		public long getLong()
-		{
-			long foo = getInt()&0xffffffffL;
-			foo = ((foo<<32)) | (getInt()&0xffffffffL);
+			long foo = ReadInt()&0xffffffffL;
+			foo = ((foo<<32)) | (ReadInt()&0xffffffffL);
 			return foo;
 		}
-		public int getInt()
+		public int ReadInt()
 		{
-			uint foo = (uint) getShort();
-			foo = ((foo<<16)&0xffff0000) | ((uint)getShort()&0xffff);
+			uint foo = (uint) ReadShort();
+			foo = ((foo<<16)&0xffff0000) | ((uint)ReadShort()&0xffff);
 			return (int)foo;
 		}
-		internal int getShort() 
+		internal int ReadShort() 
 		{
-			int foo = getByte();
-			foo = ((foo<<8)&0xff00)|(getByte()&0xff);
+			int foo = ReadByte();
+			foo = ((foo<<8)&0xff00)|(ReadByte()&0xff);
 			return foo;
 		}
-		public int getByte() 
+		public int ReadByte() 
 		{
 			return (buffer[s++]&0xff);
 		}
-		public void getByte(byte[] foo) 
+		public void ReadByte(byte[] foo) 
 		{
-			getByte(foo, 0, foo.Length);
+			ReadByte(foo, 0, foo.Length);
 		}
-		void getByte(byte[] foo, int start, int len) 
+		void ReadByte(byte[] foo, int start, int len) 
 		{
 			Array.Copy(buffer, s, foo, start, len); 
 			s+=len;
 		}
-		public int getByte(int len) 
+		public int ReadByte(int len) 
 		{
 			int foo=s;
 			s+=len;
 			return foo;
 		}
-		public byte[] getMPInt() 
+		public byte[] ReadMPInt() 
 		{
-			int i=getInt();
+			int i=ReadInt();
 			byte[] foo=new byte[i];
-			getByte(foo, 0, i);
+			ReadByte(foo, 0, i);
 			return foo;
 		}
-		public byte[] getMPIntBits() 
+		public byte[] ReadMPIntBits() 
 		{
-			int bits=getInt();
+			int bits=ReadInt();
 			int bytes=(bits+7)/8;
 			byte[] foo=new byte[bytes];
-			getByte(foo, 0, bytes);
+			ReadByte(foo, 0, bytes);
 			if((foo[0]&0x80)!=0)
 			{
 				byte[] bar=new byte[foo.Length+1];
@@ -204,33 +210,33 @@ namespace Tamir.SharpSsh.jsch
 			}
 			return foo;
 		}
-		public byte[] getString() 
+		public byte[] ReadString() 
 		{
-			int i=getInt();
+			int i=ReadInt();
 			byte[] foo=new byte[i];
-			getByte(foo, 0, i);
+			ReadByte(foo, 0, i);
 			return foo;
 		}
-		internal byte[] getString(int[]start, int[]len) 
+		internal byte[] ReadString(int[]start, int[]len) 
 		{
-			int i=getInt();
-			start[0]=getByte(i);
+			int i=ReadInt();
+			start[0]=ReadByte(i);
 			len[0]=i;
 			return buffer;
 		}
-		public void reset()
+		public void Reset()
 		{
 			index=0;
 			s=0;
 		}
-		public void shift()
+		public void Shift()
 		{
 			if(s==0)return;
 			Array.Copy(buffer, s, buffer, 0, index-s);
 			index=index-s;
 			s=0;
 		}
-		internal void rewind()
+		internal void Rewind()
 		{
 			s=0;
 		}

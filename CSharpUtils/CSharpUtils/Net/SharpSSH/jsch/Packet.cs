@@ -95,7 +95,7 @@ namespace Tamir.SharpSsh.jsch
 			{
 				random.fill(buffer.buffer, buffer.index, pad);
 			}
-			buffer.skip(pad);
+			buffer.Skip(pad);
 			//buffer.putPad(pad);
 			/*
 			for(int i=0; i<buffer.index; i++){
@@ -117,7 +117,7 @@ namespace Tamir.SharpSsh.jsch
 				len+5+9, 
 				buffer.buffer, s, buffer.index-5-9-len);
 			buffer.index=10;
-			buffer.putInt(len);
+			buffer.WriteInt(len);
 			buffer.index=len+5+9;
 			return s;
 		}
@@ -128,8 +128,8 @@ namespace Tamir.SharpSsh.jsch
 				buffer.buffer, 5+9, len);
 			buffer.buffer[5]=command;
 			buffer.index=6;
-			buffer.putInt(recipient);
-			buffer.putInt(len);
+			buffer.WriteInt(recipient);
+			buffer.WriteInt(len);
 			buffer.index=len+5+9;
 		}
 

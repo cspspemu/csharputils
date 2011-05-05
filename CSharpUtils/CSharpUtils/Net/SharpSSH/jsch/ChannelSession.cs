@@ -72,10 +72,10 @@ namespace Tamir.SharpSsh.jsch
 					}
 					if(_close)break;
 					packet.reset();
-					buf.putByte((byte)Session.SSH_MSG_CHANNEL_DATA);
-					buf.putInt(recipient);
-					buf.putInt(i);
-					buf.skip(i);
+					buf.WriteByte((byte)Session.SSH_MSG_CHANNEL_DATA);
+					buf.WriteInt(recipient);
+					buf.WriteInt(i);
+					buf.Skip(i);
 					session.write(packet, this, i);
 				}
 			}

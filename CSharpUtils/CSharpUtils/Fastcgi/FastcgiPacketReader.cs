@@ -44,10 +44,62 @@ namespace CSharpUtils.Fastcgi
 
         public void ReadAllPackets()
         {
+            while (ReadPacket())
+            {
+            }
+        }
+
+		public bool ReadPacket()
+		{
+            byte[] Content = null;
+            Fastcgi.PacketType Type = Fastcgi.PacketType.FCGI_UNKNOWN_TYPE;
+            ushort RequestId = 0;
+
             try
             {
-                while (ReadPacket())
+                int Readed = FastcgiPipe.Read(Header, 0, 8);
+                if (Readed != 8)
                 {
+                    Console.WriteLine("Header not completed");
+                    return false;
+                }
+
+                var Version = Header[0];
+                Type = (Fastcgi.PacketType)Header[1];
+                RequestId = (ushort)((Header[2] << 8) | (Header[3] << 0));
+                var ContentLength = (Header[4] << 8) | (Header[5] << 0);
+                var PaddingLength = Header[6];
+
+                if (Version != 1)
+                {
+                    Console.Error.WriteLine("Unknown Version " + Version);
+                    return false;
+                }
+
+                Content = new byte[ContentLength];
+
+                if (Debug)
+                {
+                    Console.WriteLine("ReadPacket(Version={0}, Type={1}, RequestId={2}, ContentLength={3}, PaddingLength={4})", Version, Type, RequestId, ContentLength, PaddingLength);
+                }
+
+                if (ContentLength > 0)
+                {
+                    Readed = FastcgiPipe.Read(Content, 0, ContentLength);
+                    if (Readed != ContentLength)
+                    {
+                        Console.WriteLine("Content not completed");
+                        return false;
+                    }
+                }
+                if (PaddingLength > 0)
+                {
+                    Readed = FastcgiPipe.Read(Padding, 0, PaddingLength);
+                    if (Readed != PaddingLength)
+                    {
+                        Console.WriteLine("Padding not completed");
+                        return false;
+                    }
                 }
             }
             catch (Exception Exception)
@@ -55,54 +107,6 @@ namespace CSharpUtils.Fastcgi
                 if (Debug)
                 {
                     Console.Error.WriteLine(Exception);
-                }
-            }
-        }
-
-		public bool ReadPacket()
-		{
-            int Readed = FastcgiPipe.Read(Header, 0, 8);
-            if (Readed != 8)
-            {
-                Console.WriteLine("Header not completed");
-                return false;
-            }
-
-            var Version = Header[0];
-			var Type = (Fastcgi.PacketType)Header[1];
-			var RequestId = (ushort)((Header[2] << 8) | (Header[3] << 0));
-			var ContentLength = (Header[4] << 8) | (Header[5] << 0);
-			var PaddingLength = Header[6];
-
-            if (Version != 1)
-            {
-                Console.Error.WriteLine("Unknown Version " + Version);
-                return false;
-            }
-
-
-			var Content = new byte[ContentLength];
-
-            if (Debug)
-            {
-                Console.WriteLine("ReadPacket(Version={0}, Type={1}, RequestId={2}, ContentLength={3}, PaddingLength={4})", Version, Type, RequestId, ContentLength, PaddingLength);
-            }
-
-            if (ContentLength > 0)
-            {
-                Readed = FastcgiPipe.Read(Content, 0, ContentLength);
-                if (Readed != ContentLength)
-                {
-                    Console.WriteLine("Content not completed");
-                    return false;
-                }
-            }
-            if (PaddingLength > 0)
-            {
-                Readed = FastcgiPipe.Read(Padding, 0, PaddingLength);
-                if (Readed != PaddingLength)
-                {
-                    Console.WriteLine("Padding not completed");
                     return false;
                 }
             }

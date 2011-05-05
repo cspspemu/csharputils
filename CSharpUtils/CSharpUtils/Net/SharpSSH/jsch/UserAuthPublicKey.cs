@@ -77,13 +77,13 @@ namespace Tamir.SharpSsh.jsch
 					// boolen    FALSE
 					// string    plaintext password (ISO-10646 UTF-8)
 					packet.reset();
-					buf.putByte((byte)Session.SSH_MSG_USERAUTH_REQUEST);
-					buf.putString(_username);
-					buf.putString(Util.getBytes("ssh-connection"));
-					buf.putString(Util.getBytes("publickey"));
-					buf.putByte((byte)0);
-					buf.putString(Util.getBytes(identity.getAlgName()));
-					buf.putString(pubkeyblob);
+					buf.WriteByte((byte)Session.SSH_MSG_USERAUTH_REQUEST);
+					buf.WriteString(_username);
+					buf.WriteString(Util.getBytes("ssh-connection"));
+					buf.WriteString(Util.getBytes("publickey"));
+					buf.WriteByte((byte)0);
+					buf.WriteString(Util.getBytes(identity.getAlgName()));
+					buf.WriteString(pubkeyblob);
 					session.write(packet);
 
 				loop1:
@@ -106,9 +106,9 @@ namespace Tamir.SharpSsh.jsch
 						}
 						else if(buf.buffer[5]==Session.SSH_MSG_USERAUTH_BANNER)
 						{
-							buf.getInt(); buf.getByte(); buf.getByte();
-							byte[] _message=buf.getString();
-							byte[] lang=buf.getString();
+							buf.ReadInt(); buf.ReadByte(); buf.ReadByte();
+							byte[] _message=buf.ReadString();
+							byte[] lang=buf.ReadString();
 							String message=null;
 							try{ message=Util.getStringUTF8(_message); }
 							catch
@@ -180,13 +180,13 @@ namespace Tamir.SharpSsh.jsch
 				// boolen    TRUE
 				// string    plaintext password (ISO-10646 UTF-8)
 				packet.reset();
-				buf.putByte((byte)Session.SSH_MSG_USERAUTH_REQUEST);
-				buf.putString(_username);
-				buf.putString(Util.getBytes("ssh-connection"));
-				buf.putString(Util.getBytes("publickey"));
-				buf.putByte((byte)1);
-				buf.putString(Util.getBytes(identity.getAlgName()));
-				buf.putString(pubkeyblob);
+				buf.WriteByte((byte)Session.SSH_MSG_USERAUTH_REQUEST);
+				buf.WriteString(_username);
+				buf.WriteString(Util.getBytes("ssh-connection"));
+				buf.WriteString(Util.getBytes("publickey"));
+				buf.WriteByte((byte)1);
+				buf.WriteString(Util.getBytes(identity.getAlgName()));
+				buf.WriteString(pubkeyblob);
 
 				//      byte[] tmp=new byte[buf.index-5];
 				//      System.arraycopy(buf.buffer, 5, tmp, 0, tmp.length);
@@ -207,7 +207,7 @@ namespace Tamir.SharpSsh.jsch
 				{  // for example, too long key length.
 					break;
 				}
-				buf.putString(signature);
+				buf.WriteString(signature);
 
 				session.write(packet);
 
@@ -225,9 +225,9 @@ namespace Tamir.SharpSsh.jsch
 					}
 					else if(buf.buffer[5]==Session.SSH_MSG_USERAUTH_BANNER)
 					{
-						buf.getInt(); buf.getByte(); buf.getByte();
-						byte[] _message=buf.getString();
-						byte[] lang=buf.getString();
+						buf.ReadInt(); buf.ReadByte(); buf.ReadByte();
+						byte[] _message=buf.ReadString();
+						byte[] lang=buf.ReadString();
 						String message=null;
 						try{ message=Util.getStringUTF8(_message); }
 						catch
@@ -242,9 +242,9 @@ namespace Tamir.SharpSsh.jsch
 					}
 					else if(buf.buffer[5]==Session.SSH_MSG_USERAUTH_FAILURE)
 					{
-						buf.getInt(); buf.getByte(); buf.getByte(); 
-						byte[] foo=buf.getString();
-						int partial_success=buf.getByte();
+						buf.ReadInt(); buf.ReadByte(); buf.ReadByte(); 
+						byte[] foo=buf.ReadString();
+						int partial_success=buf.ReadByte();
 						//System.out.println(Encoding.UTF8.GetString(foo)+
 						//                   " partial_success:"+(partial_success!=0));
 						if(partial_success!=0)

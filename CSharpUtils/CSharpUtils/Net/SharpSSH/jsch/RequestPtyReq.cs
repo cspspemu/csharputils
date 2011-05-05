@@ -42,16 +42,16 @@ namespace Tamir.SharpSsh.jsch
 			Packet packet=new Packet(buf);
 
 			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString(Util.getBytes("pty-req"));
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putString(Util.getBytes("vt100"));
-			buf.putInt(80);
-			buf.putInt(24);
-			buf.putInt(640);
-			buf.putInt(480);
-			buf.putString(Util.getBytes(""));
+			buf.WriteByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
+			buf.WriteInt(channel.getRecipient());
+			buf.WriteString(Util.getBytes("pty-req"));
+			buf.WriteByte((byte)(waitForReply() ? 1 : 0));
+			buf.WriteString(Util.getBytes("vt100"));
+			buf.WriteInt(80);
+			buf.WriteInt(24);
+			buf.WriteInt(640);
+			buf.WriteInt(480);
+			buf.WriteString(Util.getBytes(""));
 			session.write(packet);
 		}
 		public bool waitForReply(){ return false; }

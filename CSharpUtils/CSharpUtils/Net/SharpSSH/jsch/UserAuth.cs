@@ -41,8 +41,8 @@ namespace Tamir.SharpSsh.jsch
 			// byte      SSH_MSG_SERVICE_REQUEST(5)
 			// string    service name "ssh-userauth"
 			packet.reset();
-			buf.putByte((byte)Session.SSH_MSG_SERVICE_REQUEST);
-			buf.putString(Util.getBytes("ssh-userauth"));
+			buf.WriteByte((byte)Session.SSH_MSG_SERVICE_REQUEST);
+			buf.WriteString(Util.getBytes("ssh-userauth"));
 			session.write(packet);
 
 			// receive

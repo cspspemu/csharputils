@@ -64,13 +64,13 @@ class UserAuthKeyboardInteractive : UserAuth{
       // string    language tag (as defined in [RFC-3066])
       // string    submethods (ISO-10646 UTF-8)
       packet.reset();
-      buf.putByte((byte)Session.SSH_MSG_USERAUTH_REQUEST);
-      buf.putString(_username);
-      buf.putString(Util.getBytes("ssh-connection"));
+      buf.WriteByte((byte)Session.SSH_MSG_USERAUTH_REQUEST);
+      buf.WriteString(_username);
+      buf.WriteString(Util.getBytes("ssh-connection"));
       //buf.putString("ssh-userauth".getBytes());
-      buf.putString(Util.getBytes("keyboard-interactive"));
-      buf.putString(Util.getBytes(""));
-      buf.putString(Util.getBytes(""));
+      buf.WriteString(Util.getBytes("keyboard-interactive"));
+      buf.WriteString(Util.getBytes(""));
+      buf.WriteString(Util.getBytes(""));
       session.write(packet);
 
       bool firsttime=true;
@@ -93,9 +93,9 @@ class UserAuthKeyboardInteractive : UserAuth{
 	  return true;
 	}
 	if(buf.buffer[5]==Session.SSH_MSG_USERAUTH_BANNER){
-	  buf.getInt(); buf.getByte(); buf.getByte();
-	  byte[] _message=buf.getString();
-	  byte[] lang=buf.getString();
+	  buf.ReadInt(); buf.ReadByte(); buf.ReadByte();
+	  byte[] _message=buf.ReadString();
+	  byte[] lang=buf.ReadString();
 	  String message=null;
 	  try{ message=Util.getStringUTF8(_message); }
 	  catch{
@@ -107,9 +107,9 @@ class UserAuthKeyboardInteractive : UserAuth{
 	  goto loop;
 	}
 	if(buf.buffer[5]==Session.SSH_MSG_USERAUTH_FAILURE){
-	  buf.getInt(); buf.getByte(); buf.getByte(); 
-	  byte[] foo=buf.getString();
-	  int partial_success=buf.getByte();
+	  buf.ReadInt(); buf.ReadByte(); buf.ReadByte(); 
+	  byte[] foo=buf.ReadString();
+	  int partial_success=buf.ReadByte();
 //	  System.out.println(Encoding.UTF8.GetString(foo)+
 //			     " partial_success:"+(partial_success!=0));
 
@@ -126,11 +126,11 @@ class UserAuthKeyboardInteractive : UserAuth{
 	}
 	if(buf.buffer[5]==Session.SSH_MSG_USERAUTH_INFO_REQUEST){
 	  firsttime=false;
-	  buf.getInt(); buf.getByte(); buf.getByte();
-	  String name=Util.getString(buf.getString());
-	  String instruction=Util.getString(buf.getString());
-	  String languate_tag=Util.getString(buf.getString());
-	  int num=buf.getInt();
+	  buf.ReadInt(); buf.ReadByte(); buf.ReadByte();
+	  String name=Util.getString(buf.ReadString());
+	  String instruction=Util.getString(buf.ReadString());
+	  String languate_tag=Util.getString(buf.ReadString());
+	  int num=buf.ReadInt();
 //System.out.println("name: "+name);
 //System.out.println("instruction: "+instruction);
 //System.out.println("lang: "+languate_tag);
@@ -138,8 +138,8 @@ class UserAuthKeyboardInteractive : UserAuth{
 	  String[] prompt=new String[num];
 	  bool[] echo=new bool[num];
 	  for(int i=0; i<num; i++){
-	    prompt[i]=Util.getString(buf.getString());
-	    echo[i]=(buf.getByte()!=0);
+	    prompt[i]=Util.getString(buf.ReadString());
+	    echo[i]=(buf.ReadByte()!=0);
 //System.out.println("  "+prompt[i]+","+echo[i]);
 	  }
 
@@ -166,19 +166,19 @@ class UserAuthKeyboardInteractive : UserAuth{
 //else
 //System.out.println("response is null");
 	  packet.reset();
-	  buf.putByte((byte)Session.SSH_MSG_USERAUTH_INFO_RESPONSE);
+	  buf.WriteByte((byte)Session.SSH_MSG_USERAUTH_INFO_RESPONSE);
 	  if(num>0 &&
 	     (response==null ||  // cancel
 	      num!=response.Length)){
-	    buf.putInt(0);
+	    buf.WriteInt(0);
 	    if(response==null)
 	      cancel=true;
 	  }
 	  else{
-	    buf.putInt(num);
+	    buf.WriteInt(num);
 	    for(int i=0; i<num; i++){
 //System.out.println("response: |"+response[i]+"| <- replace here with **** if you need");
-	      buf.putString(Util.getBytes(response[i]));
+	      buf.WriteString(Util.getBytes(response[i]));
 	    }
 	  }
 	  session.write(packet);

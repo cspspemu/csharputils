@@ -81,15 +81,15 @@ namespace Tamir.SharpSsh.jsch
 				// uint32 maxmum packet size   // 0x4000(16384)
 
 				packet.reset();
-				buf.putByte((byte)90);
-				buf.putString(Util.getBytes("direct-tcpip"));
-				buf.putInt(id);
-				buf.putInt(lwsize);
-				buf.putInt(lmpsize);
-				buf.putString(Util.getBytes(host));
-				buf.putInt(port);
-				buf.putString(Util.getBytes(originator_IP_address));
-				buf.putInt(originator_port);
+				buf.WriteByte((byte)90);
+				buf.WriteString(Util.getBytes("direct-tcpip"));
+				buf.WriteInt(id);
+				buf.WriteInt(lwsize);
+				buf.WriteInt(lmpsize);
+				buf.WriteString(Util.getBytes(host));
+				buf.WriteInt(port);
+				buf.WriteString(Util.getBytes(originator_IP_address));
+				buf.WriteInt(originator_port);
 				session.write(packet);
 
 				int retry=1000;
@@ -168,10 +168,10 @@ namespace Tamir.SharpSsh.jsch
 					}
 					if(_close)break;
 					packet.reset();
-					buf.putByte((byte)Session.SSH_MSG_CHANNEL_DATA);
-					buf.putInt(recipient);
-					buf.putInt(i);
-					buf.skip(i);
+					buf.WriteByte((byte)Session.SSH_MSG_CHANNEL_DATA);
+					buf.WriteInt(recipient);
+					buf.WriteInt(i);
+					buf.Skip(i);
 					session.write(packet, this, i);
 				}
 			}

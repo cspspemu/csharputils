@@ -110,12 +110,12 @@ namespace Tamir.SharpSsh.jsch
 					if(plain[0]!=0x30)
 					{              // FSecure
 						Buffer buf=new Buffer(plain);
-						buf.getInt();
-						P_array=buf.getMPIntBits();
-						G_array=buf.getMPIntBits();
-						Q_array=buf.getMPIntBits();
-						pub_array=buf.getMPIntBits();
-						prv_array=buf.getMPIntBits();
+						buf.ReadInt();
+						P_array=buf.ReadMPIntBits();
+						G_array=buf.ReadMPIntBits();
+						Q_array=buf.ReadMPIntBits();
+						pub_array=buf.ReadMPIntBits();
+						prv_array=buf.ReadMPIntBits();
 						return true;
 					}
 					return false;
@@ -219,11 +219,11 @@ namespace Tamir.SharpSsh.jsch
 				Q_array.Length+4+ 
 				G_array.Length+4+ 
 				pub_array.Length+4);
-			buf.putString(sshdss);
-			buf.putString(P_array);
-			buf.putString(Q_array);
-			buf.putString(G_array);
-			buf.putString(pub_array);
+			buf.WriteString(sshdss);
+			buf.WriteString(P_array);
+			buf.WriteString(Q_array);
+			buf.WriteString(G_array);
+			buf.WriteString(pub_array);
 			return buf.buffer;
 		}
 

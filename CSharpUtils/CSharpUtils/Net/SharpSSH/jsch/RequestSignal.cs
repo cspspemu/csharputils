@@ -41,11 +41,11 @@ namespace Tamir.SharpSsh.jsch
 			Packet packet=new Packet(buf);
 
 			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString( Util.getBytes("signal"));
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putString(Util.getBytes(signal));
+			buf.WriteByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
+			buf.WriteInt(channel.getRecipient());
+			buf.WriteString( Util.getBytes("signal"));
+			buf.WriteByte((byte)(waitForReply() ? 1 : 0));
+			buf.WriteString(Util.getBytes(signal));
 			session.write(packet);
 		}
 		public bool waitForReply(){ return false; }

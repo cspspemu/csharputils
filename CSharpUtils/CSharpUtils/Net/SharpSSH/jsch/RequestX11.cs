@@ -51,14 +51,14 @@ namespace Tamir.SharpSsh.jsch
 			// string    x11 authentication cookie
 			// uint32    x11 screen number
 			packet.reset();
-			buf.putByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
-			buf.putInt(channel.getRecipient());
-			buf.putString(Util.getBytes("x11-req"));
-			buf.putByte((byte)(waitForReply() ? 1 : 0));
-			buf.putByte((byte)0);
-			buf.putString(Util.getBytes("MIT-MAGIC-COOKIE-1"));
-			buf.putString(ChannelX11.getFakedCookie(session));
-			buf.putInt(0);
+			buf.WriteByte((byte) Session.SSH_MSG_CHANNEL_REQUEST);
+			buf.WriteInt(channel.getRecipient());
+			buf.WriteString(Util.getBytes("x11-req"));
+			buf.WriteByte((byte)(waitForReply() ? 1 : 0));
+			buf.WriteByte((byte)0);
+			buf.WriteString(Util.getBytes("MIT-MAGIC-COOKIE-1"));
+			buf.WriteString(ChannelX11.getFakedCookie(session));
+			buf.WriteInt(0);
 			session.write(packet);
 		}
 		public bool waitForReply(){ return false; }

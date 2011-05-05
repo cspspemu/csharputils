@@ -571,31 +571,31 @@ namespace Tamir.SharpSsh.jsch
 				{
 
 					Buffer _buf=new Buffer(data);
-					_buf.getInt();  // 0x3f6ff9be
-					_buf.getInt();
-					byte[]_type=_buf.getString();
+					_buf.ReadInt();  // 0x3f6ff9be
+					_buf.ReadInt();
+					byte[]_type=_buf.ReadString();
 					//System.outs.println("type: "+Encoding.UTF8.GetString(_type)); 
-					byte[] _cipher=_buf.getString();
+					byte[] _cipher=_buf.ReadString();
 					String cipher=Util.getString(_cipher);
 					//System.outs.println("cipher: "+cipher); 
 					if(cipher.Equals("3des-cbc"))
 					{
-						_buf.getInt();
-						byte[] foo=new byte[data.Length-_buf.getOffSet()];
-						_buf.getByte(foo);
+						_buf.ReadInt();
+						byte[] foo=new byte[data.Length-_buf.Offset];
+						_buf.ReadByte(foo);
 						data=foo;
 						encrypted=true;
 						throw new JSchException("unknown privatekey format: "+prvkey);
 					}
 					else if(cipher.Equals("none"))
 					{
-						_buf.getInt();
-						_buf.getInt();
+						_buf.ReadInt();
+						_buf.ReadInt();
 
 						encrypted=false;
 
-						byte[] foo=new byte[data.Length-_buf.getOffSet()];
-						_buf.getByte(foo);
+						byte[] foo=new byte[data.Length-_buf.Offset];
+						_buf.ReadByte(foo);
 						data=foo;
 					}
 				}

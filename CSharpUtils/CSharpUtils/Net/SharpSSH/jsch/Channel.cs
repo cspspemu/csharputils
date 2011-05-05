@@ -161,11 +161,11 @@ namespace Tamir.SharpSsh.jsch
 				// uint32 initial window size  // 0x100000(65536)
 				// uint32 maxmum packet size   // 0x4000(16384)
 				packet.reset();
-				buf.putByte((byte)90);
-				buf.putString(this.type);
-				buf.putInt(this.id);
-				buf.putInt(this.lwsize);
-				buf.putInt(this.lmpsize);
+				buf.WriteByte((byte)90);
+				buf.WriteString(this.type);
+				buf.WriteInt(this.id);
+				buf.WriteInt(this.lwsize);
+				buf.WriteInt(this.lmpsize);
 				session.write(packet);
 
 				int retry=1000;
@@ -210,9 +210,9 @@ namespace Tamir.SharpSsh.jsch
 
 		internal virtual void getData(Buffer buf)
 		{
-			setRecipient(buf.getInt());
-			setRemoteWindowSize(buf.getInt());
-			setRemotePacketSize(buf.getInt());
+			setRecipient(buf.ReadInt());
+			setRemoteWindowSize(buf.ReadInt());
+			setRemotePacketSize(buf.ReadInt());
 		}
 
 		public virtual void setInputStream(Stream In)
@@ -343,8 +343,8 @@ namespace Tamir.SharpSsh.jsch
 				Buffer buf=new Buffer(100);
 				Packet packet=new Packet(buf);
 				packet.reset();
-				buf.putByte((byte)Session.SSH_MSG_CHANNEL_EOF);
-				buf.putInt(getRecipient());
+				buf.WriteByte((byte)Session.SSH_MSG_CHANNEL_EOF);
+				buf.WriteInt(getRecipient());
 				session.write(packet);
 			}
 			catch(Exception e)
@@ -403,8 +403,8 @@ namespace Tamir.SharpSsh.jsch
 				Buffer buf=new Buffer(100);
 				Packet packet=new Packet(buf);
 				packet.reset();
-				buf.putByte((byte)Session.SSH_MSG_CHANNEL_CLOSE);
-				buf.putInt(getRecipient());
+				buf.WriteByte((byte)Session.SSH_MSG_CHANNEL_CLOSE);
+				buf.WriteInt(getRecipient());
 				session.write(packet);
 			}
 			catch(Exception e)
