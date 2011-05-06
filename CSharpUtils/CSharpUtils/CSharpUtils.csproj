@@ -68,6 +68,7 @@
     <Compile Include="Fastcgi\FastcgiRequest.cs" />
     <Compile Include="Fastcgi\FastcgiServer.cs" />
     <Compile Include="FieldMapping.cs" />
+    <Compile Include="LinqXmlExExtensions.cs" />
     <Compile Include="Net\SharpSSH\jsch\ChannelSftp.Commands.cs" />
     <Compile Include="ProduceConsumeBuffer.cs" />
     <Compile Include="ArrayUtils.cs" />

@@ -26,7 +26,12 @@ namespace CSharpUtils
 
         static public byte[] GetStringzBytes(this String String, Encoding Encoding)
         {
-            return Encoding.GetBytes(String).Concat(new byte[] { 0 }).ToArray();
+			return String.GetBytes(Encoding).Concat(new byte[] { 0 }).ToArray();
         }
+
+		static public byte[] GetBytes(this String This, Encoding Encoding)
+		{
+			return Encoding.GetBytes(This);
+		}
     }
 }
