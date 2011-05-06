@@ -55,7 +55,7 @@
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
-    <Compile Include="ConsumerMemoryStream.cs" />
+    <Compile Include="Streams\ConsumerMemoryStream.cs" />
     <Compile Include="Fastcgi\FascgiRequestInputStream.cs" />
     <Compile Include="Fastcgi\FascgiResponseOutputStream.cs" />
     <Compile Include="Fastcgi\Fastcgi.cs" />
@@ -290,8 +290,8 @@
     <Compile Include="Process\ProcessBase.cs" />
     <Compile Include="Process\RunDelegate.cs" />
     <Compile Include="Process\State.cs" />
-    <Compile Include="ProxyStream.cs" />
-    <Compile Include="SliceStream.cs" />
+    <Compile Include="Streams\ProxyStream.cs" />
+    <Compile Include="Streams\SliceStream.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocatorStream.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />

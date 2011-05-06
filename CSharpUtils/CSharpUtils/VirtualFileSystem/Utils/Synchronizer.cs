@@ -7,6 +7,7 @@ using CSharpUtils;
 using System.Diagnostics;
 using System.Windows.Forms;
 using CSharpUtils.Forms;
+using CSharpUtils.Streams;
 
 namespace CSharpUtils.VirtualFileSystem.Utils
 {

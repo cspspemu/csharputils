@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
+using CSharpUtils.Streams;
 
 namespace CSharpUtils.Compression.Zip
 {

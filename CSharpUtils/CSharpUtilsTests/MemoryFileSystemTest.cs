@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using CSharpUtils;
+using CSharpUtils.Streams;
 
 namespace CSharpUtilsTests
 {

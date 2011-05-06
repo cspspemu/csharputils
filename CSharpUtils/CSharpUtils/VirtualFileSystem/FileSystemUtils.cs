@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using CSharpUtils.Streams;
 
 namespace CSharpUtils.VirtualFileSystem
 {

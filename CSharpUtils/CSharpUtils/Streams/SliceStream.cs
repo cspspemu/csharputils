@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace CSharpUtils
+namespace CSharpUtils.Streams
 {
     public class SliceStream : ProxyStream
     {
@@ -24,6 +24,8 @@ namespace CSharpUtils
         public SliceStream(Stream ParentStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
             : base(ParentStream)
         {
+			if (!ParentStream.CanSeek) throw(new NotImplementedException("ParentStream must be seekable"));
+
             this.ThisPosition = 0;
             this.ThisStart = ThisStart;
             if (ThisLength == -1)

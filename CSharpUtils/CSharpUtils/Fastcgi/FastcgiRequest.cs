@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
+using CSharpUtils.Streams;
 
 namespace CSharpUtils.Fastcgi
 {
