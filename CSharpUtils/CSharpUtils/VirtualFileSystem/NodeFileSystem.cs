@@ -130,7 +130,22 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public NodeFileSystem()
 		{
+			Initialize();
+		}
+
+		public void Initialize()
+		{
+			RemoveAllFiles();
+		}
+
+		protected void SetRootNode()
+		{
 			RootNode = new Node(this, null, "");
+		}
+
+		public void RemoveAllFiles()
+		{
+			SetRootNode();
 		}
 
 		internal override IEnumerable<FileSystemEntry> ImplFindFiles(string Path)

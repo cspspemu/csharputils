@@ -117,5 +117,21 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			return "FileSystemEntry(FullName=" + FullName + ", Name=" + Name + ", Size=" + Size + ", Type=" + Type + ")";
 		}
+
+		public FileSystemEntry Clone()
+		{
+			var That = new FileSystemEntry(this.FileSystem, this.Path)
+			{
+				ExtendedFlags = this.ExtendedFlags,
+				FileSystem = this.FileSystem,
+				Path = this.Path,
+				Size = this.Size,
+				Time = this.Time,
+				Type = this.Type,
+				GroupId = this.GroupId,
+				UserId = this.UserId,
+			};
+			return That;
+		}
 	}
 }

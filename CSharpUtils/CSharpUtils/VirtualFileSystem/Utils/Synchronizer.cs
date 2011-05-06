@@ -281,7 +281,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			}
 		}
 
-		public void ShowProgressForm()
+		public void ShowProgressForm(Action Start = null, Action Complete = null)
 		{
 			var ProgressForm = new ProgressForm();
 
@@ -295,6 +295,10 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				return (MessageBox.Show("¿Está seguro de querer cancelar la sincronización?", "Atención", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes);
 			};
 
+			if (Complete != null)
+			{
+				ProgressForm.Complete += Complete;
+			}
 
 			ProgressForm.Process = delegate()
 			{
@@ -336,6 +340,11 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			{
 				this.Cancel();
 			};
+
+			if (Start != null)
+			{
+				Start();
+			}
 
 			//ProgressForm.ShowDialog();
 			ProgressForm.ExecuteProcess();

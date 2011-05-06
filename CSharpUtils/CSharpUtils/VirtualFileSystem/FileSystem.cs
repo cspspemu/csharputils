@@ -125,6 +125,11 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 		}
 
+		virtual protected FileSystemEntry FilterFileSystemEntry(FileSystemEntry FileSystemEntry)
+		{
+			return FileSystemEntry;
+		}
+
 		abstract internal IEnumerable<FileSystemEntry> ImplFindFiles(String Path);
 		public IEnumerable<FileSystemEntry> FindFiles(String Path)
 		{
@@ -133,6 +138,7 @@ namespace CSharpUtils.VirtualFileSystem
 			return NewFileSystem.FindMountedFiles(NewPath)
 				.Concat(NewFileSystem.ImplFindFiles(NewPath))
 				.DistinctByKey(FileSystemEntry => FileSystemEntry.Name)
+				.Select(FileSystemEntry => FilterFileSystemEntry(FileSystemEntry))
 			;
 		}
 

@@ -61,7 +61,8 @@ namespace CSharpUtils.VirtualFileSystem
 
 		override internal FileSystemFileStream ImplOpenFile(string FileName, System.IO.FileMode FileMode)
 		{
-			return new RemoteFileSystemFileStream(this, RealPath(FileName), FileMode);
+			//return new RemoteFileSystemFileStream(this, RealPath(FileName), FileMode);
+			return new RemoteFileSystemFileStream(this, (FileName), FileMode);
 		}
 
 		public override string Title

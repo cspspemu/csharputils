@@ -26,6 +26,15 @@ namespace CSharpUtils.VirtualFileSystem
 			base.Access(CombinePath(AccessPath, Path), out NewFileSystem, out NewPath);
 		}
 
+		protected override FileSystemEntry FilterFileSystemEntry(FileSystemEntry FileSystemEntry)
+		{
+			var NewFileSystemEntry = FileSystemEntry.Clone();
+			{
+				NewFileSystemEntry.Path = NewFileSystemEntry.Path.Substring(AccessPath.Length);
+			}
+			return NewFileSystemEntry;
+		}
+
 		public override String Title
 		{
 			get

@@ -17,7 +17,7 @@ namespace CSharpUtils.Forms
 	{
 		public Action Process, Cancel;
 		public Func<bool> OnCancelClick;
-		public event Action Ended;
+		public event Action Complete;
 		bool Cancelled = false;
 
 		public ProgressForm()
@@ -32,7 +32,7 @@ namespace CSharpUtils.Forms
 			{
 				Cancelled = true;
 			};
-			Ended += new Action(ProgressForm_Ended);
+			Complete += new Action(ProgressForm_Ended);
 		}
 
 		void ProgressForm_Ended()
@@ -69,7 +69,7 @@ namespace CSharpUtils.Forms
 				(new Thread(delegate()
 				{
 					Process();
-					if (Ended != null) Ended();
+					if (Complete != null) Complete();
 				})).Start();
 			}
 			ShowDialog();
@@ -87,10 +87,16 @@ namespace CSharpUtils.Forms
 		{
 			this.progressBar1.Invoke(new Action(delegate()
 			{
-				this.labelDetails.Text = Details;
-				this.progressBar1.Minimum = 0;
-				this.progressBar1.Maximum = 10000;
-				this.progressBar1.Value = (int)(Value * 10000);
+				try
+				{
+					this.labelDetails.Text = Details;
+					this.progressBar1.Minimum = 0;
+					this.progressBar1.Maximum = 10000;
+					this.progressBar1.Value = (int)(Value * 10000);
+				}
+				catch (Exception e) {
+					Console.Error.WriteLine("Waring: " + e);
+				}
 			}));
 		}
 	}

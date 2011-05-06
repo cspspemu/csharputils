@@ -29,6 +29,11 @@ namespace CSharpUtils
 			return String.GetBytes(Encoding).Concat(new byte[] { 0 }).ToArray();
         }
 
+		static public byte[] GetBytes(this String This)
+		{
+			return This.GetBytes(Encoding.UTF8);
+		}
+
 		static public byte[] GetBytes(this String This, Encoding Encoding)
 		{
 			return Encoding.GetBytes(This);
