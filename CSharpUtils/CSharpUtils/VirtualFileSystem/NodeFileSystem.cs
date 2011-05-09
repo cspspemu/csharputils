@@ -13,8 +13,21 @@ namespace CSharpUtils.VirtualFileSystem
 			public String Name;
 			public Node Parent;
 			public Dictionary<String, Node> Childs = new Dictionary<String, Node>();
-			public FileSystemFileStream FileSystemFileStream;
-			public FileSystemEntry.FileTime Time;
+			protected FileSystemFileStream _FileSystemFileStream;
+			public FileSystemEntry FileSystemEntry;
+
+			public FileSystemFileStream FileSystemFileStream
+			{
+				get
+				{
+					return _FileSystemFileStream;
+				}
+				set
+				{
+					_FileSystemFileStream = value;
+					FileSystemEntry.Type = (value == null) ? FileSystemEntry.EntryType.Directory : FileSystemEntry.EntryType.File;
+				}
+			}
 
 			public long Size
 			{
@@ -37,6 +50,7 @@ namespace CSharpUtils.VirtualFileSystem
 				get
 				{
 					return FileSystemFileStream == null;
+					//return (FileSystemEntry.Type == FileSystemEntry.EntryType.Directory);
 				}
 			}
 
@@ -74,8 +88,9 @@ namespace CSharpUtils.VirtualFileSystem
 				this.NodeFileSystem = NodeFileSystem;
 				this.Parent = Parent;
 				this.Name = Name;
+				this.FileSystemEntry = new FileSystemEntry(NodeFileSystem, this.FullName);
+				this.FileSystemFileStream = null;
 			}
-
 
 			protected Node AccessChild(String Name, bool CreateNode = false)
 			{
@@ -152,14 +167,7 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			foreach (var Child in RootNode.Access(Path).Childs.Values)
 			{
-				yield return new FileSystemEntry(this, Child.FullName)
-				{
-					ExtendedFlags = FileSystemEntry.ExtendedFlagsTypes.None,
-					GroupId = 0,
-					Size = Child.Size,
-					Time = Child.Time,
-					Type = Child.IsDirectory ? FileSystemEntry.EntryType.Directory : FileSystemEntry.EntryType.File,
-				};
+				yield return Child.FileSystemEntry;
 			}
 		}
 

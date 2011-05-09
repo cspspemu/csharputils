@@ -51,7 +51,14 @@ namespace CSharpUtils.VirtualFileSystem
 						case FileMode.OpenOrCreate:
 						case FileMode.Append:
 						case FileMode.Open:
-							RemoteFileSystem.DownloadFile(FileName, TempFileName);
+							try {
+								RemoteFileSystem.DownloadFile(FileName, TempFileName);
+							}
+							catch (Exception Exception)
+							{
+								throw(new FileNotFoundException("Can't find ftp file '" + FileName + "'", Exception));
+							}
+
 							break;
 					}
 

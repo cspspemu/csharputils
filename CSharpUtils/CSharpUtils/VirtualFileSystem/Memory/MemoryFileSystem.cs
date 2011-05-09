@@ -18,17 +18,19 @@ namespace CSharpUtils.VirtualFileSystem.Memory
 			}
 		}
 
-		public void AddFile(String AddFileName, Stream Contents)
+		public Node AddFile(String AddFileName, Stream Contents)
 		{
 			AddFileName = AbsoluteNormalizePath(AddFileName);
 			var Node = RootNode.Access(AddFileName, true);
-			Node.Time = new FileSystemEntry.FileTime()
+			Node.FileSystemEntry.Time = new FileSystemEntry.FileTime()
 			{
-				CreationTime   = DateTime.Now,
+				IsNow = true,
+				CreationTime = DateTime.Now,
 				LastAccessTime = DateTime.Now,
 				LastWriteTime  = DateTime.Now,
 			};
 			Node.FileSystemFileStream = new FileSystemFileStreamStream(this, Contents);
+			return Node;
 		}
 
 		public override String Title

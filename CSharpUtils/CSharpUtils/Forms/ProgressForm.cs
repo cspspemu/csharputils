@@ -85,19 +85,26 @@ namespace CSharpUtils.Forms
 
 		public void SetStep(double Value, String Details)
 		{
-			this.progressBar1.Invoke(new Action(delegate()
+			try
 			{
-				try
+				this.progressBar1.Invoke(new Action(delegate()
 				{
-					this.labelDetails.Text = Details;
-					this.progressBar1.Minimum = 0;
-					this.progressBar1.Maximum = 10000;
-					this.progressBar1.Value = (int)(Value * 10000);
-				}
-				catch (Exception e) {
-					Console.Error.WriteLine("Waring: " + e);
-				}
-			}));
+					try
+					{
+						this.labelDetails.Text = Details;
+						this.progressBar1.Minimum = 0;
+						this.progressBar1.Maximum = 10000;
+						this.progressBar1.Value = (int)(Value * 10000);
+					}
+					catch (Exception e) {
+						Console.Error.WriteLine("Waring: " + e);
+					}
+				}));
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("Waring: " + e);
+			}
 		}
 	}
 }

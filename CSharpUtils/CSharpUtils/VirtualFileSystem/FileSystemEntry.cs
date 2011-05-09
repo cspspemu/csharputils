@@ -29,6 +29,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public class FileTime
 		{
+			public bool IsNow = false;
 			protected DateTimeRange _CreationTime;
 			protected DateTimeRange _LastAccessTime;
 			protected DateTimeRange _LastWriteTime;

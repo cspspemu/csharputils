@@ -157,7 +157,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				// Existant file (Contained in the Destination)
 				else
 				{
-					var DestinationFile = DestinationFiles[SourceFileName];
+					FileSystemEntry DestinationFile = DestinationFiles[SourceFileName];
 
 					// Check old files for updated.
 					if (_SynchronizationMode.HasFlag(SynchronizationMode.UpdateOldFiles))
@@ -169,8 +169,9 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 							AreEquals = false;
 						}
 
-						if (_ReferenceMode.HasFlag(ReferenceMode.LastWriteTime) && (SourceFile.Time.LastWriteTime == DestinationFile.Time.LastWriteTime))
+						if (_ReferenceMode.HasFlag(ReferenceMode.LastWriteTime) && (SourceFile.Time.IsNow || (SourceFile.Time.LastWriteTime != DestinationFile.Time.LastWriteTime)))
 						{
+							//Console.WriteLine(SourceFile + ":  " + SourceFile.Time.LastWriteTime + " != " + DestinationFile.Time.LastWriteTime);
 							AreEquals = false;
 						}
 
@@ -311,6 +312,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				}
 				catch (Exception Exception)
 				{
+					Console.WriteLine(Exception);
 					if (MessageBox.Show(Exception.Message, "Can't connect to local FileSystem", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Retry)
 					{
 						goto RetrySource;
@@ -326,6 +328,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				}
 				catch (Exception Exception)
 				{
+					Console.WriteLine(Exception);
 					if (MessageBox.Show(Exception.Message, "Can't connect to remote FileSystem", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Retry)
 					{
 						goto RetryDestination;
