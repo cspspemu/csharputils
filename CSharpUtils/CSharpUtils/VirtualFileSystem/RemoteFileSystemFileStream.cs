@@ -15,12 +15,14 @@ namespace CSharpUtils.VirtualFileSystem
 		protected RemoteFileSystem RemoteFileSystem;
 
 		public RemoteFileSystemFileStream(RemoteFileSystem RemoteFileSystem, String FileName, FileMode FileMode)
-			: base(RemoteFileSystem, null)
+			: base(RemoteFileSystem, (Lazy<Stream>)null)
 		{
 			this.RemoteFileSystem = RemoteFileSystem;
 			this.FileName = FileName;
 			this.FileMode = FileMode;
 		}
+
+		protected Stream _Stream;
 
 		override public Stream Stream
 		{

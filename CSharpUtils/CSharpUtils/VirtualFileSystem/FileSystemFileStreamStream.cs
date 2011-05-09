@@ -8,19 +8,25 @@ namespace CSharpUtils.VirtualFileSystem
 {
 	public class FileSystemFileStreamStream : FileSystemFileStream
 	{
-		protected Stream _Stream;
+		protected Lazy<Stream> _LazyStream;
 
 		public FileSystemFileStreamStream(FileSystem FileSystem, Stream Stream)
 			: base(FileSystem)
 		{
-			this._Stream = Stream;
+			this._LazyStream = new Lazy<Stream>(() => Stream);
+		}
+
+		public FileSystemFileStreamStream(FileSystem FileSystem, Lazy<Stream> LazyStream)
+			: base(FileSystem)
+		{
+			this._LazyStream = LazyStream;
 		}
 
 		virtual public Stream Stream
 		{
 			get
 			{
-				return _Stream;
+				return _LazyStream.Value;
 			}
 		}
 

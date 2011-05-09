@@ -18,7 +18,7 @@ namespace CSharpUtils.VirtualFileSystem.Memory
 			}
 		}
 
-		public Node AddFile(String AddFileName, Stream Contents)
+		public Node AddFile(String AddFileName, Lazy<Stream> Contents)
 		{
 			AddFileName = AbsoluteNormalizePath(AddFileName);
 			var Node = RootNode.Access(AddFileName, true);
@@ -27,10 +27,15 @@ namespace CSharpUtils.VirtualFileSystem.Memory
 				IsNow = true,
 				CreationTime = DateTime.Now,
 				LastAccessTime = DateTime.Now,
-				LastWriteTime  = DateTime.Now,
+				LastWriteTime = DateTime.Now,
 			};
 			Node.FileSystemFileStream = new FileSystemFileStreamStream(this, Contents);
 			return Node;
+		}
+
+		public Node AddFile(String AddFileName, Stream Contents)
+		{
+			return AddFile(AddFileName, new Lazy<Stream>(() => Contents));
 		}
 
 		public override String Title
