@@ -159,26 +159,31 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				{
 					FileSystemEntry DestinationFile = DestinationFiles[SourceFileName];
 
+					bool AreEquals = true;
+
+					if (SourceFile.SpecialFlags.HasFlag(FileSystemEntry.SpecialFlagsTypes.SynchronizeAlways))
+					{
+						AreEquals = false;
+					}
+
 					// Check old files for updated.
 					if (_SynchronizationMode.HasFlag(SynchronizationMode.UpdateOldFiles))
 					{
-						bool AreEquals = true;
-
 						if (_ReferenceMode.HasFlag(ReferenceMode.Size) && (SourceFile.Size != DestinationFile.Size))
 						{
 							AreEquals = false;
 						}
 
-						if (_ReferenceMode.HasFlag(ReferenceMode.LastWriteTime) && (SourceFile.Time.IsNow || (SourceFile.Time.LastWriteTime != DestinationFile.Time.LastWriteTime)))
+						if (_ReferenceMode.HasFlag(ReferenceMode.LastWriteTime) && (SourceFile.Time.LastWriteTime != DestinationFile.Time.LastWriteTime))
 						{
 							//Console.WriteLine(SourceFile + ":  " + SourceFile.Time.LastWriteTime + " != " + DestinationFile.Time.LastWriteTime);
 							AreEquals = false;
 						}
+					}
 
-						if (!AreEquals)
-						{
-							FilesToUpdate.AddLast(SourceFile);
-						}
+					if (!AreEquals)
+					{
+						FilesToUpdate.AddLast(SourceFile);
 					}
 				}
 			}

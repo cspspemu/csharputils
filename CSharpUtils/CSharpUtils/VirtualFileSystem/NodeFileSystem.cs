@@ -16,6 +16,11 @@ namespace CSharpUtils.VirtualFileSystem
 			protected FileSystemFileStream _FileSystemFileStream;
 			public FileSystemEntry FileSystemEntry;
 
+			public Node SynchronizeAlways() {
+				this.FileSystemEntry.SpecialFlags |= FileSystemEntry.SpecialFlagsTypes.SynchronizeAlways;
+				return this;
+			}
+
 			public FileSystemFileStream FileSystemFileStream
 			{
 				get

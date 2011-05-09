@@ -24,7 +24,6 @@ namespace CSharpUtils.VirtualFileSystem.Memory
 			var Node = RootNode.Access(AddFileName, true);
 			Node.FileSystemEntry.Time = new FileSystemEntry.FileTime()
 			{
-				IsNow = true,
 				CreationTime = DateTime.Now,
 				LastAccessTime = DateTime.Now,
 				LastWriteTime = DateTime.Now,

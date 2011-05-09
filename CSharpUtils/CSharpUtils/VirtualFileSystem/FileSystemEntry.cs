@@ -27,9 +27,14 @@ namespace CSharpUtils.VirtualFileSystem
 			Device     = 32,
 		}
 
+		public enum SpecialFlagsTypes
+		{
+			None = 0,
+			SynchronizeAlways = 1,
+		}
+
 		public class FileTime
 		{
-			public bool IsNow = false;
 			protected DateTimeRange _CreationTime;
 			protected DateTimeRange _LastAccessTime;
 			protected DateTimeRange _LastWriteTime;
@@ -94,6 +99,7 @@ namespace CSharpUtils.VirtualFileSystem
 		public int GroupId;
 		public EntryType Type = EntryType.Unknown;
 		public ExtendedFlagsTypes ExtendedFlags;
+		public SpecialFlagsTypes SpecialFlags;
 
 		public String FullName { get {
 			return Path;
