@@ -130,11 +130,11 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			CallStep(StepFrom, String.Format(SynchronizingFormat, Path));
 
 			var SourceFiles = this.SourceFileSystem
-				.FindFiles(SourcePath + "/" + Path)
+				.FindFiles(FileSystem.CombinePath(SourcePath, Path))
 				.ToDictionary(FileSystemEntry => FileSystemEntry.Name)
 			;
 			var DestinationFiles = this.DestinationFileSystem
-				.FindFiles(DestinationPath + "/" + Path)
+				.FindFiles(FileSystem.CombinePath(DestinationPath, Path))
 				.ToDictionary(FileSystemEntry => FileSystemEntry.Name)
 			;
 			var FilesToRemove = new LinkedList<FileSystemEntry>();
@@ -151,7 +151,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 				if (SourceFile.Type == FileSystemEntry.EntryType.Directory)
 				{
-					FoldersToExplore.AddLast(Path + "/" + SourceFileName);
+					FoldersToExplore.AddLast(FileSystem.CombinePath(Path, SourceFileName));
 				}
 			}
 
@@ -230,7 +230,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 			foreach (var FileToUpdate in FilesToUpdate)
 			{
-				String FileToUpdatePathFileName = Path + "/" + FileToUpdate.Name;
+				String FileToUpdatePathFileName = FileSystem.CombinePath(Path, FileToUpdate.Name);
 
 				CheckCanceling();
 				CallStep(GetStep(StepFrom, StepTo, step++, steps), String.Format(UpdatingFormat, FileToUpdatePathFileName));
@@ -249,7 +249,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 			foreach (var FileToRemove in FilesToRemove)
 			{
-				String FileToRemovePathFileName = Path + "/" + FileToRemove.Name;
+				String FileToRemovePathFileName = FileSystem.CombinePath(Path, FileToRemove.Name);
 
 				CheckCanceling();
 				CallStep(GetStep(StepFrom, StepTo, step++, steps), String.Format(RemovingFormat, FileToRemovePathFileName));
@@ -275,11 +275,11 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 		{
 			try
 			{
-				DestinationFileSystem.CreateDirectory(DestinationPath + "/" + PathFileName);
+				DestinationFileSystem.CreateDirectory(FileSystem.CombinePath(DestinationPath, PathFileName));
 			}
 			catch (Exception Exception)
 			{
-				Console.WriteLine("Error creating folder '{0}' : {1}", DestinationPath + "/" + PathFileName, Exception.Message);
+				Console.WriteLine("Error creating folder '{0}' : {1}", FileSystem.CombinePath(DestinationPath, PathFileName), Exception.Message);
 			}
 		}
 
@@ -287,18 +287,18 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 		{
 			try
 			{
-				DestinationFileSystem.DeleteFile(DestinationPath + "/" + PathFileName);
+				DestinationFileSystem.DeleteFile(FileSystem.CombinePath(DestinationPath, PathFileName));
 			}
 			catch (Exception Exception)
 			{
-				Console.WriteLine("Error deleting file '{0}' : {1}", DestinationPath + "/" + PathFileName, Exception.Message);
+				Console.WriteLine("Error deleting file '{0}' : {1}", FileSystem.CombinePath(DestinationPath, PathFileName), Exception.Message);
 			}
 		}
 
 		protected void CopyFile(String PathFileName)
 		{
-			using (var SourceStream = SourceFileSystem.OpenFile(SourcePath + "/" + PathFileName, FileMode.Open))
-			using (var DestinationStream = DestinationFileSystem.OpenFile(DestinationPath + "/" + PathFileName, FileMode.Create))
+			using (var SourceStream = SourceFileSystem.OpenFile(FileSystem.CombinePath(DestinationPath, PathFileName), FileMode.Open))
+			using (var DestinationStream = DestinationFileSystem.OpenFile(FileSystem.CombinePath(DestinationPath, PathFileName), FileMode.Create))
 			{
                 SourceStream.CopyToFast(DestinationStream);
 			}

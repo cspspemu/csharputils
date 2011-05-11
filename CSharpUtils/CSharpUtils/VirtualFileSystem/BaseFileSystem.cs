@@ -29,7 +29,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		static public String CombinePath(String BasePath, String PathToCombine)
 		{
-			return BasePath + "/" + PathToCombine;
+			return BasePath.TrimEnd('/') + "/" + PathToCombine.TrimStart('/');
 		}
 
 		static public String AbsoluteNormalizePath(String Path, String CurrentWorkingPath = "")
@@ -56,7 +56,7 @@ namespace CSharpUtils.VirtualFileSystem
 				}
 			}
 
-			return String.Join("/", Components);
+			return String.Join("/", Components).TrimStart('/');
 		}
 
 		public String ComparablePath(String Path)

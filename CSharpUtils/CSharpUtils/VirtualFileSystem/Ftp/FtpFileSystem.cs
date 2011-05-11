@@ -69,7 +69,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 
 		override protected String RealPath(String Path)
 		{
-			return RootPath + "/" + Path;
+			return CombinePath(RootPath, Path);
 		}
 
 		override public void Shutdown()
@@ -127,6 +127,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 			Ftp.ChangeDir(RootPath);
 			foreach (var FTPEntry in Entries)
 			{
+				//Console.WriteLine(Path + " :: " + FTPEntry.Name);
 				var FileSystemEntry = new FtpFileSystemEntry(this, Path + "/" + FTPEntry.Name, FTPEntry);
 
 				yield return FileSystemEntry;
@@ -143,7 +144,7 @@ namespace CSharpUtils.VirtualFileSystem.Ftp
 		{
 			get
 			{
-				return String.Format("ftp://{0}@{1}/{2}", Username, Host, RootPath);
+				return String.Format("ftp://{0}@{1}{2}", Username, Host, RootPath);
 			}
 		}
 

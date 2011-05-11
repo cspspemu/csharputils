@@ -30,7 +30,7 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			var NewFileSystemEntry = FileSystemEntry.Clone();
 			{
-				NewFileSystemEntry.Path = NewFileSystemEntry.Path.Substring(AccessPath.Length);
+				NewFileSystemEntry.Path = NewFileSystemEntry.Path.Substring(AccessPath.Length).PadLeft('/');
 			}
 			return NewFileSystemEntry;
 		}
@@ -39,7 +39,7 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			get
 			{
-				return ParentFileSystem.Title + "/" + AccessPath;
+				return ParentFileSystem.Title.TrimEnd('/') + "/" + AccessPath.TrimStart('/');
 			}
 		}
 

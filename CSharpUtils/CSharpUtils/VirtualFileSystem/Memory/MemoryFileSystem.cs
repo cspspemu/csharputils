@@ -37,11 +37,13 @@ namespace CSharpUtils.VirtualFileSystem.Memory
 			return AddFile(AddFileName, new Lazy<Stream>(() => Contents));
 		}
 
+		public String _Title = "memory://";
+
 		public override String Title
 		{
 			get
 			{
-				return String.Format("memory://");
+				return _Title;
 			}
 		}
 	}

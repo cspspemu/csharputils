@@ -23,7 +23,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 
 		protected String RealPath(String Path)
 		{
-			return (RootPath + "/" + Path).Replace('/', '\\');
+			return CombinePath(RootPath, Path).Replace('/', '\\');
 		}
 
 		override internal FileSystemEntry ImplGetFileInfo(String Path)
@@ -109,7 +109,8 @@ namespace CSharpUtils.VirtualFileSystem.Local
 		{
 			get
 			{
-				return "local://" + RootPath;
+				//return "local://" + RootPath;
+				return RootPath;
 			}
 		}
 	}
