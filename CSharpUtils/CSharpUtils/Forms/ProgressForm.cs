@@ -19,6 +19,7 @@ namespace CSharpUtils.Forms
 		public Func<bool> OnCancelClick;
 		public event Action Complete;
 		bool Cancelled = false;
+		public object WaitObject = null;
 
 		public ProgressForm()
 		{
@@ -37,6 +38,14 @@ namespace CSharpUtils.Forms
 
 		void ProgressForm_Ended()
 		{
+			if (WaitObject != null)
+			{
+				lock (WaitObject)
+				{
+					Monitor.Wait(WaitObject);
+				}
+			}
+
 			for (int n = 0; n < 2; n++ )
 			{
 				if (!Visible) return;
@@ -44,15 +53,17 @@ namespace CSharpUtils.Forms
 				{
 					BeginInvoke(new Action(delegate()
 					{
+						/*
 						try
 						{
-							//DialogResult property to be set to DialogResult.Cancel
-							DialogResult = Cancelled ? DialogResult.Cancel : DialogResult.OK;
-							Close();
 						}
 						catch
 						{
 						}
+						*/
+						//DialogResult property to be set to DialogResult.Cancel
+						DialogResult = Cancelled ? DialogResult.Cancel : DialogResult.OK;
+						Close();
 					}));
 				}
 				catch
@@ -72,6 +83,7 @@ namespace CSharpUtils.Forms
 					if (Complete != null) Complete();
 				})).Start();
 			}
+			//Csono
 			ShowDialog();
 		}
 
@@ -79,8 +91,17 @@ namespace CSharpUtils.Forms
 		{
 			if (this.OnCancelClick())
 			{
+				buttonCancel.Text = "Closing...";
+				buttonCancel.Enabled = false;
+
 				if (Cancel != null) Cancel();
 			}
+		}
+
+		public void SetOriginDestination(String Origin, String Destination)
+		{
+			labelOrigin.Text = Origin;
+			labelDestination.Text = Destination;
 		}
 
 		public void SetStep(double Value, String Details)
@@ -91,7 +112,7 @@ namespace CSharpUtils.Forms
 				{
 					try
 					{
-						this.labelDetails.Text = Details;
+						this.labelAction.Text = Details;
 						this.progressBar1.Minimum = 0;
 						this.progressBar1.Maximum = 10000;
 						this.progressBar1.Value = (int)(Value * 10000);

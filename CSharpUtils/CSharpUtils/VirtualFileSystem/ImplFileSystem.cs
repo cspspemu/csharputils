@@ -64,5 +64,13 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			throw new NotImplementedException();
 		}
+
+		public override String Title
+		{
+			get
+			{
+				return this.ToString();
+			}
+		}
 	}
 }

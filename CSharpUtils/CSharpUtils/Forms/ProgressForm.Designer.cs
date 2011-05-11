@@ -30,13 +30,16 @@
 		{
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.progressBar1 = new System.Windows.Forms.ProgressBar();
-			this.labelDetails = new System.Windows.Forms.Label();
+			this.labelAction = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.labelDestination = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.labelOrigin = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// buttonCancel
 			// 
-			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(102, 89);
+			this.buttonCancel.Location = new System.Drawing.Point(112, 157);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(122, 23);
 			this.buttonCancel.TabIndex = 0;
@@ -46,28 +49,67 @@
 			// 
 			// progressBar1
 			// 
-			this.progressBar1.Location = new System.Drawing.Point(12, 47);
+			this.progressBar1.Location = new System.Drawing.Point(12, 119);
 			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(306, 23);
+			this.progressBar1.Size = new System.Drawing.Size(340, 23);
 			this.progressBar1.TabIndex = 1;
 			// 
-			// labelDetails
+			// labelAction
 			// 
-			this.labelDetails.AutoEllipsis = true;
-			this.labelDetails.Location = new System.Drawing.Point(12, 14);
-			this.labelDetails.Name = "labelDetails";
-			this.labelDetails.Size = new System.Drawing.Size(306, 23);
-			this.labelDetails.TabIndex = 2;
-			this.labelDetails.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelAction.AutoEllipsis = true;
+			this.labelAction.Location = new System.Drawing.Point(12, 79);
+			this.labelAction.Name = "labelAction";
+			this.labelAction.Size = new System.Drawing.Size(340, 23);
+			this.labelAction.TabIndex = 2;
+			this.labelAction.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(12, 41);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(57, 23);
+			this.label2.TabIndex = 5;
+			this.label2.Text = "To:";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelDestination
+			// 
+			this.labelDestination.AutoEllipsis = true;
+			this.labelDestination.Location = new System.Drawing.Point(75, 41);
+			this.labelDestination.Name = "labelDestination";
+			this.labelDestination.Size = new System.Drawing.Size(277, 23);
+			this.labelDestination.TabIndex = 4;
+			this.labelDestination.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(12, 12);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(57, 23);
+			this.label4.TabIndex = 7;
+			this.label4.Text = "From:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelOrigin
+			// 
+			this.labelOrigin.AutoEllipsis = true;
+			this.labelOrigin.Location = new System.Drawing.Point(75, 12);
+			this.labelOrigin.Name = "labelOrigin";
+			this.labelOrigin.Size = new System.Drawing.Size(277, 23);
+			this.labelOrigin.TabIndex = 6;
+			this.labelOrigin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ProgressForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(330, 131);
+			this.ClientSize = new System.Drawing.Size(364, 193);
 			this.ControlBox = false;
-			this.Controls.Add(this.labelDetails);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.labelOrigin);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.labelDestination);
+			this.Controls.Add(this.labelAction);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.buttonCancel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -86,6 +128,10 @@
 
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.ProgressBar progressBar1;
-		private System.Windows.Forms.Label labelDetails;
+		private System.Windows.Forms.Label labelAction;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label labelDestination;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label labelOrigin;
 	}
 }

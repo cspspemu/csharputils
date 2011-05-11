@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using CSharpUtils.Forms;
 using CSharpUtils.Streams;
+using System.Threading;
 
 namespace CSharpUtils.VirtualFileSystem.Utils
 {
@@ -17,6 +18,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 		String UpdatingFormat = "Updating {0}...";
 		String SynchronizingFormat = "Synchronizing {0}...";
 		String ConnectingToFormat = "Connecting to {0}...";
+		object IsFinishedLockObject;
 
 		public enum SynchronizationMode
 		{
@@ -41,6 +43,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 		SynchronizationMode _SynchronizationMode;
 		ReferenceMode _ReferenceMode;
 		public event Action<double, String> OnStep;
+		public event Action<Exception> OnError;
 
 		public Synchronizer(FileSystem SourceFileSystem, String SourcePath, FileSystem DestinationFileSystem, String DestinationPath, SynchronizationMode _SynchronizationMode, ReferenceMode _ReferenceMode)
 		{
@@ -53,6 +56,11 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 			OnStep += delegate(double Value, String Details) {
 				//Console.WriteLine("OnStep: " + Value + "; " + Details);
+			};
+
+			OnError += delegate(Exception Exception)
+			{
+				Console.Error.WriteLine(Exception);
 			};
 		}
 
@@ -80,6 +88,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 
 		public void SynchronizeFolder(String Path = "/")
 		{
+			IsFinishedLockObject = new object();
 			try
 			{
 				Console.WriteLine("Synchronizing folder");
@@ -89,6 +98,14 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			catch (OperationCanceledException)
 			{
 				Console.WriteLine("Cancelled");
+			}
+			catch (Exception Exception)
+			{
+				if (OnError != null) OnError(Exception);
+			}
+			lock (IsFinishedLockObject)
+			{
+				Monitor.Pulse(IsFinishedLockObject);
 			}
 		}
 
@@ -290,10 +307,24 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 		public void ShowProgressForm(Action Start = null, Action Complete = null)
 		{
 			var ProgressForm = new ProgressForm();
+			ProgressForm.WaitObject = this.IsFinishedLockObject;
 
 			this.OnStep += delegate(double Value, String Details)
 			{
 				ProgressForm.SetStep(Value, Details);
+			};
+
+			ProgressForm.SetOriginDestination(
+				SourceFileSystem.Title,
+				DestinationFileSystem.Title
+			);
+
+			this.OnError += delegate(Exception Exception)
+			{
+				if (!Canceling)
+				{
+					MessageBox.Show(Exception.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+				}
 			};
 
 			ProgressForm.OnCancelClick = delegate()
@@ -318,9 +349,12 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				catch (Exception Exception)
 				{
 					Console.WriteLine(Exception);
-					if (MessageBox.Show(Exception.Message, "Can't connect to local FileSystem", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Retry)
+					if (!Canceling)
 					{
-						goto RetrySource;
+						if (MessageBox.Show(Exception.Message + "\n\n" + Exception.StackTrace, "Can't connect to local FileSystem", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Retry)
+						{
+							goto RetrySource;
+						}
 					}
 				}
 			
@@ -334,9 +368,12 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				catch (Exception Exception)
 				{
 					Console.WriteLine(Exception);
-					if (MessageBox.Show(Exception.Message, "Can't connect to remote FileSystem", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Retry)
+					if (!Canceling)
 					{
-						goto RetryDestination;
+						if (MessageBox.Show(Exception.Message + "\n\n" + Exception.StackTrace, "Can't connect to remote FileSystem", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2) == DialogResult.Retry)
+						{
+							goto RetryDestination;
+						}
 					}
 				}
 
