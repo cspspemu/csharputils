@@ -98,6 +98,7 @@ namespace CSharpUtils.Net
 		public String Name;
 		public String RawInfo;
 		public int Unknown;
+		public String UserName, GroupName;
 		public int UserId, GroupId;
 		public long Size;
 		public DateTimeRange ModifiedTime;
@@ -281,49 +282,55 @@ namespace CSharpUtils.Net
 			*/
 		}
 
+		static Dictionary<String, int> MonthsMap = new Dictionary<String, int>()
+		{
+			{ "jan", 1 },
+			{ "feb", 2 },
+			{ "mar", 3 },
+			{ "apr", 4 },
+			{ "may", 5 },
+			{ "jun", 6 },
+			{ "jul", 7 },
+			{ "aug", 8 },
+			{ "sep", 9 },
+			{ "oct", 10 },
+			{ "nov", 11 },
+			{ "dec", 12 },
+		};
+
+		// Linux standard
+		/*
+			-rw-r--r--
+			1
+			1000
+			1000
+			12
+			Mar
+			30
+			13:14
+			this is a test.txt
+		*/
+		static Regex regex = new Regex(
+			@"^" +
+			@"(?<Perms>\S+)\s+" +
+			@"(?<Unknown>\S+)\s+" +
+			@"(?<Uid>\S+)\s+" +
+			@"(?<Gid>\S+)\s+" +
+			@"(?<Size>\S+)\s+" +
+			@"(?<Month>\S+)\s+" +
+			@"(?<Day>\S+)\s+" +
+			@"(?<YearOrHour>\S+)\s+" +
+			@"(?<FileName>.*)" +
+			@"$"
+		, RegexOptions.Compiled);
+
+		/// <summary>
+		/// List FTPEntry items with the current path on the FTP connection.
+		/// </summary>
+		/// <returns>List of FTPEntry items</returns>
 		public LinkedList<FTPEntry> ListEntries()
 		{
 			var entries = new LinkedList<FTPEntry>();
-			// Linux standard
-			var regex = new Regex(
-				@"^" +
-				@"(?<Perms>\S+)\s+" +
-				@"(?<Unknown>\S+)\s+" +
-				@"(?<Uid>\S+)\s+" +
-				@"(?<Gid>\S+)\s+" +
-				@"(?<Size>\S+)\s+" +
-				@"(?<Month>\S+)\s+" +
-				@"(?<Day>\S+)\s+" +
-				@"(?<YearOrHour>\S+)\s+" +
-				@"(?<FileName>.*)" +
-				@"$"
-			);
-			/*
-				-rw-r--r--
-				1
-				1000
-				1000
-				12
-				Mar
-				30
-				13:14
-				this is a test.txt
-			*/
-
-			var months = new Dictionary<String, int>();
-			months["jan"] = 1;
-			months["feb"] = 2;
-			months["mar"] = 3;
-			months["apr"] = 4;
-			months["may"] = 5;
-			months["jun"] = 6;
-			months["jul"] = 7;
-			months["aug"] = 8;
-			months["sep"] = 9;
-			months["oct"] = 10;
-			months["nov"] = 11;
-			months["dec"] = 12;
-
 			int defalt_year = DateTime.Now.Year;
 
 			foreach (var row in List())
@@ -332,7 +339,7 @@ namespace CSharpUtils.Net
 				var matches = regex.Match(row.ToString());
 				int year = defalt_year, month = 1, day = 1, hour = 0, minute = 0, second = 0;
 				String year_or_hour = matches.Groups["YearOrHour"].Value;
-				month = months[matches.Groups["Month"].Value.ToLower()];
+				month = MonthsMap[matches.Groups["Month"].Value.ToLower()];
 				day = Convert.ToInt32(matches.Groups["Day"].Value);
 
 				DateTimeRange.PrecisionType Precision;
@@ -356,8 +363,16 @@ namespace CSharpUtils.Net
 				entry.Name = matches.Groups["FileName"].Value;
 				entry.RawInfo = matches.Groups["Perms"].Value;
 				entry.Unknown = Convert.ToInt32(matches.Groups["Unknown"].Value);
-				entry.UserId = Convert.ToInt32(matches.Groups["Uid"].Value);
-				entry.GroupId = Convert.ToInt32(matches.Groups["Gid"].Value);
+				entry.UserName = matches.Groups["Uid"].Value;
+				entry.GroupName = matches.Groups["Gid"].Value;
+				if (!int.TryParse(entry.UserName, out entry.UserId))
+				{
+					entry.UserId = -1;
+				}
+				if (!int.TryParse(entry.GroupName, out entry.GroupId))
+				{
+					entry.GroupId = -1;
+				}
 				entry.Size = Convert.ToInt64(matches.Groups["Size"].Value);
 				entry.ModifiedTime = new DateTimeRange(new DateTime(year, month, day, hour, minute, second), Precision);
 
@@ -382,7 +397,9 @@ namespace CSharpUtils.Net
 			get
 			{
 				if (main_sock != null)
+				{
 					return main_sock.Connected;
+				}
 				return false;
 			}
 		}

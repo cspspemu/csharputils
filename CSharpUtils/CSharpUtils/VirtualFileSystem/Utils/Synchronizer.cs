@@ -260,9 +260,9 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			{
 				DestinationFileSystem.CreateDirectory(DestinationPath + "/" + PathFileName);
 			}
-			catch (Exception e)
+			catch (Exception Exception)
 			{
-				Console.WriteLine("Error creating folder '{0}' : {1}", DestinationPath + "/" + PathFileName, e.Message);
+				Console.WriteLine("Error creating folder '{0}' : {1}", DestinationPath + "/" + PathFileName, Exception.Message);
 			}
 		}
 
@@ -272,9 +272,9 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			{
 				DestinationFileSystem.DeleteFile(DestinationPath + "/" + PathFileName);
 			}
-			catch (Exception e)
+			catch (Exception Exception)
 			{
-				Console.WriteLine("Error deleting file '{0}' : {1}", DestinationPath + "/" + PathFileName, e.Message);
+				Console.WriteLine("Error deleting file '{0}' : {1}", DestinationPath + "/" + PathFileName, Exception.Message);
 			}
 		}
 
