@@ -91,9 +91,9 @@ namespace CSharpUtils.Compression.Zip
 				switch (LocalFileHeader.CompressionMethod)
 				{
 					case CompressionMethod.Stored:
-						return new SliceStream(CompressedStream);
+						return SliceStream.CreateWithLength(CompressedStream);
 					case CompressionMethod.Deflate:
-						return new DeflateStream(new SliceStream(CompressedStream), CompressionMode.Decompress);
+                        return new DeflateStream(SliceStream.CreateWithLength(CompressedStream), CompressionMode.Decompress);
 					default:
 						throw(new NotImplementedException("Not Implementeed : " + LocalFileHeader.CompressionMethod));
 				}

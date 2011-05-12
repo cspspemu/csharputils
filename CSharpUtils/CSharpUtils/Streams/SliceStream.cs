@@ -6,31 +6,76 @@ using System.IO;
 
 namespace CSharpUtils.Streams
 {
+    /// <summary>
+    /// Class to create a SliceStream that will slice a base Stream with its own cursor.
+    /// </summary>
+    /// <example>
+    /// var File = File.OpenRead("file.txt");
+    /// var SliceFile = nSliceStream.CreateWithBounds(File, 10, 20);
+    /// </example>
     public class SliceStream : ProxyStream
     {
+        /// <summary>
+        /// Cursor for this SliceStream.
+        /// </summary>
         protected long ThisPosition;
-        protected long ThisStart, ThisLength;
 
-        static public SliceStream CreateWithLength(Stream ParentStream, long ThisStart, long ThisLength = -1, bool? CanWrite = null)
+        /// <summary>
+        /// Start offset of this SliceStream relative to ParentStream.
+        /// </summary>
+        protected long ThisStart;
+
+        /// <summary>
+        /// Length of this SliceStream.
+        /// </summary>
+        protected long ThisLength;
+
+        /// <summary>
+        /// Creates a SliceStream specifying a start offset and a length.
+        /// </summary>
+        /// <param name="BaseStream">Base Stream</param>
+        /// <param name="ThisStart">Starting Offset</param>
+        /// <param name="ThisLength">Length of the Slice</param>
+        /// <param name="CanWrite">Determines if the Stream will be writtable.</param>
+        /// <returns>A SliceStream</returns>
+        static public SliceStream CreateWithLength(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
         {
-            return new SliceStream(ParentStream, ThisStart, ThisLength, CanWrite);
+            return new SliceStream(BaseStream, ThisStart, ThisLength, CanWrite);
         }
 
-        static public SliceStream CreateWithBounds(Stream ParentStream, long LowerBound, long UpperBound, bool? CanWrite = null)
+        /// <summary>
+        /// Creates a SliceStream specifying a start offset and a end offset.
+        /// </summary>
+        /// <param name="BaseStream">Parent Stream</param>
+        /// <param name="ThisStart">Starting Offset</param>
+        /// <param name="ThisLength">Length of the Slice</param>
+        /// <param name="CanWrite">Determines if the Stream will be writtable.</param>
+        /// <returns>A SliceStream</returns>
+        static public SliceStream CreateWithBounds(Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
         {
-            return new SliceStream(ParentStream, LowerBound, UpperBound - LowerBound, CanWrite);
+            return new SliceStream(BaseStream, LowerBound, UpperBound - LowerBound, CanWrite);
         }
 
-        public SliceStream(Stream ParentStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
-            : base(ParentStream)
+        /// <summary>
+        /// Creates a SliceStream specifying a start offset and a length.
+        /// 
+        /// Please use CreateWithLength or CreateWithBounds to initialite the object.
+        /// </summary>
+        /// <param name="BaseStream">Base Stream</param>
+        /// <param name="ThisStart">Starting Offset</param>
+        /// <param name="ThisLength">Length of the Slice</param>
+        /// <param name="CanWrite">Determines if the Stream will be writtable.</param>
+        /// <returns>A SliceStream</returns>
+        protected SliceStream(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
+            : base(BaseStream)
         {
-			if (!ParentStream.CanSeek) throw(new NotImplementedException("ParentStream must be seekable"));
+			if (!BaseStream.CanSeek) throw(new NotImplementedException("ParentStream must be seekable"));
 
             this.ThisPosition = 0;
             this.ThisStart = ThisStart;
             if (ThisLength == -1)
             {
-                this.ThisLength = ParentStream.Length - ThisStart;
+                this.ThisLength = BaseStream.Length - ThisStart;
             }
             else
             {
@@ -38,6 +83,9 @@ namespace CSharpUtils.Streams
             }
         }
 
+        /// <summary>
+        /// Gets the length of the SliceStream.
+        /// </summary>
         public override long Length
         {
             get
@@ -46,6 +94,9 @@ namespace CSharpUtils.Streams
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current cursor for this SliceStream.
+        /// </summary>
         public override long Position
         {
             get
@@ -60,6 +111,12 @@ namespace CSharpUtils.Streams
             }
         }
 
+        /// <summary>
+        /// Seeks the SliceStream without altering the original Stream.
+        /// </summary>
+        /// <param name="offset">Offset to seek</param>
+        /// <param name="origin">Origin for the seeking</param>
+        /// <returns>Absolute offset after the operation</returns>
         public override long Seek(long offset, SeekOrigin origin)
         {
             //Console.WriteLine("Seek(offset: {0}, origin: {1})", offset, origin);
@@ -79,6 +136,15 @@ namespace CSharpUtils.Streams
             return Position;
         }
 
+        /// <summary>
+        /// Read a chunk from this SliceStream and move its cursor after that chunk.
+        /// Only will be able to read inside the bounds of this Slice.
+        /// It won't change the ParentStream cursor.
+        /// </summary>
+        /// <param name="buffer">ByteArray to write to</param>
+        /// <param name="offset">Offset of the ByteArray to write to</param>
+        /// <param name="count">Number of bytes to read</param>
+        /// <returns>Number of bytes readed</returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
             lock (ParentStream)
@@ -102,6 +168,14 @@ namespace CSharpUtils.Streams
             }
         }
 
+        /// <summary>
+        /// Writes a chunk from this SliceStream and move its cursor after that chunk.
+        /// Only will be able to write inside the bounds of this Slice.
+        /// It won't change the ParentStream cursor.
+        /// </summary>
+        /// <param name="buffer">ByteArray to read from</param>
+        /// <param name="offset">Offset of the ByteArray to read from</param>
+        /// <param name="count">Number of bytes to write</param>
         public override void Write(byte[] buffer, int offset, int count)
         {
             lock (ParentStream)
@@ -124,6 +198,10 @@ namespace CSharpUtils.Streams
             }
         }
 
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="value"></param>
         public override void SetLength(long value)
         {
             throw (new NotImplementedException());

@@ -10,9 +10,9 @@ namespace CSharpUtils.Streams
     {
         protected Stream ParentStream;
 
-        public ProxyStream(Stream ParentStream)
+        public ProxyStream(Stream BaseStream)
         {
-            this.ParentStream = ParentStream;
+            this.ParentStream = BaseStream;
         }
 
         public override bool CanRead { get { return ParentStream.CanRead; } }
