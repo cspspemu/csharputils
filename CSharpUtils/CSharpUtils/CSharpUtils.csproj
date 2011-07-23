@@ -299,7 +299,13 @@
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="StructUtils.cs" />
+    <Compile Include="Templates\Tokenizers\ExpressionTokenizer.cs" />
+    <Compile Include="Templates\ParserNode.cs" />
     <Compile Include="Templates\Template.cs" />
+    <Compile Include="Templates\TemplateToken.cs" />
+    <Compile Include="Templates\Tokenizers\TokenizerStringReader.cs" />
+    <Compile Include="Templates\Tokenizers\TemplateTokenizer.cs" />
+    <Compile Include="Templates\TokenReader.cs" />
     <Compile Include="TimeSampler.cs" />
     <Compile Include="VirtualFileSystem\BaseFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanNet.cs" />

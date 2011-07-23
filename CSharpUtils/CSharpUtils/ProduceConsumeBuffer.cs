@@ -19,6 +19,14 @@ namespace CSharpUtils
 			Items = Items.Concat(NewBytes, Offset, Length);
 		}
 
+        public int ConsumeRemaining
+        {
+            get
+            {
+                return Items.Length;
+            }
+        }
+
 		public T[] Consume(int Length)
 		{
 			var Return = Items.Slice(0, Length);

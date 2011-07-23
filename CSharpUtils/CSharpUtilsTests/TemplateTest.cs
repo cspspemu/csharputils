@@ -19,6 +19,13 @@ namespace CSharpUtilsTests
         }
 
         [TestMethod]
+        public void TestParseWithOperator()
+        {
+            Assert.AreEqual("Hello 3 World", Template.ParseFromString("Hello {{ 1 + 2 }} World").RenderToString(new Dictionary<String, String>() {
+            }));
+        }
+
+        [TestMethod]
         public void TokenizeTest()
         {
             var StringTokens = Template.Tokenize("Hello {{ 'User' + 15 }} Text ").Select(Token => Token.Text).ToArray();

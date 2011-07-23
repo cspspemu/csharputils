@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtilsDokanMount", "CS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtilsFastcgiTest", "CSharpUtilsFastcgiTest\CSharpUtilsFastcgiTest.csproj", "{5FFBD863-02CA-4962-BC7A-E9BDBF85BEC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtilsTemplateTest", "CSharpUtilsTemplateTest\CSharpUtilsTemplateTest.csproj", "{C93718FB-6BA5-4F70-96C7-E9BE0D643899}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = CSharpUtils.vsmdi
@@ -69,6 +71,16 @@ Global
 		{5FFBD863-02CA-4962-BC7A-E9BDBF85BEC4}.Release|Mixed Platforms.Build.0 = Release|x86
 		{5FFBD863-02CA-4962-BC7A-E9BDBF85BEC4}.Release|x86.ActiveCfg = Release|x86
 		{5FFBD863-02CA-4962-BC7A-E9BDBF85BEC4}.Release|x86.Build.0 = Release|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Debug|x86.ActiveCfg = Debug|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Debug|x86.Build.0 = Debug|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Release|Any CPU.ActiveCfg = Release|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Release|Mixed Platforms.Build.0 = Release|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Release|x86.ActiveCfg = Release|x86
+		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

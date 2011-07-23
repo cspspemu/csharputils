@@ -4,356 +4,262 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
+using CSharpUtils.Templates.Tokenizers;
 
 namespace CSharpUtils.Templates
 {
-    public class TemplateToken
-    {
-        public String Text;
-    }
-
-    public class RawTemplateToken : TemplateToken
+    public class Finalize_HandlingLevel_Root : Exception
     {
     }
 
-    public class OpenTagTemplateToken : TemplateToken
+    public class TemplateHandler
     {
-    }
+        TokenReader Tokens;
+        TextWriter TextWriter;
+        dynamic Parameters;
 
-    public class CloseTagTemplateToken : TemplateToken
-    {
-    }
-
-    public class StringLiteralTemplateToken : TemplateToken
-    {
-    }
-
-    public class NumericLiteralTemplateToken : TemplateToken
-    {
-    }
-
-    public class OperatorTemplateToken : TemplateToken
-    {
-    }
-
-    public class IdentifierTemplateToken : TemplateToken
-    {
-    }
-
-    public class StringReaderMatch
-    {
-        public bool Success;
-        public int Index;
-        public int Length;
-        public String Value;
-    }
-
-    public class StringReader
-    {
-        public String Text;
-        public int Offset;
-
-        public StringReader(String Text, int Offset = 0)
+        public TemplateHandler(TokenReader Tokens, TextWriter TextWriter, dynamic Parameters)
         {
-            this.Text = Text;
-            this.Offset = Offset;
+            this.Tokens = Tokens;
+            this.TextWriter = TextWriter;
+            this.Parameters = Parameters;
         }
 
-        public int IndexOf(String Str)
-        {
-            int Index = Text.IndexOf(Str, Offset);
-            if (Index != -1) Index -= Offset;
-            return Index;
-        }
-
-        public StringReaderMatch Match(Regex Regex)
-        {
-            var Return = Regex.Match(Text, Offset);
-            return new StringReaderMatch()
-            {
-                Success = Return.Success,
-                Index = Return.Success ? Return.Index - Offset : -1,
-                Length = Return.Success ? Return.Length : 0,
-                Value = Return.Success ? Return.Value : null,
-            };
-        }
-
-        public char ReadChar()
-        {
-            return Text[Offset++];
-        }
-
-        public void Unread(int Count = 1)
-        {
-            Offset -= Count;
-        }
-
-        public void Skip(int Count = 1)
-        {
-            Offset += Count;
-        }
-
-        public String ReadString(int Length)
-        {
-            var Return = Text.Substring(Offset, Length);
-            Offset += Length;
-            return Return;
-        }
-
-        public void SkipSpaces()
-        {
-            var Match = this.Match(new Regex(@"\s+", RegexOptions.Compiled));
-            if (Match.Index == 0)
-            {
-                Skip(Match.Length);
-            }
-        }
-
-        public String Peek(int Count)
-        {
-            return Text.Substring(Offset, Count);
-        }
-
-        public Char PeekChar()
-        {
-            return Text[Offset];
-        }
-
-        public String GetSlice(int Start, int End)
-        {
-            return Text.Substring(Start, End - Start);
-        }
-
-        int SegmentStart;
-        int SegmentEnd;
-
-        public void SegmentSetStart(int Offset = 0)
-        {
-            SegmentStart = this.Offset + Offset;
-        }
-
-        public void SegmentSetEnd(int Offset = 0)
-        {
-            SegmentEnd = this.Offset + Offset;
-        }
-
-        public String SegmentGetSlice()
-        {
-            return GetSlice(SegmentStart, SegmentEnd);
-        }
-
-        public String ReadString()
-        {
-            return ReadString(Available);
-        }
-
-        public int Available
+        TemplateToken CurrentToken
         {
             get
             {
-                return Text.Length - Offset;
+                return Tokens.Current;
             }
         }
-    }
 
-    public class ExpressionTokenizer
-    {
-        static String[] Operators2 = new String[]
+        string CurrentTokenType
         {
-            "++", "--", "&&", "||",
-        };
-        static char[] Operators1 = new char[]
-        {
-            '+', '-', '*', '/', '%', '|', '(', ')', '{', '}', '[', ']', '.', ':', ',',
-        };
-
-        static public bool IsDecimalDigit(char Char)
-        {
-            return (Char >= '0') && (Char <= '9');
-        }
-
-        static public bool IsAlpha(char Char)
-        {
-            return (Char >= 'a' && Char <= 'z') || (Char >= 'A' && Char <= 'Z') || (Char == '_');
-        }
-
-        static public bool IsAlphaNumeric(char Char)
-        {
-            return IsAlpha(Char) || IsDecimalDigit(Char);
-        }
-
-        static public void Tokenize(List<TemplateToken> Tokens, StringReader StringReader)
-        {
-            //StringReader.SkipSpaces();
-            while (StringReader.Available > 0)
+            get
             {
-                switch (StringReader.Peek(2))
-                {
-                    case "%}":
-                    case "}}":
-                        return;
-                }
-
-                var CharBase = StringReader.PeekChar();
-
-                switch (CharBase)
-                {
-                    // Ignore Spaces
-                    case ' ': case '\t': case '\r': case '\n': case '\v':
-                        StringReader.Skip();
-                        break;
-                    // String
-                    case '\'': case '"':
-                        {
-                            StringReader.SegmentSetStart();
-                            StringReader.Skip();
-                            while (true)
-                            {
-                                var Char = StringReader.ReadChar();
-                                if (Char == '\\')
-                                {
-                                    StringReader.ReadChar();
-                                } else if (Char == CharBase)
-                                {
-                                    break;
-                                }
-                            }
-                            StringReader.SegmentSetEnd();
-                            Tokens.Add(new StringLiteralTemplateToken()
-                            {
-                                Text = StringReader.SegmentGetSlice(),
-                            });
-                        }
-                        break;
-                    default:
-                        // Numbers
-                        if (IsDecimalDigit(CharBase))
-                        {
-                            StringReader.SegmentSetStart();
-                            StringReader.Skip();
-                            while (true)
-                            {
-                                var Char = StringReader.PeekChar();
-                                if (IsDecimalDigit(Char))
-                                {
-                                    StringReader.Skip();
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                            StringReader.SegmentSetEnd();
-                            Tokens.Add(new NumericLiteralTemplateToken()
-                            {
-                                Text = StringReader.SegmentGetSlice(),
-                            });
-                        }
-                        else
-                        {
-                            // Operators
-                            if (Operators2.Contains(StringReader.Peek(2)))
-                            {
-                                Tokens.Add(new OperatorTemplateToken()
-                                {
-                                    Text = StringReader.ReadString(2),
-                                });
-                                break;
-                            }
-
-                            if (Operators1.Contains(CharBase))
-                            {
-                                Tokens.Add(new OperatorTemplateToken()
-                                {
-                                    Text = StringReader.ReadChar().ToString(),
-                                });
-                                break;
-                            }
-
-                            if (IsAlpha(CharBase))
-                            {
-                                StringReader.SegmentSetStart();
-                                StringReader.Skip();
-                                while (true)
-                                {
-                                    var Char = StringReader.PeekChar();
-                                    if (IsAlphaNumeric(Char))
-                                    {
-                                        StringReader.Skip();
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-                                }
-                                StringReader.SegmentSetEnd();
-                                Tokens.Add(new IdentifierTemplateToken()
-                                {
-                                    Text = StringReader.SegmentGetSlice(),
-                                });
-                                break;
-                            }
-
-                            StringReader.Skip();
-
-                            throw (new Exception("Unknown Token Type : '" + CharBase + "'"));
-                        }
-                        break;
-                }
+                return CurrentToken.GetType().FullName;
             }
         }
-    }
 
-    public class TemplateTokenizer
-    {
-        static Regex StartTagRegex = new Regex(@"\{[\{%]", RegexOptions.Compiled);
-
-        static public void Tokenize(List<TemplateToken> Tokens, StringReader StringReader)
+        public ParserNode HandleLevel_Identifier()
         {
-            while (true)
-            {
-                var Match = StringReader.Match(StartTagRegex);
+            ParserNode ParserNode;
 
-                if (Match.Success)
-                {
-                    var RawText = StringReader.ReadString(Match.Index);
-                    if (RawText.Length > 0) Tokens.Add(new RawTemplateToken() { Text = RawText });
-                    var OpenTagTokenString = StringReader.ReadString(2);
-                    Tokens.Add(new OpenTagTemplateToken() { Text = OpenTagTokenString });
+            
+            switch (CurrentTokenType)
+            {
+                case "CSharpUtils.Templates.OperatorTemplateToken":
+                    switch (CurrentToken.Text)
                     {
-                        ExpressionTokenizer.Tokenize(Tokens, StringReader);
+                        case "(":
+                            Tokens.MoveNext();
+                            ParserNode = HandleLevel_Expression();
+                            Tokens.ExpectValue(")");
+                            break;
+                        default:
+                            throw (new Exception(String.Format("Invalid operator '{0}'", CurrentTokenType)));
                     }
-                    var CloseTagTokenString = StringReader.ReadString(2);
-                    var ExpectedCloseTagTokenString = (OpenTagTokenString == "{{") ? "}}" : "%}";
-                    if (CloseTagTokenString != ExpectedCloseTagTokenString)
+                    break;
+                case "CSharpUtils.Templates.NumericLiteralTemplateToken":
+                    ParserNode = new ParserNodeNumericLiteral()
                     {
-                        throw (new Exception("Expected '" + ExpectedCloseTagTokenString + "' but got '" + CloseTagTokenString + "'"));
-                    }
-                    Tokens.Add(new CloseTagTemplateToken() { Text = CloseTagTokenString });
-                    continue;
-                }
-                else
+                        Value = Int64.Parse(CurrentToken.Text),
+                    };
+                    break;
+                case "CSharpUtils.Templates.IdentifierTemplateToken":
+                    ParserNode = new ParserNodeIdentifier()
+                    {
+                        Id = CurrentToken.Text
+                    };
+                    break;
+                default:
+                    throw (new Exception(String.Format("Invalid Identifier '{0}'('{1}')", CurrentTokenType, CurrentToken.Text)));
+            }
+            Tokens.MoveNext();
+
+            return ParserNode;
+        }
+
+        public ParserNode HandleLevel_Sum()
+        {
+            ParserNode ParserNode = HandleLevel_Mul();
+
+            while (Tokens.HasMore)
+            {
+                switch (CurrentTokenType)
                 {
-                    var RawText = StringReader.ReadString();
-                    if (RawText.Length > 0) Tokens.Add(new RawTemplateToken() { Text = RawText });
-                    return;
+                    case "CSharpUtils.Templates.OperatorTemplateToken":
+                        string Operator = CurrentToken.Text;
+                        switch (Operator)
+                        {
+                            case "+": case "-":
+                                Tokens.MoveNext();
+                                ParserNode = new ParserNodeBinaryOperation()
+                                {
+                                    LeftNode = ParserNode,
+                                    Operator = Operator,
+                                    RightNode = HandleLevel_Mul(),
+                                };
+                                break;
+                            default: return ParserNode;
+                        }
+                        break;
+                    default: return ParserNode;
                 }
             }
+
+            return ParserNode;
+        }
+
+        public ParserNode HandleLevel_Mul()
+        {
+            ParserNode ParserNode = HandleLevel_Identifier();
+
+            while (Tokens.HasMore)
+            {
+                switch (CurrentTokenType)
+                {
+                    case "CSharpUtils.Templates.OperatorTemplateToken":
+                        string Operator = CurrentToken.Text;
+                        switch (Operator)
+                        {
+                            case "*":
+                            case "/":
+                                Tokens.MoveNext();
+                                ParserNode = new ParserNodeBinaryOperation()
+                                {
+                                    LeftNode = ParserNode,
+                                    Operator = Operator,
+                                    RightNode = HandleLevel_Identifier(),
+                                };
+                                break;
+                            default: return ParserNode;
+                        }
+                        break;
+                    default: return ParserNode;
+                }
+            }
+
+            return ParserNode;
+        }
+
+        public ParserNode HandleLevel_Expression()
+        {
+            return HandleLevel_Sum();
+        }
+
+        public ParserNode HandleLevel_Tag()
+        {
+            return HandleLevel_Expression();
+        }
+
+        public ParserNode HandleLevel_TagSpecial()
+        {
+            string SpecialType = CurrentToken.Text;
+            switch (SpecialType)
+            {
+                case "if":
+                    Tokens.MoveNext();
+
+                    ParserNode ConditionNode = HandleLevel_Expression();
+                    Tokens.ExpectValue("%}");
+                    Tokens.MoveNext();
+                    ParserNode BodyIfNode = HandleLevel_Root();
+                    ParserNode BodyElseNode = new DummyParserNode();
+
+                    switch (CurrentToken.Text)
+                    {
+                        case "endif":
+                            Tokens.MoveNext();
+                            Tokens.ExpectValue("%}");
+                            Tokens.MoveNext();
+                            break;
+                        case "else":
+                            Tokens.MoveNext();
+                            Tokens.ExpectValue("%}");
+                            Tokens.MoveNext();
+
+                            BodyElseNode = HandleLevel_Root();
+
+                            break;
+                        default:
+                            throw (new Exception(String.Format("Unprocessed Token Type '{0}'", CurrentTokenType)));
+                    }
+
+                    return new IfParserNode()
+                    {
+                        ConditionNode = ConditionNode,
+                        BodyIfNode = BodyIfNode,
+                        BodyElseNode = BodyElseNode,
+                    };
+                case "else":
+                case "endif":
+                    throw (new Finalize_HandlingLevel_Root());
+            }
+            return HandleLevel_Expression();
+        }
+
+        public ParserNode HandleLevel_Root()
+        {
+            var ParserNodeContainer = new ParserNodeContainer();
+
+            try
+            {
+                for (; Tokens.HasMore; Tokens.MoveNext())
+                {
+                    switch (CurrentTokenType)
+                    {
+                        case "CSharpUtils.Templates.RawTemplateToken":
+                            ParserNodeContainer.Add(new ParserNodeLiteral()
+                            {
+                                Text = ((RawTemplateToken)CurrentToken).Text,
+                            });
+                            break;
+                        case "CSharpUtils.Templates.OpenTagTemplateToken":
+                            string OpenType = CurrentToken.Text;
+
+                            Tokens.MoveNext();
+
+                            switch (OpenType)
+                            {
+                                case "{{":
+                                    ParserNodeContainer.Add(new ParserNodeOutputExpression() { Parent = HandleLevel_Tag() });
+                                    Tokens.ExpectValue("}}");
+                                    break;
+                                case "{%":
+                                    ParserNodeContainer.Add(HandleLevel_TagSpecial());
+                                    break;
+                            }
+                            break;
+                        default:
+                            throw (new Exception(String.Format("Unprocessed Token Type '{0}'", CurrentTokenType)));
+                    }
+                }
+            }
+            catch (Finalize_HandlingLevel_Root)
+            {
+            }
+
+            return ParserNodeContainer;
         }
     }
 
     public class Template
     {
+        TokenReader Tokens;
+
         static public List<TemplateToken> Tokenize(String TemplateString)
         {
             var Tokens = new List<TemplateToken>();
-            TemplateTokenizer.Tokenize(Tokens, new StringReader(TemplateString));
+            TemplateTokenizer.Tokenize(Tokens, new TokenizerStringReader(TemplateString));
             return Tokens;
         }
 
         static public Template ParseFromString(String TemplateString)
         {
             var Template = new Template();
+
+            Template.Tokens = new TokenReader(Template.Tokenize(TemplateString));
             //Matches.l
             //Console.WriteLine(Matches.Index);
 
@@ -362,12 +268,19 @@ namespace CSharpUtils.Templates
 
         public void RenderTo(TextWriter TextWriter, dynamic Parameters = null)
         {
+            var TemplateHandler = new TemplateHandler(Tokens, TextWriter, Parameters);
+            var Context = new ParserNodeContext()
+            {
+                TextWriter = TextWriter,
+                Parameters = Parameters,
+            };
+            TemplateHandler.HandleLevel_Root().Optimize(Context).WriteTo(Context);
         }
 
         public String RenderToString(dynamic Parameters = null)
         {
             var StringWriter = new StringWriter();
-            RenderTo(Parameters, StringWriter);
+            RenderTo(StringWriter, Parameters);
             return StringWriter.ToString();
         }
     }

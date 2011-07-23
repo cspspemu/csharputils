@@ -68,7 +68,8 @@ namespace CSharpUtils.Fastcgi
 
                 default:
                     Console.Error.WriteLine("Unhandled packet type: '" + Type + "'");
-                    throw (new Exception("Unhandled packet type: '" + Type + "'"));
+                    //throw (new Exception("Unhandled packet type: '" + Type + "'"));
+                    break;
             }
 
             if (Debug)
