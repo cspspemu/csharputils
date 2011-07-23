@@ -64,5 +64,11 @@ namespace CSharpUtils.Templates
         {
             if (Current.Text != ExpectedValue) throw (new Exception(String.Format("Expected token '{0}' but obtained '{1}'", ExpectedValue, Current.Text)));
         }
+
+        public void ExpectValueAndNext(String ExpectedValue)
+        {
+            ExpectValue(ExpectedValue);
+            MoveNext();
+        }
     }
 }

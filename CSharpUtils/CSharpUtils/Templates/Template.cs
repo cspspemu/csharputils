@@ -49,12 +49,27 @@ namespace CSharpUtils.Templates
             switch (CurrentTokenType)
             {
                 case "CSharpUtils.Templates.OperatorTemplateToken":
-                    switch (CurrentToken.Text)
+                    String Operator = CurrentToken.Text;
+                    switch (Operator)
                     {
+                        // Unary Operators
+                        /*
+                        case "+": case "-":
+                            Tokens.MoveNext();
+                            ParserNode = new ParserNodeUnaryOperation()
+                            {
+                                Parent = HandleLevel_Expression(),
+                                Operator = Operator,
+                            };
+                            Tokens.MoveNext();
+                            
+                            break;
+                        */
                         case "(":
                             Tokens.MoveNext();
                             ParserNode = HandleLevel_Expression();
                             Tokens.ExpectValue(")");
+                            //Tokens.ExpectValueAndNext(")");
                             break;
                         default:
                             throw (new Exception(String.Format("Invalid operator '{0}'", CurrentTokenType)));
@@ -70,6 +85,12 @@ namespace CSharpUtils.Templates
                     ParserNode = new ParserNodeIdentifier()
                     {
                         Id = CurrentToken.Text
+                    };
+                    break;
+                case "CSharpUtils.Templates.StringLiteralTemplateToken":
+                    ParserNode = new ParserNodeStringLiteral()
+                    {
+                        Value = CurrentToken.Text,
                     };
                     break;
                 default:
@@ -159,31 +180,35 @@ namespace CSharpUtils.Templates
             switch (SpecialType)
             {
                 case "if":
+                    bool Alive = true;
+
                     Tokens.MoveNext();
 
                     ParserNode ConditionNode = HandleLevel_Expression();
-                    Tokens.ExpectValue("%}");
-                    Tokens.MoveNext();
+                    Tokens.ExpectValueAndNext("%}");
+
                     ParserNode BodyIfNode = HandleLevel_Root();
                     ParserNode BodyElseNode = new DummyParserNode();
 
-                    switch (CurrentToken.Text)
+                    while (Alive)
                     {
-                        case "endif":
-                            Tokens.MoveNext();
-                            Tokens.ExpectValue("%}");
-                            Tokens.MoveNext();
-                            break;
-                        case "else":
-                            Tokens.MoveNext();
-                            Tokens.ExpectValue("%}");
-                            Tokens.MoveNext();
+                        switch (CurrentToken.Text)
+                        {
+                            case "endif":
+                                Tokens.MoveNext();
+                                Tokens.ExpectValue("%}");
+                                Alive = false;
+                                break;
+                            case "else":
+                                Tokens.MoveNext();
+                                Tokens.ExpectValueAndNext("%}");
 
-                            BodyElseNode = HandleLevel_Root();
+                                BodyElseNode = HandleLevel_Root();
 
-                            break;
-                        default:
-                            throw (new Exception(String.Format("Unprocessed Token Type '{0}'", CurrentTokenType)));
+                                break;
+                            default:
+                                throw (new Exception(String.Format("Unprocessed Token Type '{0}'", CurrentTokenType)));
+                        }
                     }
 
                     return new IfParserNode()
@@ -194,9 +219,35 @@ namespace CSharpUtils.Templates
                     };
                 case "else":
                 case "endif":
+                case "endblock":
                     throw (new Finalize_HandlingLevel_Root());
+                case "block": {
+                    Tokens.MoveNext();
+
+                    String BlockName = CurrentToken.Text;
+                    Tokens.MoveNext();
+                    Tokens.ExpectValueAndNext("%}");
+
+                    ParserNode BodyBlock = HandleLevel_Root();
+
+                    Tokens.ExpectValueAndNext("endblock");
+                    Tokens.ExpectValueAndNext("%}");
+
+                    return new ParserNodeBlock()
+                    {
+                        Parent = BodyBlock,
+                        BlockName = BlockName,
+                    };
+                }
+                case "extends":
+                    Tokens.MoveNext();
+                    ParserNodeExtends ParserNodeExtends = new ParserNodeExtends() { Parent = HandleLevel_Expression() };
+                    Tokens.ExpectValueAndNext("%}");
+                    return ParserNodeExtends;
+                default:
+                    throw (new Exception(String.Format("Unprocessed Tag Type '{0}'('{1}')", CurrentTokenType, CurrentToken.Text)));
             }
-            return HandleLevel_Expression();
+            //return HandleLevel_Expression();
         }
 
         public ParserNode HandleLevel_Root()
@@ -226,13 +277,15 @@ namespace CSharpUtils.Templates
                                     ParserNodeContainer.Add(new ParserNodeOutputExpression() { Parent = HandleLevel_Tag() });
                                     Tokens.ExpectValue("}}");
                                     break;
-                                case "{%":
-                                    ParserNodeContainer.Add(HandleLevel_TagSpecial());
-                                    break;
+                                case "{%": {
+                                    ParserNode ParserNode = HandleLevel_TagSpecial();
+                                    ParserNodeContainer.Add(ParserNode);
+                                    //ParserNode.Dump();
+                                } break;
                             }
                             break;
                         default:
-                            throw (new Exception(String.Format("Unprocessed Token Type '{0}'", CurrentTokenType)));
+                            throw (new Exception(String.Format("Unprocessed Token Type '{0}'('{1}')", CurrentTokenType, CurrentToken.Text)));
                     }
                 }
             }
@@ -274,7 +327,10 @@ namespace CSharpUtils.Templates
                 TextWriter = TextWriter,
                 Parameters = Parameters,
             };
-            TemplateHandler.HandleLevel_Root().Optimize(Context).WriteTo(Context);
+            var ParserNode = TemplateHandler.HandleLevel_Root();
+            var OptimizedParserNode = ParserNode.Optimize(Context);
+            OptimizedParserNode.Dump();
+            OptimizedParserNode.WriteTo(Context);
         }
 
         public String RenderToString(dynamic Parameters = null)

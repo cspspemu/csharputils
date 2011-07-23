@@ -19,6 +19,11 @@ namespace CSharpUtils.Templates
             return this;
         }
 
+        virtual public void Dump(int Level = 0, String Info = "")
+        {
+            Console.WriteLine("{0}{1}:{2}", new String(' ', Level * 4), Info, this);
+        }
+
         virtual public void WriteTo(ParserNodeContext Context)
         {
         }
@@ -26,6 +31,26 @@ namespace CSharpUtils.Templates
         protected String EscapeString(String Value)
         {
             return '"' + Value + '"';
+        }
+
+        protected T CreateThisInstanceAs<T>()
+        {
+            return (T)(Activator.CreateInstance(this.GetType()));
+        }
+
+        /*
+        override public ParserNode Optimize(ParserNodeContext Context)
+        {
+            ParserNodeParent ParserNodeParent = Activator.CreateInstance(this.GetType());
+            ParserNodeParent.Parent = Parent.Optimize(Context);
+            return ParserNodeParent;
+        }
+         * */
+
+
+        public override string ToString()
+        {
+            return String.Format("{0}", this.GetType().Name);
         }
     }
 
@@ -38,6 +63,14 @@ namespace CSharpUtils.Templates
         public ParserNode ConditionNode;
         public ParserNode BodyIfNode;
         public ParserNode BodyElseNode;
+
+        public override void Dump(int Level = 0, String Info = "")
+        {
+            base.Dump(Level, Info);
+            ConditionNode.Dump(Level + 1, "Condition");
+            BodyIfNode.Dump(Level + 1, "IfBody");
+            BodyElseNode.Dump(Level + 1, "ElseBody");
+        }
 
         override public void WriteTo(ParserNodeContext Context)
         {
@@ -54,11 +87,26 @@ namespace CSharpUtils.Templates
             }
         }
 
+        public override string ToString()
+        {
+            return "IfParserNode";
+        }
     }
 
     public class ParserNodeContainer : ParserNode
     {
         protected List<ParserNode> Nodes;
+
+        public override void Dump(int Level = 0, String Info = "")
+        {
+            base.Dump(Level, Info);
+            int n = 0;
+            foreach (var Node in Nodes)
+            {
+                Node.Dump(Level + 1, String.Format("Node{0}", n));
+                n++;
+            }
+        }
 
         public ParserNodeContainer()
         {
@@ -72,7 +120,7 @@ namespace CSharpUtils.Templates
 
         override public ParserNode Optimize(ParserNodeContext Context)
         {
-            ParserNodeContainer OptimizedNode = new ParserNodeContainer();
+            ParserNodeContainer OptimizedNode = CreateThisInstanceAs<ParserNodeContainer>();
             foreach (var Node in Nodes)
             {
                 OptimizedNode.Add(Node.Optimize(Context));
@@ -93,15 +141,15 @@ namespace CSharpUtils.Templates
     {
         public String Id;
 
-        override public ParserNode Optimize(ParserNodeContext Context)
-        {
-            return this;
-        }
-
         override public void WriteTo(ParserNodeContext Context)
         {
             //Context.TextWriter.Write(Context.Parameters[Id]);
             Context.TextWriter.Write("Context.GetVar({0})", EscapeString(Id));
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + "('" + Id + "')";
         }
     }
 
@@ -109,14 +157,29 @@ namespace CSharpUtils.Templates
     {
         public long Value;
 
-        override public ParserNode Optimize(ParserNodeContext Context)
-        {
-            return this;
-        }
-
         override public void WriteTo(ParserNodeContext Context)
         {
             Context.TextWriter.Write(Value);
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + "(" + Value + ")";
+        }
+    }
+
+    public class ParserNodeStringLiteral : ParserNode
+    {
+        public String Value;
+
+        override public void WriteTo(ParserNodeContext Context)
+        {
+            Context.TextWriter.Write(EscapeString(Value));
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + "('" + Value + "')";
         }
     }
 
@@ -124,31 +187,76 @@ namespace CSharpUtils.Templates
     {
         public String Text;
 
-        override public ParserNode Optimize(ParserNodeContext Context)
-        {
-            return this;
-        }
-
         override public void WriteTo(ParserNodeContext Context)
         {
             Context.TextWriter.Write(String.Format("Context.Output.Write({0});", EscapeString(Text)));
         }
+
+        public override string ToString()
+        {
+            return base.ToString() + "('" + Text + "')";
+        }
     }
 
-    public class ParserNodeOutputExpression : ParserNode
+    public class ParserNodeParent : ParserNode
     {
         public ParserNode Parent;
 
-        override public ParserNode Optimize(ParserNodeContext Context)
+        public override void Dump(int Level = 0, String Info = "")
         {
-            return new ParserNodeOutputExpression() { Parent = Parent.Optimize(Context) };
+            base.Dump(Level, Info);
+            Parent.Dump(Level + 1, "Parent");
         }
 
+        override public ParserNode Optimize(ParserNodeContext Context)
+        {
+            var That = CreateThisInstanceAs<ParserNodeParent>();
+            That.Parent = Parent.Optimize(Context);
+            return That;
+        }
+    }
+
+    public class ParserNodeOutputExpression : ParserNodeParent
+    {
         override public void WriteTo(ParserNodeContext Context)
         {
             Context.TextWriter.Write("Context.Output.Write(");
             Parent.WriteTo(Context);
             Context.TextWriter.Write(");");
+        }
+    }
+
+    public class ParserNodeExtends : ParserNodeParent
+    {
+        override public void WriteTo(ParserNodeContext Context)
+        {
+            Context.TextWriter.Write("SetParentClass(");
+            Parent.WriteTo(Context);
+            Context.TextWriter.Write(");");
+        }
+    }
+
+    public class ParserNodeBlock : ParserNodeParent
+    {
+        public String BlockName;
+
+        override public void WriteTo(ParserNodeContext Context)
+        {
+            Context.TextWriter.Write("Block(");
+            Parent.WriteTo(Context);
+            Context.TextWriter.Write(");");
+        }
+    }
+
+    public class ParserNodeUnaryOperation : ParserNodeParent
+    {
+        public String Operator;
+
+        override public void WriteTo(ParserNodeContext Context)
+        {
+            Context.TextWriter.Write("{0}(", Operator);
+            Parent.WriteTo(Context);
+            Context.TextWriter.Write(")");
         }
     }
 
@@ -158,15 +266,22 @@ namespace CSharpUtils.Templates
         public ParserNode RightNode;
         public String Operator;
 
+        public override void Dump(int Level = 0, String Info = "")
+        {
+            base.Dump(Level, Info);
+            LeftNode.Dump(Level + 1, "Left");
+            RightNode.Dump(Level + 1, "Right");
+        }
+
         override public ParserNode Optimize(ParserNodeContext Context)
         {
-            LeftNode = LeftNode.Optimize(Context);
-            RightNode = RightNode.Optimize(Context);
+            var LeftNodeOptimized = LeftNode.Optimize(Context);
+            var RightNodeOptimized = RightNode.Optimize(Context);
 
-            if (LeftNode is ParserNodeNumericLiteral && RightNode is ParserNodeNumericLiteral)
+            if ((LeftNodeOptimized is ParserNodeNumericLiteral) && (RightNodeOptimized is ParserNodeNumericLiteral))
             {
-                var LeftNodeLiteral = (ParserNodeNumericLiteral)LeftNode;
-                var RightNodeLiteral = (ParserNodeNumericLiteral)RightNode;
+                var LeftNodeLiteral = (ParserNodeNumericLiteral)LeftNodeOptimized;
+                var RightNodeLiteral = (ParserNodeNumericLiteral)RightNodeOptimized;
                 switch (Operator)
                 {
                     case "+": return new ParserNodeNumericLiteral() { Value = LeftNodeLiteral.Value + RightNodeLiteral.Value, };
@@ -185,6 +300,11 @@ namespace CSharpUtils.Templates
             Context.TextWriter.Write(" " + Operator + " ");
             RightNode.WriteTo(Context);
             Context.TextWriter.Write(")");
+        }
+
+        public override string ToString()
+        {
+            return String.Format("ParserNodeBinaryOperation('{0}')", Operator);
         }
     }
 

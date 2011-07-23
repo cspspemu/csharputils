@@ -8,6 +8,7 @@ namespace CSharpUtils.Templates
     public class TemplateToken
     {
         public String Text;
+        //public String OriginalText;
     }
 
     public class RawTemplateToken : TemplateToken
