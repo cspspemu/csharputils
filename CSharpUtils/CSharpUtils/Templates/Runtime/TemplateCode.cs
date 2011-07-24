@@ -12,6 +12,14 @@ namespace CSharpUtils.Templates.Runtime
         public TextWriter Output;
         public dynamic Parameters;
 
+        public TemplateContext(TextWriter Output, dynamic Parameters)
+        {
+            if (Parameters == null) Parameters = new Dictionary<String, object>();
+
+            this.Output = Output;
+            this.Parameters = Parameters;
+        }
+
         public dynamic GetVar(String Name)
         {
             return Parameters[Name];
@@ -39,6 +47,17 @@ namespace CSharpUtils.Templates.Runtime
                 Console.Error.WriteLine(Exception);
                 return false;
             }
+        }
+
+        public dynamic GenRange(dynamic Start, dynamic End)
+        {
+            var List = new List<dynamic>();
+            for (dynamic N = Start; N <= End; N++)
+            {
+                List.Add(N);
+            }
+            //return List.ToArray();
+            return List;
         }
     }
 

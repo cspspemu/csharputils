@@ -27,6 +27,12 @@ namespace CSharpUtilsTests
         }
 
         [TestMethod]
+        public void TestExecForRange()
+        {
+            Assert.AreEqual("0123456789", Template.ParseFromString("{% for Item in 0..9 %}{{ Item }}{% endfor %}").RenderToString());
+        }
+
+        [TestMethod]
         public void TestExecWithOperator()
         {
             Assert.AreEqual("Hello 3 World", Template.ParseFromString("Hello {{ 1 + 2 }} World").RenderToString());
@@ -50,23 +56,41 @@ namespace CSharpUtilsTests
             Assert.AreEqual("A", Template.ParseFromString("{% if 1 %}A{% else %}B{% endif %}").RenderToString());
         }
 
+        protected void TokenizerAssertEquals(String Base, params String[] Tokens)
+        {
+            var StringTokens = Template.Tokenize(Base).Select(Token => Token.Text).ToArray();
+            foreach (var StringToken in StringTokens)
+            {
+                Console.WriteLine(StringToken);
+            }
+            CollectionAssert.AreEqual(StringTokens, Tokens);
+        }
 
         [TestMethod]
         public void TokenizeTest()
         {
-            var StringTokens = Template.Tokenize("Hello {{ 'User' + 15 }} Text ").Select(Token => Token.Text).ToArray();
-            CollectionAssert.AreEqual(StringTokens, new String[] {
-                "Hello ", "{{", "'User'", "+", "15", "}}", " Text ",
-            });
+            TokenizerAssertEquals(
+                "Hello {{ 'User' + 15 }} Text ",
+                "Hello ", "{{", "'User'", "+", "15", "}}", " Text "
+            );
         }
 
         [TestMethod]
         public void Tokenize2Test()
         {
-            var StringTokens = Template.Tokenize("Hello {% for n in [1, 2, 3, 4] %}{{ n }}{% endfor %}").Select(Token => Token.Text).ToArray();
-            CollectionAssert.AreEqual(StringTokens, new String[] {
+            TokenizerAssertEquals(
+                "Hello {% for n in [1, 2, 3, 4] %}{{ n }}{% endfor %}",
                 "Hello ", "{%", "for", "n", "in", "[", "1", ",", "2", ",", "3", ",", "4", "]", "%}", "{{", "n", "}}", "{%", "endfor", "%}"
-            });
+            );
+        }
+
+        [TestMethod]
+        public void TokenizeRange()
+        {
+            TokenizerAssertEquals(
+                "{% for n in 0..10 %}",
+                "{%", "for", "n", "in", "0", "..", "10", "%}"
+            );
         }
     }
 }

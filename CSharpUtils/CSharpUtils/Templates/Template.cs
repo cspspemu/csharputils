@@ -49,7 +49,6 @@ namespace CSharpUtils.Templates
         {
             ParserNode ParserNode;
 
-            
             switch (CurrentTokenType)
             {
                 case "CSharpUtils.Templates.OperatorTemplateToken":
@@ -57,7 +56,6 @@ namespace CSharpUtils.Templates
                     switch (Operator)
                     {
                         // Unary Operators
-                        /*
                         case "+": case "-":
                             Tokens.MoveNext();
                             ParserNode = new ParserNodeUnaryOperation()
@@ -68,12 +66,10 @@ namespace CSharpUtils.Templates
                             Tokens.MoveNext();
                             
                             break;
-                        */
                         case "(":
                             Tokens.MoveNext();
                             ParserNode = HandleLevel_Expression();
-                            Tokens.ExpectValue(")");
-                            //Tokens.ExpectValueAndNext(")");
+                            Tokens.ExpectValueAndNext(")");
                             break;
                         default:
                             throw (new Exception(String.Format("Invalid operator '{0}'", CurrentTokenType)));
@@ -84,53 +80,24 @@ namespace CSharpUtils.Templates
                     {
                         Value = Int64.Parse(CurrentToken.Text),
                     };
+                    Tokens.MoveNext();
                     break;
                 case "CSharpUtils.Templates.IdentifierTemplateToken":
                     ParserNode = new ParserNodeIdentifier()
                     {
                         Id = CurrentToken.Text
                     };
+                    Tokens.MoveNext();
                     break;
                 case "CSharpUtils.Templates.StringLiteralTemplateToken":
                     ParserNode = new ParserNodeStringLiteral()
                     {
                         Value = CurrentToken.Text,
                     };
+                    Tokens.MoveNext();
                     break;
                 default:
                     throw (new Exception(String.Format("Invalid Identifier '{0}'('{1}')", CurrentTokenType, CurrentToken.Text)));
-            }
-            Tokens.MoveNext();
-
-            return ParserNode;
-        }
-
-        public ParserNode HandleLevel_Sum()
-        {
-            ParserNode ParserNode = HandleLevel_Mul();
-
-            while (Tokens.HasMore)
-            {
-                switch (CurrentTokenType)
-                {
-                    case "CSharpUtils.Templates.OperatorTemplateToken":
-                        string Operator = CurrentToken.Text;
-                        switch (Operator)
-                        {
-                            case "+": case "-":
-                                Tokens.MoveNext();
-                                ParserNode = new ParserNodeBinaryOperation()
-                                {
-                                    LeftNode = ParserNode,
-                                    Operator = Operator,
-                                    RightNode = HandleLevel_Mul(),
-                                };
-                                break;
-                            default: return ParserNode;
-                        }
-                        break;
-                    default: return ParserNode;
-                }
             }
 
             return ParserNode;
@@ -168,9 +135,72 @@ namespace CSharpUtils.Templates
             return ParserNode;
         }
 
+        public ParserNode HandleLevel_Sum()
+        {
+            ParserNode ParserNode = HandleLevel_Mul();
+
+            while (Tokens.HasMore)
+            {
+                switch (CurrentTokenType)
+                {
+                    case "CSharpUtils.Templates.OperatorTemplateToken":
+                        string Operator = CurrentToken.Text;
+                        switch (Operator)
+                        {
+                            case "+":
+                            case "-":
+                                Tokens.MoveNext();
+                                ParserNode = new ParserNodeBinaryOperation()
+                                {
+                                    LeftNode = ParserNode,
+                                    Operator = Operator,
+                                    RightNode = HandleLevel_Mul(),
+                                };
+                                break;
+                            default: return ParserNode;
+                        }
+                        break;
+                    default: return ParserNode;
+                }
+            }
+
+            return ParserNode;
+        }
+
+        public ParserNode HandleLevel_Sli()
+        {
+            ParserNode ParserNode = HandleLevel_Sum();
+
+            while (Tokens.HasMore)
+            {
+                switch (CurrentTokenType)
+                {
+                    case "CSharpUtils.Templates.OperatorTemplateToken":
+                        string Operator = CurrentToken.Text;
+                        switch (Operator)
+                        {
+                            case "..":
+                                Tokens.MoveNext();
+                                ParserNode = new ParserNodeBinaryOperation()
+                                {
+                                    LeftNode = ParserNode,
+                                    Operator = Operator,
+                                    RightNode = HandleLevel_Sum(),
+                                };
+                                break;
+                            default: return ParserNode;
+                        }
+                        break;
+                    default: return ParserNode;
+                }
+            }
+
+            return ParserNode;
+        }
+
         public ParserNode HandleLevel_Expression()
         {
-            return HandleLevel_Sum();
+            return HandleLevel_Sli();
         }
 
         public ParserNode HandleLevel_Tag()
@@ -232,7 +262,7 @@ namespace CSharpUtils.Templates
                         {
                             case "endif":
                                 Tokens.MoveNext();
-                                Tokens.ExpectValue("%}");
+                                Tokens.ExpectValueAndNext("%}");
                                 Alive = false;
                                 break;
                             case "else":
@@ -290,8 +320,9 @@ namespace CSharpUtils.Templates
 
             try
             {
-                for (; Tokens.HasMore; Tokens.MoveNext())
+                while (Tokens.HasMore)
                 {
+                    //Console.WriteLine(CurrentToken);
                     switch (CurrentTokenType)
                     {
                         case "CSharpUtils.Templates.RawTemplateToken":
@@ -299,6 +330,7 @@ namespace CSharpUtils.Templates
                             {
                                 Text = ((RawTemplateToken)CurrentToken).Text,
                             });
+                            Tokens.MoveNext();
                             break;
                         case "CSharpUtils.Templates.OpenTagTemplateToken":
                             string OpenType = CurrentToken.Text;
@@ -309,7 +341,7 @@ namespace CSharpUtils.Templates
                             {
                                 case "{{":
                                     ParserNodeContainer.Add(new ParserNodeOutputExpression() { Parent = HandleLevel_Tag() });
-                                    Tokens.ExpectValue("}}");
+                                    Tokens.ExpectValueAndNext("}}");
                                     break;
                                 case "{%": {
                                     ParserNode ParserNode = HandleLevel_TagSpecial();
@@ -397,9 +429,7 @@ namespace CSharpUtils.Templates
                 Assembly assembly = CompilerResults.CompiledAssembly;
                 Type Type = assembly.GetType("CSharpUtils.Templates.CompiledTemplates.CompiledTemplate_TempTemplate");
 
-                TemplateContext TemplateContext = new TemplateContext();
-                TemplateContext.Output = new StringWriter();
-                TemplateContext.Parameters = Parameters;
+                TemplateContext TemplateContext = new TemplateContext(new StringWriter(), Parameters);
 
                 TemplateCode TemplateCode = (TemplateCode)Activator.CreateInstance(Type);
                 TemplateCode.Render(TemplateContext);

@@ -327,11 +327,25 @@ namespace CSharpUtils.Templates
 
         override public void WriteTo(ParserNodeContext Context)
         {
-            Context.TextWriter.Write("(");
-            LeftNode.WriteTo(Context);
-            Context.TextWriter.Write(" " + Operator + " ");
-            RightNode.WriteTo(Context);
-            Context.TextWriter.Write(")");
+            switch (Operator)
+            {
+                case "+": case "-": case "*": case "/":
+                    Context.TextWriter.Write("(");
+                    LeftNode.WriteTo(Context);
+                    Context.TextWriter.Write(" " + Operator + " ");
+                    RightNode.WriteTo(Context);
+                    Context.TextWriter.Write(")");
+                    break;
+                case "..":
+                    Context.TextWriter.Write("Context.GenRange(");
+                    LeftNode.WriteTo(Context);
+                    Context.TextWriter.Write(", ");
+                    RightNode.WriteTo(Context);
+                    Context.TextWriter.Write(")");
+                    break;
+                default:
+                    throw(new Exception(String.Format("Unknown Operator '{0}'", Operator)));
+            }
         }
 
         public override string ToString()

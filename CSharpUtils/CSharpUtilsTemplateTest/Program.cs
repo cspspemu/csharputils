@@ -72,9 +72,15 @@ namespace CSharpUtilsTemplateTest
             //Console.WriteLine(Result);
             */
 
+            /*
             Console.WriteLine(Template.ParseFromString("{% for Item in List %}{{ Item }}{% endfor %}").RenderToString(new Dictionary<String, object>() {
                 { "List", new int[] { 1, 2, 3, 4 } },
             }));
+            */
+            Console.WriteLine(Template.ParseFromString("{% if 1 %}A{% endif %}").RenderToString());
+            //Console.WriteLine(Template.ParseFromString("{% for Item in 0..9 %}{{ Item }}{% endfor %}").RenderToString());
+            //Console.WriteLine(Template.ParseFromString("Hello {{ 1 + 2 }} World").RenderToString());
+            
 
             Console.ReadKey();
         }
