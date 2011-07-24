@@ -91,7 +91,7 @@ namespace CSharpUtils.Templates.ParserNodes
 		}
 	}
 
-	public class IfParserNode : ParserNode
+	public class ParserNodeIf : ParserNode
 	{
 		public ParserNode ConditionNode;
 		public ParserNode BodyIfNode;
@@ -334,6 +334,21 @@ namespace CSharpUtils.Templates.ParserNodes
 		}
 	}
 
+	public class ParserNodeBlockParent : ParserNode
+	{
+		String BlockName;
+
+		public ParserNodeBlockParent(String BlockName)
+		{
+			this.BlockName = BlockName;
+		}
+
+		override public void WriteTo(ParserNodeContext Context)
+		{
+			Context.TextWriter.WriteLine("CallParentBlock({0}, Context);", StringUtils.EscapeString(BlockName));
+		}
+	}
+
 	public class ParserNodeBinaryOperation : ParserNode
 	{
 		public ParserNode LeftNode;
@@ -379,11 +394,18 @@ namespace CSharpUtils.Templates.ParserNodes
 			switch (Operator)
 			{
 				case "+": case "-": case "*": case "/":
-					Context.TextWriter.Write("(");
+					Context.TextWriter.Write("((");
 					LeftNode.WriteTo(Context);
-					Context.TextWriter.Write(" " + Operator + " ");
+					Context.TextWriter.Write(") " + Operator + " (");
 					RightNode.WriteTo(Context);
-					Context.TextWriter.Write(")");
+					Context.TextWriter.Write("))");
+					break;
+				case "&&": case "||":
+					Context.TextWriter.Write("(Context.ToBool(");
+					LeftNode.WriteTo(Context);
+					Context.TextWriter.Write(") " + Operator + " Context.ToBool(");
+					RightNode.WriteTo(Context);
+					Context.TextWriter.Write("))");
 					break;
 				case "..":
 					Context.TextWriter.Write("Context.GenRange(");

@@ -11,6 +11,9 @@ namespace CSharpUtils.Templates.Runtime
 {
 	public class TemplateCode
 	{
+		/// <summary>
+		/// @TODO: Have members here make code not multithreaded.
+		/// </summary>
 		TemplateFactory TemplateFactory;
 		public delegate void RenderDelegate(TemplateContext Context);
 		Dictionary<String, RenderDelegate> Blocks = new Dictionary<string, RenderDelegate>();
@@ -79,6 +82,7 @@ namespace CSharpUtils.Templates.Runtime
 
 		protected void CallParentBlock(String BlockName, TemplateContext Context)
 		{
+
 		}
 	}
 }

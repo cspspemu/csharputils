@@ -23,13 +23,20 @@ namespace CSharpUtils.Templates
 	{
 		TokenReader Tokens;
 		TextWriter TextWriter;
+		String CurrentBlockName;
 		public Dictionary<String, ParserNode> Blocks;
+		int IsInsideABlock = 0;
 
 		public TemplateHandler(TokenReader Tokens, TextWriter TextWriter)
 		{
 			this.Tokens = Tokens;
 			this.TextWriter = TextWriter;
 			this.Blocks = new Dictionary<string, ParserNode>();
+		}
+
+		public void Reset()
+		{
+			IsInsideABlock = 0;
 		}
 
 		TemplateToken CurrentToken
@@ -82,6 +89,16 @@ namespace CSharpUtils.Templates
 
 			return ParserNode;
 		}
+
+		public ParserNode _HandleLevel_Op_BinarySimple(Func<ParserNode> HandleLevelNext, params string[] BinarySimple)
+		{
+			return _HandleLevel_Op(
+				HandleLevelNext,
+				BinarySimple,
+				(ParserNode LeftNode, ParserNode RightNode, String Operator) => { return new ParserNodeBinaryOperation(LeftNode, RightNode, Operator); }
+			);
+		}
+
 
 		public ParserNode HandleLevel_Identifier()
 		{
@@ -142,26 +159,28 @@ namespace CSharpUtils.Templates
 
 		public ParserNode HandleLevel_Mul()
 		{
-			return _HandleLevel_Op(
-				HandleLevel_Identifier,
-				new string[] { "*", "/", "%" },
-				(ParserNode LeftNode, ParserNode RightNode, String Operator) => { return new ParserNodeBinaryOperation(LeftNode, RightNode, Operator); }
-			);
+			return _HandleLevel_Op_BinarySimple(HandleLevel_Identifier, "*", "/", "%");
 		}
 
 		public ParserNode HandleLevel_Sum()
 		{
-			return _HandleLevel_Op(
-				HandleLevel_Mul,
-				new string[] { "+", "-" },
-				(ParserNode LeftNode, ParserNode RightNode, String Operator) => { return new ParserNodeBinaryOperation(LeftNode, RightNode, Operator); }
-			);
+			return _HandleLevel_Op_BinarySimple(HandleLevel_Mul, "+", "-");
+		}
+
+		public ParserNode HandleLevel_And()
+		{
+			return _HandleLevel_Op_BinarySimple(HandleLevel_Sum, "&&");
+		}
+
+		public ParserNode HandleLevel_Or()
+		{
+			return _HandleLevel_Op_BinarySimple(HandleLevel_And, "||");
 		}
 
 		public ParserNode HandleLevel_Ternary()
 		{
 			return _HandleLevel_Op(
-				HandleLevel_Sum,
+				HandleLevel_Or,
 				new string[] { "?" },
 				(ParserNode ConditionNode, ParserNode TrueNode, String Operator) => {
 					Tokens.ExpectValueAndNext(":");
@@ -190,7 +209,7 @@ namespace CSharpUtils.Templates
 			return HandleLevel_Expression();
 		}
 
-		public ParserNode HandleLevel_TagSpecial_For()
+		protected ParserNode HandleLevel_TagSpecial_For()
 		{
 			Tokens.MoveNext();
 
@@ -213,7 +232,7 @@ namespace CSharpUtils.Templates
 			};
 		}
 
-		public ParserNode HandleLevel_TagSpecial_Extends()
+		protected ParserNode HandleLevel_TagSpecial_Extends()
 		{
 
 			Tokens.MoveNext();
@@ -224,66 +243,105 @@ namespace CSharpUtils.Templates
 			return ParserNodeExtends;
 		}
 
+		ParserNode InsideABlock(String BlockName, Func<ParserNode> Callback)
+		{
+			String PreviousBlockName = CurrentBlockName;
+			ParserNode ParserNode;
+			try
+			{
+				CurrentBlockName = BlockName;
+				IsInsideABlock++;
+				ParserNode = Callback();
+				return ParserNode;
+			}
+			finally
+			{
+				IsInsideABlock--;
+				CurrentBlockName = PreviousBlockName;
+			}
+		}
+
+		protected ParserNode HandleLevel_TagSpecial_Block()
+		{
+			Tokens.MoveNext();
+
+			String BlockName = CurrentToken.Text;
+			Tokens.MoveNext();
+			Tokens.ExpectValueAndNext("%}");
+
+			ParserNode BodyBlock = InsideABlock(BlockName, delegate()
+			{
+				return HandleLevel_Root();
+			});
+
+			Tokens.ExpectValueAndNext("endblock");
+			Tokens.ExpectValueAndNext("%}");
+
+			Blocks[BlockName] = BodyBlock;
+
+			return new ParserNodeCallBlock(BlockName);
+		}
+
+		public ParserNode HandleLevel_TagSpecial_If()
+		{
+			bool Alive = true;
+
+			Tokens.MoveNext();
+
+			ParserNode ConditionNode = HandleLevel_Expression();
+			Tokens.ExpectValueAndNext("%}");
+
+			ParserNode BodyIfNode = HandleLevel_Root();
+			ParserNode BodyElseNode = new DummyParserNode();
+
+			while (Alive)
+			{
+				switch (CurrentToken.Text)
+				{
+					case "endif":
+						Tokens.MoveNext();
+						Tokens.ExpectValueAndNext("%}");
+						Alive = false;
+						break;
+					case "else":
+						Tokens.MoveNext();
+						Tokens.ExpectValueAndNext("%}");
+
+						BodyElseNode = HandleLevel_Root();
+
+						break;
+					default:
+						throw (new Exception(String.Format("Unprocessed Token Type '{0}'", CurrentTokenType)));
+				}
+			}
+
+			return new ParserNodeIf()
+			{
+				ConditionNode = ConditionNode,
+				BodyIfNode = BodyIfNode,
+				BodyElseNode = BodyElseNode,
+			};
+		}
+
+		private ParserNode HandleLevel_TagSpecial_Parent()
+		{
+			if (IsInsideABlock == 0) throw(new Exception("Parent can only be called inside a block"));
+
+			Tokens.MoveNext();
+			Tokens.ExpectValueAndNext("%}");
+
+			return new ParserNodeBlockParent(CurrentBlockName);
+		}
+
 		public ParserNode HandleLevel_TagSpecial()
 		{
 			string SpecialType = CurrentToken.Text;
 			switch (SpecialType)
 			{
-				case "if":
-					bool Alive = true;
-
-					Tokens.MoveNext();
-
-					ParserNode ConditionNode = HandleLevel_Expression();
-					Tokens.ExpectValueAndNext("%}");
-
-					ParserNode BodyIfNode = HandleLevel_Root();
-					ParserNode BodyElseNode = new DummyParserNode();
-
-					while (Alive)
-					{
-						switch (CurrentToken.Text)
-						{
-							case "endif":
-								Tokens.MoveNext();
-								Tokens.ExpectValueAndNext("%}");
-								Alive = false;
-								break;
-							case "else":
-								Tokens.MoveNext();
-								Tokens.ExpectValueAndNext("%}");
-
-								BodyElseNode = HandleLevel_Root();
-
-								break;
-							default:
-								throw (new Exception(String.Format("Unprocessed Token Type '{0}'", CurrentTokenType)));
-						}
-					}
-
-					return new IfParserNode()
-					{
-						ConditionNode = ConditionNode,
-						BodyIfNode = BodyIfNode,
-						BodyElseNode = BodyElseNode,
-					};
-				case "block": {
-					Tokens.MoveNext();
-
-					String BlockName = CurrentToken.Text;
-					Tokens.MoveNext();
-					Tokens.ExpectValueAndNext("%}");
-
-					ParserNode BodyBlock = HandleLevel_Root();
-
-					Tokens.ExpectValueAndNext("endblock");
-					Tokens.ExpectValueAndNext("%}");
-
-					Blocks[BlockName] = BodyBlock;
-
-					return new ParserNodeCallBlock(BlockName);
-				}
-				case "for": return HandleLevel_TagSpecial_For();
+				case "if"     : return HandleLevel_TagSpecial_If();
+				case "block"  : return HandleLevel_TagSpecial_Block();
+				case "parent" : return HandleLevel_TagSpecial_Parent();
+				case "for"    : return HandleLevel_TagSpecial_For();
 				case "extends": return HandleLevel_TagSpecial_Extends();
 				case "else":
 				case "endif":
@@ -379,6 +437,7 @@ namespace CSharpUtils.Templates
 				TextWriter = TextWriter,
 				TemplateFactory = TemplateFactory,
 			};
+			TemplateHandler.Reset();
 			var ParserNode = TemplateHandler.HandleLevel_Root();
 
 			//OptimizedParserNode.Dump();

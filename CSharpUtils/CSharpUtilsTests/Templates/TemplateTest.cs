@@ -83,6 +83,18 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
+		public void TestExecIfAnd()
+		{
+			Assert.AreEqual("A", TemplateCodeGen.CompileTemplateByString("{% if 1 && 2 %}A{% endif %}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecIfOr()
+		{
+			Assert.AreEqual("A", TemplateCodeGen.CompileTemplateByString("{% if 0 || 2 %}A{% endif %}").RenderToString());
+		}
+
+		[TestMethod]
 		public void TestExecBasicInheritance()
 		{
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
@@ -92,6 +104,18 @@ namespace CSharpUtilsTests.Templates
 			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}Not{% block Body %}Ex{% endblock %}Rendered");
 
 			Assert.AreEqual("TestExTest", TemplateFactory.GetTemplateByFile("Test.html").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecInheritanceWithParent()
+		{
+			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
+			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider);
+
+			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
+			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}Not{% block Body %}1{% parent %}2{% endblock %}Rendered");
+
+			Assert.AreEqual("Test1Base2Test", TemplateFactory.GetTemplateByFile("Test.html").RenderToString());
 		}
 	}
 }
