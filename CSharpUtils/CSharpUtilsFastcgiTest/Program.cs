@@ -25,7 +25,7 @@ namespace CSharpUtilsFastcgiTest
 
 			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
 			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}{% block Body %}Ex{{ Count }}{% endblock %}");
-			TemplateCode = TemplateFactory.GetTemplateByFile("Test.html");
+			TemplateCode = TemplateFactory.GetTemplateCodeByFile("Test.html");
 
 			//TemplateProvider.Add("Test.html", "{% block Body %}Ex{% endblock %}");
 		}

@@ -9,6 +9,7 @@ namespace CSharpUtils.Templates.Runtime
 {
 	public class TemplateContext
 	{
+		public TemplateCode RenderingTemplate;
 		public TemplateFactory TemplateFactory;
 		public TextWriter Output;
 		public dynamic Parameters;

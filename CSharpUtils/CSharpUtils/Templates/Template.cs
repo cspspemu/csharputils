@@ -408,9 +408,14 @@ namespace CSharpUtils.Templates
 		TemplateFactory TemplateFactory;
 		TokenReader Tokens;
 
-		static public TemplateCode CompileTemplateByString(String TemplateString, TemplateFactory TemplateFactory = null)
+		static public TemplateCode CompileTemplateCodeByString(String TemplateString, TemplateFactory TemplateFactory = null)
 		{
-			return (new TemplateCodeGen(TemplateString, TemplateFactory)).GetTemplate();
+			return (TemplateCode)Activator.CreateInstance(CompileTemplateCodeTypeByString(TemplateString, TemplateFactory), TemplateFactory);
+		}
+
+		static public Type CompileTemplateCodeTypeByString(String TemplateString, TemplateFactory TemplateFactory = null)
+		{
+			return (new TemplateCodeGen(TemplateString, TemplateFactory)).GetTemplateCodeType();
 		}
 
 		public TemplateCodeGen(String TemplateString, TemplateFactory TemplateFactory = null)
@@ -474,7 +479,7 @@ namespace CSharpUtils.Templates
 			Context.TextWriter.WriteLine("}"); // namespace
 		}
 
-		protected TemplateCode GetTemplateCodeByCode(String Code)
+		protected Type GetTemplateCodeTypeByCode(String Code)
 		{
 			//Console.WriteLine(Code);
 
@@ -495,8 +500,7 @@ namespace CSharpUtils.Templates
 			{
 				Assembly assembly = CompilerResults.CompiledAssembly;
 				Type Type = assembly.GetType("CSharpUtils.Templates.CompiledTemplates.CompiledTemplate_TempTemplate");
-
-				return (TemplateCode)Activator.CreateInstance(Type, TemplateFactory);
+				return Type;
 			}
 			else
 			{
@@ -511,16 +515,18 @@ namespace CSharpUtils.Templates
 			}
 		}
 
-		public TemplateCode GetTemplate()
+		public Type GetTemplateCodeType()
 		{
-			return GetTemplateCodeByCode(GetCode());
+			return GetTemplateCodeTypeByCode(GetCode());
 		}
 
+		/*
 		public String RenderToString(dynamic Parameters = null)
 		{
 			var OutputWriter = new StringWriter();
-			GetTemplateCodeByCode(GetCode()).Render(new TemplateContext(OutputWriter, Parameters, TemplateFactory));
+			GetTemplateCodeTypeByCode(GetCode()).Render(new TemplateContext(OutputWriter, Parameters, TemplateFactory));
 			return OutputWriter.ToString();
 		}
+		*/
 	}
 }

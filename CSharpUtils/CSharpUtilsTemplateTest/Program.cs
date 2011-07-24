@@ -26,7 +26,7 @@ namespace CSharpUtilsTemplateTest
 			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}{% block Body %}Ex{% endblock %}");
 			//TemplateProvider.Add("Test.html", "{% block Body %}Ex{% endblock %}");
 
-			Console.WriteLine(TemplateFactory.GetTemplateByFile("Test.html").RenderToString());
+			Console.WriteLine(TemplateFactory.GetTemplateCodeByFile("Test.html").RenderToString());
 
 			Console.ReadKey();
 		}

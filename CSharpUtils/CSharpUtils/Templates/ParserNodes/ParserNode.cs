@@ -263,7 +263,7 @@ namespace CSharpUtils.Templates.ParserNodes
 		{
 			Context.TextWriter.Write("SetAndRenderParentTemplate(");
 			Parent.WriteTo(Context);
-			Context.TextWriter.Write(", Context); throw(new FinalizeRenderException());");
+			Context.TextWriter.Write(", Context);");
 			Context.TextWriter.WriteLine("");
 		}
 	}

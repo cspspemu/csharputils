@@ -11,9 +11,6 @@ namespace CSharpUtils.Templates.Runtime
 {
 	public class TemplateCode
 	{
-		/// <summary>
-		/// @TODO: Have members here make code not multithreaded.
-		/// </summary>
 		TemplateFactory TemplateFactory;
 		public delegate void RenderDelegate(TemplateContext Context);
 		Dictionary<String, RenderDelegate> Blocks = new Dictionary<string, RenderDelegate>();
@@ -46,6 +43,8 @@ namespace CSharpUtils.Templates.Runtime
 
 		public void Render(TemplateContext Context)
 		{
+			Context.RenderingTemplate = this;
+
 			try
 			{
 				this.LocalRender(Context);
@@ -69,20 +68,36 @@ namespace CSharpUtils.Templates.Runtime
 
 		protected void SetAndRenderParentTemplate(String ParentTemplateFileName, TemplateContext Context)
 		{
-			this.ParentTemplate = Context.TemplateFactory.GetTemplateByFile(ParentTemplateFileName);
-			this.SetBlocks(this.ParentTemplate.Blocks);
+			this.ParentTemplate = Context.TemplateFactory.GetTemplateCodeByFile(ParentTemplateFileName);
 			this.ParentTemplate.ChildTemplate = this;
 			this.ParentTemplate.LocalRender(Context);
+
+			throw (new FinalizeRenderException());
 		}
 
 		protected void CallBlock(String BlockName, TemplateContext Context)
 		{
-			this.Blocks[BlockName](Context);
+			Context.RenderingTemplate.GetFirstAscendingBlock(BlockName)(Context);
+		}
+
+		protected RenderDelegate GetFirstAscendingBlock(String BlockName)
+		{
+			if (this.Blocks.ContainsKey(BlockName))
+			{
+				return this.Blocks[BlockName];
+			}
+
+			if (this.ParentTemplate != null)
+			{
+				return this.ParentTemplate.GetFirstAscendingBlock(BlockName);
+			}
+			
+			throw(new Exception(String.Format("Can't find ascending parent block '{0}'", BlockName)));
 		}
 
 		protected void CallParentBlock(String BlockName, TemplateContext Context)
 		{
-
+			this.ParentTemplate.GetFirstAscendingBlock(BlockName)(Context);
 		}
 	}
 }

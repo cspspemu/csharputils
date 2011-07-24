@@ -12,7 +12,7 @@ namespace CSharpUtils.Templates
 	{
 		public Encoding Encoding;
 		public ITemplateProvider TemplateProvider;
-		public Dictionary<String, TemplateCode> CachedTemplatesByFile = new Dictionary<string, TemplateCode>();
+		public Dictionary<String, Type> CachedTemplatesByFile = new Dictionary<string, Type>();
 
 		public TemplateFactory(ITemplateProvider TemplateProvider = null, Encoding Encoding = null)
 		{
@@ -20,20 +20,35 @@ namespace CSharpUtils.Templates
 			this.TemplateProvider = TemplateProvider;
 		}
 
-		public TemplateCode GetTemplateByString(String TemplateString)
+		protected Type GetTemplateCodeTypeByString(String TemplateString)
 		{
-			return new TemplateCodeGen(TemplateString, this).GetTemplate();
+			return new TemplateCodeGen(TemplateString, this).GetTemplateCodeType();
 		}
 
-		public TemplateCode GetTemplateByFile(String Name)
+		protected Type GetTemplateCodeTypeByFile(String Name)
 		{
 			if (TemplateProvider == null) throw(new Exception("No specified TemplateProvider"));
 			if (!CachedTemplatesByFile.ContainsKey(Name))
 			{
-				return CachedTemplatesByFile[Name] = GetTemplateByString(TemplateProvider.GetTemplate(Name).ReadAllContentsAsString(Encoding));
+				return CachedTemplatesByFile[Name] = GetTemplateCodeTypeByString(TemplateProvider.GetTemplate(Name).ReadAllContentsAsString(Encoding));
 			}
 
 			return CachedTemplatesByFile[Name];
+		}
+
+		protected TemplateCode CreateInstanceByType(Type Type)
+		{
+			return (TemplateCode)Activator.CreateInstance(Type, this);
+		}
+
+		public TemplateCode GetTemplateCodeByString(String TemplateString)
+		{
+			return CreateInstanceByType(GetTemplateCodeTypeByString(TemplateString));
+		}
+
+		public TemplateCode GetTemplateCodeByFile(String Name)
+		{
+			return CreateInstanceByType(GetTemplateCodeTypeByFile(Name));
 		}
 	}
 }
