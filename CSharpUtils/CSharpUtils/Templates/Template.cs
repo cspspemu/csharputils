@@ -9,6 +9,7 @@ using Microsoft.CSharp;
 using System.Reflection;
 using System.CodeDom.Compiler;
 using CSharpUtils.Templates.Runtime;
+using CSharpUtils.Templates.ParserNodes;
 
 namespace CSharpUtils.Templates
 {
@@ -41,7 +42,7 @@ namespace CSharpUtils.Templates
         {
             get
             {
-                return CurrentToken.GetType().FullName;
+                return CurrentToken.GetType().Name;
             }
         }
 
@@ -51,7 +52,7 @@ namespace CSharpUtils.Templates
 
             switch (CurrentTokenType)
             {
-                case "CSharpUtils.Templates.OperatorTemplateToken":
+                case "OperatorTemplateToken":
                     String Operator = CurrentToken.Text;
                     switch (Operator)
                     {
@@ -75,21 +76,21 @@ namespace CSharpUtils.Templates
                             throw (new Exception(String.Format("Invalid operator '{0}'", CurrentTokenType)));
                     }
                     break;
-                case "CSharpUtils.Templates.NumericLiteralTemplateToken":
+                case "NumericLiteralTemplateToken":
                     ParserNode = new ParserNodeNumericLiteral()
                     {
                         Value = Int64.Parse(CurrentToken.Text),
                     };
                     Tokens.MoveNext();
                     break;
-                case "CSharpUtils.Templates.IdentifierTemplateToken":
+                case "IdentifierTemplateToken":
                     ParserNode = new ParserNodeIdentifier()
                     {
                         Id = CurrentToken.Text
                     };
                     Tokens.MoveNext();
                     break;
-                case "CSharpUtils.Templates.StringLiteralTemplateToken":
+                case "StringLiteralTemplateToken":
                     ParserNode = new ParserNodeStringLiteral()
                     {
                         Value = CurrentToken.Text,
@@ -111,7 +112,7 @@ namespace CSharpUtils.Templates
             {
                 switch (CurrentTokenType)
                 {
-                    case "CSharpUtils.Templates.OperatorTemplateToken":
+                    case "OperatorTemplateToken":
                         string Operator = CurrentToken.Text;
                         switch (Operator)
                         {
@@ -143,7 +144,7 @@ namespace CSharpUtils.Templates
             {
                 switch (CurrentTokenType)
                 {
-                    case "CSharpUtils.Templates.OperatorTemplateToken":
+                    case "OperatorTemplateToken":
                         string Operator = CurrentToken.Text;
                         switch (Operator)
                         {
@@ -175,7 +176,7 @@ namespace CSharpUtils.Templates
             {
                 switch (CurrentTokenType)
                 {
-                    case "CSharpUtils.Templates.OperatorTemplateToken":
+                    case "OperatorTemplateToken":
                         string Operator = CurrentToken.Text;
                         switch (Operator)
                         {
@@ -325,14 +326,14 @@ namespace CSharpUtils.Templates
                     //Console.WriteLine(CurrentToken);
                     switch (CurrentTokenType)
                     {
-                        case "CSharpUtils.Templates.RawTemplateToken":
+                        case "RawTemplateToken":
                             ParserNodeContainer.Add(new ParserNodeLiteral()
                             {
                                 Text = ((RawTemplateToken)CurrentToken).Text,
                             });
                             Tokens.MoveNext();
                             break;
-                        case "CSharpUtils.Templates.OpenTagTemplateToken":
+                        case "OpenTagTemplateToken":
                             string OpenType = CurrentToken.Text;
 
                             Tokens.MoveNext();

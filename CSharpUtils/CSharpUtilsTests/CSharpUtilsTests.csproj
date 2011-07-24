@@ -57,7 +57,7 @@
     <Compile Include="FastcgiHandlerTest.cs" />
     <Compile Include="MemoryFileSystemTest.cs" />
     <Compile Include="SliceStreamTest.cs" />
-    <Compile Include="TemplateTest.cs" />
+    <Compile Include="Templates\TemplateTest.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFromPathTest.cs" />
     <Compile Include="LinqExExtensionsTest.cs" />
     <Compile Include="Process\ProcessTest.cs" />

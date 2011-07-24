@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using CSharpUtils;
 using System.Linq;
 
-namespace CSharpUtilsTests
+namespace CSharpUtilsTests.Templates
 {
     [TestClass]
     public class TemplateTest
