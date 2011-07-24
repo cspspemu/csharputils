@@ -58,6 +58,7 @@ namespace CSharpUtilsTemplateTest
             }
             */
 
+            /*
             var FileSystem = new LocalFileSystem(FileUtils.GetExecutableDirectoryPath(), false);
             var TemplateString = FileSystem.OpenFile("Templates/Test.html", FileMode.Open).ReadAllContentsAsString();
 
@@ -69,6 +70,12 @@ namespace CSharpUtilsTemplateTest
                 { "Value", 1 },
             });
             //Console.WriteLine(Result);
+            */
+
+            Console.WriteLine(Template.ParseFromString("{% for Item in List %}{{ Item }}{% endfor %}").RenderToString(new Dictionary<String, object>() {
+                { "List", new int[] { 1, 2, 3, 4 } },
+            }));
+
             Console.ReadKey();
         }
     }

@@ -178,6 +178,38 @@ namespace CSharpUtils.Templates
             return HandleLevel_Expression();
         }
 
+        public ParserNode HandleLevel_TagSpecial_For()
+        {
+            Tokens.MoveNext();
+
+            String VarName = CurrentToken.Text;
+            Tokens.MoveNext();
+            Tokens.ExpectValueAndNext("in");
+            ParserNode LoopIterator = HandleLevel_Expression();
+            Tokens.ExpectValueAndNext("%}");
+
+            ParserNode BodyBlock = HandleLevel_Root();
+
+            Tokens.ExpectValueAndNext("endfor");
+            Tokens.ExpectValueAndNext("%}");
+
+            return new ForParserNode()
+            {
+                LoopIterator = LoopIterator,
+                VarName = VarName,
+                BodyBlock = BodyBlock,
+            };
+        }
+
+        public ParserNode HandleLevel_TagSpecial_Extends()
+        {
+
+            Tokens.MoveNext();
+            ParserNodeExtends ParserNodeExtends = new ParserNodeExtends() { Parent = HandleLevel_Expression() };
+            Tokens.ExpectValueAndNext("%}");
+            return ParserNodeExtends;
+        }
+
         public ParserNode HandleLevel_TagSpecial()
         {
             string SpecialType = CurrentToken.Text;
@@ -221,10 +253,6 @@ namespace CSharpUtils.Templates
                         BodyIfNode = BodyIfNode,
                         BodyElseNode = BodyElseNode,
                     };
-                case "else":
-                case "endif":
-                case "endblock":
-                    throw (new Finalize_HandlingLevel_Root());
                 case "block": {
                     Tokens.MoveNext();
 
@@ -243,11 +271,13 @@ namespace CSharpUtils.Templates
                         BlockName = BlockName,
                     };
                 }
-                case "extends":
-                    Tokens.MoveNext();
-                    ParserNodeExtends ParserNodeExtends = new ParserNodeExtends() { Parent = HandleLevel_Expression() };
-                    Tokens.ExpectValueAndNext("%}");
-                    return ParserNodeExtends;
+                case "for": return HandleLevel_TagSpecial_For();
+                case "extends": return HandleLevel_TagSpecial_Extends();
+                case "else":
+                case "endif":
+                case "endblock":
+                case "endfor":
+                    throw (new Finalize_HandlingLevel_Root());
                 default:
                     throw (new Exception(String.Format("Unprocessed Tag Type '{0}'('{1}')", CurrentTokenType, CurrentToken.Text)));
             }
@@ -362,11 +392,6 @@ namespace CSharpUtils.Templates
                 Code
             );
 
-            foreach (var Error in CompilerResults.Errors)
-            {
-                Console.WriteLine("Error: " + Error);
-            }
-
             if (CompilerResults.NativeCompilerReturnValue == 0)
             {
                 Assembly assembly = CompilerResults.CompiledAssembly;
@@ -379,11 +404,18 @@ namespace CSharpUtils.Templates
                 TemplateCode TemplateCode = (TemplateCode)Activator.CreateInstance(Type);
                 TemplateCode.Render(TemplateContext);
 
-                Console.WriteLine(TemplateContext.Output.ToString());
+                //Console.WriteLine(TemplateContext.Output.ToString());
                 return TemplateContext.Output.ToString();
             }
             else
             {
+                Console.Error.WriteLine(Code);
+
+                foreach (var Error in CompilerResults.Errors)
+                {
+                    Console.Error.WriteLine("Error: " + Error);
+                }
+
                 throw(new Exception("Error Compiling"));
             }
         }

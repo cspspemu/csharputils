@@ -58,6 +58,37 @@ namespace CSharpUtils.Templates
     {
     }
 
+    public class ForParserNode : ParserNode
+    {
+        public String VarName;
+        public ParserNode LoopIterator;
+        public ParserNode BodyBlock;
+
+        public override void Dump(int Level = 0, String Info = "")
+        {
+            base.Dump(Level, Info);
+            LoopIterator.Dump(Level + 1, "LoopIterator");
+            BodyBlock.Dump(Level + 1, "BodyBlock");
+        }
+
+        override public void WriteTo(ParserNodeContext Context)
+        {
+            Context.TextWriter.Write("foreach (var LoopVar in (");
+            LoopIterator.WriteTo(Context);
+            Context.TextWriter.Write(")) {");
+            Context.TextWriter.WriteLine("");
+            Context.TextWriter.WriteLine("Context.SetVar({0}, LoopVar);", EscapeString(VarName));
+            BodyBlock.WriteTo(Context);
+            Context.TextWriter.Write("}");
+            Context.TextWriter.WriteLine("");
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + "('" + VarName + "')";
+        }
+    }
+
     public class IfParserNode : ParserNode
     {
         public ParserNode ConditionNode;
@@ -74,9 +105,9 @@ namespace CSharpUtils.Templates
 
         override public void WriteTo(ParserNodeContext Context)
         {
-            Context.TextWriter.Write("if (");
+            Context.TextWriter.Write("if (Context.ToBool(");
             ConditionNode.WriteTo(Context);
-            Context.TextWriter.Write(") {");
+            Context.TextWriter.Write(")) {");
             Context.TextWriter.WriteLine("");
             BodyIfNode.WriteTo(Context);
             Context.TextWriter.Write("}");
@@ -87,11 +118,6 @@ namespace CSharpUtils.Templates
                 Context.TextWriter.Write("}");
             }
             Context.TextWriter.WriteLine("");
-        }
-
-        public override string ToString()
-        {
-            return "IfParserNode";
         }
     }
 
