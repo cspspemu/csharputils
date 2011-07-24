@@ -28,5 +28,15 @@ namespace CSharpUtils
 				File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath));
 			}
 		}
+
+        static public String GetExecutableFilePath()
+        {
+            return System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName;
+        }
+
+        static public String GetExecutableDirectoryPath()
+        {
+            return System.IO.Path.GetDirectoryName(GetExecutableFilePath());
+        }
 	}
 }

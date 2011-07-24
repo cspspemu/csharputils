@@ -77,14 +77,16 @@ namespace CSharpUtils.Templates
             Context.TextWriter.Write("if (");
             ConditionNode.WriteTo(Context);
             Context.TextWriter.Write(") {");
+            Context.TextWriter.WriteLine("");
             BodyIfNode.WriteTo(Context);
             Context.TextWriter.Write("}");
             if (!(BodyElseNode is DummyParserNode))
             {
-                Context.TextWriter.Write("else {");
+                Context.TextWriter.Write(" else {");
                 BodyElseNode.WriteTo(Context);
                 Context.TextWriter.Write("}");
             }
+            Context.TextWriter.WriteLine("");
         }
 
         public override string ToString()
@@ -190,6 +192,7 @@ namespace CSharpUtils.Templates
         override public void WriteTo(ParserNodeContext Context)
         {
             Context.TextWriter.Write(String.Format("Context.Output.Write({0});", EscapeString(Text)));
+            Context.TextWriter.WriteLine("");
         }
 
         public override string ToString()
@@ -223,6 +226,7 @@ namespace CSharpUtils.Templates
             Context.TextWriter.Write("Context.Output.Write(");
             Parent.WriteTo(Context);
             Context.TextWriter.Write(");");
+            Context.TextWriter.WriteLine("");
         }
     }
 
@@ -233,6 +237,7 @@ namespace CSharpUtils.Templates
             Context.TextWriter.Write("SetParentClass(");
             Parent.WriteTo(Context);
             Context.TextWriter.Write(");");
+            Context.TextWriter.WriteLine("");
         }
     }
 
@@ -245,6 +250,7 @@ namespace CSharpUtils.Templates
             Context.TextWriter.Write("Block(");
             Parent.WriteTo(Context);
             Context.TextWriter.Write(");");
+            Context.TextWriter.WriteLine("");
         }
     }
 

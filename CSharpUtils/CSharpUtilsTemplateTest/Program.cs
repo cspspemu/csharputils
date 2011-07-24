@@ -6,6 +6,10 @@ using CSharpUtils.Templates;
 using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
+using System.IO;
+using CSharpUtils;
+using CSharpUtils.VirtualFileSystem;
+using CSharpUtils.VirtualFileSystem.Local;
 
 namespace CSharpUtilsTemplateTest
 {
@@ -46,15 +50,25 @@ namespace CSharpUtilsTemplateTest
 
             //compilerResults.CompiledAssembly
 
-            Console.WriteLine(Template.ParseFromString(@"
-                {% extends 'Base' %}
-                Hello {{ User }} {{ ((1) + 2) * 2 + 3 * 4 + 1 + Value }}
-                {% if Value %}true{% else %}false{% endif %}
-                {% block MyBlock %}MyBlock Text{% if 1 %}Test{% endif %}{% endblock %}
-            ").RenderToString(new Dictionary<String, object>() {
+            //Assembly.GetExecutingAssembly().GetManifestResourceStream();
+            /*
+            foreach (var Name in Assembly.GetExecutingAssembly().GetManifestResourceNames())
+            {
+                Console.WriteLine(Name);
+            }
+            */
+
+            var FileSystem = new LocalFileSystem(FileUtils.GetExecutableDirectoryPath(), false);
+            var TemplateString = FileSystem.OpenFile("Templates/Test.html", FileMode.Open).ReadAllContentsAsString();
+
+            //Stream TemplateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CSharpUtilsTemplateTest.Templates.Test.html");
+            //String TemplateString = TemplateStream.ReadAllContentsAsString();
+
+            var Result = Template.ParseFromString(TemplateString).RenderToString(new Dictionary<String, object>() {
                 { "User", "Test" },
                 { "Value", 1 },
-            }));
+            });
+            //Console.WriteLine(Result);
             Console.ReadKey();
         }
     }

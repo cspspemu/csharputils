@@ -5,6 +5,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using CSharpUtils.Templates.Tokenizers;
+using Microsoft.CSharp;
+using System.Reflection;
+using System.CodeDom.Compiler;
+using CSharpUtils.Templates.Runtime;
 
 namespace CSharpUtils.Templates
 {
@@ -319,7 +323,7 @@ namespace CSharpUtils.Templates
             return Template;
         }
 
-        public void RenderTo(TextWriter TextWriter, dynamic Parameters = null)
+        public void RenderCodeTo(TextWriter TextWriter, dynamic Parameters = null)
         {
             var TemplateHandler = new TemplateHandler(Tokens, TextWriter, Parameters);
             var Context = new ParserNodeContext()
@@ -329,15 +333,67 @@ namespace CSharpUtils.Templates
             };
             var ParserNode = TemplateHandler.HandleLevel_Root();
             var OptimizedParserNode = ParserNode.Optimize(Context);
-            OptimizedParserNode.Dump();
+            //OptimizedParserNode.Dump();
+            Context.TextWriter.WriteLine("using System;");
+            Context.TextWriter.WriteLine("using CSharpUtils.Templates.Runtime;");
+            Context.TextWriter.WriteLine("namespace CSharpUtils.Templates.CompiledTemplates {");
+            Context.TextWriter.WriteLine("class CompiledTemplate_TempTemplate : TemplateCode {");
+            Context.TextWriter.WriteLine("override public void Render(TemplateContext Context) { try {");
             OptimizedParserNode.WriteTo(Context);
+            Context.TextWriter.WriteLine("} catch (Exception Exception) { Console.WriteLine(Exception); } }");
+            Context.TextWriter.WriteLine("}");
+            Context.TextWriter.WriteLine("}");
+        }
+
+        public String ExecuteCode(String Code, dynamic Parameters = null)
+        {
+            //Console.WriteLine(Code);
+
+            CSharpCodeProvider CSharpCodeProvider = new CSharpCodeProvider();
+            //Console.WriteLine(Assembly.GetExecutingAssembly().FullName);
+
+            CompilerResults CompilerResults = CSharpCodeProvider.CompileAssemblyFromSource(
+                new CompilerParameters(new string[] {
+                    "System.dll",
+                    "Microsoft.CSharp.dll",
+                    "System.Core.dll",
+                    System.Reflection.Assembly.GetAssembly(typeof(Template)).Location
+                }),
+                Code
+            );
+
+            foreach (var Error in CompilerResults.Errors)
+            {
+                Console.WriteLine("Error: " + Error);
+            }
+
+            if (CompilerResults.NativeCompilerReturnValue == 0)
+            {
+                Assembly assembly = CompilerResults.CompiledAssembly;
+                Type Type = assembly.GetType("CSharpUtils.Templates.CompiledTemplates.CompiledTemplate_TempTemplate");
+
+                TemplateContext TemplateContext = new TemplateContext();
+                TemplateContext.Output = new StringWriter();
+                TemplateContext.Parameters = Parameters;
+
+                TemplateCode TemplateCode = (TemplateCode)Activator.CreateInstance(Type);
+                TemplateCode.Render(TemplateContext);
+
+                Console.WriteLine(TemplateContext.Output.ToString());
+                return TemplateContext.Output.ToString();
+            }
+            else
+            {
+                throw(new Exception("Error Compiling"));
+            }
         }
 
         public String RenderToString(dynamic Parameters = null)
         {
             var StringWriter = new StringWriter();
-            RenderTo(StringWriter, Parameters);
-            return StringWriter.ToString();
+            RenderCodeTo(StringWriter, Parameters);
+            String CodeString = StringWriter.ToString();
+            return ExecuteCode(CodeString, Parameters);
         }
     }
 }

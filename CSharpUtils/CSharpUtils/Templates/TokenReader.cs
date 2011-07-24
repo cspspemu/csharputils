@@ -13,10 +13,11 @@ namespace CSharpUtils.Templates
         public TokenReader(List<TemplateToken> Tokens)
         {
             this.Tokens = Tokens;
+        }
 
-            foreach (var Token in Tokens) {
-                Console.WriteLine(Token);
-            }
+        void Dump()
+        {
+            foreach (var Token in Tokens) Console.WriteLine(Token);
         }
 
         public bool HasMore
