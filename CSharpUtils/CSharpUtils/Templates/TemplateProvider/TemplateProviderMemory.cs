@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CSharpUtils.Templates.TemplateProvider
 {
-    class TemplateProviderMemory : ITemplateProvider
+	public class TemplateProviderMemory : ITemplateProvider
     {
         Dictionary<String, Stream> Map;
 

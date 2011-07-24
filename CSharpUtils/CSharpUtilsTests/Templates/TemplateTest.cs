@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using CSharpUtils;
 using System.Linq;
 using CSharpUtils.Templates.Tokenizers;
+using CSharpUtils.Templates.TemplateProvider;
 
 namespace CSharpUtilsTests.Templates
 {
@@ -25,6 +26,12 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual("1234", TemplateCodeGen.CompileTemplateByString("{% for Item in List %}{{ Item }}{% endfor %}").RenderToString(new Dictionary<String, object>() {
 				{ "List", new int[] { 1, 2, 3, 4 } },
 			}));
+		}
+
+		[TestMethod]
+		public void TestExecBlock()
+		{
+			Assert.AreEqual("1", TemplateCodeGen.CompileTemplateByString("{% block Body %}1{% endblock %}").RenderToString());
 		}
 
 		[TestMethod]
@@ -57,41 +64,16 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual("A", TemplateCodeGen.CompileTemplateByString("{% if 1 %}A{% else %}B{% endif %}").RenderToString());
 		}
 
-		protected void TokenizerAssertEquals(String TemplateString, params String[] Tokens)
-		{
-			var StringTokens = TemplateTokenizer.Tokenize(new TokenizerStringReader(TemplateString)).Select(Token => Token.Text).ToArray();
-			foreach (var StringToken in StringTokens)
-			{
-				Console.WriteLine(StringToken);
-			}
-			CollectionAssert.AreEqual(StringTokens, Tokens);
-		}
-
 		[TestMethod]
-		public void TokenizeTest()
+		public void TestExecBasicInheritance()
 		{
-			TokenizerAssertEquals(
-				"Hello {{ 'User' + 15 }} Text ",
-				"Hello ", "{{", "'User'", "+", "15", "}}", " Text "
-			);
-		}
+			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
+			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider);
 
-		[TestMethod]
-		public void Tokenize2Test()
-		{
-			TokenizerAssertEquals(
-				"Hello {% for n in [1, 2, 3, 4] %}{{ n }}{% endfor %}",
-				"Hello ", "{%", "for", "n", "in", "[", "1", ",", "2", ",", "3", ",", "4", "]", "%}", "{{", "n", "}}", "{%", "endfor", "%}"
-			);
-		}
+			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
+			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}Not{% block Body %}Ex{% endblock %}Rendered");
 
-		[TestMethod]
-		public void TokenizeRange()
-		{
-			TokenizerAssertEquals(
-				"{% for n in 0..10 %}",
-				"{%", "for", "n", "in", "0", "..", "10", "%}"
-			);
+			Assert.AreEqual("TestExTest", TemplateFactory.GetTemplateByFile("Test.html").RenderToString());
 		}
 	}
 }

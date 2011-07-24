@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CSharpUtils.Templates.Utils;
 
 namespace CSharpUtils.Templates.Tokenizers
 {
@@ -25,6 +26,13 @@ namespace CSharpUtils.Templates.Tokenizers
 
 	public class StringLiteralTemplateToken : TemplateToken
 	{
+		public String UnescapedText
+		{
+			get
+			{
+				return StringUtils.UnescapeString(Text);
+			}
+		}
 	}
 
 	public class NumericLiteralTemplateToken : TemplateToken

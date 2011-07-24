@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using CSharpUtils.Templates.TemplateProvider;
 
 namespace CSharpUtils.Templates.Runtime
 {
 	public class TemplateContext
 	{
+		public TemplateFactory TemplateFactory;
 		public TextWriter Output;
 		public dynamic Parameters;
 
-		public TemplateContext(TextWriter Output, dynamic Parameters)
+		public TemplateContext(TextWriter Output, dynamic Parameters, TemplateFactory TemplateFactory)
 		{
 			if (Parameters == null) Parameters = new Dictionary<String, object>();
 
 			this.Output = Output;
 			this.Parameters = Parameters;
+			this.TemplateFactory = TemplateFactory;
 		}
 
 		public dynamic GetVar(String Name)

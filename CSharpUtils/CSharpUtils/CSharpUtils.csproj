@@ -299,6 +299,7 @@
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="StructUtils.cs" />
+    <Compile Include="Templates\Runtime\FinalizeRenderException.cs" />
     <Compile Include="Templates\Runtime\TemplateCode.cs" />
     <Compile Include="Templates\Runtime\TemplateContext.cs" />
     <Compile Include="Templates\TemplateFactory.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Templates\Tokenizers\TokenizerStringReader.cs" />
     <Compile Include="Templates\Tokenizers\TemplateTokenizer.cs" />
     <Compile Include="Templates\Tokenizers\TokenReader.cs" />
+    <Compile Include="Templates\Utils\StringUtils.cs" />
     <Compile Include="TimeSampler.cs" />
     <Compile Include="VirtualFileSystem\BaseFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanNet.cs" />

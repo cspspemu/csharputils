@@ -11,6 +11,7 @@ using System.CodeDom.Compiler;
 using CSharpUtils.Templates.Runtime;
 using CSharpUtils.Templates.ParserNodes;
 using CSharpUtils.Templates.TemplateProvider;
+using CSharpUtils.Templates.Utils;
 
 namespace CSharpUtils.Templates
 {
@@ -94,7 +95,7 @@ namespace CSharpUtils.Templates
 				case "StringLiteralTemplateToken":
 					ParserNode = new ParserNodeStringLiteral()
 					{
-						Value = CurrentToken.Text,
+						Value = ((StringLiteralTemplateToken)CurrentToken).UnescapedText,
 					};
 					Tokens.MoveNext();
 					break;
@@ -237,7 +238,9 @@ namespace CSharpUtils.Templates
 		{
 
 			Tokens.MoveNext();
-			ParserNodeExtends ParserNodeExtends = new ParserNodeExtends() { Parent = HandleLevel_Expression() };
+			ParserNodeExtends ParserNodeExtends = new ParserNodeExtends() {
+				Parent = HandleLevel_Expression()
+			};
 			Tokens.ExpectValueAndNext("%}");
 			return ParserNodeExtends;
 		}
@@ -299,12 +302,7 @@ namespace CSharpUtils.Templates
 
 					Blocks[BlockName] = BodyBlock;
 
-					return new ParserNodeCallBlock()
-					{
-						//Parent = BodyBlock,
-						Parent = new DummyParserNode(),
-						BlockName = BlockName,
-					};
+					return new ParserNodeCallBlock(BlockName);
 				}
 				case "for": return HandleLevel_TagSpecial_For();
 				case "extends": return HandleLevel_TagSpecial_Extends();
@@ -370,17 +368,17 @@ namespace CSharpUtils.Templates
 
 	public class TemplateCodeGen
 	{
-		ITemplateProvider TemplateProvider;
+		TemplateFactory TemplateFactory;
 		TokenReader Tokens;
 
-		static public TemplateCode CompileTemplateByString(String TemplateString, ITemplateProvider TemplateProvider = null)
+		static public TemplateCode CompileTemplateByString(String TemplateString, TemplateFactory TemplateFactory = null)
 		{
-			return (new TemplateCodeGen(TemplateString, TemplateProvider)).GetTemplate();
+			return (new TemplateCodeGen(TemplateString, TemplateFactory)).GetTemplate();
 		}
 
-		public TemplateCodeGen(String TemplateString, ITemplateProvider TemplateProvider = null)
+		public TemplateCodeGen(String TemplateString, TemplateFactory TemplateFactory = null)
 		{
-			this.TemplateProvider = TemplateProvider;
+			this.TemplateFactory = TemplateFactory;
 			this.Tokens = new TokenReader(TemplateTokenizer.Tokenize(new TokenizerStringReader(TemplateString)));
 		}
 
@@ -388,6 +386,9 @@ namespace CSharpUtils.Templates
 		{
 			StringWriter CodeWriter = new StringWriter();
 			RenderCodeTo(CodeWriter);
+
+			//Console.WriteLine(CodeWriter.ToString());
+
 			return CodeWriter.ToString();
 		}
 
@@ -397,22 +398,26 @@ namespace CSharpUtils.Templates
 			var Context = new ParserNodeContext()
 			{
 				TextWriter = TextWriter,
-				TemplateProvider = TemplateProvider,
+				TemplateFactory = TemplateFactory,
 			};
 			var ParserNode = TemplateHandler.HandleLevel_Root();
 
 			//OptimizedParserNode.Dump();
 			Context.TextWriter.WriteLine("using System;");
-			Context.TextWriter.WriteLine("using CSharpUtils.Templates.Runtime;");
 			Context.TextWriter.WriteLine("using System.Collections.Generic;");
+			Context.TextWriter.WriteLine("using CSharpUtils.Templates;");
+			Context.TextWriter.WriteLine("using CSharpUtils.Templates.Runtime;");
+			Context.TextWriter.WriteLine("using CSharpUtils.Templates.TemplateProvider;");
 			Context.TextWriter.WriteLine("");
 			Context.TextWriter.WriteLine("namespace CSharpUtils.Templates.CompiledTemplates {");
 			Context.TextWriter.WriteLine("class CompiledTemplate_TempTemplate : TemplateCode {");
 
+			Context.TextWriter.WriteLine("public CompiledTemplate_TempTemplate(TemplateFactory TemplateFactory = null) : base(TemplateFactory) { }");
+
 			Context.TextWriter.WriteLine("override public void SetBlocks(Dictionary<String, RenderDelegate> Blocks) {");
 			foreach (var BlockPair in TemplateHandler.Blocks)
 			{
-				Context.TextWriter.WriteLine("SetBlock(Blocks, {0}, Block_{1});", ParserNode.EscapeString(BlockPair.Key), BlockPair.Key);
+				Context.TextWriter.WriteLine("SetBlock(Blocks, {0}, Block_{1});", StringUtils.EscapeString(BlockPair.Key), BlockPair.Key);
 			}
 			Context.TextWriter.WriteLine("}");
 
@@ -453,7 +458,7 @@ namespace CSharpUtils.Templates
 				Assembly assembly = CompilerResults.CompiledAssembly;
 				Type Type = assembly.GetType("CSharpUtils.Templates.CompiledTemplates.CompiledTemplate_TempTemplate");
 
-				return (TemplateCode)Activator.CreateInstance(Type);
+				return (TemplateCode)Activator.CreateInstance(Type, TemplateFactory);
 			}
 			else
 			{
@@ -476,7 +481,7 @@ namespace CSharpUtils.Templates
 		public String RenderToString(dynamic Parameters = null)
 		{
 			var OutputWriter = new StringWriter();
-			GetTemplateCodeByCode(GetCode()).Render(new TemplateContext(OutputWriter, Parameters));
+			GetTemplateCodeByCode(GetCode()).Render(new TemplateContext(OutputWriter, Parameters, TemplateFactory));
 			return OutputWriter.ToString();
 		}
 	}

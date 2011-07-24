@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CSharpUtils.Templates.TemplateProvider;
+using CSharpUtils.Templates.Utils;
 
 namespace CSharpUtils.Templates.ParserNodes
 {
 	public class ParserNodeContext
 	{
 		public TextWriter TextWriter;
-		public ITemplateProvider TemplateProvider;
+		public TemplateFactory TemplateFactory;
 	}
 
 	abstract public class ParserNode
@@ -27,23 +28,6 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		virtual public void WriteTo(ParserNodeContext Context)
 		{
-		}
-
-		static public String EscapeString(String Value)
-		{
-			String EscapedString = "";
-
-			for (int n = 0; n < Value.Length; n++) {
-				switch (Value[n]) {
-					case '\n': EscapedString += @"\n"; break;
-					case '\r': EscapedString += @"\r"; break;
-					case '\t': EscapedString += @"\t"; break;
-					case '"': EscapedString += "\\\""; break;
-					default: EscapedString +=  Value[n]; break;
-				}
-			}
-
-			return '"' + EscapedString + '"';
 		}
 
 		protected T CreateThisInstanceAs<T>()
@@ -95,7 +79,7 @@ namespace CSharpUtils.Templates.ParserNodes
 			LoopIterator.WriteTo(Context);
 			Context.TextWriter.Write(")) {");
 			Context.TextWriter.WriteLine("");
-			Context.TextWriter.WriteLine("Context.SetVar({0}, LoopVar);", EscapeString(VarName));
+			Context.TextWriter.WriteLine("Context.SetVar({0}, LoopVar);", StringUtils.EscapeString(VarName));
 			BodyBlock.WriteTo(Context);
 			Context.TextWriter.Write("}");
 			Context.TextWriter.WriteLine("");
@@ -189,7 +173,7 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("Context.GetVar({0})", EscapeString(Id));
+			Context.TextWriter.Write("Context.GetVar({0})", StringUtils.EscapeString(Id));
 		}
 
 		public override string ToString()
@@ -219,7 +203,7 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write(EscapeString(Value));
+			Context.TextWriter.Write(StringUtils.EscapeString(Value));
 		}
 
 		public override string ToString()
@@ -234,7 +218,7 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write(String.Format("Context.Output.Write(Context.AutoFilter({0}));", EscapeString(Text)));
+			Context.TextWriter.Write(String.Format("Context.Output.Write(Context.AutoFilter({0}));", StringUtils.EscapeString(Text)));
 			Context.TextWriter.WriteLine("");
 		}
 
@@ -277,20 +261,25 @@ namespace CSharpUtils.Templates.ParserNodes
 	{
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("SetParentClass(");
+			Context.TextWriter.Write("SetAndRenderParentTemplate(");
 			Parent.WriteTo(Context);
-			Context.TextWriter.Write(");");
+			Context.TextWriter.Write(", Context); throw(new FinalizeRenderException());");
 			Context.TextWriter.WriteLine("");
 		}
 	}
 
-	public class ParserNodeCallBlock : ParserNodeParent
+	public class ParserNodeCallBlock : ParserNode
 	{
 		public String BlockName;
 
+		public ParserNodeCallBlock(String BlockName)
+		{
+			this.BlockName = BlockName;
+		}
+
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.WriteLine("CallBlock({0}, Context);", EscapeString(BlockName));
+			Context.TextWriter.WriteLine("CallBlock({0}, Context);", StringUtils.EscapeString(this.BlockName));
 			Context.TextWriter.WriteLine("");
 		}
 	}

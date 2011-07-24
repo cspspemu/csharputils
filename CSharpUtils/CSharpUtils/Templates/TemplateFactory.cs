@@ -10,22 +10,30 @@ namespace CSharpUtils.Templates
 {
 	public class TemplateFactory
 	{
-		ITemplateProvider TemplateProvider;
+		public Encoding Encoding;
+		public ITemplateProvider TemplateProvider;
+		public Dictionary<String, TemplateCode> CachedTemplatesByFile = new Dictionary<string, TemplateCode>();
 
-		public TemplateFactory(ITemplateProvider TemplateProvider = null)
+		public TemplateFactory(ITemplateProvider TemplateProvider = null, Encoding Encoding = null)
 		{
+			this.Encoding = Encoding;
 			this.TemplateProvider = TemplateProvider;
 		}
 
 		public TemplateCode GetTemplateByString(String TemplateString)
 		{
-			return new TemplateCodeGen(TemplateString, TemplateProvider).GetTemplate();
+			return new TemplateCodeGen(TemplateString, this).GetTemplate();
 		}
 
-		public TemplateCode GetTemplateByFile(String Name, Encoding Encoding = null)
+		public TemplateCode GetTemplateByFile(String Name)
 		{
 			if (TemplateProvider == null) throw(new Exception("No specified TemplateProvider"));
-			return GetTemplateByString(TemplateProvider.GetTemplate(Name).ReadAllContentsAsString(Encoding));
+			if (!CachedTemplatesByFile.ContainsKey(Name))
+			{
+				return CachedTemplatesByFile[Name] = GetTemplateByString(TemplateProvider.GetTemplate(Name).ReadAllContentsAsString(Encoding));
+			}
+
+			return CachedTemplatesByFile[Name];
 		}
 	}
 }

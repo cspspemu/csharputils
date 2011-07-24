@@ -7,7 +7,7 @@ using CSharpUtils.VirtualFileSystem;
 
 namespace CSharpUtils.Templates.TemplateProvider
 {
-    class TemplateProviderVirtualFileSystem : ITemplateProvider
+    public class TemplateProviderVirtualFileSystem : ITemplateProvider
     {
         FileSystem FileSystem;
 
