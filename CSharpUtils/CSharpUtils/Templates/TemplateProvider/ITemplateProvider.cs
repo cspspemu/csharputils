@@ -6,8 +6,8 @@ using System.IO;
 
 namespace CSharpUtils.Templates.TemplateProvider
 {
-    interface ITemplateProvider
-    {
-        Stream GetTemplate(String Name);
-    }
+	public interface ITemplateProvider
+	{
+		Stream GetTemplate(String Name);
+	}
 }

@@ -301,6 +301,7 @@
     <Compile Include="StructUtils.cs" />
     <Compile Include="Templates\Runtime\TemplateCode.cs" />
     <Compile Include="Templates\Runtime\TemplateContext.cs" />
+    <Compile Include="Templates\TemplateFactory.cs" />
     <Compile Include="Templates\TemplateProvider\ITemplateProvider.cs" />
     <Compile Include="Templates\TemplateProvider\TemplateProviderMemory.cs" />
     <Compile Include="Templates\TemplateProvider\TemplateProviderVirtualFileSystem.cs" />

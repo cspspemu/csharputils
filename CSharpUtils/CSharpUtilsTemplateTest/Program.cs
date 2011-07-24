@@ -77,7 +77,7 @@ namespace CSharpUtilsTemplateTest
                 { "List", new int[] { 1, 2, 3, 4 } },
             }));
             */
-            Console.WriteLine(Template.ParseFromString("{% if 1 %}A{% endif %}").RenderToString());
+            Console.WriteLine(TemplateCodeGen.CompileTemplateByString("{% if 1 %}{% block Body %}A{% endblock %}{% endif %}").RenderToString());
             //Console.WriteLine(Template.ParseFromString("{% for Item in 0..9 %}{{ Item }}{% endfor %}").RenderToString());
             //Console.WriteLine(Template.ParseFromString("Hello {{ 1 + 2 }} World").RenderToString());
             
