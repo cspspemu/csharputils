@@ -65,6 +65,24 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
+		public void TestExecTernaryTrue()
+		{
+			Assert.AreEqual("A", TemplateCodeGen.CompileTemplateByString("{{ 1 ? 'A' : 'B' }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecTernaryFalse()
+		{
+			Assert.AreEqual("B", TemplateCodeGen.CompileTemplateByString("{{ (1 - 1) ? 'A' : 'B' }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void ExecUnary()
+		{
+			Assert.AreEqual("-6", TemplateCodeGen.CompileTemplateByString("{{ -(1 + 2) + -3  }}").RenderToString());
+		}
+
+		[TestMethod]
 		public void TestExecBasicInheritance()
 		{
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();

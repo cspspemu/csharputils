@@ -14,7 +14,7 @@ namespace CSharpUtils.Templates.Tokenizers
 		static char[] Operators1 = new char[]
 		{
 			'+', '-', '*', '/', '%', '|', '(', ')', '{', '}', '[', ']', '.', ':', ',',
-			'<', '>',
+			'<', '>', '?'
 		};
 
 		static public bool IsDecimalDigit(char Char)

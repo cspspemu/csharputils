@@ -32,11 +32,38 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
+		public void TokenizeBinary()
+		{
+			TokenizerAssertEquals(
+				"{{ 1 + 2 * 3 / 4 % 5 }}",
+				"{{", "1", "+", "2", "*", "3", "/", "4", "%", "5", "}}"
+			);
+		}
+
+		[TestMethod]
+		public void TokenizeTernary()
+		{
+			TokenizerAssertEquals(
+				"{{ 1 ? 1 : 0 }}",
+				"{{", "1", "?", "1", ":", "0", "}}"
+			);
+		}
+
+		[TestMethod]
 		public void TokenizeRange()
 		{
 			TokenizerAssertEquals(
 				"{% for n in 0..10 %}",
 				"{%", "for", "n", "in", "0", "..", "10", "%}"
+			);
+		}
+
+		[TestMethod]
+		public void TokenizeUnary()
+		{
+			TokenizerAssertEquals(
+				"{{ -(1 + 2) + -3  }}",
+				"{{", "-", "(", "1", "+", "2", ")", "+", "-", "3", "}}"
 			);
 		}
 

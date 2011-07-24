@@ -48,6 +48,41 @@ namespace CSharpUtils.Templates
 			}
 		}
 
+		protected ParserNode _HandleLevel_Op(Func<ParserNode> HandleLevelNext, string[] Operators, Func<ParserNode, ParserNode, String, ParserNode> HandleOperator)
+		{
+			ParserNode ParserNode = HandleLevelNext();
+
+			while (Tokens.HasMore)
+			{
+				switch (CurrentTokenType)
+				{
+					case "OperatorTemplateToken":
+						string Operator = CurrentToken.Text;
+						bool Found = false;
+						foreach (var CurrentOperator in Operators)
+						{
+							if (Operator == CurrentOperator)
+							{
+								Tokens.MoveNext();
+								ParserNode RightNode = HandleLevelNext();
+								ParserNode = HandleOperator(ParserNode, RightNode, Operator);
+								Found = true;
+								break;
+							}
+						}
+						if (!Found)
+						{
+							return ParserNode;
+						}
+						break;
+					default:
+						return ParserNode;
+				}
+			}
+
+			return ParserNode;
+		}
+
 		public ParserNode HandleLevel_Identifier()
 		{
 			ParserNode ParserNode;
@@ -67,7 +102,6 @@ namespace CSharpUtils.Templates
 								Operator = Operator,
 							};
 							Tokens.MoveNext();
-                            
 							break;
 						case "(":
 							Tokens.MoveNext();
@@ -75,7 +109,7 @@ namespace CSharpUtils.Templates
 							Tokens.ExpectValueAndNext(")");
 							break;
 						default:
-							throw (new Exception(String.Format("Invalid operator '{0}'", CurrentTokenType)));
+							throw (new Exception(String.Format("Invalid operator '{0}'('{1}')", CurrentTokenType, CurrentToken.Text)));
 					}
 					break;
 				case "NumericLiteralTemplateToken":
@@ -108,97 +142,42 @@ namespace CSharpUtils.Templates
 
 		public ParserNode HandleLevel_Mul()
 		{
-			ParserNode ParserNode = HandleLevel_Identifier();
-
-			while (Tokens.HasMore)
-			{
-				switch (CurrentTokenType)
-				{
-					case "OperatorTemplateToken":
-						string Operator = CurrentToken.Text;
-						switch (Operator)
-						{
-							case "*":
-							case "/":
-								Tokens.MoveNext();
-								ParserNode = new ParserNodeBinaryOperation()
-								{
-									LeftNode = ParserNode,
-									Operator = Operator,
-									RightNode = HandleLevel_Identifier(),
-								};
-								break;
-							default: return ParserNode;
-						}
-						break;
-					default: return ParserNode;
-				}
-			}
-
-			return ParserNode;
+			return _HandleLevel_Op(
+				HandleLevel_Identifier,
+				new string[] { "*", "/", "%" },
+				(ParserNode LeftNode, ParserNode RightNode, String Operator) => { return new ParserNodeBinaryOperation(LeftNode, RightNode, Operator); }
+			);
 		}
 
 		public ParserNode HandleLevel_Sum()
 		{
-			ParserNode ParserNode = HandleLevel_Mul();
+			return _HandleLevel_Op(
+				HandleLevel_Mul,
+				new string[] { "+", "-" },
+				(ParserNode LeftNode, ParserNode RightNode, String Operator) => { return new ParserNodeBinaryOperation(LeftNode, RightNode, Operator); }
+			);
+		}
 
-			while (Tokens.HasMore)
-			{
-				switch (CurrentTokenType)
-				{
-					case "OperatorTemplateToken":
-						string Operator = CurrentToken.Text;
-						switch (Operator)
-						{
-							case "+":
-							case "-":
-								Tokens.MoveNext();
-								ParserNode = new ParserNodeBinaryOperation()
-								{
-									LeftNode = ParserNode,
-									Operator = Operator,
-									RightNode = HandleLevel_Mul(),
-								};
-								break;
-							default: return ParserNode;
-						}
-						break;
-					default: return ParserNode;
+		public ParserNode HandleLevel_Ternary()
+		{
+			return _HandleLevel_Op(
+				HandleLevel_Sum,
+				new string[] { "?" },
+				(ParserNode ConditionNode, ParserNode TrueNode, String Operator) => {
+					Tokens.ExpectValueAndNext(":");
+					ParserNode FalseNode = HandleLevel_Sum();
+					return new ParserNodeTernaryOperation(ConditionNode, TrueNode, FalseNode, Operator);
 				}
-			}
-
-			return ParserNode;
+			);
 		}
 
 		public ParserNode HandleLevel_Sli()
 		{
-			ParserNode ParserNode = HandleLevel_Sum();
-
-			while (Tokens.HasMore)
-			{
-				switch (CurrentTokenType)
-				{
-					case "OperatorTemplateToken":
-						string Operator = CurrentToken.Text;
-						switch (Operator)
-						{
-							case "..":
-								Tokens.MoveNext();
-								ParserNode = new ParserNodeBinaryOperation()
-								{
-									LeftNode = ParserNode,
-									Operator = Operator,
-									RightNode = HandleLevel_Sum(),
-								};
-								break;
-							default: return ParserNode;
-						}
-						break;
-					default: return ParserNode;
-				}
-			}
-
-			return ParserNode;
+			return _HandleLevel_Op(
+				HandleLevel_Ternary,
+				new string[] { ".." },
+				(ParserNode LeftNode, ParserNode RightNode, String Operator) => { return new ParserNodeBinaryOperation(LeftNode, RightNode, Operator); }
+			);
 		}
 
 		public ParserNode HandleLevel_Expression()

@@ -296,11 +296,56 @@ namespace CSharpUtils.Templates.ParserNodes
 		}
 	}
 
+	public class ParserNodeTernaryOperation : ParserNode
+	{
+		public ParserNode ConditionNode;
+		public ParserNode TrueNode;
+		public ParserNode FalseNode;
+		public String Operator;
+
+		public ParserNodeTernaryOperation(ParserNode ConditionNode, ParserNode TrueNode, ParserNode FalseNode, String Operator)
+		{
+			this.ConditionNode = ConditionNode;
+			this.TrueNode = TrueNode;
+			this.FalseNode = FalseNode;
+			this.Operator = Operator;
+		}
+
+		override public void WriteTo(ParserNodeContext Context)
+		{
+			switch (Operator)
+			{
+				case "?":
+					Context.TextWriter.Write("Context.ToBool(");
+					ConditionNode.WriteTo(Context);
+					Context.TextWriter.Write(")");
+					Context.TextWriter.Write("?");
+					Context.TextWriter.Write("(");
+					TrueNode.WriteTo(Context);
+					Context.TextWriter.Write(")");
+					Context.TextWriter.Write(":");
+					Context.TextWriter.Write("(");
+					FalseNode.WriteTo(Context);
+					Context.TextWriter.Write(")");
+					break;
+				default:
+					throw (new Exception(String.Format("Unknown Operator '{0}'", Operator)));
+			}
+		}
+	}
+
 	public class ParserNodeBinaryOperation : ParserNode
 	{
 		public ParserNode LeftNode;
 		public ParserNode RightNode;
 		public String Operator;
+
+		public ParserNodeBinaryOperation(ParserNode LeftNode, ParserNode RightNode, String Operator)
+		{
+			this.LeftNode = LeftNode;
+			this.RightNode = RightNode;
+			this.Operator = Operator;
+		}
 
 		public override void Dump(int Level = 0, String Info = "")
 		{
