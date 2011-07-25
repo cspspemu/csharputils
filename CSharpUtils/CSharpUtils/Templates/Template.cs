@@ -248,16 +248,25 @@ namespace CSharpUtils.Templates
 			ParserNode LoopIterator = HandleLevel_Expression();
 			Tokens.ExpectValueAndNext("%}");
 
+			ParserNode ElseBlock = new DummyParserNode();
 			ParserNode BodyBlock = HandleLevel_Root();
+
+			if (Tokens.Current.Text == "else")
+			{
+				Tokens.MoveNext();
+				Tokens.ExpectValueAndNext("%}");
+				ElseBlock = HandleLevel_Root();
+			}
 
 			Tokens.ExpectValueAndNext("endfor");
 			Tokens.ExpectValueAndNext("%}");
 
-			return new ForParserNode()
+			return new ForeachParserNode()
 			{
 				LoopIterator = LoopIterator,
 				VarName = VarName,
 				BodyBlock = BodyBlock,
+				ElseBlock = ElseBlock,
 			};
 		}
 

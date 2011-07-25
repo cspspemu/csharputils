@@ -61,11 +61,12 @@ namespace CSharpUtils.Templates.ParserNodes
 	{
 	}
 
-	public class ForParserNode : ParserNode
+	public class ForeachParserNode : ParserNode
 	{
 		public String VarName;
 		public ParserNode LoopIterator;
 		public ParserNode BodyBlock;
+		public ParserNode ElseBlock;
 
 		public override void Dump(int Level = 0, String Info = "")
 		{
@@ -76,14 +77,24 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("foreach (var LoopVar in (");
+			//DynamicUtils.CountArray
+
+			//Foreach(TemplateContext Context, String VarName, dynamic Expression, Action Iteration, Action Else = null)
+
+			Context.TextWriter.Write("Foreach(Context, {0}, ", StringUtils.EscapeString(VarName));
 			LoopIterator.WriteTo(Context);
-			Context.TextWriter.Write(")) {");
-			Context.TextWriter.WriteLine("");
-			Context.TextWriter.WriteLine("Context.SetVar({0}, LoopVar);", StringUtils.EscapeString(VarName));
+			Context.TextWriter.Write(", ");
+			Context.TextWriter.WriteLine("new EmptyDelegate(delegate() {");
 			BodyBlock.WriteTo(Context);
-			Context.TextWriter.Write("}");
-			Context.TextWriter.WriteLine("");
+			Context.TextWriter.Write("})");
+			if (!(ElseBlock is DummyParserNode))
+			{
+				Context.TextWriter.Write(", ");
+				Context.TextWriter.WriteLine("new EmptyDelegate(delegate() {");
+				ElseBlock.WriteTo(Context);
+				Context.TextWriter.Write("})");
+			}
+			Context.TextWriter.WriteLine(");");
 		}
 
 		public override string ToString()

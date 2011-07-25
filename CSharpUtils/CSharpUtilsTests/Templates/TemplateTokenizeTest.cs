@@ -76,6 +76,15 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
+		[TestMethod]
+		public void TokenizeComments()
+		{
+			TokenizerAssertEquals(
+				"Hello {# World #}{{ test }}A{# Test #}B",
+				"Hello ", "{{", "test", "}}", "A", "B"
+			);
+		}
+
 		protected void TokenizerAssertEquals(String TemplateString, params String[] Tokens)
 		{
 			var StringTokens = TemplateTokenizer.Tokenize(new TokenizerStringReader(TemplateString)).Select(Token => Token.Text).ToArray();

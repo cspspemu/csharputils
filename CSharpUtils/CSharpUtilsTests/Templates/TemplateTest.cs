@@ -30,6 +30,15 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
+		public void TestExecForElse()
+		{
+			var Params1 = new Dictionary<String, object>() { { "List", new int[] { 1, 2, 3, 4, 5 } } };
+			var Params2 = new Dictionary<String, object>() { { "List", new int[] { } } };
+			Assert.AreEqual("12345", TemplateCodeGen.CompileTemplateCodeByString("{% for Item in List %}{{ Item }}{% else %}Empty{% endfor %}").RenderToString(Params1));
+			Assert.AreEqual("Empty", TemplateCodeGen.CompileTemplateCodeByString("{% for Item in List %}{{ Item }}{% else %}Empty{% endfor %}").RenderToString(Params2));
+		}
+
+		[TestMethod]
 		public void TestExecBlock()
 		{
 			Assert.AreEqual("1", TemplateCodeGen.CompileTemplateCodeByString("{% block Body %}1{% endblock %}").RenderToString());

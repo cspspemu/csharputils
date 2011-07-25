@@ -11,7 +11,7 @@ namespace Tamir
 	
 		private StreamReader reader;
 		private PipedOutputStream writer_po;
-		private Session session;
+		//private Session session;
 		private ChannelShell channel;
 		private string host;
 	

@@ -137,5 +137,26 @@ namespace CSharpUtils.Templates.Runtime
 				default: throw(new Exception(String.Format("Unknown operator '{0}'", Operation)));
 			}
 		}
+
+		static public int CountArray(dynamic Value)
+		{
+			if (Value == null) return 0;
+			if (Value is String) return 0;
+			try
+			{
+				return Value.Length;
+			}
+			catch
+			{
+				try
+				{
+					return Value.Count;
+				}
+				catch
+				{
+					return 0;
+				}
+			}
+		}
 	}
 }

@@ -8,7 +8,7 @@ namespace CSharpUtils.Templates.Tokenizers
 {
 	public class TemplateTokenizer
 	{
-		static Regex StartTagRegex = new Regex(@"\{[\{%]", RegexOptions.Compiled);
+		static Regex StartTagRegex = new Regex(@"\{[\{%#]", RegexOptions.Compiled);
 
 		static public List<TemplateToken> Tokenize(TokenizerStringReader StringReader)
 		{
@@ -28,18 +28,30 @@ namespace CSharpUtils.Templates.Tokenizers
 					var RawText = StringReader.ReadString(Match.Index);
 					if (RawText.Length > 0) Tokens.Add(new RawTemplateToken() { Text = RawText });
 					var OpenTagTokenString = StringReader.ReadString(2);
-					Tokens.Add(new OpenTagTemplateToken() { Text = OpenTagTokenString });
+
+					// It is a comment.
+					if (OpenTagTokenString == "{#")
 					{
-						ExpressionTokenizer.Tokenize(Tokens, StringReader);
+						int Index = StringReader.IndexOf("#}");
+						if (Index == -1) throw(new Exception("Not closing comment"));
+						StringReader.ReadString(Index + 2);
 					}
-					var CloseTagTokenString = StringReader.ReadString(2);
-					var ExpectedCloseTagTokenString = (OpenTagTokenString == "{{") ? "}}" : "%}";
-					if (CloseTagTokenString != ExpectedCloseTagTokenString)
+					// It is either a expression tag or a special tag.
+					else
 					{
-						throw (new Exception("Expected '" + ExpectedCloseTagTokenString + "' but got '" + CloseTagTokenString + "'"));
+						Tokens.Add(new OpenTagTemplateToken() { Text = OpenTagTokenString });
+						{
+							ExpressionTokenizer.Tokenize(Tokens, StringReader);
+						}
+						var CloseTagTokenString = StringReader.ReadString(2);
+						var ExpectedCloseTagTokenString = ((OpenTagTokenString == "{{") ? "}}" : "%}");
+						if (CloseTagTokenString != ExpectedCloseTagTokenString)
+						{
+							throw (new Exception("Expected '" + ExpectedCloseTagTokenString + "' but got '" + CloseTagTokenString + "'"));
+						}
+						Tokens.Add(new CloseTagTemplateToken() { Text = CloseTagTokenString });
+						continue;
 					}
-					Tokens.Add(new CloseTagTemplateToken() { Text = CloseTagTokenString });
-					continue;
 				}
 				else
 				{

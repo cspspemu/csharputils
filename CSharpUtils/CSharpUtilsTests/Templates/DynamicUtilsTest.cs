@@ -51,6 +51,16 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual(2, DynamicUtils.Access(new List<int>(new int[] { 0, 1, 2, 3, 4 }), 2));
 		}
 
+		[TestMethod]
+		public void TestCountArray()
+		{
+			Assert.AreEqual(0, DynamicUtils.CountArray(null));
+			Assert.AreEqual(0, DynamicUtils.CountArray(10));
+			Assert.AreEqual(0, DynamicUtils.CountArray("String"));
+			Assert.AreEqual(3, DynamicUtils.CountArray(new int[] { 1, 2, 3 }));
+			Assert.AreEqual(3, DynamicUtils.CountArray(new List<int>(new int[] { 1, 2, 3 })));
+		}
+
 		class ClassTestAccess
 		{
 			public int SampleField = 10;

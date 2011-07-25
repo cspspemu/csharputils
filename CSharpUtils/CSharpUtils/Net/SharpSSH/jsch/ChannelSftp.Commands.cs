@@ -6,7 +6,6 @@ using CSharpUtils;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpUtils;
 using Tamir.SharpSsh.jsch;
 
 namespace Tamir.SharpSsh.jsch

@@ -46,4 +46,8 @@ namespace CSharpUtils.Templates.Tokenizers
 	public class IdentifierTemplateToken : TemplateToken
 	{
 	}
+
+	public class EndOfFileTemplateToken : TemplateToken
+	{
+	}
 }

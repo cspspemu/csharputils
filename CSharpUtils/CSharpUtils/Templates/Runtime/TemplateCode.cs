@@ -98,6 +98,30 @@ namespace CSharpUtils.Templates.Runtime
 		protected void CallParentBlock(String BlockName, TemplateContext Context)
 		{
 			this.ParentTemplate.GetFirstAscendingBlock(BlockName)(Context);
+
+			/*
+			Foreach(Context, "Test", Context.GetVar("Test"), new EmptyDelegate(delegate()
+			{
+			}));
+			*/
+		}
+
+		public delegate void EmptyDelegate();
+
+		protected void Foreach(TemplateContext Context, String VarName, dynamic Expression, EmptyDelegate Iteration, EmptyDelegate Else = null)
+		{
+			if (DynamicUtils.CountArray(Expression) > 0)
+			{
+				foreach (var Item in Expression)
+				{
+					Context.SetVar(VarName, Item);
+					Iteration();
+				}
+			}
+			else
+			{
+				if (Else != null) Else();
+			}
 		}
 	}
 }
