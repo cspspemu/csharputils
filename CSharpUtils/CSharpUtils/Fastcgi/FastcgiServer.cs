@@ -147,7 +147,7 @@ namespace CSharpUtils.Fastcgi
             {
                 Console.WriteLine("HandleAcceptedSocket: " + Socket);
             }
-            Console.Write(".");
+            //Console.Write(".");
             var FastcgiHandler = new FastcgiHandler(new FastcgiPipeSocket(Socket), Debug);
             FastcgiHandler.HandleFastcgiRequest += HandleFascgiRequest;
             FastcgiHandler.Reader.ReadAllPackets();

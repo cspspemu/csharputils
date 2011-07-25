@@ -10,12 +10,6 @@
 
 	{{ Posts.Count }}
 
-	{% for Post in Posts %}
-		<div>
-			<div class="title">{{ Post.Title }}</div>
-			<div class="body">{{ Post.Body }}</div>
-		</div>
-	{% endfor %}
 	<form action="/" method="post">
 		<table>
 			<tr>
@@ -29,6 +23,13 @@
 		</table>
 		<input type="submit" />
 	</form>
+	{% for Post in Posts %}
+		<div>
+			<div class="title">{{ Post.Title }}</div>
+			<div class="body">{{ Post.Body }}</div>
+		</div>
+	{% endfor %}
+
 	<pre>
 		{% for Param in Params %}
 			{{ loop.index }} {{ Param }}

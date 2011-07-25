@@ -9,64 +9,6 @@ using CSharpUtils.Templates.Runtime;
 
 namespace CSharpUtils.Templates.ParserNodes
 {
-	public class ParserNodeContext
-	{
-		protected bool ShouldWriteIndentation;
-		protected int IndentationLevel;
-		protected TextWriter TextWriter;
-		protected TemplateFactory TemplateFactory;
-
-		public ParserNodeContext(TextWriter TextWriter, TemplateFactory TemplateFactory)
-		{
-			this.TextWriter = TextWriter;
-			this.TemplateFactory = TemplateFactory;
-			this.IndentationLevel = 0;
-			this.ShouldWriteIndentation = true;
-		}
-
-		public void Indent(Action Action)
-		{
-			IndentationLevel++;
-			try
-			{
-				Action();
-			}
-			finally
-			{
-				IndentationLevel--;
-			}
-		}
-
-		protected void _TryWriteIndentation()
-		{
-			if (ShouldWriteIndentation)
-			{
-				TextWriter.Write(new String('\t', IndentationLevel));
-				ShouldWriteIndentation = false;
-			}
-		}
-
-		public void WriteLine(String Text, params object[] Params)
-		{
-			Write(Text, Params);
-			TextWriter.WriteLine("");
-			ShouldWriteIndentation = true;
-		}
-
-		public void Write(String Text, params object[] Params)
-		{
-			_TryWriteIndentation();
-			if (Params.Length > 0)
-			{
-				TextWriter.Write(Text, Params);
-			}
-			else
-			{
-				TextWriter.Write(Text);
-			}
-		}
-	}
-
 	abstract public class ParserNode
 	{
 		virtual public ParserNode Optimize(ParserNodeContext Context)
@@ -111,59 +53,6 @@ namespace CSharpUtils.Templates.ParserNodes
 
 	public class DummyParserNode : ParserNode
 	{
-	}
-
-	public class ForeachParserNode : ParserNode
-	{
-		public String VarName;
-		public ParserNode LoopIterator;
-		public ParserNode BodyBlock;
-		public ParserNode ElseBlock;
-
-		public override void Dump(int Level = 0, String Info = "")
-		{
-			base.Dump(Level, Info);
-			LoopIterator.Dump(Level + 1, "LoopIterator");
-			BodyBlock.Dump(Level + 1, "BodyBlock");
-		}
-
-		override public void WriteTo(ParserNodeContext Context)
-		{
-			//DynamicUtils.CountArray
-
-			//Foreach(TemplateContext Context, String VarName, dynamic Expression, Action Iteration, Action Else = null)
-
-			Context.WriteLine("Context.NewScope(delegate() {");
-			Context.Indent(delegate()
-			{
-				Context.Write("Foreach(Context, {0}, ", StringUtils.EscapeString(VarName));
-				Context.Indent(delegate()
-				{
-					LoopIterator.WriteTo(Context);
-				});
-				Context.Write(", ");
-				Context.WriteLine("new EmptyDelegate(delegate() {");
-				Context.Indent(delegate()
-				{
-					BodyBlock.WriteTo(Context);
-				});
-				Context.Write("})");
-				if (!(ElseBlock is DummyParserNode))
-				{
-					Context.Write(", ");
-					Context.WriteLine("new EmptyDelegate(delegate() {");
-					ElseBlock.WriteTo(Context);
-					Context.Write("})");
-				}
-				Context.WriteLine(");");  // Foreach
-			});
-			Context.WriteLine("});"); // Context.NewScope
-		}
-
-		public override string ToString()
-		{
-			return base.ToString() + "('" + VarName + "')";
-		}
 	}
 
 	public class ParserNodeIf : ParserNode
@@ -479,61 +368,6 @@ namespace CSharpUtils.Templates.ParserNodes
 			Context.Write(",");
 			Key.WriteTo(Context);
 			Context.Write(")");
-		}
-	}
-
-	public class ParserNodeBinaryOperation : ParserNode
-	{
-		public ParserNode LeftNode;
-		public ParserNode RightNode;
-		public String Operator;
-
-		public ParserNodeBinaryOperation(ParserNode LeftNode, ParserNode RightNode, String Operator)
-		{
-			this.LeftNode = LeftNode;
-			this.RightNode = RightNode;
-			this.Operator = Operator;
-		}
-
-		public override void Dump(int Level = 0, String Info = "")
-		{
-			base.Dump(Level, Info);
-			LeftNode.Dump(Level + 1, "Left");
-			RightNode.Dump(Level + 1, "Right");
-		}
-
-		override public ParserNode Optimize(ParserNodeContext Context)
-		{
-			var LeftNodeOptimized = LeftNode.Optimize(Context);
-			var RightNodeOptimized = RightNode.Optimize(Context);
-
-			if ((LeftNodeOptimized is ParserNodeNumericLiteral) && (RightNodeOptimized is ParserNodeNumericLiteral))
-			{
-				var LeftNodeLiteral = (ParserNodeNumericLiteral)LeftNodeOptimized;
-				var RightNodeLiteral = (ParserNodeNumericLiteral)RightNodeOptimized;
-				switch (Operator)
-				{
-					case "+": return new ParserNodeNumericLiteral() { Value = LeftNodeLiteral.Value + RightNodeLiteral.Value, };
-					case "-": return new ParserNodeNumericLiteral() { Value = LeftNodeLiteral.Value - RightNodeLiteral.Value, };
-					case "*": return new ParserNodeNumericLiteral() { Value = LeftNodeLiteral.Value * RightNodeLiteral.Value, };
-					case "/": return new ParserNodeNumericLiteral() { Value = LeftNodeLiteral.Value / RightNodeLiteral.Value, };
-				}
-			}
-			return this;
-		}
-
-		override public void WriteTo(ParserNodeContext Context)
-		{
-			Context.Write("DynamicUtils.BinaryOperation_" + DynamicUtils.GetOpName(Operator) + "(");
-			LeftNode.WriteTo(Context);
-			Context.Write(",");
-			RightNode.WriteTo(Context);
-			Context.Write(")");
-		}
-
-		public override string ToString()
-		{
-			return String.Format("ParserNodeBinaryOperation('{0}')", Operator);
 		}
 	}
 }
