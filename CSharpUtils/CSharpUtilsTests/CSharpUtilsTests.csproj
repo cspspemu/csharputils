@@ -57,6 +57,7 @@
     <Compile Include="FastcgiHandlerTest.cs" />
     <Compile Include="MemoryFileSystemTest.cs" />
     <Compile Include="SliceStreamTest.cs" />
+    <Compile Include="Templates\DynamicUtilsTest.cs" />
     <Compile Include="Templates\TemplateTest.cs" />
     <Compile Include="Templates\TemplateTokenizeTest.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFromPathTest.cs" />

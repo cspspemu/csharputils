@@ -23,9 +23,24 @@ namespace CSharpUtils.Templates.Runtime
 			this.TemplateFactory = TemplateFactory;
 		}
 
+		public void OutputWriteAutoFiltered(dynamic Value)
+		{
+			if (Value != null)
+			{
+				Output.Write(AutoFilter(Value));
+			}
+		}
+
 		public dynamic GetVar(String Name)
 		{
-			return Parameters[Name];
+			try
+			{
+				return Parameters[Name];
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
 		public void SetVar(String Name, dynamic Value)
@@ -36,36 +51,6 @@ namespace CSharpUtils.Templates.Runtime
 		public dynamic AutoFilter(dynamic Value)
 		{
 			return Value;
-		}
-
-		public bool ToBool(dynamic Value)
-		{
-			try
-			{
-				if (Value == null) return false;
-				if (Value is bool) return Value;
-				if (Value is int) return Value != 0;
-				if (Value is Int64) return Value != 0;
-				if (Value is object) return true;
-				return (bool)Value;
-			}
-			catch (Exception Exception)
-			{
-				Console.WriteLine("VALUE: {0}", Value);
-				Console.Error.WriteLine(Exception);
-				return false;
-			}
-		}
-
-		public dynamic GenRange(dynamic Start, dynamic End)
-		{
-			var List = new List<dynamic>();
-			for (dynamic N = Start; N <= End; N++)
-			{
-				List.Add(N);
-			}
-			//return List.ToArray();
-			return List;
 		}
 	}
 }

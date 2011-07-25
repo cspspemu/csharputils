@@ -19,6 +19,20 @@ namespace CSharpUtils.Templates
 	{
 	}
 
+	public class TemplateException : Exception
+	{
+		public TemplateException(String Message) : base(Message)
+		{
+		}
+	}
+
+	public class TemplateParentOutsideBlockException : TemplateException
+	{
+		public TemplateParentOutsideBlockException(String Message) : base(Message)
+		{
+		}
+	}
+
 	public class TemplateHandler
 	{
 		TokenReader Tokens;
@@ -115,7 +129,7 @@ namespace CSharpUtils.Templates
 							Tokens.MoveNext();
 							ParserNode = new ParserNodeUnaryOperation()
 							{
-								Parent = HandleLevel_Expression(),
+								Parent = HandleLevel_Identifier(),
 								Operator = Operator,
 							};
 							Tokens.MoveNext();
@@ -137,17 +151,32 @@ namespace CSharpUtils.Templates
 					Tokens.MoveNext();
 					break;
 				case "IdentifierTemplateToken":
-					ParserNode = new ParserNodeIdentifier()
-					{
-						Id = CurrentToken.Text
-					};
+					ParserNode = new ParserNodeIdentifier(CurrentToken.Text);
 					Tokens.MoveNext();
+
+					while (true)
+					{
+						if (CurrentToken.Text == ".")
+						{
+							Tokens.MoveNext();
+							TemplateToken AcessToken = Tokens.ExpectTypeAndNext(typeof(IdentifierTemplateToken));
+							ParserNode = new ParserNodeAccess(ParserNode, new ParserNodeStringLiteral(AcessToken.Text));
+						}
+						else if (CurrentToken.Text == "[")
+						{
+							Tokens.MoveNext();
+							ParserNode AccessNode = HandleLevel_Expression();
+							Tokens.ExpectValueAndNext("]");
+							ParserNode = new ParserNodeAccess(ParserNode, AccessNode);
+						}
+						else
+						{
+							break;
+						}
+					}
 					break;
 				case "StringLiteralTemplateToken":
-					ParserNode = new ParserNodeStringLiteral()
-					{
-						Value = ((StringLiteralTemplateToken)CurrentToken).UnescapedText,
-					};
+					ParserNode = new ParserNodeStringLiteral(((StringLiteralTemplateToken)CurrentToken).UnescapedText);
 					Tokens.MoveNext();
 					break;
 				default:
@@ -325,7 +354,7 @@ namespace CSharpUtils.Templates
 
 		private ParserNode HandleLevel_TagSpecial_Parent()
 		{
-			if (IsInsideABlock == 0) throw(new Exception("Parent can only be called inside a block"));
+			if (IsInsideABlock == 0) throw (new TemplateParentOutsideBlockException("Parent can only be called inside a block"));
 
 			Tokens.MoveNext();
 			Tokens.ExpectValueAndNext("%}");
@@ -481,7 +510,7 @@ namespace CSharpUtils.Templates
 
 		protected Type GetTemplateCodeTypeByCode(String Code)
 		{
-			//Console.WriteLine(Code);
+			Console.WriteLine(Code);
 
 			CSharpCodeProvider CSharpCodeProvider = new CSharpCodeProvider();
 			//Console.WriteLine(Assembly.GetExecutingAssembly().FullName);

@@ -6,6 +6,7 @@ using CSharpUtils;
 using System.Linq;
 using CSharpUtils.Templates.Tokenizers;
 using CSharpUtils.Templates.TemplateProvider;
+using System.Collections;
 
 namespace CSharpUtilsTests.Templates
 {
@@ -77,9 +78,9 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
-		public void ExecUnary()
+		public void TestExecUnary()
 		{
-			Assert.AreEqual("-6", TemplateCodeGen.CompileTemplateCodeByString("{{ -(1 + 2) + -3  }}").RenderToString());
+			Assert.AreEqual("-6", TemplateCodeGen.CompileTemplateCodeByString("{{ -(1 + 2) + -3 }}").RenderToString());
 		}
 
 		[TestMethod]
@@ -92,6 +93,60 @@ namespace CSharpUtilsTests.Templates
 		public void TestExecIfOr()
 		{
 			Assert.AreEqual("A", TemplateCodeGen.CompileTemplateCodeByString("{% if 0 || 2 %}A{% endif %}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecAccessSimple()
+		{
+			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key }}").RenderToString(new Hashtable()
+			{
+				{ "Item", new Hashtable() {
+					{ "Key", "Value" },
+				} }
+			}));
+		}
+
+		[TestMethod]
+		public void TestExecAccessSimpleIndexer()
+		{
+			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item['Key'] }}").RenderToString(new Hashtable()
+			{
+				{ "Item", new Hashtable() {
+					{ "Key", "Value" },
+				} }
+			}));
+		}
+
+		[TestMethod]
+		public void TestExecAccess()
+		{
+			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key.SubKey }}").RenderToString(new Hashtable()
+			{
+				{ "Item", new Hashtable() {
+					{ "Key", new Hashtable() {
+						{ "SubKey", "Value" },
+					} }
+				} }
+			}));
+		}
+
+		[TestMethod]
+		public void TestExecAccessInexistentKey()
+		{
+			Assert.AreEqual("", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.InexistentKey }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecAccessInexistentSubKey()
+		{
+			Assert.AreEqual("", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key.InexistentKey }}").RenderToString(new Hashtable()
+			{
+				{ "Item", new Hashtable() {
+					{ "Key", new Hashtable() {
+						{ "SubKey", "Value" },
+					} }
+				} }
+			}));
 		}
 
 		[TestMethod]
@@ -114,6 +169,19 @@ namespace CSharpUtilsTests.Templates
 
 			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
 			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}Not{% block Body %}1{% parent %}2{% endblock %}Rendered");
+
+			Assert.AreEqual("Test1Base2Test", TemplateFactory.GetTemplateCodeByFile("Test.html").RenderToString());
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(TemplateParentOutsideBlockException))]
+		public void TestExecInheritanceWithParentOutside()
+		{
+			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
+			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider);
+
+			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
+			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}Not{% block Body %}12{% endblock %}{% parent %}Rendered");
 
 			Assert.AreEqual("Test1Base2Test", TemplateFactory.GetTemplateCodeByFile("Test.html").RenderToString());
 		}

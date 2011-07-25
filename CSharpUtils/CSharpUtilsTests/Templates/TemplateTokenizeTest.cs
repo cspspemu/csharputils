@@ -67,6 +67,15 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
+		[TestMethod]
+		public void TokenizeAccessDot()
+		{
+			TokenizerAssertEquals(
+				"{{ test.key.subkey }}",
+				"{{", "test", ".", "key", ".", "subkey", "}}"
+			);
+		}
+
 		protected void TokenizerAssertEquals(String TemplateString, params String[] Tokens)
 		{
 			var StringTokens = TemplateTokenizer.Tokenize(new TokenizerStringReader(TemplateString)).Select(Token => Token.Text).ToArray();

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Templates.Utils;
+using CSharpUtils.Templates.Runtime;
 
 namespace CSharpUtils.Templates.ParserNodes
 {
@@ -107,7 +108,7 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("if (Context.ToBool(");
+			Context.TextWriter.Write("if (DynamicUtils.ConvertToBool(");
 			ConditionNode.WriteTo(Context);
 			Context.TextWriter.Write(")) {");
 			Context.TextWriter.WriteLine("");
@@ -169,7 +170,12 @@ namespace CSharpUtils.Templates.ParserNodes
 
 	public class ParserNodeIdentifier : ParserNode
 	{
-		public String Id;
+		protected String Id;
+
+		public ParserNodeIdentifier(String Id)
+		{
+			this.Id = Id;
+		}
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
@@ -199,7 +205,12 @@ namespace CSharpUtils.Templates.ParserNodes
 
 	public class ParserNodeStringLiteral : ParserNode
 	{
-		public String Value;
+		protected String Value;
+
+		public ParserNodeStringLiteral(String Value)
+		{
+			this.Value = Value;
+		}
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
@@ -250,9 +261,9 @@ namespace CSharpUtils.Templates.ParserNodes
 	{
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("Context.Output.Write(Context.AutoFilter(");
+			Context.TextWriter.Write("Context.OutputWriteAutoFiltered(");
 			Parent.WriteTo(Context);
-			Context.TextWriter.Write("));");
+			Context.TextWriter.Write(");");
 			Context.TextWriter.WriteLine("");
 		}
 	}
@@ -316,7 +327,7 @@ namespace CSharpUtils.Templates.ParserNodes
 			switch (Operator)
 			{
 				case "?":
-					Context.TextWriter.Write("Context.ToBool(");
+					Context.TextWriter.Write("DynamicUtils.ConvertToBool(");
 					ConditionNode.WriteTo(Context);
 					Context.TextWriter.Write(")");
 					Context.TextWriter.Write("?");
@@ -346,6 +357,27 @@ namespace CSharpUtils.Templates.ParserNodes
 		override public void WriteTo(ParserNodeContext Context)
 		{
 			Context.TextWriter.WriteLine("CallParentBlock({0}, Context);", StringUtils.EscapeString(BlockName));
+		}
+	}
+
+	public class ParserNodeAccess : ParserNode
+	{
+		ParserNode Parent;
+		ParserNode Key;
+
+		public ParserNodeAccess(ParserNode Parent, ParserNode Key)
+		{
+			this.Parent = Parent;
+			this.Key = Key;
+		}
+
+		override public void WriteTo(ParserNodeContext Context)
+		{
+			Context.TextWriter.Write("DynamicUtils.Access(");
+			Parent.WriteTo(Context);
+			Context.TextWriter.Write(",");
+			Key.WriteTo(Context);
+			Context.TextWriter.Write(")");
 		}
 	}
 
@@ -391,32 +423,11 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			switch (Operator)
-			{
-				case "+": case "-": case "*": case "/":
-					Context.TextWriter.Write("((");
-					LeftNode.WriteTo(Context);
-					Context.TextWriter.Write(") " + Operator + " (");
-					RightNode.WriteTo(Context);
-					Context.TextWriter.Write("))");
-					break;
-				case "&&": case "||":
-					Context.TextWriter.Write("(Context.ToBool(");
-					LeftNode.WriteTo(Context);
-					Context.TextWriter.Write(") " + Operator + " Context.ToBool(");
-					RightNode.WriteTo(Context);
-					Context.TextWriter.Write("))");
-					break;
-				case "..":
-					Context.TextWriter.Write("Context.GenRange(");
-					LeftNode.WriteTo(Context);
-					Context.TextWriter.Write(", ");
-					RightNode.WriteTo(Context);
-					Context.TextWriter.Write(")");
-					break;
-				default:
-					throw(new Exception(String.Format("Unknown Operator '{0}'", Operator)));
-			}
+			Context.TextWriter.Write("DynamicUtils.BinaryOperation_" + DynamicUtils.GetOpName(Operator) + "(");
+			LeftNode.WriteTo(Context);
+			Context.TextWriter.Write(",");
+			RightNode.WriteTo(Context);
+			Context.TextWriter.Write(")");
 		}
 
 		public override string ToString()
