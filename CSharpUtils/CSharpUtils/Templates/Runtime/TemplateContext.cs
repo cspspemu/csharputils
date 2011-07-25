@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CSharpUtils.Templates.TemplateProvider;
+using CSharpUtils.Html;
 
 namespace CSharpUtils.Templates.Runtime
 {
-	public class TemplateScope
+	sealed public class TemplateScope
 	{
 		public TemplateScope ParentScope;
 		public Dictionary<String, dynamic> Items;
@@ -46,7 +47,7 @@ namespace CSharpUtils.Templates.Runtime
 		}
 	}
 
-	public class TemplateContext
+	sealed public class TemplateContext
 	{
 		public TemplateCode RenderingTemplate;
 		public TemplateFactory TemplateFactory;
@@ -97,6 +98,7 @@ namespace CSharpUtils.Templates.Runtime
 
 		public dynamic AutoFilter(dynamic Value)
 		{
+			Value = HtmlUtils.EscapeHtmlCharacters(DynamicUtils.ConvertToString(Value));
 			return Value;
 		}
 	}

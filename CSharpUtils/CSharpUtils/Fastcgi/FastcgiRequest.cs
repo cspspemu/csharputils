@@ -6,19 +6,21 @@ using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using CSharpUtils.Streams;
+using CSharpUtils.Http;
 
 namespace CSharpUtils.Fastcgi
 {
 	public class FastcgiRequest
 	{
-        public bool Processing;
-        public bool FinalizedRequest = false;
+		public bool Processing;
+		public bool FinalizedRequest = false;
 		public ushort RequestId;
 		public FastcgiHandler FastcgiHandler;
 		public FascgiRequestInputStream ParamsStream;
-        public FascgiRequestInputStream StdinStream;
+		public FascgiRequestInputStream StdinStream;
 		public FascgiResponseOutputStream StdoutStream;
 		public FascgiResponseOutputStream StderrStream;
+		public Dictionary<String, String> PostParams;
 
 		public FastcgiRequest(FastcgiHandler FastcgiHandler, ushort RequestId)
 		{
@@ -32,6 +34,9 @@ namespace CSharpUtils.Fastcgi
 
 		public void ParseParamsStream()
 		{
+			this.StdinStream.SetPosition(0);
+			this.PostParams = HttpUtils.ParseUrlEncoded(this.StdinStream.ReadAllContentsAsString());
+
 			Params = new Dictionary<string, string>();
 			ParamsStream.Position = 0;
 			while (!ParamsStream.Eof())
@@ -42,7 +47,7 @@ namespace CSharpUtils.Fastcgi
 				ParamsStream.Read(Value, 0, Value.Length);
 				Params[Encoding.ASCII.GetString(Key)] = Encoding.ASCII.GetString(Value);
 			}
-            ParamsStream = new FascgiRequestInputStream();
+			ParamsStream = new FascgiRequestInputStream();
 		}
 
 		public Dictionary<String, String> Params = new Dictionary<string, string>();

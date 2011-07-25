@@ -112,10 +112,16 @@ namespace CSharpUtils.Templates.Runtime
 		{
 			if (DynamicUtils.CountArray(Expression) > 0)
 			{
-				foreach (var Item in Expression)
+				int Index = 0;
+				foreach (var Item in DynamicUtils.ConvertToIEnumerable(Expression))
 				{
+					Context.SetVar("loop", new Dictionary<String, dynamic> {
+						{ "index", Index + 1 },
+						{ "index0", Index },
+					});
 					Context.SetVar(VarName, Item);
 					Iteration();
+					Index++;
 				}
 			}
 			else

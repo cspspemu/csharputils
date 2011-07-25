@@ -61,6 +61,38 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual(3, DynamicUtils.CountArray(new List<int>(new int[] { 1, 2, 3 })));
 		}
 
+		[TestMethod]
+		public void TestCountArrayList()
+		{
+			Assert.AreEqual(3, DynamicUtils.CountArray(new List<Post> {
+				new Post() { Title = "Test1" },
+				new Post() { Title = "Test2" },
+				new Post() { Title = "Test3" },
+			}));
+		}
+
+		class Post
+		{
+			public string Title;
+		}
+
+		[TestMethod]
+		public void TestConvertToIEnumerable()
+		{
+			CollectionAssert.AreEquivalent(
+				new object[] { },
+				DynamicUtils.ConvertToIEnumerable(null)
+			);
+			CollectionAssert.AreEquivalent(
+				new object[] { "1", 2, 3 },
+				DynamicUtils.ConvertToIEnumerable(new Dictionary<string, object> { { "Test1", "1" }, { "Test2", 2 }, { "Test3", 3 } })
+			);
+			CollectionAssert.AreEquivalent(
+				new object[] { "1", 2, 3 },
+				DynamicUtils.ConvertToIEnumerable(new List<object> { "1", 2, 3 })
+			);
+		}
+
 		class ClassTestAccess
 		{
 			public int SampleField = 10;

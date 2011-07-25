@@ -96,6 +96,11 @@ namespace CSharpUtils.Templates.Runtime
 			return Left / Right;
 		}
 
+		static public int BinaryOperation_DivInt(dynamic Left, dynamic Right)
+		{
+			return (int)(Left / Right);
+		}
+
 		static public dynamic BinaryOperation_Mod(dynamic Left, dynamic Right)
 		{
 			return Left % Right;
@@ -109,6 +114,11 @@ namespace CSharpUtils.Templates.Runtime
 		static public bool BinaryOperation_OrBool(dynamic Left, dynamic Right)
 		{
 			return ConvertToBool(Left) || ConvertToBool(Right);
+		}
+
+		static public double BinaryOperation_Pow(dynamic Left, dynamic Right)
+		{
+			return Math.Pow(Left, Right);
 		}
 
 		static public dynamic BinaryOperation_Range(dynamic Start, dynamic End)
@@ -133,6 +143,8 @@ namespace CSharpUtils.Templates.Runtime
 				case "%": return "Mod";
 				case "&&": return "AndBool";
 				case "||": return "OrBool";
+				case "//": return "DivInt";
+				case "**": return "Pow";
 				case "..": return "Range";
 				default: throw(new Exception(String.Format("Unknown operator '{0}'", Operation)));
 			}
@@ -142,6 +154,8 @@ namespace CSharpUtils.Templates.Runtime
 		{
 			if (Value == null) return 0;
 			if (Value is String) return 0;
+			//Console.WriteLine(Value);
+			Type ValueType = Value.GetType();
 			try
 			{
 				return Value.Length;
@@ -150,13 +164,58 @@ namespace CSharpUtils.Templates.Runtime
 			{
 				try
 				{
-					return Value.Count;
+					return ValueType.GetProperty("Count").GetValue(Value, null);
 				}
 				catch
 				{
-					return 0;
+					try
+					{
+						return Value.Count();
+					}
+					catch
+					{
+						return 0;
+					}
 				}
 			}
+		}
+
+		//internal static IEnumerable<dynamic> ConvertToIEnumerable(Dictionary<String, object> List)
+		internal static dynamic ConvertToIEnumerable(dynamic List)
+		{
+			if (List != null)
+			{
+				try
+				{
+					var OutputList = new List<dynamic>();
+
+					foreach (var Item in List)
+					{
+						if (Item.GetType().Name == typeof(KeyValuePair<dynamic, dynamic>).Name)
+						{
+							//Console.WriteLine(Item.GetType().Name);
+
+							OutputList.Add(Item.Value);
+							//OutputList.Add(Item);
+							continue;
+						}
+
+						OutputList.Add(Item);
+					}
+
+					return OutputList;
+				}
+				catch
+				{
+				}
+			}
+
+			return new object[] { };
+		}
+
+		static public String ConvertToString(dynamic Value)
+		{
+			return String.Format("{0}", Value);
 		}
 	}
 }

@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace CSharpUtils.Fastcgi
 {
@@ -19,38 +20,72 @@ namespace CSharpUtils.Fastcgi
         bool Debug = false;
         //bool Debug = true;
 
-        public void Listen(ushort Port, string Address = "0.0.0.0")
-        {
-            this.Port = Port;
-            this.Address = Address;
-            AcceptMutex = new ManualResetEvent(false);
-            TcpListener = new TcpListener(IPAddress.Parse(Address), Port);
-            Console.WriteLine("Listen at {0}:{1}", Address, Port);
-            TcpListener.Start();
+		[DllImport("Kernel32")]
+		public static extern bool SetConsoleCtrlHandler(HandlerRoutine Handler, bool Add);
 
-            while (true)
-            {
-                if (Debug)
-                {
-                    Console.WriteLine("Waiting a connection...");
-                }
+		// A delegate type to be used as the handler routine 
+		// for SetConsoleCtrlHandler.
+		public delegate bool HandlerRoutine(CtrlTypes CtrlType);
 
-                if (Async)
-                {
-                    /*
-                    AcceptMutex.Reset();
-                    {
-                        TcpListener.BeginAcceptSocket(new AsyncCallback(HandleAcceptedCallbackAsync), TcpListener);
-                    }
-                    AcceptMutex.WaitOne();
-                    */
-                }
-                else
-                {
-                    ThreadPool.QueueUserWorkItem(HandleAcceptedSocket, TcpListener.AcceptSocket());
-                }
-            }
-        }
+		// An enumerated type for the control messages
+		// sent to the handler routine.
+		public enum CtrlTypes
+		{
+			CTRL_C_EVENT = 0,
+			CTRL_BREAK_EVENT,
+			CTRL_CLOSE_EVENT,
+			CTRL_LOGOFF_EVENT = 5,
+			CTRL_SHUTDOWN_EVENT
+		}
+
+		event Action OnShutdown;
+
+		/// <summary>
+		/// Handles the shutdown of the server to be able to execute code.
+		/// </summary>
+		/// <param name="CtrlType"></param>
+		/// <returns>True to avoid exiting. False to allow exiting.</returns>
+		private bool HandleShutdown(CtrlTypes CtrlType)
+		{
+			Console.WriteLine("Closing... ({0})", CtrlType);
+			if (OnShutdown != null) OnShutdown();
+			return false;
+		}
+
+		public void Listen(ushort Port, string Address = "0.0.0.0")
+		{
+			this.Port = Port;
+			this.Address = Address;
+			AcceptMutex = new ManualResetEvent(false);
+			TcpListener = new TcpListener(IPAddress.Parse(Address), Port);
+			Console.WriteLine("Listen at {0}:{1}", Address, Port);
+			TcpListener.Start();
+
+			SetConsoleCtrlHandler(new HandlerRoutine(HandleShutdown), true);
+
+			while (true)
+			{
+				if (Debug)
+				{
+					Console.WriteLine("Waiting a connection...");
+				}
+
+				if (Async)
+				{
+					/*
+					AcceptMutex.Reset();
+					{
+						TcpListener.BeginAcceptSocket(new AsyncCallback(HandleAcceptedCallbackAsync), TcpListener);
+					}
+					AcceptMutex.WaitOne();
+					*/
+				}
+				else
+				{
+					ThreadPool.QueueUserWorkItem(HandleAcceptedSocket, TcpListener.AcceptSocket());
+				}
+			}
+		}
 
         /*
         class ConnectionState

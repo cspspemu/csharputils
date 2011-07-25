@@ -31,6 +31,30 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
+		public void TestTrueFalseNoneAreImmutableConstants()
+		{
+			var Scope = new TemplateScope(new Dictionary<String, object>() {
+				{ "true", false },
+				{ "false", true },
+				{ "none", 1 },
+			});
+
+			Assert.AreEqual("1", TemplateCodeGen.CompileTemplateCodeByString("{% if true %}1{% else %}0{% endif %}").RenderToString(Scope));
+			Assert.AreEqual("0", TemplateCodeGen.CompileTemplateCodeByString("{% if false %}1{% else %}0{% endif %}").RenderToString(Scope));
+			Assert.AreEqual("0", TemplateCodeGen.CompileTemplateCodeByString("{% if none %}1{% else %}0{% endif %}").RenderToString(Scope));
+		}
+
+		/*
+		[TestMethod]
+		public void TestInvalidClosing()
+		{
+			// if / endfor
+			// Check that thows a descriptive exception.
+			Assert.AreEqual("1", TemplateCodeGen.CompileTemplateCodeByString("{% if true %}1{% enfor %}").RenderToString());
+		}
+		*/
+
+		[TestMethod]
 		public void TestExecForCreateScope()
 		{
 			Assert.AreEqual("1234", TemplateCodeGen.CompileTemplateCodeByString("{{ Item }}{% for Item in List %}{{ Item }}{% endfor %}{{ Item }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
@@ -44,11 +68,33 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
+		public void TestExecPow()
+		{
+			Assert.AreEqual("256", TemplateCodeGen.CompileTemplateCodeByString("{{ 2 ** 8 }}").RenderToString());
+		}
+
+		[TestMethod]
 		public void TestExecForInsideFor()
 		{
 			Assert.AreEqual("[1]1234[1][2]2468[2]", TemplateCodeGen.CompileTemplateCodeByString("{% for Item2 in List2 %}[{{ Item2 }}]{% for Item1 in List1 %}{{ Item1 * Item2 }}{% endfor %}[{{ Item2 }}]{% endfor %}{{ Item1 }}{{ Item2 }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
 				{ "List1", new int[] { 1, 2, 3, 4 } },
 				{ "List2", new int[] { 1, 2 } },
+			})));
+		}
+
+		class Post
+		{
+			public String Text;
+		}
+
+		[TestMethod]
+		public void TestExecForObjects()
+		{
+			Assert.AreEqual("HelloWorld", TemplateCodeGen.CompileTemplateCodeByString("{% for Post in Posts %}{{ Post.Text }}{% endfor %}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
+				{ "Posts", new List<Post>() {
+					new Post() { Text = "Hello" },
+					new Post() { Text = "World" },
+				} },
 			})));
 		}
 

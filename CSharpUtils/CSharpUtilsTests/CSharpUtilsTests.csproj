@@ -55,6 +55,8 @@
     <Compile Include="AsyncTaskTest.cs" />
     <Compile Include="ConsumerMemoryStreamTest.cs" />
     <Compile Include="FastcgiHandlerTest.cs" />
+    <Compile Include="Html\HtmlUtilsTest.cs" />
+    <Compile Include="Http\HttpUtilsTest.cs" />
     <Compile Include="MemoryFileSystemTest.cs" />
     <Compile Include="SliceStreamTest.cs" />
     <Compile Include="Templates\DynamicUtilsTest.cs" />

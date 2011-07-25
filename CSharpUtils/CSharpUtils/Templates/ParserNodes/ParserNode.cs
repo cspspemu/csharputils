@@ -11,8 +11,60 @@ namespace CSharpUtils.Templates.ParserNodes
 {
 	public class ParserNodeContext
 	{
-		public TextWriter TextWriter;
-		public TemplateFactory TemplateFactory;
+		protected bool ShouldWriteIndentation;
+		protected int IndentationLevel;
+		protected TextWriter TextWriter;
+		protected TemplateFactory TemplateFactory;
+
+		public ParserNodeContext(TextWriter TextWriter, TemplateFactory TemplateFactory)
+		{
+			this.TextWriter = TextWriter;
+			this.TemplateFactory = TemplateFactory;
+			this.IndentationLevel = 0;
+			this.ShouldWriteIndentation = true;
+		}
+
+		public void Indent(Action Action)
+		{
+			IndentationLevel++;
+			try
+			{
+				Action();
+			}
+			finally
+			{
+				IndentationLevel--;
+			}
+		}
+
+		protected void _TryWriteIndentation()
+		{
+			if (ShouldWriteIndentation)
+			{
+				TextWriter.Write(new String('\t', IndentationLevel));
+				ShouldWriteIndentation = false;
+			}
+		}
+
+		public void WriteLine(String Text, params object[] Params)
+		{
+			Write(Text, Params);
+			TextWriter.WriteLine("");
+			ShouldWriteIndentation = true;
+		}
+
+		public void Write(String Text, params object[] Params)
+		{
+			_TryWriteIndentation();
+			if (Params.Length > 0)
+			{
+				TextWriter.Write(Text, Params);
+			}
+			else
+			{
+				TextWriter.Write(Text);
+			}
+		}
 	}
 
 	abstract public class ParserNode
@@ -81,22 +133,31 @@ namespace CSharpUtils.Templates.ParserNodes
 
 			//Foreach(TemplateContext Context, String VarName, dynamic Expression, Action Iteration, Action Else = null)
 
-			Context.TextWriter.WriteLine("Context.NewScope(delegate() {");
-			Context.TextWriter.Write("Foreach(Context, {0}, ", StringUtils.EscapeString(VarName));
-			LoopIterator.WriteTo(Context);
-			Context.TextWriter.Write(", ");
-			Context.TextWriter.WriteLine("new EmptyDelegate(delegate() {");
-			BodyBlock.WriteTo(Context);
-			Context.TextWriter.Write("})");
-			if (!(ElseBlock is DummyParserNode))
+			Context.WriteLine("Context.NewScope(delegate() {");
+			Context.Indent(delegate()
 			{
-				Context.TextWriter.Write(", ");
-				Context.TextWriter.WriteLine("new EmptyDelegate(delegate() {");
-				ElseBlock.WriteTo(Context);
-				Context.TextWriter.Write("})");
-			}
-			Context.TextWriter.WriteLine(");");  // Foreach
-			Context.TextWriter.WriteLine("});"); // Context.NewScope
+				Context.Write("Foreach(Context, {0}, ", StringUtils.EscapeString(VarName));
+				Context.Indent(delegate()
+				{
+					LoopIterator.WriteTo(Context);
+				});
+				Context.Write(", ");
+				Context.WriteLine("new EmptyDelegate(delegate() {");
+				Context.Indent(delegate()
+				{
+					BodyBlock.WriteTo(Context);
+				});
+				Context.Write("})");
+				if (!(ElseBlock is DummyParserNode))
+				{
+					Context.Write(", ");
+					Context.WriteLine("new EmptyDelegate(delegate() {");
+					ElseBlock.WriteTo(Context);
+					Context.Write("})");
+				}
+				Context.WriteLine(");");  // Foreach
+			});
+			Context.WriteLine("});"); // Context.NewScope
 		}
 
 		public override string ToString()
@@ -121,19 +182,19 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("if (DynamicUtils.ConvertToBool(");
+			Context.Write("if (DynamicUtils.ConvertToBool(");
 			ConditionNode.WriteTo(Context);
-			Context.TextWriter.Write(")) {");
-			Context.TextWriter.WriteLine("");
+			Context.Write(")) {");
+			Context.WriteLine("");
 			BodyIfNode.WriteTo(Context);
-			Context.TextWriter.Write("}");
+			Context.Write("}");
 			if (!(BodyElseNode is DummyParserNode))
 			{
-				Context.TextWriter.Write(" else {");
+				Context.Write(" else {");
 				BodyElseNode.WriteTo(Context);
-				Context.TextWriter.Write("}");
+				Context.Write("}");
 			}
-			Context.TextWriter.WriteLine("");
+			Context.WriteLine("");
 		}
 	}
 
@@ -192,12 +253,38 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("Context.GetVar({0})", StringUtils.EscapeString(Id));
+			Context.Write("Context.GetVar({0})", StringUtils.EscapeString(Id));
 		}
 
 		public override string ToString()
 		{
 			return base.ToString() + "('" + Id + "')";
+		}
+	}
+
+	public class ParserNodeConstant : ParserNode
+	{
+		protected String Name;
+
+		public ParserNodeConstant(String Name)
+		{
+			this.Name = Name;
+		}
+
+		override public void WriteTo(ParserNodeContext Context)
+		{
+			switch (Name)
+			{
+				case "true": Context.Write("true"); break;
+				case "false": Context.Write("false"); break;
+				case "none": Context.Write("null"); break;
+				default: throw(new Exception(String.Format("Unknown constant '{0}'", Name)));
+			}
+		}
+
+		public override string ToString()
+		{
+			return base.ToString() + "('" + Name + "')";
 		}
 	}
 
@@ -207,7 +294,7 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write(Value);
+			Context.Write("{0}", Value);
 		}
 
 		public override string ToString()
@@ -227,7 +314,7 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write(StringUtils.EscapeString(Value));
+			Context.Write(StringUtils.EscapeString(Value));
 		}
 
 		public override string ToString()
@@ -242,8 +329,9 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write(String.Format("Context.Output.Write(Context.AutoFilter({0}));", StringUtils.EscapeString(Text)));
-			Context.TextWriter.WriteLine("");
+			//Context.Write("Context.Output.Write(Context.AutoFilter({0}));", StringUtils.EscapeString(Text));
+			Context.Write("Context.Output.Write({0});", StringUtils.EscapeString(Text));
+			Context.WriteLine("");
 		}
 
 		public override string ToString()
@@ -274,10 +362,10 @@ namespace CSharpUtils.Templates.ParserNodes
 	{
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("Context.OutputWriteAutoFiltered(");
+			Context.Write("Context.OutputWriteAutoFiltered(");
 			Parent.WriteTo(Context);
-			Context.TextWriter.Write(");");
-			Context.TextWriter.WriteLine("");
+			Context.Write(");");
+			Context.WriteLine("");
 		}
 	}
 
@@ -285,10 +373,10 @@ namespace CSharpUtils.Templates.ParserNodes
 	{
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("SetAndRenderParentTemplate(");
+			Context.Write("SetAndRenderParentTemplate(");
 			Parent.WriteTo(Context);
-			Context.TextWriter.Write(", Context);");
-			Context.TextWriter.WriteLine("");
+			Context.Write(", Context);");
+			Context.WriteLine("");
 		}
 	}
 
@@ -303,8 +391,8 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.WriteLine("CallBlock({0}, Context);", StringUtils.EscapeString(this.BlockName));
-			Context.TextWriter.WriteLine("");
+			Context.WriteLine("CallBlock({0}, Context);", StringUtils.EscapeString(this.BlockName));
+			Context.WriteLine("");
 		}
 	}
 
@@ -314,9 +402,9 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("{0}(", Operator);
+			Context.Write("{0}(", Operator);
 			Parent.WriteTo(Context);
-			Context.TextWriter.Write(")");
+			Context.Write(")");
 		}
 	}
 
@@ -340,17 +428,17 @@ namespace CSharpUtils.Templates.ParserNodes
 			switch (Operator)
 			{
 				case "?":
-					Context.TextWriter.Write("DynamicUtils.ConvertToBool(");
+					Context.Write("DynamicUtils.ConvertToBool(");
 					ConditionNode.WriteTo(Context);
-					Context.TextWriter.Write(")");
-					Context.TextWriter.Write("?");
-					Context.TextWriter.Write("(");
+					Context.Write(")");
+					Context.Write("?");
+					Context.Write("(");
 					TrueNode.WriteTo(Context);
-					Context.TextWriter.Write(")");
-					Context.TextWriter.Write(":");
-					Context.TextWriter.Write("(");
+					Context.Write(")");
+					Context.Write(":");
+					Context.Write("(");
 					FalseNode.WriteTo(Context);
-					Context.TextWriter.Write(")");
+					Context.Write(")");
 					break;
 				default:
 					throw (new Exception(String.Format("Unknown Operator '{0}'", Operator)));
@@ -369,7 +457,7 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.WriteLine("CallParentBlock({0}, Context);", StringUtils.EscapeString(BlockName));
+			Context.WriteLine("CallParentBlock({0}, Context);", StringUtils.EscapeString(BlockName));
 		}
 	}
 
@@ -386,11 +474,11 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("DynamicUtils.Access(");
+			Context.Write("DynamicUtils.Access(");
 			Parent.WriteTo(Context);
-			Context.TextWriter.Write(",");
+			Context.Write(",");
 			Key.WriteTo(Context);
-			Context.TextWriter.Write(")");
+			Context.Write(")");
 		}
 	}
 
@@ -436,11 +524,11 @@ namespace CSharpUtils.Templates.ParserNodes
 
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.TextWriter.Write("DynamicUtils.BinaryOperation_" + DynamicUtils.GetOpName(Operator) + "(");
+			Context.Write("DynamicUtils.BinaryOperation_" + DynamicUtils.GetOpName(Operator) + "(");
 			LeftNode.WriteTo(Context);
-			Context.TextWriter.Write(",");
+			Context.Write(",");
 			RightNode.WriteTo(Context);
-			Context.TextWriter.Write(")");
+			Context.Write(")");
 		}
 
 		public override string ToString()

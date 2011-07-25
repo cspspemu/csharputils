@@ -151,29 +151,47 @@ namespace CSharpUtils.Templates
 					Tokens.MoveNext();
 					break;
 				case "IdentifierTemplateToken":
-					ParserNode = new ParserNodeIdentifier(CurrentToken.Text);
+					String Id = CurrentToken.Text;
 					Tokens.MoveNext();
 
-					while (true)
-					{
-						if (CurrentToken.Text == ".")
-						{
-							Tokens.MoveNext();
-							TemplateToken AcessToken = Tokens.ExpectTypeAndNext(typeof(IdentifierTemplateToken));
-							ParserNode = new ParserNodeAccess(ParserNode, new ParserNodeStringLiteral(AcessToken.Text));
-						}
-						else if (CurrentToken.Text == "[")
-						{
-							Tokens.MoveNext();
-							ParserNode AccessNode = HandleLevel_Expression();
-							Tokens.ExpectValueAndNext("]");
-							ParserNode = new ParserNodeAccess(ParserNode, AccessNode);
-						}
-						else
-						{
+					// Constants.
+					switch (Id) {
+						case "true":
+							ParserNode = new ParserNodeConstant(Id);
 							break;
-						}
+						case "false":
+							ParserNode = new ParserNodeConstant(Id);
+							break;
+						case "none":
+							ParserNode = new ParserNodeConstant(Id);
+							break;
+						default:
+							ParserNode = new ParserNodeIdentifier(Id);
+
+							while (true)
+							{
+								if (CurrentToken.Text == ".")
+								{
+									Tokens.MoveNext();
+									TemplateToken AcessToken = Tokens.ExpectTypeAndNext(typeof(IdentifierTemplateToken));
+									ParserNode = new ParserNodeAccess(ParserNode, new ParserNodeStringLiteral(AcessToken.Text));
+								}
+								else if (CurrentToken.Text == "[")
+								{
+									Tokens.MoveNext();
+									ParserNode AccessNode = HandleLevel_Expression();
+									Tokens.ExpectValueAndNext("]");
+									ParserNode = new ParserNodeAccess(ParserNode, AccessNode);
+								}
+								else
+								{
+									break;
+								}
+							}
+
+							break;
 					}
+					
 					break;
 				case "StringLiteralTemplateToken":
 					ParserNode = new ParserNodeStringLiteral(((StringLiteralTemplateToken)CurrentToken).UnescapedText);
@@ -186,9 +204,14 @@ namespace CSharpUtils.Templates
 			return ParserNode;
 		}
 
+		public ParserNode HandleLevel_Pow()
+		{
+			return _HandleLevel_Op_BinarySimple(HandleLevel_Identifier, "**");
+		}
+
 		public ParserNode HandleLevel_Mul()
 		{
-			return _HandleLevel_Op_BinarySimple(HandleLevel_Identifier, "*", "/", "%");
+			return _HandleLevel_Op_BinarySimple(HandleLevel_Pow, "*", "/", "//", "%");
 		}
 
 		public ParserNode HandleLevel_Sum()
@@ -475,46 +498,61 @@ namespace CSharpUtils.Templates
 		protected void RenderCodeTo(TextWriter TextWriter)
 		{
 			var TemplateHandler = new TemplateHandler(Tokens, TextWriter);
-			var Context = new ParserNodeContext()
-			{
-				TextWriter = TextWriter,
-				TemplateFactory = TemplateFactory,
-			};
+			var Context = new ParserNodeContext(TextWriter, TemplateFactory);
 			TemplateHandler.Reset();
 			var ParserNode = TemplateHandler.HandleLevel_Root();
 
 			//OptimizedParserNode.Dump();
-			Context.TextWriter.WriteLine("using System;");
-			Context.TextWriter.WriteLine("using System.Collections.Generic;");
-			Context.TextWriter.WriteLine("using CSharpUtils.Templates;");
-			Context.TextWriter.WriteLine("using CSharpUtils.Templates.Runtime;");
-			Context.TextWriter.WriteLine("using CSharpUtils.Templates.TemplateProvider;");
-			Context.TextWriter.WriteLine("");
-			Context.TextWriter.WriteLine("namespace CSharpUtils.Templates.CompiledTemplates {");
-			Context.TextWriter.WriteLine("class CompiledTemplate_TempTemplate : TemplateCode {");
-
-			Context.TextWriter.WriteLine("public CompiledTemplate_TempTemplate(TemplateFactory TemplateFactory = null) : base(TemplateFactory) { }");
-
-			Context.TextWriter.WriteLine("override public void SetBlocks(Dictionary<String, RenderDelegate> Blocks) {");
-			foreach (var BlockPair in TemplateHandler.Blocks)
+			Context.WriteLine("using System;");
+			Context.WriteLine("using System.Collections.Generic;");
+			Context.WriteLine("using CSharpUtils.Templates;");
+			Context.WriteLine("using CSharpUtils.Templates.Runtime;");
+			Context.WriteLine("using CSharpUtils.Templates.TemplateProvider;");
+			Context.WriteLine("");
+			Context.WriteLine("namespace CSharpUtils.Templates.CompiledTemplates {");
+			Context.Indent(delegate()
 			{
-				Context.TextWriter.WriteLine("SetBlock(Blocks, {0}, Block_{1});", StringUtils.EscapeString(BlockPair.Key), BlockPair.Key);
-			}
-			Context.TextWriter.WriteLine("}");
+				Context.WriteLine("class CompiledTemplate_TempTemplate : TemplateCode {");
 
-			Context.TextWriter.WriteLine("override protected void LocalRender(TemplateContext Context) {");
-			ParserNode.OptimizeAndWrite(Context);
-			Context.TextWriter.WriteLine("}"); // Method
+				Context.Indent(delegate()
+				{
+					Context.WriteLine("public CompiledTemplate_TempTemplate(TemplateFactory TemplateFactory = null) : base(TemplateFactory) { }");
+					Context.WriteLine("");
 
-			foreach (var BlockPair in TemplateHandler.Blocks)
-			{
-				Context.TextWriter.WriteLine("public void Block_" + BlockPair.Key + "(TemplateContext Context) {");
-				BlockPair.Value.OptimizeAndWrite(Context);
-				Context.TextWriter.WriteLine("}"); // Method
-			}
+					Context.WriteLine("override public void SetBlocks(Dictionary<String, RenderDelegate> Blocks) {");
+					Context.Indent(delegate()
+					{
+						foreach (var BlockPair in TemplateHandler.Blocks)
+						{
+							Context.WriteLine(String.Format("SetBlock(Blocks, {0}, Block_{1});", StringUtils.EscapeString(BlockPair.Key), BlockPair.Key));
+						}
+					});
+					Context.WriteLine("}");
+					Context.WriteLine("");
 
-			Context.TextWriter.WriteLine("}"); // class
-			Context.TextWriter.WriteLine("}"); // namespace
+					Context.WriteLine("override protected void LocalRender(TemplateContext Context) {");
+					Context.Indent(delegate()
+					{
+						ParserNode.OptimizeAndWrite(Context);
+					});
+					Context.WriteLine("}"); // Method
+
+					foreach (var BlockPair in TemplateHandler.Blocks)
+					{
+						Context.WriteLine("");
+						Context.WriteLine("public void Block_" + BlockPair.Key + "(TemplateContext Context) {");
+						Context.Indent(delegate()
+						{
+							BlockPair.Value.OptimizeAndWrite(Context);
+						});
+						Context.WriteLine("}"); // Method
+					}
+				});
+
+				Context.WriteLine("}"); // class
+			});
+			
+			Context.WriteLine("}"); // namespace
 		}
 
 		protected Type GetTemplateCodeTypeByCode(String Code)

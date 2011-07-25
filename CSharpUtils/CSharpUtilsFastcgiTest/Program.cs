@@ -8,24 +8,37 @@ using System.Threading;
 using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Templates;
 using CSharpUtils.Templates.Runtime;
+using CSharpUtils.VirtualFileSystem.Local;
+using CSharpUtils;
 
 namespace CSharpUtilsFastcgiTest
 {
 	class MyFastcgiServer : FastcgiServer
 	{
 		int Count = 0;
-		TemplateProviderMemory TemplateProvider;
 		TemplateFactory TemplateFactory;
 		TemplateCode TemplateCode;
 
+		public class Post
+		{
+			public string Title;
+			public string Body;
+		}
+		List<Post> Posts;
+
 		public MyFastcgiServer() : base()
 		{
-			TemplateProvider = new TemplateProviderMemory();
-			TemplateFactory = new TemplateFactory(TemplateProvider);
+			TemplateFactory = new TemplateFactory(new TemplateProviderVirtualFileSystem(new LocalFileSystem(FileUtils.GetExecutableDirectoryPath() + @"\Templates")));
 
-			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
-			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}{% block Body %}Ex{{ Count }}{% endblock %}");
 			TemplateCode = TemplateFactory.GetTemplateCodeByFile("Test.html");
+
+			Posts = new List<Post>();
+
+			Posts.Add(new Post()
+			{
+				Title = "Sample Title",
+				Body = "Sample Body",
+			});
 
 			//TemplateProvider.Add("Test.html", "{% block Body %}Ex{% endblock %}");
 		}
@@ -39,13 +52,33 @@ namespace CSharpUtilsFastcgiTest
 				TextWriter.WriteLine("");
 				//TextWriter.WriteLine(Count++);
 				var Start = DateTime.Now;
+
+				if (FastcgiRequest.PostParams.ContainsKey("Title"))
+				{
+					Posts.Add(new Post()
+					{
+						Title = FastcgiRequest.PostParams["Title"],
+						Body = FastcgiRequest.PostParams["Body"],
+					});
+				}
+
+				/*
+				foreach (var Param in FastcgiRequest.Params)
+				{
+					Console.WriteLine("{0} : {1}", Param.Key, Param.Value);
+				}
+				*/
+
 				TextWriter.WriteLine(TemplateCode.RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
 				{
-					{ "Count", Count++ }
+					{ "Count", Count++ },
+					{ "Params", FastcgiRequest.Params },
+					{ "Posts", Posts },
+					{ "POST", FastcgiRequest.PostParams },
 				})));
+
 				var End = DateTime.Now;
 				TextWriter.WriteLine((End - Start).Milliseconds);
-
 			}
 		}
 	}

@@ -11,7 +11,7 @@ namespace CSharpUtilsTests
 		[TestMethod]
 		public void OpenTest()
 		{
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			//Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 	}
 }

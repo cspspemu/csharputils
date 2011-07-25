@@ -9,7 +9,7 @@ namespace CSharpUtils.Templates.Tokenizers
 	{
 		static String[] Operators2 = new String[]
 		{
-			"++", "--", "&&", "||", "..",
+			"++", "--", "&&", "||", "..", "//", "**",
 		};
 		static char[] Operators1 = new char[]
 		{

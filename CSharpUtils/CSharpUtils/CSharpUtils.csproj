@@ -55,6 +55,8 @@
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
+    <Compile Include="Html\HtmlUtils.cs" />
+    <Compile Include="Http\HttpUtils.cs" />
     <Compile Include="Streams\ConsumerMemoryStream.cs" />
     <Compile Include="Fastcgi\FascgiRequestInputStream.cs" />
     <Compile Include="Fastcgi\FascgiResponseOutputStream.cs" />
