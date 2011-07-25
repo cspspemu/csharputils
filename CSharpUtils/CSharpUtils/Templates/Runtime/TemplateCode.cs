@@ -58,11 +58,11 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 
-		public String RenderToString(dynamic Parameters = null)
+		public String RenderToString(TemplateScope Scope = null)
 		{
-			if (Parameters == null) Parameters = new Dictionary<String, object>();
+			if (Scope == null) Scope = new TemplateScope();
 			var StringWriter = new StringWriter();
-			Render(new TemplateContext(StringWriter, Parameters, TemplateFactory));
+			Render(new TemplateContext(StringWriter, Scope, TemplateFactory));
 			return StringWriter.ToString();
 		}
 

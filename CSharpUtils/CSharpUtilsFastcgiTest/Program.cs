@@ -39,10 +39,10 @@ namespace CSharpUtilsFastcgiTest
 				TextWriter.WriteLine("");
 				//TextWriter.WriteLine(Count++);
 				var Start = DateTime.Now;
-				TextWriter.WriteLine(TemplateCode.RenderToString(new Dictionary<string, object>()
+				TextWriter.WriteLine(TemplateCode.RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
 				{
 					{ "Count", Count++ }
-				}));
+				})));
 				var End = DateTime.Now;
 				TextWriter.WriteLine((End - Start).Milliseconds);
 

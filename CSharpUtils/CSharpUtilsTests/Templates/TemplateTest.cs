@@ -7,6 +7,7 @@ using System.Linq;
 using CSharpUtils.Templates.Tokenizers;
 using CSharpUtils.Templates.TemplateProvider;
 using System.Collections;
+using CSharpUtils.Templates.Runtime;
 
 namespace CSharpUtilsTests.Templates
 {
@@ -16,24 +17,46 @@ namespace CSharpUtilsTests.Templates
 		[TestMethod]
 		public void TestExecVariableSimple()
 		{
-			Assert.AreEqual("Hello Test", TemplateCodeGen.CompileTemplateCodeByString("Hello {{ User }}").RenderToString(new Dictionary<String, object>() {
+			Assert.AreEqual("Hello Test", TemplateCodeGen.CompileTemplateCodeByString("Hello {{ User }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
 				{ "User", "Test" },
-			}));
+			})));
 		}
 
 		[TestMethod]
 		public void TestExecFor()
 		{
-			Assert.AreEqual("1234", TemplateCodeGen.CompileTemplateCodeByString("{% for Item in List %}{{ Item }}{% endfor %}").RenderToString(new Dictionary<String, object>() {
+			Assert.AreEqual("1234", TemplateCodeGen.CompileTemplateCodeByString("{% for Item in List %}{{ Item }}{% endfor %}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
 				{ "List", new int[] { 1, 2, 3, 4 } },
-			}));
+			})));
+		}
+
+		[TestMethod]
+		public void TestExecForCreateScope()
+		{
+			Assert.AreEqual("1234", TemplateCodeGen.CompileTemplateCodeByString("{{ Item }}{% for Item in List %}{{ Item }}{% endfor %}{{ Item }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
+				{ "List", new int[] { 1, 2, 3, 4 } },
+			})));
+
+			Assert.AreEqual("512345", TemplateCodeGen.CompileTemplateCodeByString("{{ Item }}{% for Item in List %}{{ Item }}{% endfor %}{{ Item }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
+				{ "List", new int[] { 1, 2, 3, 4 } },
+				{ "Item", 5 },
+			})));
+		}
+
+		[TestMethod]
+		public void TestExecForInsideFor()
+		{
+			Assert.AreEqual("[1]1234[1][2]2468[2]", TemplateCodeGen.CompileTemplateCodeByString("{% for Item2 in List2 %}[{{ Item2 }}]{% for Item1 in List1 %}{{ Item1 * Item2 }}{% endfor %}[{{ Item2 }}]{% endfor %}{{ Item1 }}{{ Item2 }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
+				{ "List1", new int[] { 1, 2, 3, 4 } },
+				{ "List2", new int[] { 1, 2 } },
+			})));
 		}
 
 		[TestMethod]
 		public void TestExecForElse()
 		{
-			var Params1 = new Dictionary<String, object>() { { "List", new int[] { 1, 2, 3, 4, 5 } } };
-			var Params2 = new Dictionary<String, object>() { { "List", new int[] { } } };
+			var Params1 = new TemplateScope(new Dictionary<String, object>() { { "List", new int[] { 1, 2, 3, 4, 5 } } });
+			var Params2 = new TemplateScope(new Dictionary<String, object>() { { "List", new int[] { } } });
 			Assert.AreEqual("12345", TemplateCodeGen.CompileTemplateCodeByString("{% for Item in List %}{{ Item }}{% else %}Empty{% endfor %}").RenderToString(Params1));
 			Assert.AreEqual("Empty", TemplateCodeGen.CompileTemplateCodeByString("{% for Item in List %}{{ Item }}{% else %}Empty{% endfor %}").RenderToString(Params2));
 		}
@@ -107,36 +130,36 @@ namespace CSharpUtilsTests.Templates
 		[TestMethod]
 		public void TestExecAccessSimple()
 		{
-			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key }}").RenderToString(new Hashtable()
+			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key }}").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
 			{
 				{ "Item", new Hashtable() {
 					{ "Key", "Value" },
 				} }
-			}));
+			})));
 		}
 
 		[TestMethod]
 		public void TestExecAccessSimpleIndexer()
 		{
-			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item['Key'] }}").RenderToString(new Hashtable()
+			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item['Key'] }}").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
 			{
 				{ "Item", new Hashtable() {
 					{ "Key", "Value" },
 				} }
-			}));
+			})));
 		}
 
 		[TestMethod]
 		public void TestExecAccess()
 		{
-			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key.SubKey }}").RenderToString(new Hashtable()
+			Assert.AreEqual("Value", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key.SubKey }}").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
 			{
 				{ "Item", new Hashtable() {
 					{ "Key", new Hashtable() {
 						{ "SubKey", "Value" },
 					} }
 				} }
-			}));
+			})));
 		}
 
 		[TestMethod]
@@ -148,14 +171,14 @@ namespace CSharpUtilsTests.Templates
 		[TestMethod]
 		public void TestExecAccessInexistentSubKey()
 		{
-			Assert.AreEqual("", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key.InexistentKey }}").RenderToString(new Hashtable()
+			Assert.AreEqual("", TemplateCodeGen.CompileTemplateCodeByString("{{ Item.Key.InexistentKey }}").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
 			{
 				{ "Item", new Hashtable() {
 					{ "Key", new Hashtable() {
 						{ "SubKey", "Value" },
 					} }
 				} }
-			}));
+			})));
 		}
 
 		[TestMethod]

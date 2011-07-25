@@ -81,6 +81,7 @@ namespace CSharpUtils.Templates.ParserNodes
 
 			//Foreach(TemplateContext Context, String VarName, dynamic Expression, Action Iteration, Action Else = null)
 
+			Context.TextWriter.WriteLine("Context.NewScope(delegate() {");
 			Context.TextWriter.Write("Foreach(Context, {0}, ", StringUtils.EscapeString(VarName));
 			LoopIterator.WriteTo(Context);
 			Context.TextWriter.Write(", ");
@@ -94,7 +95,8 @@ namespace CSharpUtils.Templates.ParserNodes
 				ElseBlock.WriteTo(Context);
 				Context.TextWriter.Write("})");
 			}
-			Context.TextWriter.WriteLine(");");
+			Context.TextWriter.WriteLine(");");  // Foreach
+			Context.TextWriter.WriteLine("});"); // Context.NewScope
 		}
 
 		public override string ToString()
