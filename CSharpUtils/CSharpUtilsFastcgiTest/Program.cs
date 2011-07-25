@@ -10,10 +10,11 @@ using CSharpUtils.Templates;
 using CSharpUtils.Templates.Runtime;
 using CSharpUtils.VirtualFileSystem.Local;
 using CSharpUtils;
+using CSharpUtils.Fastcgi.Http;
 
 namespace CSharpUtilsFastcgiTest
 {
-	class MyFastcgiServer : FastcgiServer
+	class MyFastcgiServer : FastcgiHttpServer
 	{
 		int Count = 0;
 		TemplateFactory TemplateFactory;
@@ -43,43 +44,33 @@ namespace CSharpUtilsFastcgiTest
 			//TemplateProvider.Add("Test.html", "{% block Body %}Ex{% endblock %}");
 		}
 
-		protected override void HandleFascgiRequest(FastcgiRequest FastcgiRequest)
+		protected override void HandleHttpRequest(HttpRequest HttpRequest)
 		{
-			using (var TextWriter = new StreamWriter(FastcgiRequest.StdoutStream, Encoding.UTF8))
+			if (HttpRequest.Post.ContainsKey("Title"))
 			{
-				TextWriter.WriteLine("X-Dynamic: C#");
-				TextWriter.WriteLine("Content-Type: text/html; charset=utf-8");
-				TextWriter.WriteLine("");
-				//TextWriter.WriteLine(Count++);
-				var Start = DateTime.Now;
-
-				if (FastcgiRequest.PostParams.ContainsKey("Title"))
+				Posts.Add(new Post()
 				{
-					Posts.Add(new Post()
-					{
-						Title = FastcgiRequest.PostParams["Title"],
-						Body = FastcgiRequest.PostParams["Body"],
-					});
-				}
-
-				/*
-				foreach (var Param in FastcgiRequest.Params)
-				{
-					Console.WriteLine("{0} : {1}", Param.Key, Param.Value);
-				}
-				*/
-
-				TextWriter.WriteLine(TemplateCode.RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
-				{
-					{ "Count", Count++ },
-					{ "Params", FastcgiRequest.Params },
-					{ "Posts", Posts },
-					{ "POST", FastcgiRequest.PostParams },
-				})));
-
-				var End = DateTime.Now;
-				TextWriter.WriteLine((End - Start).Milliseconds);
+					Title = HttpRequest.Post["Title"],
+					Body = HttpRequest.Post["Body"],
+				});
 			}
+
+			HttpRequest.Output.Write(TemplateCode.RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
+			{
+				{ "Count", Count++ },
+				{ "Params", HttpRequest.Enviroment },
+				{ "Posts", Posts },
+				{ "POST", HttpRequest.Post },
+			})));
+
+			HttpRequest.Output.WriteLine("<pre>");
+			foreach (var Param in HttpRequest.Enviroment)
+			{
+				HttpRequest.Output.WriteLine("{0}: {1}", Param.Key, Param.Value);
+			}
+			HttpRequest.Output.WriteLine("</pre>");
+
+			HttpRequest.OutputDebug = true;
 		}
 	}
 
