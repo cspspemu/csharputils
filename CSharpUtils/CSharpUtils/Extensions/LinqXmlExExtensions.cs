@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using System.IO;
 using System.Xml;
 
-namespace CSharpUtils
+namespace CSharpUtils.Extensions
 {
 	static public class LinqXmlExExtensions
 	{

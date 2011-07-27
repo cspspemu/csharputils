@@ -18,7 +18,6 @@ namespace CSharpUtilsFastcgiTest
 	{
 		int Count = 0;
 		TemplateFactory TemplateFactory;
-		TemplateCode TemplateCode;
 
 		public class Post
 		{
@@ -30,8 +29,6 @@ namespace CSharpUtilsFastcgiTest
 		public MyFastcgiServer() : base()
 		{
 			TemplateFactory = new TemplateFactory(new TemplateProviderVirtualFileSystem(new LocalFileSystem(FileUtils.GetExecutableDirectoryPath() + @"\Templates")));
-
-			TemplateCode = TemplateFactory.GetTemplateCodeByFile("Test.html");
 
 			Posts = new List<Post>();
 
@@ -46,7 +43,7 @@ namespace CSharpUtilsFastcgiTest
 
 		protected override void HandleHttpRequest(HttpRequest HttpRequest)
 		{
-			if (HttpRequest.Post.ContainsKey("Title"))
+			if (HttpRequest.Post.ContainsKey("Title") && HttpRequest.Post.ContainsKey("Body"))
 			{
 				Posts.Add(new Post()
 				{
@@ -55,7 +52,7 @@ namespace CSharpUtilsFastcgiTest
 				});
 			}
 
-			HttpRequest.Output.Write(TemplateCode.RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
+			HttpRequest.Output.Write(TemplateFactory.GetTemplateCodeByFile("Test.html").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
 			{
 				{ "Count", Count++ },
 				{ "Params", HttpRequest.Enviroment },
@@ -69,6 +66,14 @@ namespace CSharpUtilsFastcgiTest
 				HttpRequest.Output.WriteLine("{0}: {1}", Param.Key, Param.Value);
 			}
 			HttpRequest.Output.WriteLine("</pre>");
+
+			/*
+			if (HttpRequest.StdinBytes.Length > 0)
+			{
+				File.WriteAllBytes("Stdin.bin", HttpRequest.StdinBytes);
+			}
+			HttpRequest.Output.WriteLine(HttpRequest.Stdin);
+			*/
 
 			HttpRequest.OutputDebug = true;
 		}

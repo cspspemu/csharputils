@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CSharpUtils.Streams;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtils.SpaceAssigner
 {

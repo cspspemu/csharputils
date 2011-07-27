@@ -10,7 +10,7 @@
 
 	{{ Posts.Count }}
 
-	<form action="/" method="post">
+	<form action="/" method="post" enctype="multipart/form-data">
 		<table>
 			<tr>
 				<th>Title:</th>
@@ -19,7 +19,11 @@
 			<tr>
 				<th>Body:</th>
 				<td><textarea name="Body" style="width:640px;height:80px;">{{ POST.Body }}</textarea></td>
-				</tr>
+			</tr>
+			<tr>
+				<th>File:</th>
+				<td><input type="file" name="File" /></td>
+			</tr>
 		</table>
 		<input type="submit" />
 	</form>

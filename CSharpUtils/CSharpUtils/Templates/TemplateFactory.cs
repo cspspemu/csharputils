@@ -5,6 +5,7 @@ using System.Text;
 using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Templates.Runtime;
 using CSharpUtils.Templates.Tokenizers;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtils.Templates
 {

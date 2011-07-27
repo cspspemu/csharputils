@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Sockets;
 using CSharpUtils;
 using CSharpUtils.Streams;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtilsTests
 {

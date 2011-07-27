@@ -56,9 +56,13 @@
     <Compile Include="ConsumerMemoryStreamTest.cs" />
     <Compile Include="FastcgiHandlerTest.cs" />
     <Compile Include="Html\HtmlUtilsTest.cs" />
+    <Compile Include="Http\HttpHeaderTest.cs" />
     <Compile Include="Http\HttpUtilsTest.cs" />
+    <Compile Include="Http\MultipartDecoderTest.cs" />
     <Compile Include="MemoryFileSystemTest.cs" />
     <Compile Include="SliceStreamTest.cs" />
+    <Compile Include="Streams\StreamChunker2Test.cs" />
+    <Compile Include="Streams\StreamChunkerTest.cs" />
     <Compile Include="Templates\DynamicUtilsTest.cs" />
     <Compile Include="Templates\TemplateTest.cs" />
     <Compile Include="Templates\TemplateTokenizeTest.cs" />
@@ -85,6 +89,9 @@
       <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
       <Name>CSharpUtils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fastcgi\Http\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

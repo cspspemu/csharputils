@@ -7,6 +7,7 @@ using System.IO.Pipes;
 using System.Threading;
 using CSharpUtils.Streams;
 using CSharpUtils.Http;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtils.Fastcgi
 {
@@ -34,9 +35,6 @@ namespace CSharpUtils.Fastcgi
 
 		public void ParseParamsStream()
 		{
-			this.StdinStream.SetPosition(0);
-			this.PostParams = HttpUtils.ParseUrlEncoded(this.StdinStream.ReadAllContentsAsString());
-
 			Params = new Dictionary<string, string>();
 			ParamsStream.Position = 0;
 			while (!ParamsStream.Eof())

@@ -27,6 +27,11 @@ namespace CSharpUtilsTests
 			Assert.AreEqual(Buffer.IndexOf(-2), -1);
 			Buffer.Produce(new int[] { 4, 2 });
 			CollectionAssert.AreEqual(Buffer.Items, new int[] { 3, 15, 4, 2 });
+
+			Assert.AreEqual(-1, Buffer.IndexOf(new int[] { 3, 15, 4, 1 }));
+			Assert.AreEqual(0, Buffer.IndexOf(new int[] { 3, 15, 4 }));
+			Assert.AreEqual(1, Buffer.IndexOf(new int[] { 15, 4 }));
+			Assert.AreEqual(2, Buffer.IndexOf(new int[] { 4, 2 }));
 		}
 	}
 }

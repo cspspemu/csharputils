@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,13 +52,17 @@
   <ItemGroup>
     <Compile Include="ArrayEqualityComparer.cs" />
     <Compile Include="AsyncTask.cs" />
-    <Compile Include="BinaryReaderWriterExtensions.cs" />
+    <Compile Include="Extensions\BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
     <Compile Include="Fastcgi\Http\FastcgiHttpServer.cs" />
     <Compile Include="Html\HtmlUtils.cs" />
+    <Compile Include="Http\HttpHeader.cs" />
+    <Compile Include="Http\HttpHeaderList.cs" />
     <Compile Include="Http\HttpUtils.cs" />
+    <Compile Include="Http\MultipartDecoder.cs" />
+    <Compile Include="LanguageUtils.cs" />
     <Compile Include="Streams\ConsumerMemoryStream.cs" />
     <Compile Include="Fastcgi\FascgiRequestInputStream.cs" />
     <Compile Include="Fastcgi\FascgiResponseOutputStream.cs" />
@@ -71,7 +76,7 @@
     <Compile Include="Fastcgi\FastcgiRequest.cs" />
     <Compile Include="Fastcgi\FastcgiServer.cs" />
     <Compile Include="FieldMapping.cs" />
-    <Compile Include="LinqXmlExExtensions.cs" />
+    <Compile Include="Extensions\LinqXmlExExtensions.cs" />
     <Compile Include="Net\SharpSSH\jsch\ChannelSftp.Commands.cs" />
     <Compile Include="ProduceConsumeBuffer.cs" />
     <Compile Include="ArrayUtils.cs" />
@@ -90,7 +95,7 @@
     <Compile Include="FileUtils.cs" />
     <Compile Include="Forms\TimerTaskQueue.cs" />
     <Compile Include="LazyHolder.cs" />
-    <Compile Include="LinqExExtensions.cs" />
+    <Compile Include="Extensions\LinqExExtensions.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MathUtils.cs" />
     <Compile Include="Net\DiffieHellman\DHKeyGeneration.cs" />
@@ -299,8 +304,10 @@
     <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
-    <Compile Include="StreamExtensions.cs" />
-    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Streams\StreamChunker.cs" />
+    <Compile Include="Streams\StreamChunker2.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="StructUtils.cs" />
     <Compile Include="Templates\ParserNodes\ForeachParserNode.cs" />
     <Compile Include="Templates\ParserNodes\ParserNodeBinaryOperation.cs" />

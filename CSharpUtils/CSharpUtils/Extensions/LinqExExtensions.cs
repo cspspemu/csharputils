@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq.Expressions;
 
-namespace CSharpUtils
+namespace CSharpUtils.Extensions
 {
 	static public class LinqExExtensions
 	{

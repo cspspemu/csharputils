@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace CSharpUtils
+namespace CSharpUtils.Extensions
 {
     static public class BinaryReaderWriterExtensions
     {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Linq;
 using CSharpUtils;
 using CSharpUtils.Streams;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtilsTests
 {

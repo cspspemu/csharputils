@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CSharpUtils
+namespace CSharpUtils.Extensions
 {
 	static public class StringExtensions
 	{
