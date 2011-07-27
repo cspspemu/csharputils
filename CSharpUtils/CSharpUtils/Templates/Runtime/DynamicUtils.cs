@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtils.Templates.Runtime
 {
@@ -216,6 +217,39 @@ namespace CSharpUtils.Templates.Runtime
 		static public String ConvertToString(dynamic Value)
 		{
 			return String.Format("{0}", Value);
+		}
+
+		//internal static dynamic Call(Delegate Delegate, params dynamic[] Params)
+		internal static dynamic Call(Type Type, string Method, params dynamic[] Params)
+		{
+			/*
+			var ConvertedParams = new List<Object>();
+			int ExtractedParamsIndex = 0;
+
+			foreach (var Parameter in Delegate.Method.GetParameters())
+			{
+				if (Parameter.ParameterType.Name.Substr(-2) == "[]")
+				{
+					var ExtractedParams = Params.Slice(ExtractedParamsIndex);
+					ConvertedParams.Add(ExtractedParams);
+					Console.WriteLine(ExtractedParams.Length);
+					Console.WriteLine(ExtractedParams[0]);
+				}
+				else
+				{
+					ConvertedParams.Add(Params[ExtractedParamsIndex++]);
+				}
+			}
+			foreach (var Param in ConvertedParams)
+			{
+				Console.WriteLine(Param);
+			}
+			return Delegate.DynamicInvoke(ConvertedParams);
+			 * */
+
+			return Type.InvokeMember(Method, System.Reflection.BindingFlags.InvokeMethod, null, null, Params);
+
+			//return null;
 		}
 	}
 }

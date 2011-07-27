@@ -93,6 +93,12 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
+		[TestMethod]
+		public void TestCall()
+		{
+			Assert.AreEqual("Hello World", DynamicUtils.Call(typeof(String), "Format", "Hello {0}", "World"));
+		}
+
 		class ClassTestAccess
 		{
 			public int SampleField = 10;

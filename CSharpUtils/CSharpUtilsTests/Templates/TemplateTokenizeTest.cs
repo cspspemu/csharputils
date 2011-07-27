@@ -50,6 +50,33 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
+		public void TokenizeFilter()
+		{
+			TokenizerAssertEquals(
+				"{{ 'Hello {0}'|format('World') }}",
+				"{{", "'Hello {0}'", "|", "format", "(", "'World'", ")", "}}"
+			);
+		}
+
+		[TestMethod]
+		public void TokenizeEscapeStart()
+		{
+			TokenizerAssertEquals(
+				"A{{ '{{' }}B",
+				"A", "{{", "'{{'", "}}", "B"
+			);
+		}
+
+		[TestMethod]
+		public void TokenizeEscapeEnd()
+		{
+			TokenizerAssertEquals(
+				"A{{ '}}' }}B",
+				"A", "{{", "'}}'", "}}", "B"
+			);
+		}
+
+		[TestMethod]
 		public void TokenizeRange()
 		{
 			TokenizerAssertEquals(

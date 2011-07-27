@@ -46,7 +46,7 @@ namespace CSharpUtils.Templates
 
 		protected void RenderCodeTo(TextWriter TextWriter)
 		{
-			var TemplateHandler = new TemplateHandler(Tokens, TextWriter);
+			var TemplateHandler = new TemplateParser(Tokens, TextWriter);
 			var Context = new ParserNodeContext(TextWriter, TemplateFactory);
 			TemplateHandler.Reset();
 			var ParserNode = TemplateHandler.HandleLevel_Root();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtils.Templates.Tokenizers
 {
@@ -66,9 +67,13 @@ namespace CSharpUtils.Templates.Tokenizers
 			return Current;
 		}
 
-		public void ExpectValue(String ExpectedValue)
+		public TemplateToken ExpectValue(params String[] ExpectedValue)
 		{
-			if (Current.Text != ExpectedValue) throw (new Exception(String.Format("Expected token '{0}' but obtained '{1}'", ExpectedValue, Current.Text)));
+			if (!ExpectedValue.Contains(Current.Text))
+			{
+				throw (new Exception(String.Format("Expected tokens [{0}] but obtained '{1}'", ExpectedValue.Select(Item => "'" + Item + "'").Implode(","), Current.Text)));
+			}
+			return Current;
 		}
 
 		public TemplateToken ExpectTypeAndNext(Type Type)
@@ -78,10 +83,11 @@ namespace CSharpUtils.Templates.Tokenizers
 			return ReturnToken;
 		}
 
-		public void ExpectValueAndNext(String ExpectedValue)
+		public TemplateToken ExpectValueAndNext(params String[] ExpectedValue)
 		{
-			ExpectValue(ExpectedValue);
+			var Return = ExpectValue(ExpectedValue);
 			MoveNext();
+			return Return;
 		}
 	}
 }

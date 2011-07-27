@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Html;
+using CSharpUtils.Templates.Runtime.Filters;
+using System.Reflection;
 
 namespace CSharpUtils.Templates.Runtime
 {
@@ -54,6 +56,8 @@ namespace CSharpUtils.Templates.Runtime
 		public TextWriter Output;
 		public TemplateScope Scope;
 		public dynamic Parameters;
+		public bool Autoescape = true;
+		public Dictionary<String, Tuple<Type, string>> Filters;
 
 		public TemplateContext(TextWriter Output, TemplateScope Scope = null, TemplateFactory TemplateFactory = null)
 		{
@@ -62,6 +66,46 @@ namespace CSharpUtils.Templates.Runtime
 			this.Output = Output;
 			this.Scope = Scope;
 			this.TemplateFactory = TemplateFactory;
+
+			Filters = new Dictionary<string, Tuple<Type, string>>();
+
+			AddFilterLibrary(typeof(CoreFilters));
+		}
+
+		public void AddFilterLibrary(Type FilterLibraryType)
+		{
+			foreach (var Method in FilterLibraryType.GetMethods(BindingFlags.Static | BindingFlags.Public))
+			{
+				Console.WriteLine(Method);
+				foreach (var Attribute in Method.GetCustomAttributes(typeof(TemplateFilterAttribute), true))
+				{
+					TemplateFilterAttribute TemplateFilterAttribute = (TemplateFilterAttribute)Attribute;
+					this.AddFilter(TemplateFilterAttribute.Name, FilterLibraryType, Method.Name);
+				}
+			}
+			/*
+			this.AddFilter("format", typeof(CoreFilters), "Format");
+			this.AddFilter("raw", typeof(CoreFilters), "Raw");
+			this.AddFilter("Escape", typeof(CoreFilters), "Escape");
+			*/
+		}
+
+		public void AddFilter(String FilterName, Type Type, String FunctionName)
+		{
+			Filters[FilterName] = new Tuple<Type,string>(Type, FunctionName);
+		}
+
+		public dynamic CallFilter(string FilterName, params dynamic[] Params)
+		{
+			Tuple<Type, string> Info;
+			if (Filters.TryGetValue(FilterName, out Info))
+			{
+				return DynamicUtils.Call(Info.Item1, Info.Item2, Params);
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		public void OutputWriteAutoFiltered(dynamic Value)
@@ -98,8 +142,11 @@ namespace CSharpUtils.Templates.Runtime
 
 		public dynamic AutoFilter(dynamic Value)
 		{
-			Value = HtmlUtils.EscapeHtmlCharacters(DynamicUtils.ConvertToString(Value));
-			return Value;
+			if (Value is RawWrapper || !Autoescape)
+			{
+				return Value;
+			}
+			return HtmlUtils.EscapeHtmlCharacters(DynamicUtils.ConvertToString(Value));
 		}
 	}
 }

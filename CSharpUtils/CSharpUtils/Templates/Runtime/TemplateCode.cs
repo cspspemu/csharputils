@@ -98,15 +98,19 @@ namespace CSharpUtils.Templates.Runtime
 		protected void CallParentBlock(String BlockName, TemplateContext Context)
 		{
 			this.ParentTemplate.GetFirstAscendingBlock(BlockName)(Context);
-
-			/*
-			Foreach(Context, "Test", Context.GetVar("Test"), new EmptyDelegate(delegate()
-			{
-			}));
-			*/
 		}
 
 		public delegate void EmptyDelegate();
+
+		protected void Autoescape(TemplateContext Context, dynamic Expression, EmptyDelegate Block)
+		{
+			bool OldAutoescape = Context.Autoescape;
+			Context.Autoescape = Expression;
+			{
+				Block();
+			}
+			Context.Autoescape = OldAutoescape;
+		}
 
 		protected void Foreach(TemplateContext Context, String VarName, dynamic Expression, EmptyDelegate Iteration, EmptyDelegate Else = null)
 		{

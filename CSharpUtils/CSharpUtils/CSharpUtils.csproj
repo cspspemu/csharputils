@@ -312,7 +312,11 @@
     <Compile Include="Templates\ParserNodes\ForeachParserNode.cs" />
     <Compile Include="Templates\ParserNodes\ParserNodeBinaryOperation.cs" />
     <Compile Include="Templates\ParserNodes\ParserNodeContext.cs" />
+    <Compile Include="Templates\ParserNodes\ParserNodeFilter.cs" />
     <Compile Include="Templates\Runtime\DynamicUtils.cs" />
+    <Compile Include="Templates\Runtime\Filters\CoreFilters.cs" />
+    <Compile Include="Templates\Runtime\Filters\RawWrapper.cs" />
+    <Compile Include="Templates\Runtime\Filters\TemplateFilterAttribute.cs" />
     <Compile Include="Templates\Runtime\FinalizeRenderException.cs" />
     <Compile Include="Templates\Runtime\TemplateCode.cs" />
     <Compile Include="Templates\Runtime\TemplateContext.cs" />
@@ -323,7 +327,7 @@
     <Compile Include="Templates\TemplateProvider\TemplateProviderVirtualFileSystem.cs" />
     <Compile Include="Templates\Tokenizers\ExpressionTokenizer.cs" />
     <Compile Include="Templates\ParserNodes\ParserNode.cs" />
-    <Compile Include="Templates\TemplateHandler.cs" />
+    <Compile Include="Templates\TemplateParser.cs" />
     <Compile Include="Templates\Tokenizers\TemplateToken.cs" />
     <Compile Include="Templates\Tokenizers\TokenizerStringReader.cs" />
     <Compile Include="Templates\Tokenizers\TemplateTokenizer.cs" />

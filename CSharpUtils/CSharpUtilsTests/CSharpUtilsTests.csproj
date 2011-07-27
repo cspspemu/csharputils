@@ -63,6 +63,7 @@
     <Compile Include="SliceStreamTest.cs" />
     <Compile Include="Streams\StreamChunker2Test.cs" />
     <Compile Include="Streams\StreamChunkerTest.cs" />
+    <Compile Include="Templates\DynaGenTest\DynaGenTest.cs" />
     <Compile Include="Templates\DynamicUtilsTest.cs" />
     <Compile Include="Templates\TemplateTest.cs" />
     <Compile Include="Templates\TemplateTokenizeTest.cs" />

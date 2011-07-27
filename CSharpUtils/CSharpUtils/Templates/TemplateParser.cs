@@ -33,7 +33,7 @@ namespace CSharpUtils.Templates
 		}
 	}
 
-	public class TemplateHandler
+	public class TemplateParser
 	{
 		TokenReader Tokens;
 		TextWriter TextWriter;
@@ -41,7 +41,7 @@ namespace CSharpUtils.Templates
 		public Dictionary<String, ParserNode> Blocks;
 		int IsInsideABlock = 0;
 
-		public TemplateHandler(TokenReader Tokens, TextWriter TextWriter)
+		public TemplateParser(TokenReader Tokens, TextWriter TextWriter)
 		{
 			this.Tokens = Tokens;
 			this.TextWriter = TextWriter;
@@ -69,7 +69,7 @@ namespace CSharpUtils.Templates
 			}
 		}
 
-		protected ParserNode _HandleLevel_Op(Func<ParserNode> HandleLevelNext, string[] Operators, Func<ParserNode, ParserNode, String, ParserNode> HandleOperator)
+		protected ParserNode _HandleLevel_OpBase(Func<ParserNode> HandleLevelNext, string[] Operators, Func<ParserNode, String, ParserNode> HandleOperator)
 		{
 			ParserNode ParserNode = HandleLevelNext();
 
@@ -84,9 +84,7 @@ namespace CSharpUtils.Templates
 						{
 							if (Operator == CurrentOperator)
 							{
-								Tokens.MoveNext();
-								ParserNode RightNode = HandleLevelNext();
-								ParserNode = HandleOperator(ParserNode, RightNode, Operator);
+								ParserNode = HandleOperator(ParserNode, Operator);
 								Found = true;
 								break;
 							}
@@ -102,6 +100,15 @@ namespace CSharpUtils.Templates
 			}
 
 			return ParserNode;
+		}
+
+		protected ParserNode _HandleLevel_Op(Func<ParserNode> HandleLevelNext, string[] Operators, Func<ParserNode, ParserNode, String, ParserNode> HandleOperator)
+		{
+			return _HandleLevel_OpBase(HandleLevelNext, Operators, delegate(ParserNode ParserNode, String Operator) {
+				Tokens.MoveNext();
+				ParserNode RightNode = HandleLevelNext();
+				return HandleOperator(ParserNode, RightNode, Operator);
+			});
 		}
 
 		public ParserNode _HandleLevel_Op_BinarySimple(Func<ParserNode> HandleLevelNext, params string[] BinarySimple)
@@ -167,31 +174,33 @@ namespace CSharpUtils.Templates
 							break;
 						default:
 							ParserNode = new ParserNodeIdentifier(Id);
-
-							while (true)
-							{
-								if (CurrentToken.Text == ".")
-								{
-									Tokens.MoveNext();
-									TemplateToken AcessToken = Tokens.ExpectTypeAndNext(typeof(IdentifierTemplateToken));
-									ParserNode = new ParserNodeAccess(ParserNode, new ParserNodeStringLiteral(AcessToken.Text));
-								}
-								else if (CurrentToken.Text == "[")
-								{
-									Tokens.MoveNext();
-									ParserNode AccessNode = HandleLevel_Expression();
-									Tokens.ExpectValueAndNext("]");
-									ParserNode = new ParserNodeAccess(ParserNode, AccessNode);
-								}
-								else
-								{
-									break;
-								}
-							}
-
 							break;
 					}
-					
+
+					bool Running = true;
+					while (Running)
+					{
+						switch (CurrentToken.Text)
+						{
+							// Dot identifier accessor.
+							case ".": {
+								Tokens.MoveNext();
+								TemplateToken AcessToken = Tokens.ExpectTypeAndNext(typeof(IdentifierTemplateToken));
+								ParserNode = new ParserNodeAccess(ParserNode, new ParserNodeStringLiteral(AcessToken.Text));
+							} break;
+							// Brace expression accessor.
+							case "[": {
+								Tokens.MoveNext();
+								ParserNode AccessNode = HandleLevel_Expression();
+								Tokens.ExpectValueAndNext("]");
+								ParserNode = new ParserNodeAccess(ParserNode, AccessNode);
+							} break;
+							default:
+								Running = false;
+								break;
+						}
+					}
+
 					break;
 				case "StringLiteralTemplateToken":
 					ParserNode = new ParserNodeStringLiteral(((StringLiteralTemplateToken)CurrentToken).UnescapedText);
@@ -229,10 +238,35 @@ namespace CSharpUtils.Templates
 			return _HandleLevel_Op_BinarySimple(HandleLevel_And, "||");
 		}
 
+		public ParserNode HandleLevel_Filter()
+		{
+			return _HandleLevel_OpBase(HandleLevel_Or, new string[] { "|" }, (ParserNode LeftNode, String Operator) =>
+			{
+				Tokens.MoveNext();
+
+				var Parameters = new List<ParserNode>();
+				Parameters.Add(LeftNode);
+
+				TemplateToken AcessToken = Tokens.ExpectTypeAndNext(typeof(IdentifierTemplateToken));
+				if (Tokens.Current.Text == "(")
+				{
+					Tokens.MoveNext();
+
+					while (Tokens.HasMore)
+					{
+						Parameters.Add(HandleLevel_Expression());
+						String TokenType = Tokens.ExpectValueAndNext(",", ")").Text;
+						if (TokenType == ")") break;
+					}
+				}
+				return new ParserNodeFilter(AcessToken.Text, Parameters.ToArray());
+			});
+		}
+
 		public ParserNode HandleLevel_Ternary()
 		{
 			return _HandleLevel_Op(
-				HandleLevel_Or,
+				HandleLevel_Filter,
 				new string[] { "?" },
 				(ParserNode ConditionNode, ParserNode TrueNode, String Operator) => {
 					Tokens.ExpectValueAndNext(":");
@@ -343,6 +377,22 @@ namespace CSharpUtils.Templates
 			return new ParserNodeCallBlock(BlockName);
 		}
 
+		protected ParserNode HandleLevel_TagSpecial_Autoescape()
+		{
+			Tokens.MoveNext();
+
+			ParserNode AutoEscapeExpression = HandleLevel_Expression();
+
+			Tokens.ExpectValueAndNext("%}");
+
+			ParserNode BodyBlock = HandleLevel_Root();
+
+			Tokens.ExpectValueAndNext("endautoescape");
+			Tokens.ExpectValueAndNext("%}");
+
+			return new ParserNodeAutoescape(AutoEscapeExpression, BodyBlock);
+		}
+
 		public ParserNode HandleLevel_TagSpecial_If()
 		{
 			bool Alive = true;
@@ -401,12 +451,14 @@ namespace CSharpUtils.Templates
 			{
 				case "if"     : return HandleLevel_TagSpecial_If();
 				case "block"  : return HandleLevel_TagSpecial_Block();
-				case "parent" : return HandleLevel_TagSpecial_Parent();
+				case "autoescape": return HandleLevel_TagSpecial_Autoescape();
+				case "parent": return HandleLevel_TagSpecial_Parent();
 				case "for"    : return HandleLevel_TagSpecial_For();
 				case "extends": return HandleLevel_TagSpecial_Extends();
 				case "else":
 				case "endif":
 				case "endblock":
+				case "endautoescape":
 				case "endfor":
 					throw (new Finalize_HandlingLevel_Root());
 				default:

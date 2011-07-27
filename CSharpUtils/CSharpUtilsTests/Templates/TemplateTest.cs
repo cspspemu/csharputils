@@ -228,6 +228,49 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		[TestMethod]
+		public void TestExecFilter()
+		{
+			Assert.AreEqual("Hello World", TemplateCodeGen.CompileTemplateCodeByString("{{ 'Hello {0}'|format('World') }}").RenderToString());
+			Assert.AreEqual("Hello &lt;World&gt;", TemplateCodeGen.CompileTemplateCodeByString("{{ 'Hello {0}'|format('<World>') }}").RenderToString());
+			Assert.AreEqual("Hello <World>", TemplateCodeGen.CompileTemplateCodeByString("{{ 'Hello {0}'|format('<World>')|raw }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecAutoescapeOff()
+		{
+			Assert.AreEqual("Hello <World>", TemplateCodeGen.CompileTemplateCodeByString("{% autoescape false %}{{ 'Hello <World>' }}{% endautoescape %}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecAutoescapeOffEscape()
+		{
+			Assert.AreEqual("Hello &lt;World&gt;", TemplateCodeGen.CompileTemplateCodeByString("{% autoescape false %}{{ 'Hello <World>'|escape }}{% endautoescape %}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecAutoescapeOnEscape()
+		{
+			Assert.AreEqual("Hello &lt;World&gt;", TemplateCodeGen.CompileTemplateCodeByString("{{ 'Hello <World>'|escape }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecAutoescapeOnEscapeShortcut()
+		{
+			Assert.AreEqual("Hello &lt;World&gt;", TemplateCodeGen.CompileTemplateCodeByString("{{ 'Hello <World>'|e }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecEscapeTwice()
+		{
+			Assert.AreEqual("Hello &amp;lt;World&amp;gt;", TemplateCodeGen.CompileTemplateCodeByString("{{ 'Hello <World>'|e|e }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecFunctionCall()
+		{
+		}
+
+		[TestMethod]
 		public void TestExecBasicInheritance()
 		{
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();

@@ -25,6 +25,11 @@ namespace CSharpUtils.Templates.ParserNodes
 		{
 		}
 
+		virtual public void GenerateIL(ParserNodeContext Context)
+		{
+			throw(new NotImplementedException());
+		}
+
 		protected T CreateThisInstanceAs<T>()
 		{
 			return (T)(Activator.CreateInstance(this.GetType()));
