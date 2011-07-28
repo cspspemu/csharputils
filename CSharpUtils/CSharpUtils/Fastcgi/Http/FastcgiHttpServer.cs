@@ -9,34 +9,6 @@ using CSharpUtils.Extensions;
 
 namespace CSharpUtils.Fastcgi.Http
 {
-	public class HttpFile
-	{
-		public string FileName;
-		public string ContentType;
-		public FileInfo TempFile;
-	}
-
-	public class HttpRequest
-	{
-		public bool OutputDebug;
-		public Encoding Encoding = Encoding.UTF8;
-		public HttpHeaderList Headers;
-		public TextWriter Output;
-
-		public Dictionary<String, String> Enviroment;
-		public Dictionary<String, String> Post;
-		public Dictionary<String, HttpFile> Files;
-		public Stream StdinStream;
-		public Dictionary<String, String> Get;
-		public Dictionary<String, String> Cookies;
-
-		public void SetContentType(string MimeType, Encoding Encoding)
-		{
-			Headers.Set("Content-Type", MimeType + "; charset=" + Encoding.ToString());
-			this.Encoding = Encoding;
-		}
-	}
-
 	abstract public class FastcgiHttpServer : FastcgiServer
 	{
 		sealed override protected void HandleFascgiRequest(FastcgiRequest FastcgiRequest)
@@ -108,7 +80,7 @@ namespace CSharpUtils.Fastcgi.Http
 				Stopwatch.Stop();
 				double GenerationTime = (double)Stopwatch.ElapsedTicks / (double)Stopwatch.Frequency;
 
-				HttpRequest.Headers.Set("X-GenerationTime", String.Format("{0}", GenerationTime));
+				HttpRequest.Headers.Set("X-GenerationTime", String.Format("{0}", GenerationTime.ToString("F8")));
 
 				using (var Stdout = new StreamWriter(FastcgiRequest.StdoutStream))
 				{

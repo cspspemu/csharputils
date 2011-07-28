@@ -29,12 +29,18 @@ namespace CSharpUtils.Templates
 		protected Type GetTemplateCodeTypeByFile(String Name)
 		{
 			if (TemplateProvider == null) throw(new Exception("No specified TemplateProvider"));
-			if (!CachedTemplatesByFile.ContainsKey(Name))
+			lock (CachedTemplatesByFile)
 			{
-				return CachedTemplatesByFile[Name] = GetTemplateCodeTypeByString(TemplateProvider.GetTemplate(Name).ReadAllContentsAsString(Encoding));
-			}
+				if (!CachedTemplatesByFile.ContainsKey(Name))
+				{
+					using (var TemplateStream = TemplateProvider.GetTemplate(Name))
+					{
+						return CachedTemplatesByFile[Name] = GetTemplateCodeTypeByString(TemplateStream.ReadAllContentsAsString(Encoding));
+					}
+				}
 
-			return CachedTemplatesByFile[Name];
+				return CachedTemplatesByFile[Name];
+			}
 		}
 
 		protected TemplateCode CreateInstanceByType(Type Type)

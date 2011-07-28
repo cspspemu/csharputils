@@ -10,45 +10,6 @@ using System.Reflection;
 
 namespace CSharpUtils.Templates.Runtime
 {
-	sealed public class TemplateScope
-	{
-		public TemplateScope ParentScope;
-		public Dictionary<String, dynamic> Items;
-
-		public TemplateScope(Dictionary<String, dynamic> Items, TemplateScope ParentScope = null)
-		{
-			this.ParentScope = ParentScope;
-			this.Items = Items;
-		}
-
-		public TemplateScope(TemplateScope ParentScope = null)
-		{
-			this.ParentScope = ParentScope;
-			this.Items = new Dictionary<String, dynamic>();
-		}
-
-		public dynamic this[String Index]
-		{
-			set
-			{
-				Items[Index] = value;
-			}
-			get
-			{
-				if (Items.ContainsKey(Index))
-				{
-					return Items[Index];
-				}
-
-				if (ParentScope != null)
-				{
-					return ParentScope[Index];
-				}
-				return null;
-			}
-		}
-	}
-
 	sealed public class TemplateContext
 	{
 		public TemplateCode RenderingTemplate;
@@ -76,18 +37,12 @@ namespace CSharpUtils.Templates.Runtime
 		{
 			foreach (var Method in FilterLibraryType.GetMethods(BindingFlags.Static | BindingFlags.Public))
 			{
-				Console.WriteLine(Method);
 				foreach (var Attribute in Method.GetCustomAttributes(typeof(TemplateFilterAttribute), true))
 				{
 					TemplateFilterAttribute TemplateFilterAttribute = (TemplateFilterAttribute)Attribute;
 					this.AddFilter(TemplateFilterAttribute.Name, FilterLibraryType, Method.Name);
 				}
 			}
-			/*
-			this.AddFilter("format", typeof(CoreFilters), "Format");
-			this.AddFilter("raw", typeof(CoreFilters), "Raw");
-			this.AddFilter("Escape", typeof(CoreFilters), "Escape");
-			*/
 		}
 
 		public void AddFilter(String FilterName, Type Type, String FunctionName)

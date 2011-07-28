@@ -56,7 +56,11 @@
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Fastcgi\Http\FastcgiHttpServer.cs" />
+    <Compile Include="Fastcgi\Http\HttpFile.cs" />
+    <Compile Include="Fastcgi\Http\HttpRequest.cs" />
+    <Compile Include="Fastcgi\Http\UrlsHandler.cs" />
     <Compile Include="Html\HtmlUtils.cs" />
     <Compile Include="Http\HttpHeader.cs" />
     <Compile Include="Http\HttpHeaderList.cs" />
@@ -320,6 +324,7 @@
     <Compile Include="Templates\Runtime\FinalizeRenderException.cs" />
     <Compile Include="Templates\Runtime\TemplateCode.cs" />
     <Compile Include="Templates\Runtime\TemplateContext.cs" />
+    <Compile Include="Templates\Runtime\TemplateScope.cs" />
     <Compile Include="Templates\TemplateCodeGen.cs" />
     <Compile Include="Templates\TemplateFactory.cs" />
     <Compile Include="Templates\TemplateProvider\ITemplateProvider.cs" />

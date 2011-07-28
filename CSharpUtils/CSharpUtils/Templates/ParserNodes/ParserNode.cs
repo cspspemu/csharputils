@@ -6,6 +6,8 @@ using System.IO;
 using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Templates.Utils;
 using CSharpUtils.Templates.Runtime;
+using System.Reflection.Emit;
+using System.Reflection;
 
 namespace CSharpUtils.Templates.ParserNodes
 {
@@ -25,7 +27,7 @@ namespace CSharpUtils.Templates.ParserNodes
 		{
 		}
 
-		virtual public void GenerateIL(ParserNodeContext Context)
+		virtual public void GenerateIL(ILGenerator ILGenerator, ParserNodeContext Context)
 		{
 			throw(new NotImplementedException());
 		}
@@ -191,6 +193,11 @@ namespace CSharpUtils.Templates.ParserNodes
 			Context.Write("{0}", Value);
 		}
 
+		override public void GenerateIL(ILGenerator ILGenerator, ParserNodeContext Context)
+		{
+			ILGenerator.Emit(OpCodes.Ldc_I8, Value);
+		}
+
 		public override string ToString()
 		{
 			return base.ToString() + "(" + Value + ")";
@@ -211,6 +218,11 @@ namespace CSharpUtils.Templates.ParserNodes
 			Context.Write(StringUtils.EscapeString(Value));
 		}
 
+		override public void GenerateIL(ILGenerator ILGenerator, ParserNodeContext Context)
+		{
+			ILGenerator.Emit(OpCodes.Ldstr, Value);
+		}
+
 		public override string ToString()
 		{
 			return base.ToString() + "('" + Value + "')";
@@ -227,6 +239,13 @@ namespace CSharpUtils.Templates.ParserNodes
 			Context.Write("Context.Output.Write({0});", StringUtils.EscapeString(Text));
 			Context.WriteLine("");
 		}
+
+		/*
+		override public void GenerateIL(ILGenerator ILGenerator, ParserNodeContext Context)
+		{
+			//ILGenerator.Emit(OpCodes.Call, typeof(StringUtils).GetMethod("EscapeString"));
+		}
+		*/
 
 		public override string ToString()
 		{

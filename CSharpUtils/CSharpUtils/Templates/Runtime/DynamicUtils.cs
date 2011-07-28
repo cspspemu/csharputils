@@ -181,8 +181,7 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 
-		//internal static IEnumerable<dynamic> ConvertToIEnumerable(Dictionary<String, object> List)
-		internal static dynamic ConvertToIEnumerable(dynamic List)
+		static public dynamic ConvertToIEnumerable(dynamic List)
 		{
 			if (List != null)
 			{
@@ -220,7 +219,7 @@ namespace CSharpUtils.Templates.Runtime
 		}
 
 		//internal static dynamic Call(Delegate Delegate, params dynamic[] Params)
-		internal static dynamic Call(Type Type, string Method, params dynamic[] Params)
+		static public dynamic Call(Type Type, string Method, params dynamic[] Params)
 		{
 			/*
 			var ConvertedParams = new List<Object>();

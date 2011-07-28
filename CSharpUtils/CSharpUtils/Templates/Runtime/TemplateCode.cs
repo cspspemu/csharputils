@@ -114,21 +114,19 @@ namespace CSharpUtils.Templates.Runtime
 
 		protected void Foreach(TemplateContext Context, String VarName, dynamic Expression, EmptyDelegate Iteration, EmptyDelegate Else = null)
 		{
-			if (DynamicUtils.CountArray(Expression) > 0)
+			int Index = 0;
+			foreach (var Item in DynamicUtils.ConvertToIEnumerable(Expression))
 			{
-				int Index = 0;
-				foreach (var Item in DynamicUtils.ConvertToIEnumerable(Expression))
-				{
-					Context.SetVar("loop", new Dictionary<String, dynamic> {
-						{ "index", Index + 1 },
-						{ "index0", Index },
-					});
-					Context.SetVar(VarName, Item);
-					Iteration();
-					Index++;
-				}
+				Context.SetVar("loop", new Dictionary<String, dynamic> {
+					{ "index", Index + 1 },
+					{ "index0", Index },
+				});
+				Context.SetVar(VarName, Item);
+				Iteration();
+				Index++;
 			}
-			else
+
+			if (Index == 0)
 			{
 				if (Else != null) Else();
 			}
