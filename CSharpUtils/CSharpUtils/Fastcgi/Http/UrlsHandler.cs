@@ -23,7 +23,12 @@ namespace CSharpUtils.Fastcgi.Http
 
 		public void DispatchRequest(HttpRequest HttpRequest)
 		{
-			string RequestUri = HttpRequest.Enviroment["REQUEST_URI"];
+			string RequestUri;
+
+			if (!HttpRequest.Enviroment.TryGetValue("REQUEST_URI", out RequestUri))
+			{
+				RequestUri = "";
+			}
 
 			foreach (var Pair in Criterias)
 			{

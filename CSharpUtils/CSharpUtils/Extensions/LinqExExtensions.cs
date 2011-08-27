@@ -59,15 +59,20 @@ namespace CSharpUtils.Extensions
 			return Items.Distinct(new LinqEqualityComparer<TSource, TResult>(Selector));
 		}
 
-        static public String ToHexString(this IEnumerable<byte> Bytes)
-        {
-            return String.Join("", Bytes.Select(Byte => Byte.ToString("x2")));
-        }
+		static public String ToHexString(this IEnumerable<byte> Bytes)
+		{
+			return String.Join("", Bytes.Select(Byte => Byte.ToString("x2")));
+		}
 
-        static public String Implode<TSource>(this IEnumerable<TSource> Items, String Separator)
-        {
-            return String.Join(Separator, Items.Select(Item => Item.ToString()));
-        }
+		static public String Implode<TSource>(this IEnumerable<TSource> Items, String Separator)
+		{
+			return String.Join(Separator, Items.Select(Item => Item.ToString()));
+		}
+
+		static public String ToStringArray<TSource>(this IEnumerable<TSource> Items, String Separator = ",")
+		{
+			return Items.Implode(Separator);
+		}
 
 		/// <summary>
 		/// http://msdn.microsoft.com/en-us/magazine/cc163329.aspx
@@ -90,6 +95,53 @@ namespace CSharpUtils.Extensions
 		public static void ForEach<T>(this IEnumerable<T> Items, Action<T> action)
 		{
 			foreach (var Item in Items) action(Item);
+		}
+
+		public static int LocateWhereMinIndex<T>(this IEnumerable<T> Items, Func<T, bool> where, Func<T, dynamic> compareValue)
+		{
+			bool First = true;
+			T MinItem = default(T);
+			dynamic MinValue = null;
+			int MinIndex = -1;
+			int Index = 0;
+			foreach (var Item in Items)
+			{
+				if (where(Item))
+				{
+					dynamic CurValue = compareValue(Item);
+
+					if (First || (CurValue < MinValue))
+					{
+						MinItem = Item;
+						MinValue = CurValue;
+						MinIndex = Index;
+						First = false;
+					}
+				}
+
+				Index++;
+			}
+
+			return MinIndex;
+		}
+
+		public static T LocateMin<T>(this IEnumerable<T> Items, Func<T, dynamic> compareValue)
+		{
+			bool First = true;
+			T MinItem = default(T);
+			dynamic MinValue = null;
+			foreach (var Item in Items)
+			{
+				dynamic CurValue = compareValue(Item);
+
+				if (First || (CurValue < MinValue))
+				{
+					MinItem = Item;
+					MinValue = CurValue;
+					First = false;
+				}
+			}
+			return MinItem;
 		}
 	}
 }

@@ -101,8 +101,9 @@ namespace CSharpUtils.Extensions
 			}
 		}
 
-		static public Stream ReadStream(this Stream Stream, long ToRead)
+		static public Stream ReadStream(this Stream Stream, long ToRead = -1)
 		{
+			if (ToRead == -1) ToRead = Stream.Available();
 			var ReadedStream = SliceStream.CreateWithLength(Stream, Stream.Position, ToRead);
 			Stream.Skip(ToRead);
 			return ReadedStream;
@@ -111,7 +112,7 @@ namespace CSharpUtils.Extensions
 		static public byte[] ReadBytes(this Stream Stream, int ToRead)
 		{
 			var Buffer = new byte[ToRead];
-			var Readed = Stream.Read(Buffer, 0, ToRead);
+			var Readed = Stream.Read(Buffer, 0, (int)ToRead);
 			if (Readed != ToRead) throw(new Exception("Unable to read " + ToRead + " bytes, readed " + Readed + "."));
 			return Buffer;
 		}
@@ -193,6 +194,16 @@ namespace CSharpUtils.Extensions
 			return StructUtils.BytesToStruct<T>(Buffer);
 		}
 
+		public static T[] ReadStructVector<T>(this Stream Stream, uint Size) where T : struct
+		{
+			T[] Vector = new T[Size];
+			for (int n = 0; n < Size; n++)
+			{
+				Vector[n] = ReadStruct<T>(Stream);
+			}
+			return Vector;
+		}
+
 		public static void WriteStruct<T>(this Stream Stream, T Struct) where T : struct
 		{
 			byte[] Bytes = StructUtils.StructToBytes(Struct);
@@ -248,6 +259,11 @@ namespace CSharpUtils.Extensions
 		{
 			Stream.Position = Position;
 			return Stream;
+		}
+
+		public static void WriteByteRepeated(this Stream Stream, byte Byte, uint Count = 1)
+		{
+			for (int n = 0; n < Count; n++) Stream.WriteByte(Byte);
 		}
 	}
 }

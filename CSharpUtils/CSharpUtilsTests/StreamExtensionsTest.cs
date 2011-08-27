@@ -30,5 +30,18 @@ namespace CSharpUtilsTests
 			CollectionAssert.AreEqual(Input.ToArray(), Output.ToArray());
 			CollectionAssert.AreEqual(Input.ToArray(), Output2.ToArray());
 		}
+
+		[TestMethod]
+		public void SliceStreamTest()
+		{
+			MemoryStream MemoryStream = new MemoryStream(Encoding.ASCII.GetBytes("Hello World"));
+			MemoryStream.ReadBytes(6);
+			var SliceStream = MemoryStream.ReadStream();
+			Assert.AreEqual("Wo", Encoding.ASCII.GetString(SliceStream.ReadBytes(2)));
+			var SliceStream2 = SliceStream.ReadStream();
+			Assert.AreEqual(0, SliceStream.Available());
+			Assert.AreEqual("rld", Encoding.ASCII.GetString(SliceStream2.ReadBytes(3)));
+			Assert.AreEqual(0, SliceStream2.Available());
+		}
 	}
 }

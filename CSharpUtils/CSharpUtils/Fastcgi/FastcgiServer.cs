@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace CSharpUtils.Fastcgi
 {
@@ -15,17 +16,18 @@ namespace CSharpUtils.Fastcgi
         ManualResetEvent AcceptMutex;
         String Address;
         ushort Port;
-        TcpListener TcpListener;
+        //TcpListener TcpListener;
+		Socket ServerSocket;
         bool Async = false;
         bool Debug = false;
         //bool Debug = true;
 
-		[DllImport("Kernel32")]
-		public static extern bool SetConsoleCtrlHandler(HandlerRoutine Handler, bool Add);
+		//[DllImport("Kernel32")]
+		//public static extern bool SetConsoleCtrlHandler(HandlerRoutine Handler, bool Add);
 
 		// A delegate type to be used as the handler routine 
 		// for SetConsoleCtrlHandler.
-		public delegate bool HandlerRoutine(CtrlTypes CtrlType);
+		//public delegate bool HandlerRoutine(CtrlTypes CtrlType);
 
 		// An enumerated type for the control messages
 		// sent to the handler routine.
@@ -52,16 +54,25 @@ namespace CSharpUtils.Fastcgi
 			return false;
 		}
 
-		public void Listen(ushort Port, string Address = "0.0.0.0")
+		public void Listen(string UnixEndPoint)
 		{
-			this.Port = Port;
-			this.Address = Address;
-			AcceptMutex = new ManualResetEvent(false);
-			TcpListener = new TcpListener(IPAddress.Parse(Address), Port);
-			Console.WriteLine("Listen at {0}:{1}", Address, Port);
-			TcpListener.Start();
+			ServerSocket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
 
-			SetConsoleCtrlHandler(new HandlerRoutine(HandleShutdown), true);
+			//EndPoint EndPoint = (EndPoint)Assembly.LoadWithPartialName("Mono.Posix").GetType("Mono.Unix.UnixEndPoint").GetConstructor(new Type[] { typeof(String) }).Invoke(null, new object[] { UnixEndPoint });
+			EndPoint EndPoint = (EndPoint)Assembly.LoadWithPartialName("Mono.Posix").GetType("Mono.Unix.UnixEndPoint").GetConstructor(new Type[] { typeof(String) }).Invoke(new object[] { UnixEndPoint });
+
+			Console.WriteLine(EndPoint);
+
+			ServerSocket.Bind(EndPoint);
+			Console.WriteLine("Listen at '{0}'", UnixEndPoint);
+			ServerSocket.Listen(128);
+
+			ListenCommon();
+		}
+
+		private void ListenCommon()
+		{
+			//SetConsoleCtrlHandler(new HandlerRoutine(HandleShutdown), true);
 
 			while (true)
 			{
@@ -82,9 +93,37 @@ namespace CSharpUtils.Fastcgi
 				}
 				else
 				{
-					ThreadPool.QueueUserWorkItem(HandleAcceptedSocket, TcpListener.AcceptSocket());
+					//ThreadPool.QueueUserWorkItem(HandleAcceptedSocket, TcpListener.AcceptSocket());
+					//ThreadPool.
+					HandleAcceptedSocketInNewThread(ServerSocket.Accept());
 				}
 			}
+		}
+
+		public void Listen(ushort Port, string Address = "0.0.0.0")
+		{
+			this.Port = Port;
+			this.Address = Address;
+			AcceptMutex = new ManualResetEvent(false);
+
+			ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+
+			ServerSocket.Bind(new IPEndPoint(IPAddress.Parse(Address), Port));
+			Console.WriteLine("Listen at {0}:{1}", Address, Port);
+			ServerSocket.Listen(128);
+
+			ListenCommon();
+		}
+
+		protected void HandleAcceptedSocketInNewThread(Socket AcceptedSocket)
+		{
+			ThreadPool.QueueUserWorkItem(HandleAcceptedSocket, AcceptedSocket);
+			/*
+			new Thread(delegate()
+			{
+				HandleAcceptedSocket(AcceptedSocket);
+			}).Start();
+			*/
 		}
 
         /*

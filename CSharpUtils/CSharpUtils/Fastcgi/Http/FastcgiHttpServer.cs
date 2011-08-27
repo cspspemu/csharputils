@@ -16,19 +16,17 @@ namespace CSharpUtils.Fastcgi.Http
 			FastcgiRequest.StdinStream.SetPosition(0);
 			Dictionary<string, string> Post = new Dictionary<string, string>();
 			Dictionary<string, HttpFile> Files = new Dictionary<string, HttpFile>();
+			bool HandledPost = false;
 
-			HttpHeader ContentType = new HttpHeader("Content-Type", FastcgiRequest.Params["CONTENT_TYPE"]);
+			//foreach (var Param in FastcgiRequest.Params) Console.WriteLine(Param);
 
-			if (FastcgiRequest.StdinStream.Length > 0)
-			{
-				File.WriteAllBytes("Stdin.bin", FastcgiRequest.StdinStream.ReadAll());
-			}
+			HttpHeader ContentType = new HttpHeader("Content-Type", FastcgiRequest.GetParam("CONTENT_TYPE"));
 
 			var ContentTypeParts = ContentType.ParseValue("type");
 			if (ContentTypeParts["type"] == "multipart/form-data")
 			{
 				string Boundary = ContentTypeParts["boundary"];
-				File.WriteAllBytes("Boundary.bin", Encoding.ASCII.GetBytes(Boundary));
+				//File.WriteAllBytes("Boundary.bin", Encoding.ASCII.GetBytes(Boundary));
 				MultipartDecoder MultipartDecoder = new MultipartDecoder(FastcgiRequest.StdinStream, "--" + Boundary);
 				var Parts = MultipartDecoder.Parse();
 
@@ -36,7 +34,8 @@ namespace CSharpUtils.Fastcgi.Http
 				{
 					if (Part.IsFile)
 					{
-						Files.Add(Part.Name, new HttpFile() {
+						Files.Add(Part.Name, new HttpFile()
+						{
 							TempFile = new FileInfo(Part.TempFilePath),
 							FileName = Part.FileName,
 							ContentType = Part.ContentType,
@@ -46,9 +45,12 @@ namespace CSharpUtils.Fastcgi.Http
 					{
 						Post[Part.Name] = Part.Content;
 					}
+
+					HandledPost = true;
 				}
 			}
-			else
+
+			if (!HandledPost)
 			{
 				Post = HttpUtils.ParseUrlEncoded(Encoding.UTF8.GetString(FastcgiRequest.StdinStream.ReadAll()));
 			}
@@ -65,7 +67,7 @@ namespace CSharpUtils.Fastcgi.Http
 					StdinStream = FastcgiRequest.StdinStream,
 					Post = Post,
 					Files = Files,
-					Get = HttpUtils.ParseUrlEncoded(FastcgiRequest.Params["QUERY_STRING"]),
+					Get = HttpUtils.ParseUrlEncoded(FastcgiRequest.GetParam("QUERY_STRING")),
 					Cookies = new Dictionary<String, String>(),
 				};
 

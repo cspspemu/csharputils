@@ -49,5 +49,11 @@ namespace CSharpUtils.Fastcgi
 		}
 
 		public Dictionary<String, String> Params = new Dictionary<string, string>();
+
+		public String GetParam(String Key)
+		{
+			String Value;
+			return Params.TryGetValue(Key, out Value) ? Value : "";
+		}
 	}
 }

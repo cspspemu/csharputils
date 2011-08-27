@@ -36,6 +36,14 @@ namespace CSharpUtils
 			return Items.Slice(0, Length);
 		}
 
+		public int Consume(T[] Buffer, int Offset, int Length)
+		{
+			Length = Math.Min(Length, ConsumeRemaining);
+			Array.Copy(Items, 0, Buffer, Offset, Length);
+			Items = Items.Slice(Length);
+			return Length;
+		}
+
 		public T[] Consume(int Length)
 		{
 			var Return = ConsumePeek(Length);

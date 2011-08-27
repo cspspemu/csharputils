@@ -23,6 +23,10 @@ namespace CSharpUtils.VirtualFileSystem.Local
 
 		protected String RealPath(String Path)
 		{
+			if (Environment.OSVersion.Platform == PlatformID.Unix)
+			{
+				return CombinePath(RootPath, Path);
+			}
 			return CombinePath(RootPath, Path).Replace('/', '\\');
 		}
 

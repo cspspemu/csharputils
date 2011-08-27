@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ArrayEqualityComparer.cs" />
     <Compile Include="AsyncTask.cs" />
+    <Compile Include="ColorUtils.cs" />
     <Compile Include="Extensions\BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Http\HttpHeaderList.cs" />
     <Compile Include="Http\HttpUtils.cs" />
     <Compile Include="Http\MultipartDecoder.cs" />
+    <Compile Include="Http\Server\HttpServer.cs" />
     <Compile Include="LanguageUtils.cs" />
     <Compile Include="Streams\ConsumerMemoryStream.cs" />
     <Compile Include="Fastcgi\FascgiRequestInputStream.cs" />
@@ -309,6 +311,7 @@
     <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Streams\SocketStream.cs" />
     <Compile Include="Streams\StreamChunker.cs" />
     <Compile Include="Streams\StreamChunker2.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

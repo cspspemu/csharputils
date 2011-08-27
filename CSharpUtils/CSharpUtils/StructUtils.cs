@@ -19,6 +19,15 @@ namespace CSharpUtils
 
 	public class StructUtils
 	{
+		static public void ExpectSize<T>(int ExpectedSize)
+		{
+			int RealSize = Marshal.SizeOf(typeof(T));
+			if (RealSize != ExpectedSize)
+			{
+				throw (new Exception("Expecting struct '" + typeof(T).FullName + "' size. Expected(" + ExpectedSize + ") but Obtained(" + RealSize + ")."));
+			}
+		}
+
 		public static void RespectEndianness(Type type, byte[] data)
 		{
 			var fields = type.GetFields().Where(f => f.IsDefined(typeof(EndianAttribute), false))
