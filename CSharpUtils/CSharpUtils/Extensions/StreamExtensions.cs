@@ -280,13 +280,13 @@ namespace CSharpUtils.Extensions
 
 		static public Stream WriteVariableUintBit8Extends(this Stream Stream, uint Value)
 		{
-			while (Value != 0)
+			do
 			{
 				byte Byte = (byte)(Value & 0x7F);
 				Value >>= 7;
 				if (Value != 0) Byte |= 0x80;
 				Stream.WriteByte(Byte);
-			}
+			} while (Value != 0);
 			return Stream;
 		}
 
@@ -301,11 +301,13 @@ namespace CSharpUtils.Extensions
 
 		static public uint ReadVariableUintBit8Extends(this Stream Stream)
 		{
-			byte c; uint v = 0;
+			int c;
+			uint v = 0;
 			int shift = 0;
 			do
 			{
-				c = (byte)Stream.ReadByte();
+				c = Stream.ReadByte();
+				if (c == -1) throw (new Exception("Incomplete VariableUintBit8Extends"));
 				v |= (uint)(((uint)c & 0x7F) << shift);
 				shift += 7;
 			} while ((c & 0x80) != 0);
