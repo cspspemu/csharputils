@@ -143,5 +143,13 @@ namespace CSharpUtils.Extensions
 			}
 			return MinItem;
 		}
+
+		/*
+		public static T ProcessNewObject<T>(T Object, Action<T> Callback)
+		{
+			Callback(Object);
+			return Object;
+		}
+		*/
 	}
 }

@@ -42,7 +42,7 @@ namespace CSharpUtils.Compression
 			return NodesSliced;
 		}
 
-		static public int BuildTable(uint[] UsageTable, Node[] Nodes)
+		static public int BuildTable(uint[] UsageTable, Node[] EncodingTable)
 		{
 			uint SumOfInputTable = 0;
 
@@ -51,7 +51,7 @@ namespace CSharpUtils.Compression
 			{ // Verified.
 				for (int n = 0; n < UsageTable.Length; n++)
 				{
-					Nodes[n] = new Node()
+					EncodingTable[n] = new Node()
 					{
 						Index = n,
 						Unused = (UsageTable[n] > 0),
@@ -70,14 +70,14 @@ namespace CSharpUtils.Compression
 
 				if (SumOfInputTable == 0)
 				{
-					throw (new Exception("SumOfInputTable == 0"));
+					throw (new Exception("All elements on EncodingTable are 0"));
 				}
 			}
 
 			{ // Verified.
-				for (int n = UsageTable.Length; n < Nodes.Length; n++)
+				for (int n = UsageTable.Length; n < EncodingTable.Length; n++)
 				{
-					Nodes[n] = new Node()
+					EncodingTable[n] = new Node()
 					{
 						Index = n,
 						Unused = false,
@@ -99,27 +99,27 @@ namespace CSharpUtils.Compression
 			{
 				uint ParentUsageCount = 0;
 
-				Left = Nodes.Where(Node => Node.Unused).LocateMin(Node => Node.UsageCount);
+				Left = EncodingTable.Where(Node => Node.Unused).LocateMin(Node => Node.UsageCount);
 
 				if (Left != null)
 				{
 					Left.Unused = false;
-					Left.Parent = Nodes[CurrentNodeIndex];
+					Left.Parent = EncodingTable[CurrentNodeIndex];
 					ParentUsageCount += Left.UsageCount;
 				}
 
-				Right = Nodes.Where(Node => Node.Unused).LocateMin(Node => Node.UsageCount);
+				Right = EncodingTable.Where(Node => Node.Unused).LocateMin(Node => Node.UsageCount);
 
 				if (Right != null)
 				{
 					Right.Unused = false;
-					Right.Parent = Nodes[CurrentNodeIndex];
+					Right.Parent = EncodingTable[CurrentNodeIndex];
 					ParentUsageCount += Right.UsageCount;
 				}
 
 				Node node;
 
-				Nodes[CurrentNodeIndex] = node = new Node()
+				EncodingTable[CurrentNodeIndex] = node = new Node()
 				{
 					Index = CurrentNodeIndex,
 					Unused = true,
@@ -135,7 +135,7 @@ namespace CSharpUtils.Compression
 				if (node.UsageCount == SumOfInputTable) break;
 			}
 
-			SetEncodingRecursive(Nodes[CurrentNodeIndex - 1]);
+			SetEncodingRecursive(EncodingTable[CurrentNodeIndex - 1]);
 
 			return CurrentNodeIndex;
 		}
@@ -158,15 +158,15 @@ namespace CSharpUtils.Compression
 			return UsageTable;
 		}
 
-		static public Stream Compress(Stream Input, Node[] Nodes)
+		static public Stream Compress(Stream Input, Node[] EncodingTable)
 		{
 			Stream Output = new MemoryStream();
-			Compress(Input, Output, Nodes);
+			Compress(Input, Output, EncodingTable);
 			Output.Position = 0;
 			return Output;
 		}
 
-		static public void Compress(Stream Input, Stream Output, Node[] Nodes)
+		static public void Compress(Stream Input, Stream Output, Node[] EncodingTable)
 		{
 			byte CurrentByte = 0;
 			byte Mask = 0x80;
@@ -174,9 +174,11 @@ namespace CSharpUtils.Compression
 			while (!Input.Eof())
 			{
 				var Symbol = Input.ReadByte();
-				var Node = Nodes[Symbol];
+				var Node = EncodingTable[Symbol];
 				var NodeEncodingBitsCount = Node.EncodeBitsCount;
 				var NodeEncodeBitsValue = Node.EncodeBitsValue;
+
+				if (Node.EncodeBitsCount == 0) throw (new Exception(String.Format("Symbol '{0}' not found on EncodingTable", Symbol)));
 
 				//Console.WriteLine("Encode: {0}, {1}, {2}", Symbol, NodeEncodingBitsCount, NodeEncodeBitsValue);
 
@@ -207,21 +209,21 @@ namespace CSharpUtils.Compression
 		}
 
 
-		static public Stream Uncompress(Stream Input, uint OutputLength, Node[] Nodes)
+		static public Stream Uncompress(Stream Input, uint OutputLength, Node[] EncodingTable)
 		{
 			Stream Output = new MemoryStream();
-			Uncompress(Input, Output, OutputLength, Nodes);
+			Uncompress(Input, Output, OutputLength, EncodingTable);
 			return Output;
 		}
 
-		static public void Uncompress(Stream Input, Stream Output, uint OutputLength, Node[] Nodes)
+		static public void Uncompress(Stream Input, Stream Output, uint OutputLength, Node[] EncodingTable)
 		{
 			byte Mask = 0;
 			byte CurrentByte = 0;
 
 			for (int n = 0; n < OutputLength; n++)
 			{
-				var CurrentNode = Nodes[Nodes.Length - 1];
+				var CurrentNode = EncodingTable[EncodingTable.Length - 1];
 
 				while (CurrentNode.HasChilds)
 				{

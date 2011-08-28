@@ -17,6 +17,19 @@ namespace CSharpUtils.Extensions
 			return Stream.Available() <= 0;
 		}
 
+		static public Stream PreservePositionAndLock(this Stream Stream, Action Callback)
+		{
+			lock (Stream)
+			{
+				var OldPosition = Stream.Position;
+				{
+					Callback();
+				}
+				Stream.Position = OldPosition;
+			}
+			return Stream;
+		}
+
 		static public long Available(this Stream Stream)
 		{
 			return Stream.Length - Stream.Position;
@@ -25,13 +38,11 @@ namespace CSharpUtils.Extensions
 		static public byte[] ReadChunk(this Stream Stream, int Start, int Length)
 		{
 			byte[] Chunk = new byte[Length];
-			lock (Stream)
+			Stream.PreservePositionAndLock(() =>
 			{
-				var OldPosition = Stream.Position;
 				Stream.Position = Start;
 				Stream.Read(Chunk, 0, Length);
-				Stream.Position = OldPosition;
-			}
+			});
 			return Chunk;
 		}
 
@@ -68,37 +79,22 @@ namespace CSharpUtils.Extensions
 
 		static public byte[] ReadAll(this Stream Stream, bool FromStart = true)
 		{
-			lock (Stream)
-			{
-				/*
-				if (Stream.CanSeek)
-				{
-					var OldPosition = Stream.Position;
-					var Data = new byte[Stream.Length];
-					Stream.Position = 0;
-					Stream.Read(Data, 0, Data.Length);
-					Stream.Position = OldPosition;
-				}
-				else
-				{
-				}
-				return Data;
-				*/
-				long PreviousPosition = -1;
+			var MemoryStream = new MemoryStream();
 
-				if (FromStart)
+			if (FromStart)
+			{
+				Stream.PreservePositionAndLock(() =>
 				{
-					PreviousPosition = Stream.Position;
 					Stream.Position = 0;
-				}
-				var MemoryStream = new MemoryStream();
-				Stream.CopyTo(MemoryStream);
-				if (FromStart)
-				{
-					Stream.Position = PreviousPosition;
-				}
-				return MemoryStream.ToArray();
+					Stream.CopyTo(MemoryStream);
+				});
 			}
+			else
+			{
+				Stream.CopyTo(MemoryStream);
+			}
+
+			return MemoryStream.ToArray();
 		}
 
 		static public Stream ReadStream(this Stream Stream, long ToRead = -1)
@@ -117,9 +113,10 @@ namespace CSharpUtils.Extensions
 			return Buffer;
 		}
 
-		static public void WriteBytes(this Stream Stream, byte[] Bytes)
+		static public Stream WriteBytes(this Stream Stream, byte[] Bytes)
 		{
 			Stream.Write(Bytes, 0, Bytes.Length);
+			return Stream;
 		}
 
 		static public String ReadString(this Stream Stream, int ToRead, Encoding Encoding = null)
@@ -146,7 +143,7 @@ namespace CSharpUtils.Extensions
 			}
 		}
 
-		static public void WriteStringz(this Stream Stream, String Value, int ToWrite = -1, Encoding Encoding = null)
+		static public Stream WriteStringz(this Stream Stream, String Value, int ToWrite = -1, Encoding Encoding = null)
 		{
 			if (Encoding == null) Encoding = Encoding.ASCII;
 			if (ToWrite == -1)
@@ -160,9 +157,11 @@ namespace CSharpUtils.Extensions
 				Stream.WriteBytes(Bytes);
 				Stream.WriteZeroBytes(ToWrite - Bytes.Length);
 			}
+
+			return Stream;
 		}
 
-		static public void WriteZeroBytes(this Stream Stream, int Count)
+		static public Stream WriteZeroBytes(this Stream Stream, int Count)
 		{
 			if (Count < 0)
 			{
@@ -174,16 +173,19 @@ namespace CSharpUtils.Extensions
 				var Bytes = new byte[Count];
 				Stream.WriteBytes(Bytes);
 			}
+			return Stream;
 		}
 
-		static public void WriteZeroToAlign(this Stream Stream, int Align)
+		static public Stream WriteZeroToAlign(this Stream Stream, int Align)
 		{
 			Stream.WriteZeroBytes((int)(MathUtils.Align(Stream.Position, Align) - Stream.Position));
+			return Stream;
 		}
 
-		static public void WriteZeroToOffset(this Stream Stream, long Offset)
+		static public Stream WriteZeroToOffset(this Stream Stream, long Offset)
 		{
 			Stream.WriteZeroBytes((int)(Offset - Stream.Position));
+			return Stream;
 		}
 
 		public static T ReadStruct<T>(this Stream Stream) where T : struct
@@ -204,20 +206,23 @@ namespace CSharpUtils.Extensions
 			return Vector;
 		}
 
-		public static void WriteStruct<T>(this Stream Stream, T Struct) where T : struct
+		public static Stream WriteStruct<T>(this Stream Stream, T Struct) where T : struct
 		{
 			byte[] Bytes = StructUtils.StructToBytes(Struct);
 			Stream.Write(Bytes, 0, Bytes.Length);
+			return Stream;
 		}
 
-		public static void Align(this Stream Stream, int Align)
+		public static Stream Align(this Stream Stream, int Align)
 		{
 			Stream.Position = MathUtils.Align(Stream.Position, Align);
+			return Stream;
 		}
 
-		public static void Skip(this Stream Stream, long Count)
+		public static Stream Skip(this Stream Stream, long Count)
 		{
 			Stream.Seek(Count, SeekOrigin.Current);
+			return Stream;
 		}
 
 #if false
@@ -247,12 +252,18 @@ namespace CSharpUtils.Extensions
 		}
 #endif
 
-		public static void CopyToFile(this Stream Stream, String FileName)
+		public static Stream CopyToFile(this Stream Stream, String FileName)
 		{
 			using (var OutputFile = File.OpenWrite(FileName))
 			{
 				Stream.CopyToFast(OutputFile);
 			}
+			return Stream;
+		}
+
+		public static void WriteStream(this Stream ToStream, Stream FromStream)
+		{
+			FromStream.CopyToFast(ToStream);
 		}
 
 		public static Stream SetPosition(this Stream Stream, long Position)
@@ -261,12 +272,13 @@ namespace CSharpUtils.Extensions
 			return Stream;
 		}
 
-		public static void WriteByteRepeated(this Stream Stream, byte Byte, uint Count = 1)
+		public static Stream WriteByteRepeated(this Stream Stream, byte Byte, uint Count = 1)
 		{
 			for (int n = 0; n < Count; n++) Stream.WriteByte(Byte);
+			return Stream;
 		}
 
-		static public void WriteVariableUintBit8Extends(this Stream Stream, uint Value)
+		static public Stream WriteVariableUintBit8Extends(this Stream Stream, uint Value)
 		{
 			while (Value != 0)
 			{
@@ -275,14 +287,16 @@ namespace CSharpUtils.Extensions
 				if (Value != 0) Byte |= 0x80;
 				Stream.WriteByte(Byte);
 			}
+			return Stream;
 		}
 
-		static public void WriteVariableUintBit8ExtendsArray(this Stream Stream, params uint[] Values)
+		static public Stream WriteVariableUintBit8ExtendsArray(this Stream Stream, params uint[] Values)
 		{
 			foreach (var Value in Values)
 			{
 				Stream.WriteVariableUintBit8Extends(Value);
 			}
+			return Stream;
 		}
 
 		static public uint ReadVariableUintBit8Extends(this Stream Stream)
@@ -303,6 +317,30 @@ namespace CSharpUtils.Extensions
 			uint[] Array = new uint[Count];
 			for (int n = 0; n < Count; n++) Array[n] = Stream.ReadVariableUintBit8Extends();
 			return Array;
+		}
+
+		static public IEnumerable<byte> AsByteEnumerable(this Stream Stream)
+		{
+			lock (Stream)
+			{
+				var OldPosition = Stream.Position;
+				try
+				{
+					while (true)
+					{
+						int Value = Stream.ReadByte();
+						if (Value == -1)
+						{
+							break;
+						}
+						yield return (byte)Value;
+					}
+				}
+				finally
+				{
+					Stream.Position = OldPosition;
+				}
+			}
 		}
 
 	}
