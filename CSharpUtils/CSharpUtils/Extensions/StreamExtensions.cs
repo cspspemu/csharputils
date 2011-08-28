@@ -265,5 +265,45 @@ namespace CSharpUtils.Extensions
 		{
 			for (int n = 0; n < Count; n++) Stream.WriteByte(Byte);
 		}
+
+		static public void WriteVariableUintBit8Extends(this Stream Stream, uint Value)
+		{
+			while (Value != 0)
+			{
+				byte Byte = (byte)(Value & 0x7F);
+				Value >>= 7;
+				if (Value != 0) Byte |= 0x80;
+				Stream.WriteByte(Byte);
+			}
+		}
+
+		static public void WriteVariableUintBit8ExtendsArray(this Stream Stream, params uint[] Values)
+		{
+			foreach (var Value in Values)
+			{
+				Stream.WriteVariableUintBit8Extends(Value);
+			}
+		}
+
+		static public uint ReadVariableUintBit8Extends(this Stream Stream)
+		{
+			byte c; uint v = 0;
+			int shift = 0;
+			do
+			{
+				c = (byte)Stream.ReadByte();
+				v |= (uint)(((uint)c & 0x7F) << shift);
+				shift += 7;
+			} while ((c & 0x80) != 0);
+			return v;
+		}
+
+		static public uint[] ReadVariableUintBit8ExtendsArray(this Stream Stream, int Count)
+		{
+			uint[] Array = new uint[Count];
+			for (int n = 0; n < Count; n++) Array[n] = Stream.ReadVariableUintBit8Extends();
+			return Array;
+		}
+
 	}
 }
