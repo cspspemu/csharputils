@@ -53,10 +53,12 @@
     <Compile Include="ArrayEqualityComparer.cs" />
     <Compile Include="AsyncTask.cs" />
     <Compile Include="ColorUtils.cs" />
+    <Compile Include="Compression\Huffman.cs" />
     <Compile Include="Extensions\BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
+    <Compile Include="Extensions\BitmapExtension.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Fastcgi\Http\FastcgiHttpServer.cs" />
     <Compile Include="Fastcgi\Http\HttpFile.cs" />

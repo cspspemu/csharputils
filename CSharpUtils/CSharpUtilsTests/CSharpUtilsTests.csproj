@@ -59,6 +59,7 @@
     <Compile Include="Http\HttpHeaderTest.cs" />
     <Compile Include="Http\HttpUtilsTest.cs" />
     <Compile Include="Http\MultipartDecoderTest.cs" />
+    <Compile Include="Compression\HuffmanTest.cs" />
     <Compile Include="MemoryFileSystemTest.cs" />
     <Compile Include="SliceStreamTest.cs" />
     <Compile Include="Streams\StreamChunker2Test.cs" />
@@ -86,6 +87,10 @@
     <Compile Include="ZipArchiveTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\svn.translations.soywiz.com\edelweiss\chsarp\Ethornell\EthornellUtils\EthornellUtils.csproj">
+      <Project>{7E09E386-6FA8-4FFE-A16D-D2329ACD262A}</Project>
+      <Name>EthornellUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
       <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
       <Name>CSharpUtils</Name>

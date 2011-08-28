@@ -8,7 +8,7 @@ namespace CSharpUtils
 {
 	public class ColorUtils
 	{
-		static public void InternalSum(ref int R, ref int G, ref int B, ref int A, params Color[] Colors)
+		static public void InternalAdd(ref int R, ref int G, ref int B, ref int A, params Color[] Colors)
 		{
 			foreach (var Color in Colors)
 			{
@@ -23,7 +23,7 @@ namespace CSharpUtils
 		{
 			int R = 0, G = 0, B = 0, A = 0;
 			int L = Colors.Length;
-			InternalSum(ref R, ref G, ref B, ref A, Colors);
+			InternalAdd(ref R, ref G, ref B, ref A, Colors);
 			if (L == 0) L = 1;
 			return Color.FromArgb(
 				(byte)(A / L),
@@ -33,11 +33,21 @@ namespace CSharpUtils
 			);
 		}
 
-		static public Color Sum(params Color[] Colors)
+		static public Color Add(params Color[] Colors)
 		{
 			int R = 0, G = 0, B = 0, A = 0;
-			InternalSum(ref R, ref G, ref B, ref A, Colors);
+			InternalAdd(ref R, ref G, ref B, ref A, Colors);
 			return Color.FromArgb((byte)A, (byte)R, (byte)G, (byte)B);
+		}
+
+		static public Color Substract(Color ColorLeft, Color ColorRight)
+		{
+			return Color.FromArgb(
+				(byte)(ColorLeft.A - ColorRight.A),
+				(byte)(ColorLeft.R - ColorRight.R),
+				(byte)(ColorLeft.G - ColorRight.G),
+				(byte)(ColorLeft.B - ColorRight.B)
+			);
 		}
 
 		static public Color Average(Bitmap Bitmap)
