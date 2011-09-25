@@ -68,6 +68,7 @@
     <Compile Include="Fastcgi\Http\HttpFile.cs" />
     <Compile Include="Fastcgi\Http\HttpRequest.cs" />
     <Compile Include="Fastcgi\Http\UrlsHandler.cs" />
+    <Compile Include="Getopt\Getopt.cs" />
     <Compile Include="Html\HtmlUtils.cs" />
     <Compile Include="Http\HttpHeader.cs" />
     <Compile Include="Http\HttpHeaderList.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="Process\ProcessBase.cs" />
     <Compile Include="Process\RunDelegate.cs" />
     <Compile Include="Process\State.cs" />
+    <Compile Include="Streams\FilterStream.cs" />
     <Compile Include="Streams\ProxyStream.cs" />
     <Compile Include="Streams\SliceStream.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocatorStream.cs" />

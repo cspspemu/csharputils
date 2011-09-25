@@ -248,13 +248,15 @@ namespace CSharpUtils.Extensions
 		public static void CopyToFast(this Stream FromStream, Stream ToStream)
 		{
 			/// TODO: Create a buffer and reuse it once for each thread.
-			FromStream.CopyTo(ToStream, 2 * 1024 * 1024);
+            var BufferSize = Math.Min((int)FromStream.Length, 2 * 1024 * 1024);
+
+            FromStream.CopyTo(ToStream, BufferSize);
 		}
 #endif
 
 		public static Stream CopyToFile(this Stream Stream, String FileName)
 		{
-			using (var OutputFile = File.OpenWrite(FileName))
+			using (var OutputFile = File.Open(FileName, FileMode.Create, FileAccess.Write))
 			{
 				Stream.CopyToFast(OutputFile);
 			}
