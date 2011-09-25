@@ -144,6 +144,13 @@ namespace CSharpUtils.Extensions
 			return MinItem;
 		}
 
+		public static T[] ToArray2<T>(this IEnumerable<T> Items)
+		{
+			List<T> ListItems = new List<T>();
+			foreach (var Item in Items) ListItems.Add(Item);
+			return ListItems.ToArray();
+		}
+
 		/*
 		public static T ProcessNewObject<T>(T Object, Action<T> Callback)
 		{
