@@ -345,5 +345,14 @@ namespace CSharpUtils.Extensions
 			}
 		}
 
+        static public SliceStream SliceWithLength(this Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
+        {
+            return SliceStream.CreateWithLength(BaseStream, ThisStart, ThisLength, CanWrite);
+        }
+
+        static public SliceStream SliceWithBounds(this Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
+        {
+            return SliceStream.CreateWithBounds(BaseStream, LowerBound, UpperBound, CanWrite);
+        }
 	}
 }
