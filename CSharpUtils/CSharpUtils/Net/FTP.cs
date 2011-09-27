@@ -853,7 +853,7 @@ namespace CSharpUtils.Net
 			Byte[] bytes = new Byte[512];
 			string file_list = "";
 			long bytesgot = 0;
-			int msecs_passed = 0;
+			//int msecs_passed = 0;
 			ArrayList list = new ArrayList();
 
 			Connect();

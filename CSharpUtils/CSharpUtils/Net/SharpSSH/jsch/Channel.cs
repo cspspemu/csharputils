@@ -177,7 +177,7 @@ namespace Tamir.SharpSsh.jsch
 					try {
 						System.Threading.Thread.Sleep(50);
 					}
-					catch(Exception ee)
+					catch(Exception)
 					{
 					}
 					retry--;
@@ -303,7 +303,7 @@ namespace Tamir.SharpSsh.jsch
 				//    if(io.outs!=null)
 				io.put(foo, s, l);
 			}
-			catch(NullReferenceException e){}
+			catch(NullReferenceException){}
 		}
 		internal virtual void write_ext(byte[] foo, int s, int l)  
 		{
@@ -312,7 +312,7 @@ namespace Tamir.SharpSsh.jsch
 				//    if(io.out_ext!=null)
 				io.put_ext(foo, s, l);
 			}
-			catch(NullReferenceException e){}
+			catch(NullReferenceException){}
 		}
 
 		internal virtual void eof_remote()
@@ -326,8 +326,8 @@ namespace Tamir.SharpSsh.jsch
 					io.outs=null;
 				}
 			}
-			catch(NullReferenceException e){}
-			catch(IOException e){}
+			catch(NullReferenceException){}
+			catch(IOException){}
 		}
 
 		internal virtual void eof()
@@ -347,7 +347,7 @@ namespace Tamir.SharpSsh.jsch
 				buf.WriteInt(getRecipient());
 				session.write(packet);
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//System.Out.println("Channel.eof");
 				//e.printStackTrace();
@@ -407,7 +407,7 @@ namespace Tamir.SharpSsh.jsch
 				buf.WriteInt(getRecipient());
 				session.write(packet);
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//e.printStackTrace();
 			}
@@ -433,7 +433,7 @@ namespace Tamir.SharpSsh.jsch
 							channels[count++]=c;
 						}
 					}
-					catch(Exception e)
+					catch(Exception)
 					{
 					}
 				} 
@@ -474,7 +474,7 @@ namespace Tamir.SharpSsh.jsch
 					io.close();
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//e.printStackTrace();
 			}

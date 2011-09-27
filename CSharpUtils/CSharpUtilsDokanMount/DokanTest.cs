@@ -15,7 +15,7 @@ namespace CSharpUtilsDokanMount
 	{
 		public void TestDokanTest()
 		{
-			for (int retries = 0; retries < 2; retries++)
+			//for (int retries = 0; retries < 2; retries++)
 			{
 				DokanOptions opt = new DokanOptions();
 				var FileSystem = new LocalFileSystem(@"C:\temp\temp2");
@@ -63,7 +63,7 @@ namespace CSharpUtilsDokanMount
 						break;
 				}
 				Console.ReadKey();
-				break;
+				//break;
 			}
 		}
 	}

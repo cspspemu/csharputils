@@ -60,7 +60,7 @@ namespace Tamir.SharpSsh.jsch
 
 		private byte[] I_C; // the payload of the client's SSH_MSG_KEXINIT
 		private byte[] I_S; // the payload of the server's SSH_MSG_KEXINIT
-		private byte[] K_S; // the host key
+		//private byte[] K_S; // the host key
 
 		private byte[] session_id;
 
@@ -154,7 +154,7 @@ namespace Tamir.SharpSsh.jsch
 			try	
 			{
 				int i, j;
-				int pad=0;
+				//int pad=0;
 
 				if(proxy==null)
 				{
@@ -339,7 +339,7 @@ namespace Tamir.SharpSsh.jsch
 					}
 				}
 
-			loop:
+			//loop:
 				while(true)
 				{
 
@@ -380,7 +380,7 @@ namespace Tamir.SharpSsh.jsch
 								auth=us.start(this);
 								auth_cancel=false;
 							}
-							catch(JSchAuthCancelException ee)
+							catch(JSchAuthCancelException)
 							{
 								//System.Console.WriteLine(ee);
 								auth_cancel=true;
@@ -440,7 +440,7 @@ namespace Tamir.SharpSsh.jsch
 						write(packet);
 						disconnect();
 					}
-					catch(Exception ee)
+					catch(Exception)
 					{
 					}
 				}
@@ -991,10 +991,10 @@ namespace Tamir.SharpSsh.jsch
 							deflater = (Compression)System.Activator.CreateInstance(System.Type.GetType(foo));
 							int level=6;
 							try{ level=System.Convert.ToInt32(getConfig("compression_level"));}
-							catch(Exception ee){ }
+							catch(Exception){ }
 							deflater.init(Compression.DEFLATER, level);
 						}
-						catch(Exception ee)
+						catch(Exception)
 						{
 							System.Console.Error.WriteLine(foo+" isn't accessible.");
 						}
@@ -1017,7 +1017,7 @@ namespace Tamir.SharpSsh.jsch
 							inflater = (Compression)System.Activator.CreateInstance(System.Type.GetType(foo));
 							inflater.init(Compression.INFLATER, 0);
 						}
-						catch(Exception ee)
+						catch(Exception)
 						{
 							System.Console.Error.WriteLine(foo+" isn't accessible.");
 						}
@@ -1041,7 +1041,7 @@ namespace Tamir.SharpSsh.jsch
 				if(in_kex)
 				{
 					try { System.Threading.Thread.Sleep(10); }
-					catch(ThreadInterruptedException e){};
+					catch(ThreadInterruptedException){};
 					continue;
 				}
 				lock(c)
@@ -1100,7 +1100,7 @@ namespace Tamir.SharpSsh.jsch
 				}
 
 				try { System.Threading.Thread.Sleep(100); }
-				catch(ThreadInterruptedException e){};
+				catch(ThreadInterruptedException){};
 			}
 			_write(packet);
 		}
@@ -1133,7 +1133,7 @@ namespace Tamir.SharpSsh.jsch
 					break;
 				}
 				try { System.Threading.Thread.Sleep(10); }
-				catch(ThreadInterruptedException e){};
+				catch(ThreadInterruptedException){};
 			}
 			_write(packet);
 		}
@@ -1211,11 +1211,11 @@ namespace Tamir.SharpSsh.jsch
 							{
 								channel.write(foo, start[0], length[0]);
 							}
-							catch(Exception e)
+							catch(Exception)
 							{
 								//System.Console.WriteLine(e);
 								try{channel.disconnect();}
-								catch(Exception ee){}
+								catch(Exception){}
 								break;
 							}
 							int len=length[0];
@@ -1443,7 +1443,7 @@ namespace Tamir.SharpSsh.jsch
 					}
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//System.Console.WriteLine("# Session.run");
 				//e.printStackTrace();
@@ -1452,12 +1452,12 @@ namespace Tamir.SharpSsh.jsch
 			{
 				disconnect();
 			}
-			catch(NullReferenceException e)
+			catch(NullReferenceException)
 			{
 				//System.Console.WriteLine("@1");
 				//e.printStackTrace();
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//System.Console.WriteLine("@2");
 				//e.printStackTrace();
@@ -1526,7 +1526,7 @@ namespace Tamir.SharpSsh.jsch
 					proxy=null;
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//      e.printStackTrace();
 			}
@@ -1633,7 +1633,7 @@ namespace Tamir.SharpSsh.jsch
 
 				grr.setThread(System.Threading.Thread.CurrentThread);
 				try { System.Threading.Thread.Sleep(10000); }
-				catch(Exception e)
+				catch(Exception)
 				{
 				}
 				int reply=grr.getReply();

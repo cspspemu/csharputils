@@ -251,7 +251,7 @@ namespace Tamir.SharpSsh.jsch
 					this.sock.Connect(ep);
 					*/
 					socket = new Socket(
-						new IPEndPoint(Dns.GetHostByName(host).AddressList[0], port).AddressFamily,
+						new IPEndPoint(Dns.GetHostEntry(host).AddressList[0], port).AddressFamily,
 						SocketType.Stream,
 						ProtocolType.Tcp
 					);
@@ -279,7 +279,7 @@ namespace Tamir.SharpSsh.jsch
 				tmp.Join(timeout);
 				message="timeout: ";
 			}
-			catch(ThreadInterruptedException eee)
+			catch(ThreadInterruptedException)
 			{
 			}
 			if(sockp[0]!=null && sockp[0].Connected)
@@ -320,7 +320,7 @@ namespace Tamir.SharpSsh.jsch
 				sockp[0]=null;
 				try
 				{
-					var SocketEndPoint = new IPEndPoint(Dns.GetHostByName(_host).AddressList[0], _port);
+					var SocketEndPoint = new IPEndPoint(Dns.GetHostEntry(_host).AddressList[0], _port);
 					sockp[0] = new Socket(
 						SocketEndPoint.AddressFamily,
 						SocketType.Stream,
@@ -337,7 +337,7 @@ namespace Tamir.SharpSsh.jsch
 						{
 							sockp[0].Close();
 						}
-						catch(Exception eee){}
+						catch(Exception){}
 					}
 					sockp[0]=null;
 				}

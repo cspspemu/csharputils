@@ -32,7 +32,7 @@ namespace Tamir.SharpSsh.jsch
 
 					port = System.Convert.ToInt32(proxy_host.Substring(proxy_host.IndexOf(':') + 1));
 				}
-				catch(Exception e)
+				catch(Exception)
 				{
 				}
 			}
@@ -110,7 +110,7 @@ namespace Tamir.SharpSsh.jsch
 					code = System.Convert.ToInt32(response.Substring(foo + 1, bar));
 					reason=response.Substring(bar+1);
 				}
-				catch(Exception e)
+				catch(Exception)
 				{
 				}
 				if(code!=200)
@@ -148,7 +148,7 @@ namespace Tamir.SharpSsh.jsch
 			catch(Exception e)
 			{
 				try{ if(socket!=null)socket.Close(); }
-				catch(Exception eee)
+				catch(Exception)
 				{
 				}
 				String message="ProxyHTTP: "+e.ToString();
@@ -166,7 +166,7 @@ namespace Tamir.SharpSsh.jsch
 				if(outs!=null)outs.close();
 				if(socket!=null)socket.Close();
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 			}
 			ins=null;

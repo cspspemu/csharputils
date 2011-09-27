@@ -96,7 +96,6 @@
     <Compile Include="Net\SharpSSH\jsch\ChannelSftp.Commands.cs" />
     <Compile Include="ProduceConsumeBuffer.cs" />
     <Compile Include="ArrayUtils.cs" />
-    <Compile Include="Compression\Lzx.cs" />
     <Compile Include="ConvertEx.cs" />
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="Endianness.cs" />

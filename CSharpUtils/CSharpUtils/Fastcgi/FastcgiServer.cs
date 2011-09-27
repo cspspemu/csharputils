@@ -59,7 +59,8 @@ namespace CSharpUtils.Fastcgi
 			ServerSocket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
 
 			//EndPoint EndPoint = (EndPoint)Assembly.LoadWithPartialName("Mono.Posix").GetType("Mono.Unix.UnixEndPoint").GetConstructor(new Type[] { typeof(String) }).Invoke(null, new object[] { UnixEndPoint });
-			EndPoint EndPoint = (EndPoint)Assembly.LoadWithPartialName("Mono.Posix").GetType("Mono.Unix.UnixEndPoint").GetConstructor(new Type[] { typeof(String) }).Invoke(new object[] { UnixEndPoint });
+			//EndPoint EndPoint = (EndPoint)Assembly.LoadWithPartialName("Mono.Posix").GetType("Mono.Unix.UnixEndPoint").GetConstructor(new Type[] { typeof(String) }).Invoke(new object[] { UnixEndPoint });
+			EndPoint EndPoint = (EndPoint)Assembly.Load("Mono.Posix").GetType("Mono.Unix.UnixEndPoint").GetConstructor(new Type[] { typeof(String) }).Invoke(new object[] { UnixEndPoint });
 
 			Console.WriteLine(EndPoint);
 

@@ -105,16 +105,16 @@ namespace Org.Mentalis.Security.Ssl {
 			m_Client = socket;
 			m_Active = true;
 		}
-        /// <summary> 
-        /// Create a new SecureTcpClient based on an existing one.
-        /// </summary>
-        /// <param name="client">The SecureTcpClient to copy from.</param>
-        public SecureTcpClient(SecureTcpClient client) : base() {
-            m_Client = client.Client;
-            m_Active = client.Active;
-            m_CleanedUp = client.CleanedUp;
-            m_DataStream = client.DataStream;
-        } 
+		/// <summary> 
+		/// Create a new SecureTcpClient based on an existing one.
+		/// </summary>
+		/// <param name="client">The SecureTcpClient to copy from.</param>
+		public SecureTcpClient(SecureTcpClient client) : base() {
+			m_Client = client.Client;
+			m_Active = client.Active;
+			m_CleanedUp = client.CleanedUp;
+			m_DataStream = client.DataStream;
+		} 
 		/// <summary>
 		/// Connects the client to a remote TCP host using the specified remote network endpoint.
 		/// </summary>
@@ -156,7 +156,7 @@ namespace Org.Mentalis.Security.Ssl {
 			if (hostname == null)
 				throw new ArgumentNullException();
 
-			Connect(Dns.GetHostByName(hostname).AddressList[0], port);
+			Connect(Dns.GetHostEntry(hostname).AddressList[0], port);
 		}
 		/// <summary>
 		/// Returns the stream used to send and receive data.

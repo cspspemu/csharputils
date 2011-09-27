@@ -46,7 +46,7 @@ namespace Tamir.SharpSsh.jsch
     public partial class ChannelSftp : ChannelSession
     {
         private static byte SSH_FXP_INIT = 1;
-        private static byte SSH_FXP_VERSION = 2;
+        //private static byte SSH_FXP_VERSION = 2;
         private static byte SSH_FXP_OPEN = 3;
         private static byte SSH_FXP_CLOSE = 4;
         private static byte SSH_FXP_READ = 5;
@@ -54,7 +54,7 @@ namespace Tamir.SharpSsh.jsch
         private static byte SSH_FXP_LSTAT = 7;
         private static byte SSH_FXP_FSTAT = 8;
         private static byte SSH_FXP_SETSTAT = 9;
-        private static byte SSH_FXP_FSETSTAT = 10;
+        //private static byte SSH_FXP_FSETSTAT = 10;
         private static byte SSH_FXP_OPENDIR = 11;
         private static byte SSH_FXP_READDIR = 12;
         private static byte SSH_FXP_REMOVE = 13;
@@ -70,8 +70,8 @@ namespace Tamir.SharpSsh.jsch
         private static byte SSH_FXP_DATA = 103;
         private static byte SSH_FXP_NAME = 104;
         private static byte SSH_FXP_ATTRS = 105;
-        private static byte SSH_FXP_EXTENDED = (byte)200;
-        private static byte SSH_FXP_EXTENDED_REPLY = (byte)201;
+        //private static byte SSH_FXP_EXTENDED = (byte)200;
+        //private static byte SSH_FXP_EXTENDED_REPLY = (byte)201;
 
         // pflags
         private static int SSH_FXF_READ = 0x00000001;
@@ -79,7 +79,7 @@ namespace Tamir.SharpSsh.jsch
         //private static  int SSH_FXF_APPEND=         0x00000004;
         private static int SSH_FXF_CREAT = 0x00000008;
         private static int SSH_FXF_TRUNC = 0x00000010;
-        private static int SSH_FXF_EXCL = 0x00000020;
+        //private static int SSH_FXF_EXCL = 0x00000020;
 
         //private static  int SSH_FILEXFER_ATTR_SIZE=         0x00000001;
         //private static  int SSH_FILEXFER_ATTR_UIDGID=       0x00000002;
@@ -566,7 +566,7 @@ namespace Tamir.SharpSsh.jsch
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
             return v;
@@ -885,7 +885,7 @@ namespace Tamir.SharpSsh.jsch
                 closed = true;
                 if (monitor != null) monitor.end();
                 try { sftp._sendCLOSE(handle, header); }
-                catch (Exception e) { throw new System.IO.IOException("error"); }
+                catch (Exception) { throw new System.IO.IOException("error"); }
             }
         }
     }

@@ -75,7 +75,7 @@ namespace Tamir.SharpSsh.jsch
 			IPAddress addr;
 			try
 			{
-				addr = Dns.GetHostByName(address).AddressList[0];
+				addr = Dns.GetHostEntry(address).AddressList[0];
 			}
 			catch(Exception)
 			{
@@ -154,7 +154,7 @@ namespace Tamir.SharpSsh.jsch
 			this.rport=rport;
 			try
 			{
-				boundaddress = Dns.GetHostByName(address).AddressList[0];
+				boundaddress = Dns.GetHostEntry(address).AddressList[0];
 				ss=(factory==null) ?
 					new TcpListener(boundaddress, lport) :
 					factory.createServerSocket(lport, 0, boundaddress);

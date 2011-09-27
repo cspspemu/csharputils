@@ -150,19 +150,19 @@ namespace Tamir.SharpSsh.jsch
 				if(ins!=null && !in_dontclose) ins.Close();
 				ins=null;
 			}
-			catch(Exception ee){}
+			catch(Exception){}
 			try
 			{
 				if(outs!=null && !out_dontclose) outs.Close();
 				outs=null;
 			}
-			catch(Exception ee){}
+			catch(Exception){}
 			try
 			{
 				if(outs_ext!=null && !outs_ext_dontclose) outs_ext.Close();
 				outs_ext=null;
 			}
-			catch(Exception ee){}
+			catch(Exception){}
 		}
 
 //		public void finalize()

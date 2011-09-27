@@ -11,8 +11,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 		Node _end = null;
 		CountType _length = 0;
 		IComparer<Type> Comparer = null;
-		//bool allowDuplicates = false;
-		const bool AllowDuplicates = false;
+		bool AllowDuplicates = false;
+		//const bool AllowDuplicates = false;
 
 		public RedBlackTreeWithStats()
 		{

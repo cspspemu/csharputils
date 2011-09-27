@@ -62,7 +62,7 @@ namespace Tamir.SharpSsh.jsch
 		private byte[] iqmp_array;
 		 
 		//  private String algname="ssh-dss";
-		private String algname="ssh-rsa";
+		//private String algname="ssh-rsa";
 
 		private const int ERROR=0;
 		private const int RSA=1;

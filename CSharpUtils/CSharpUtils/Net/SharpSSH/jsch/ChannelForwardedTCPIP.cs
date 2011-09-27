@@ -78,7 +78,7 @@ namespace Tamir.SharpSsh.jsch
 
 					if (factory == null)
 					{
-						var ep = new IPEndPoint(Dns.GetHostByName(target).AddressList[0], lport);
+						var ep = new IPEndPoint(Dns.GetHostEntry(target).AddressList[0], lport);
 						socket = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 						socket.Connect(ep);
 					}
@@ -130,7 +130,7 @@ namespace Tamir.SharpSsh.jsch
 					session.write(packet, this, i);
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//System.out.println(e);
 			}
@@ -284,7 +284,7 @@ namespace Tamir.SharpSsh.jsch
 				buf.WriteInt(rport);
 				session.write(packet);
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				//    throw new JSchException(e.toString());
 			}

@@ -177,7 +177,7 @@ namespace CSharpUtils.VirtualFileSystem
 				FillFileInformationFromFileSystemEntry(fileinfo, FileSystemEntry);
 				return 0;
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				return -1;
 				//return 0;

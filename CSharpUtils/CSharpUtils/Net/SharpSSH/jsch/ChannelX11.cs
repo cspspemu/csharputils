@@ -116,8 +116,8 @@ namespace Tamir.SharpSsh.jsch
 
 			type=Util.getBytes("x11");
 			try
-			{ 
-				IPEndPoint ep = new IPEndPoint(Dns.GetHostByName(host).AddressList[0], port);		
+			{
+				IPEndPoint ep = new IPEndPoint(Dns.GetHostEntry(host).AddressList[0], port);		
 				socket=new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 				socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, 1);
 				socket.Connect(ep);

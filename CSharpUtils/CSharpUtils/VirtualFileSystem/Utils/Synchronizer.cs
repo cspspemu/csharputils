@@ -210,7 +210,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			if (_SynchronizationMode.HasFlag(SynchronizationMode.DeleteOldFiles))
 			{
 				throw (new NotImplementedException());
-
+				/*
 				foreach (var PairDestinationFile in DestinationFiles)
 				{
 					CheckCanceling();
@@ -224,6 +224,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 						FilesToRemove.AddLast(DestinationFile);
 					}
 				}
+				*/
 			}
 
 			int step = 0;

@@ -63,7 +63,7 @@ namespace Tamir.SharpSsh.jsch.jce
 				rand.GetBytes(tmp);
 				Array.Copy(tmp, 0, foo, start, len);
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				times++;
 				Console.WriteLine(times+") Array.Copy(tmp={0}, 0, foo={1}, {2}, {3}", tmp.Length, foo.Length, start, len);
