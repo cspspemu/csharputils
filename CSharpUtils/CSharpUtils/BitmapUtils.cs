@@ -38,7 +38,15 @@ namespace CSharpUtils
 
 		unsafe static public void TransferChannelsDataLinear(Bitmap Bitmap, byte[] NewData, Direction Direction, params BitmapChannel[] Channels)
 		{
+			TransferChannelsDataLinear(Bitmap.GetFullRectangle(), Bitmap, NewData, Direction, Channels);
+		}
+
+		unsafe static public void TransferChannelsDataLinear(Rectangle Rectangle, Bitmap Bitmap, byte[] NewData, Direction Direction, params BitmapChannel[] Channels)
+		{
 			int WidthHeight = Bitmap.Width * Bitmap.Height;
+			var FullRectangle = Bitmap.GetFullRectangle();
+			if (!FullRectangle.Contains(Rectangle.Location)) throw(new InvalidProgramException());
+			if (!FullRectangle.Contains(Rectangle.Location + Rectangle.Size - new Size(1, 1))) throw (new InvalidProgramException());
 
 			int NumberOfChannels = 1;
 			foreach (var Channel in Channels)
@@ -61,19 +69,25 @@ namespace CSharpUtils
 					Stride = Width;
 				}
 
+				int RectangleTop = Rectangle.Top;
+				int RectangleBottom = Rectangle.Bottom;
+				int RectangleLeft = Rectangle.Left;
+				int RectangleRight = Rectangle.Right;
+
 				fixed (byte* OutputPtrStart = &NewData[0])
 				{
 					byte* OutputPtr = OutputPtrStart;
 					foreach (var Channel in Channels)
 					{
-						for (int y = 0; y < Height; y++)
+						for (int y = RectangleTop; y < RectangleBottom; y++)
 						{
 							byte* InputPtr = BitmapDataScan0 + Stride * y;
 							if (NumberOfChannels != 1)
 							{
 								InputPtr = InputPtr + (int)Channel;
 							}
-							for (int x = 0; x < Width; x++)
+							InputPtr += NumberOfChannels * RectangleLeft;
+							for (int x = RectangleLeft; x < RectangleRight; x++)
 							{
 								if (Direction == Direction.FromBitmapToData)
 								{

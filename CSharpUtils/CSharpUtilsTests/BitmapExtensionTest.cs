@@ -58,6 +58,19 @@ namespace CSharpUtilsTests
 		}
 
 		[TestMethod()]
+		unsafe public void GetIndexedDataLinearRectangleTest()
+		{
+			Bitmap Bitmap = new Bitmap(3, 3, PixelFormat.Format8bppIndexed);
+
+			Bitmap.SetIndexedDataLinear(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
+
+			Assert.AreEqual(
+				"04050708",
+				Bitmap.GetIndexedDataLinear(new Rectangle(1, 1, 2, 2)).ToHexString()
+			);
+		}
+
+		[TestMethod()]
 		unsafe public void SetIndexedDataLinearTest()
 		{
 			Bitmap Bitmap = new Bitmap(3, 3, PixelFormat.Format8bppIndexed);

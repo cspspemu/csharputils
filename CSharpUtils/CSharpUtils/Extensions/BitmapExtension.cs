@@ -24,26 +24,44 @@ namespace CSharpUtils.Extensions
 
 		unsafe static public byte[] GetIndexedDataLinear(this Bitmap Bitmap)
 		{
-			var NewData = new byte[Bitmap.Width * Bitmap.Height];
-			BitmapUtils.TransferChannelsDataLinear(Bitmap, NewData, BitmapUtils.Direction.FromBitmapToData, BitmapChannel.Indexed);
-			return NewData;
+			return Bitmap.GetChannelsDataLinear(BitmapChannel.Indexed);
 		}
 
-		unsafe static public byte[] GetChannelsDataLinear(this Bitmap Bitmap, params BitmapChannel[] Channels)
+		unsafe static public byte[] GetIndexedDataLinear(this Bitmap Bitmap, Rectangle Rectangle)
 		{
-			var NewData = new byte[Bitmap.Width * Bitmap.Height * Channels.Length];
-			BitmapUtils.TransferChannelsDataLinear(Bitmap, NewData, BitmapUtils.Direction.FromBitmapToData, Channels);
-			return NewData;
+			return Bitmap.GetChannelsDataLinear(Rectangle, BitmapChannel.Indexed);
 		}
 
 		unsafe static public void SetIndexedDataLinear(this Bitmap Bitmap, byte[] NewData)
 		{
-			BitmapUtils.TransferChannelsDataLinear(Bitmap, NewData, BitmapUtils.Direction.FromDataToBitmap, BitmapChannel.Indexed);
+			Bitmap.SetChannelsDataLinear(NewData, BitmapChannel.Indexed);
+		}
+
+		unsafe static public void SetIndexedDataLinear(this Bitmap Bitmap, Rectangle Rectangle, byte[] NewData)
+		{
+			Bitmap.SetChannelsDataLinear(NewData, Rectangle, BitmapChannel.Indexed);
+		}
+
+		unsafe static public byte[] GetChannelsDataLinear(this Bitmap Bitmap, params BitmapChannel[] Channels)
+		{
+			return Bitmap.GetChannelsDataLinear(Bitmap.GetFullRectangle(), Channels);
+		}
+
+		unsafe static public byte[] GetChannelsDataLinear(this Bitmap Bitmap, Rectangle Rectangle, params BitmapChannel[] Channels)
+		{
+			var NewData = new byte[Rectangle.Width * Rectangle.Height * Channels.Length];
+			BitmapUtils.TransferChannelsDataLinear(Rectangle, Bitmap, NewData, BitmapUtils.Direction.FromBitmapToData, Channels);
+			return NewData;
 		}
 
 		unsafe static public void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, params BitmapChannel[] Channels)
 		{
-			BitmapUtils.TransferChannelsDataLinear(Bitmap, NewData, BitmapUtils.Direction.FromDataToBitmap, Channels);
+			Bitmap.SetChannelsDataLinear(NewData, Bitmap.GetFullRectangle(), Channels);
+		}
+
+		unsafe static public void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, Rectangle Rectangle, params BitmapChannel[] Channels)
+		{
+			BitmapUtils.TransferChannelsDataLinear(Rectangle, Bitmap, NewData, BitmapUtils.Direction.FromDataToBitmap, Channels);
 		}
 
 		unsafe static public byte[] GetChannelsDataInterleaved(this Bitmap Bitmap, params BitmapChannel[] Channels)
@@ -86,5 +104,9 @@ namespace CSharpUtils.Extensions
 			}
 		}
 
+		static public Rectangle GetFullRectangle(this Bitmap Bitmap)
+		{
+			return new Rectangle(0, 0, Bitmap.Width, Bitmap.Height);
+		}
 	}
 }
