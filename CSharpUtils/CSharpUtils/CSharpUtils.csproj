@@ -55,6 +55,9 @@
     <Compile Include="ColorUtils.cs" />
     <Compile Include="Compression\Huffman.cs" />
     <Compile Include="Compression\Lz\LzBuffer.cs" />
+    <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStats.cs" />
+    <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsNode.cs" />
+    <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsRange.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />

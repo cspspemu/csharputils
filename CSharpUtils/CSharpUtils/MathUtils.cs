@@ -16,6 +16,13 @@ namespace CSharpUtils
 			return Value;
 		}
 
+		static public void Swap<Type>(ref Type A, ref Type B)
+		{
+			Type T = A;
+			A = B;
+			B = T;
+		}
+
 		/// <summary>
 		/// Returns the upper minimum value that will be divisible by AlignValue.
 		/// </summary>

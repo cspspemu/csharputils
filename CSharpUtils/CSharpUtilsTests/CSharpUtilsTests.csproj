@@ -64,6 +64,7 @@
     <Compile Include="ListExtensionsTest.cs" />
     <Compile Include="Compression\LzBufferTest.cs" />
     <Compile Include="MemoryFileSystemTest.cs" />
+    <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsTest.cs" />
     <Compile Include="SliceStreamTest.cs" />
     <Compile Include="Streams\StreamChunker2Test.cs" />
     <Compile Include="Streams\StreamChunkerTest.cs" />
