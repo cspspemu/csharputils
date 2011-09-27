@@ -81,6 +81,7 @@
     <Compile Include="Http\MultipartDecoder.cs" />
     <Compile Include="Http\Server\HttpServer.cs" />
     <Compile Include="LanguageUtils.cs" />
+    <Compile Include="Streams\ConcatStream.cs" />
     <Compile Include="Streams\ConsumerMemoryStream.cs" />
     <Compile Include="Fastcgi\FascgiRequestInputStream.cs" />
     <Compile Include="Fastcgi\FascgiResponseOutputStream.cs" />

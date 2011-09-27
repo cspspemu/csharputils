@@ -248,9 +248,9 @@ namespace CSharpUtils.Extensions
 		public static void CopyToFast(this Stream FromStream, Stream ToStream)
 		{
 			/// TODO: Create a buffer and reuse it once for each thread.
-            var BufferSize = Math.Min((int)FromStream.Length, 2 * 1024 * 1024);
+			var BufferSize = Math.Min((int)FromStream.Length, 2 * 1024 * 1024);
 
-            FromStream.CopyTo(ToStream, BufferSize);
+			FromStream.CopyTo(ToStream, BufferSize);
 		}
 #endif
 
@@ -347,14 +347,19 @@ namespace CSharpUtils.Extensions
 			}
 		}
 
-        static public SliceStream SliceWithLength(this Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
-        {
-            return SliceStream.CreateWithLength(BaseStream, ThisStart, ThisLength, CanWrite);
-        }
+		static public SliceStream SliceWithLength(this Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
+		{
+			return SliceStream.CreateWithLength(BaseStream, ThisStart, ThisLength, CanWrite);
+		}
 
-        static public SliceStream SliceWithBounds(this Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
-        {
-            return SliceStream.CreateWithBounds(BaseStream, LowerBound, UpperBound, CanWrite);
-        }
+		static public SliceStream SliceWithBounds(this Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
+		{
+			return SliceStream.CreateWithBounds(BaseStream, LowerBound, UpperBound, CanWrite);
+		}
+
+		static public ConcatStream Concat(this Stream BaseStream, Stream NextStream)
+		{
+			return new ConcatStream(BaseStream, NextStream);
+		}
 	}
 }
