@@ -119,6 +119,13 @@ namespace CSharpUtils.Extensions
 			return Stream;
 		}
 
+		static public Stream WriteBytes(this Stream Stream, byte Byte, int RepeatCount)
+		{
+			var Bytes = Byte.Repeat(RepeatCount);
+			Stream.Write(Bytes, 0, Bytes.Length);
+			return Stream;
+		}
+
 		static public String ReadString(this Stream Stream, int ToRead, Encoding Encoding = null)
 		{
 			return Stream.ReadBytes(ToRead).GetString(Encoding);

@@ -10,6 +10,18 @@ namespace CSharpUtils
 {
 	public class BitmapUtils
 	{
+		static public BitmapChannel[] RGB
+		{
+			get
+			{
+				return new BitmapChannel[] {
+					BitmapChannel.Red,
+					BitmapChannel.Green,
+					BitmapChannel.Blue,
+				};
+			}
+		}
+
 		static public ColorPalette GetColorPalette(int nColors)
 		{
 			// Assume monochrome image.
