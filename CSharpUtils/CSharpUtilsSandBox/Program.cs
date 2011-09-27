@@ -109,10 +109,25 @@ namespace CSharpUtilsSandBox
 			//Stats.DebugValidateTree();
 		}
 
+		static void Test3()
+		{
+			var Stats = (new RedBlackTreeWithStats<int>()).Clone();
+			Stats.Add(1);
+			Stats.Add(2);
+			Stats.Add(3);
+			Console.WriteLine(
+				Stats
+					.Skip(1)
+					.Where(Item => Item >= 3)
+					.Count()
+			);
+		}
+
 		static void Main(string[] args)
 		{
-			Test1();
-			Test2();
+			//Test1();
+			//Test2();
+			Test3();
 			Console.ReadKey();
 		}
 	}

@@ -3,32 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CountType = System.Int32;
+using System.Linq.Expressions;
 
 namespace CSharpUtils.Containers.RedBlackTree
 {
-	public partial class RedBlackTreeWithStats<Type> : ICollection<Type>, ICloneable
+	public partial class RedBlackTreeWithStats<TElement> : ICollection<TElement>, ICloneable, IOrderedQueryable<TElement>, IQueryable<TElement>
 	{
 		Node RootNode = null;
 		CountType _Length = 0;
-		IComparer<Type> Comparer = null;
+		IComparer<TElement> Comparer = null;
 		bool AllowDuplicates = false;
 		//const bool AllowDuplicates = false;
 
 		public RedBlackTreeWithStats()
 		{
-			this.Comparer = Comparer<Type>.Default;
+			this.Comparer = Comparer<TElement>.Default;
 			//this.allowDuplicates = false;
 			_setup();
 		}
 
-		public RedBlackTreeWithStats(IComparer<Type> Comparer, Node _end, int _length)
+		public RedBlackTreeWithStats(IComparer<TElement> Comparer, Node _end, int _length)
 		{
 			this.Comparer = Comparer;
 			this.RootNode = _end;
 			this._Length = _length;
 		}
 
-		public RedBlackTreeWithStats(IComparer<Type> Comparer)
+		public RedBlackTreeWithStats(IComparer<TElement> Comparer)
 		{
 			this.Comparer = Comparer;
 			//this.allowDuplicates = false;
@@ -46,25 +47,25 @@ namespace CSharpUtils.Containers.RedBlackTree
 			return new Node();
 		}
 
-		private Node Allocate(Type n)
+		private Node Allocate(TElement n)
 		{
 			Node node = new Node();
 			node.Value = n;
 			return node;
 		}
 
-		bool _less(Type A, Type B)
+		bool _less(TElement A, TElement B)
 		{
 			return Comparer.Compare(A, B) < 0;
 		}
 
-		private Node _add(Type n)
+		private Node _add(TElement n)
 		{
 			bool added;
 			return _add(n, out added);
 		}
 
-		private Node _add(Type n, out bool added)
+		private Node _add(TElement n, out bool added)
 		{
 			Node result = null;
 			added = true;
@@ -136,7 +137,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 
 
 		// find a node based on an element value
-		public Node _find(Type e)
+		public Node _find(TElement e)
 		{
 			if (AllowDuplicates)
 			{
@@ -207,7 +208,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 *
 		 * Complexity: $(BIGOH log(n))
 		 */
-		Type front
+		TElement front
 		{
 			get {
 				return RootNode.leftmost.value;
@@ -219,14 +220,14 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 *
 		 * Complexity: $(BIGOH log(n))
 		 */
-		Type back
+		TElement back
 		{
 			get {
 				return RootNode.prev.value;
 			}
 		}
 
-		public bool Contains(Type V) {
+		public bool Contains(TElement V) {
 			return _find(V) != null;
 		}
 
@@ -242,7 +243,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 *
 		 * Complexity: $(BIGOH log(n))
 		 */
-		public CountType insert(Type stuff)
+		public CountType insert(TElement stuff)
 		{
 			if (AllowDuplicates)
 			{
@@ -262,7 +263,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 *
 		 * Complexity: $(BIGOH log(n))
 		 */
-		Type removeAny()
+		TElement removeAny()
 		{
 			var n = RootNode.leftmost;
 			var result = n.value;
@@ -358,7 +359,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 * */
 
 		// find the first node where the value is > e
-		private Node _firstGreater(Type e)
+		private Node _firstGreater(TElement e)
 		{
 			// can't use _find, because we cannot return null
 			var cur = RootNode.left;
@@ -378,7 +379,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		}
 
 		// find the first node where the value is >= e
-		private Node _firstGreaterEqual(Type e)
+		private Node _firstGreaterEqual(TElement e)
 		{
 			// can't use _find, because we cannot return null.
 			var cur = RootNode.left;
@@ -405,7 +406,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 *
 		 * Complexity: $(BIGOH log(n))
 		 */
-		Range upperBound(Type e)
+		Range upperBound(TElement e)
 		{
 			return new Range(this, _firstGreater(e), RootNode);
 		}
@@ -416,7 +417,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 *
 		 * Complexity: $(BIGOH log(n))
 		 */
-		Range lowerBound(Type e)
+		Range lowerBound(TElement e)
 		{
 			return new Range(this, RootNode.leftmost, _firstGreaterEqual(e));
 		}
@@ -427,7 +428,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 *
 		 * Complexity: $(BIGOH log(n))
 		 */
-		Range equalRange(Type e)
+		Range equalRange(TElement e)
 		{
 			var beg = _firstGreaterEqual(e);
 			if(beg == RootNode || _less(e, beg.value)) {
@@ -538,7 +539,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			Assert(CalculatedLength == InternalLength);
 		}
 
-		public void Add(Type item)
+		public void Add(TElement item)
 		{
 			insert(item);
 		}
@@ -548,7 +549,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			clear();
 		}
 
-		public void CopyTo(Type[] array, CountType arrayIndex)
+		public void CopyTo(TElement[] array, CountType arrayIndex)
 		{
 			throw new NotImplementedException();
 		}
@@ -563,7 +564,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			get { return false; }
 		}
 
-		public bool Remove(Type item)
+		public bool Remove(TElement item)
 		{
 			Node node = _firstGreaterEqual(item);
 			if (node != null)
@@ -579,24 +580,42 @@ namespace CSharpUtils.Containers.RedBlackTree
 			//throw new NotImplementedException();
 		}
 
-		public IEnumerator<Type> GetEnumerator()
+		public IEnumerator<TElement> GetEnumerator()
 		{
-			return (All as IEnumerable<Type>).GetEnumerator();
+			return (All as IEnumerable<TElement>).GetEnumerator();
 		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
-			return (All as IEnumerable<Type>).GetEnumerator();
+			return (All as IEnumerable<TElement>).GetEnumerator();
 		}
 
-		public RedBlackTreeWithStats<Type> Clone()
+		public RedBlackTreeWithStats<TElement> Clone()
 		{
-			return new RedBlackTreeWithStats<Type>(Comparer, RootNode.Clone(), _Length);
+			return new RedBlackTreeWithStats<TElement>(Comparer, RootNode.Clone(), _Length);
 		}
 
 		object ICloneable.Clone()
 		{
-			return new RedBlackTreeWithStats<Type>(Comparer, RootNode.Clone(), _Length);
+			return new RedBlackTreeWithStats<TElement>(Comparer, RootNode.Clone(), _Length);
+		}
+
+		//private readonly Expression _expression;
+		//private readonly RedBlackTreeWithStatsQueryProvider _provider;
+
+		public System.Type ElementType
+		{
+			get { return All.ElementType; }
+		}
+
+		public Expression Expression
+		{
+			get { return All.Expression; }
+		}
+
+		public IQueryProvider Provider
+		{
+			get { return All.Provider; }
 		}
 	}
 }

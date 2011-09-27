@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CountType = System.Int32;
+using System.Linq.Expressions;
 
 namespace CSharpUtils.Containers.RedBlackTree
 {
-	public partial class RedBlackTreeWithStats<Type>
+	public partial class RedBlackTreeWithStats<TElement>
 	{
-		public class Range : IEnumerable<Type>, ICollection<Type>, ICloneable
+		public class Range : IEnumerable<TElement>, ICollection<TElement>, ICloneable, IOrderedQueryable<TElement>
 		{
-			internal RedBlackTreeWithStats<Type> ParentTree;
+			internal RedBlackTreeWithStats<TElement> ParentTree;
 			internal Node _rbegin;
 			internal Node _rend;
 			internal CountType _rbeginPosition;
@@ -23,7 +24,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				return _rbeginPosition + index;
 			}
 		
-			internal Range(RedBlackTreeWithStats<Type> ParentTree, Node b, Node e, CountType rbeginPosition = -1, CountType rendPosition = -1) {
+			internal Range(RedBlackTreeWithStats<TElement> ParentTree, Node b, Node e, CountType rbeginPosition = -1, CountType rendPosition = -1) {
 				this.ParentTree = ParentTree;
 				if (b == null) b = ParentTree.locateNodeAtPosition(rbeginPosition);
 				if (e == null) e = ParentTree.locateNodeAtPosition(rendPosition);
@@ -173,7 +174,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			}
 			*/
 
-			IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+			IEnumerator<TElement> IEnumerable<TElement>.GetEnumerator()
 			{
 				for (Node current = _rbegin; current != _rend; current = current.next)
 				{
@@ -189,7 +190,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				}
 			}
 
-			public void Add(Type item)
+			public void Add(TElement item)
 			{
 				throw new NotImplementedException();
 			}
@@ -199,7 +200,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				throw new NotImplementedException();
 			}
 
-			public bool Contains(Type item)
+			public bool Contains(TElement item)
 			{
 				if (IsEmpty) return false;
 				//Node node = ParentTree._find(item);
@@ -208,7 +209,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				return true;
 			}
 
-			public void CopyTo(Type[] array, CountType arrayIndex)
+			public void CopyTo(TElement[] array, CountType arrayIndex)
 			{
 				throw new NotImplementedException();
 			}
@@ -223,7 +224,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				get { return true; }
 			}
 
-			public bool Remove(Type item)
+			public bool Remove(TElement item)
 			{
 				throw new NotImplementedException();
 			}
@@ -231,6 +232,21 @@ namespace CSharpUtils.Containers.RedBlackTree
 			object ICloneable.Clone()
 			{
 				return new Range(ParentTree, _rbegin, _rend, _rbeginPosition, _rendPosition);
+			}
+
+			public System.Type ElementType
+			{
+				get { return typeof(TElement); }
+			}
+
+			public Expression Expression
+			{
+				get { return Expression.Constant(this); }
+			}
+
+			public IQueryProvider Provider
+			{
+				get { return new RedBlackTreeWithStatsQueryProvider<TElement>(this); }
 			}
 		}
 	}

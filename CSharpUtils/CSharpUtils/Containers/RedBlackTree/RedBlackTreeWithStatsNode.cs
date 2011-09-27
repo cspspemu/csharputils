@@ -6,7 +6,7 @@ using CountType = System.Int32;
 
 namespace CSharpUtils.Containers.RedBlackTree
 {
-	public partial class RedBlackTreeWithStats<Type>
+	public partial class RedBlackTreeWithStats<TElement>
 	{
 		static void DebugAssert(bool Assertion)
 		{
@@ -32,10 +32,10 @@ namespace CSharpUtils.Containers.RedBlackTree
 			internal CountType ChildCountLeft;
 			internal CountType ChildCountRight;
 
-			internal Type Value;
+			internal TElement Value;
 			internal Color Color;
 
-			internal Type value
+			internal TElement value
 			{
 				get
 				{
