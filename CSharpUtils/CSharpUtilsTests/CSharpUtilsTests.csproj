@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncTaskTest.cs" />
+    <Compile Include="BitmapExtensionTest.cs" />
     <Compile Include="ConsumerMemoryStreamTest.cs" />
     <Compile Include="FastcgiHandlerTest.cs" />
     <Compile Include="Html\HtmlUtilsTest.cs" />
