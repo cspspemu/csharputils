@@ -6,7 +6,7 @@ using CountType = System.Int32;
 
 namespace CSharpUtils.Containers.RedBlackTree
 {
-	public partial class RedBlackTreeWithStats<Type>
+	public partial class RedBlackTreeWithStats<Type> : ICollection<Type>
 	{
 		Node _end = null;
 		CountType _length = 0;
@@ -570,6 +570,57 @@ namespace CSharpUtils.Containers.RedBlackTree
 			int InternalLength = _length;
 			int CalculatedLength = DebugValidateStatsNodeSubtree();
 			Assert(CalculatedLength == InternalLength);
+		}
+
+		public void Add(Type item)
+		{
+			insert(item);
+		}
+
+		public void Clear()
+		{
+			clear();
+		}
+
+		public void CopyTo(Type[] array, CountType arrayIndex)
+		{
+			throw new NotImplementedException();
+		}
+
+		public CountType Count
+		{
+			get { return Length; }
+		}
+
+		public bool IsReadOnly
+		{
+			get { return false; }
+		}
+
+		public bool Remove(Type item)
+		{
+			Node node = _firstGreaterEqual(item);
+			if (node != null)
+			{
+				node.remove(_end);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			//_find(item).remove(_end);
+			//throw new NotImplementedException();
+		}
+
+		public IEnumerator<Type> GetEnumerator()
+		{
+			return (All as IEnumerable<Type>).GetEnumerator();
+		}
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return (All as IEnumerable<Type>).GetEnumerator();
 		}
 	}
 }

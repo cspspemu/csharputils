@@ -18,18 +18,23 @@ namespace CSharpUtilsSandBox
 			//Stats.PrintTree();
 			{
 				var Start = DateTime.Now;
+				int Value = 0;
 				for (int n = 0; n < 100; n++)
 				{
-					int Value = Stats.All.Length;
+					Value = Stats.All.Length;
 				}
+				Console.WriteLine(Value);
 				Console.WriteLine(DateTime.Now - Start);
 			}
 			{
 				var Start = DateTime.Now;
+				int Value = 0;
 				for (int n = 0; n < 100; n++)
 				{
-					int Value = Stats.All.Count();
+					//int Value = Stats.All.Count();
+					Value = Stats.Count();
 				}
+				Console.WriteLine(Value);
 				Console.WriteLine(DateTime.Now - Start);
 			}
 			/*

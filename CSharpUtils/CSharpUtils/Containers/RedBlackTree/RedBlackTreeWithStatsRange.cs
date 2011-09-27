@@ -8,7 +8,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 {
 	public partial class RedBlackTreeWithStats<Type>
 	{
-		public class Range : IEnumerable<Type>
+		public class Range : IEnumerable<Type>, ICollection<Type>
 		{
 			internal RedBlackTreeWithStats<Type> ParentTree;
 			internal Node _rbegin;
@@ -182,6 +182,45 @@ namespace CSharpUtils.Containers.RedBlackTree
 				{
 					yield return current.Value;
 				}
+			}
+
+			public void Add(Type item)
+			{
+				throw new NotImplementedException();
+			}
+
+			public void Clear()
+			{
+				throw new NotImplementedException();
+			}
+
+			public bool Contains(Type item)
+			{
+				if (IsEmpty) return false;
+				//Node node = ParentTree._find(item);
+				if (ParentTree.Comparer.Compare(item, _rbegin.value) < 0) return false;
+				if (ParentTree.Comparer.Compare(item, _rend.value) > 0) return false;
+				return true;
+			}
+
+			public void CopyTo(Type[] array, CountType arrayIndex)
+			{
+				throw new NotImplementedException();
+			}
+
+			public CountType Count
+			{
+				get { return Length; }
+			}
+
+			public bool IsReadOnly
+			{
+				get { return true; }
+			}
+
+			public bool Remove(Type item)
+			{
+				throw new NotImplementedException();
 			}
 		}
 	}
