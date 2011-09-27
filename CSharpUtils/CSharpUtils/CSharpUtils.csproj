@@ -57,6 +57,7 @@
     <Compile Include="Compression\Lz\LzBuffer.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStats.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsNode.cs" />
+    <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsQueryProvider.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsRange.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\BinaryReaderWriterExtensions.cs" />

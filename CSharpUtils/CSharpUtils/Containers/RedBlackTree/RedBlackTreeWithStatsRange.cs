@@ -8,7 +8,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 {
 	public partial class RedBlackTreeWithStats<Type>
 	{
-		public class Range : IEnumerable<Type>, ICollection<Type>
+		public class Range : IEnumerable<Type>, ICollection<Type>, ICloneable
 		{
 			internal RedBlackTreeWithStats<Type> ParentTree;
 			internal Node _rbegin;
@@ -30,7 +30,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				if (b == null || e == null) {
 					//b = _end.left;
 					//e = _end.left;
-					b = e = ParentTree._end;
+					b = e = ParentTree.RootNode;
 					rbeginPosition = -1;
 					rendPosition = -1;
 				}
@@ -70,6 +70,11 @@ namespace CSharpUtils.Containers.RedBlackTree
 			public Range Skip(CountType skipCount)
 			{
 				return SkipUnchecked(skipCount);
+			}
+
+			public Range Take(CountType skipCount)
+			{
+				return Limit(skipCount);
 			}
 		
 			public Range SkipUnchecked(CountType skipCount)
@@ -221,6 +226,11 @@ namespace CSharpUtils.Containers.RedBlackTree
 			public bool Remove(Type item)
 			{
 				throw new NotImplementedException();
+			}
+
+			object ICloneable.Clone()
+			{
+				return new Range(ParentTree, _rbegin, _rend, _rbeginPosition, _rendPosition);
 			}
 		}
 	}

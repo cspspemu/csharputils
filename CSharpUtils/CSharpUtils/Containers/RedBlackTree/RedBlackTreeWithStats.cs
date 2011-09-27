@@ -6,10 +6,10 @@ using CountType = System.Int32;
 
 namespace CSharpUtils.Containers.RedBlackTree
 {
-	public partial class RedBlackTreeWithStats<Type> : ICollection<Type>
+	public partial class RedBlackTreeWithStats<Type> : ICollection<Type>, ICloneable
 	{
-		Node _end = null;
-		CountType _length = 0;
+		Node RootNode = null;
+		CountType _Length = 0;
 		IComparer<Type> Comparer = null;
 		bool AllowDuplicates = false;
 		//const bool AllowDuplicates = false;
@@ -24,8 +24,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 		public RedBlackTreeWithStats(IComparer<Type> Comparer, Node _end, int _length)
 		{
 			this.Comparer = Comparer;
-			this._end = _end;
-			this._length = _length;
+			this.RootNode = _end;
+			this._Length = _length;
 		}
 
 		public RedBlackTreeWithStats(IComparer<Type> Comparer)
@@ -37,8 +37,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 
 		private void _setup()
 		{
-			Assert(_end == null); //Make sure that _setup isn't run more than once.
-			_end = Allocate();
+			Assert(RootNode == null); //Make sure that _setup isn't run more than once.
+			RootNode = Allocate();
 		}
 
 		private Node Allocate()
@@ -69,13 +69,13 @@ namespace CSharpUtils.Containers.RedBlackTree
 			Node result = null;
 			added = true;
 		
-			if (_end.left == null)
+			if (RootNode.left == null)
 			{
-				_end.left = result = Allocate(n);
+				RootNode.left = result = Allocate(n);
 			}
 			else
 			{
-				Node newParent = _end.left;
+				Node newParent = RootNode.left;
 				Node nxt;
 
 				while (true)
@@ -121,15 +121,15 @@ namespace CSharpUtils.Containers.RedBlackTree
 		
 			if (AllowDuplicates) {
 				result.UpdateCurrentAndAncestors(+1);
-				result.setColor(_end);
-				_length++;
+				result.setColor(RootNode);
+				_Length++;
 				return result;
 			} else {
 				if (added) {
 					result.UpdateCurrentAndAncestors(+1);
-					result.setColor(_end);
+					result.setColor(RootNode);
 				}
-				_length++;
+				_Length++;
 				return result;
 			}
 		}
@@ -140,7 +140,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		{
 			if (AllowDuplicates)
 			{
-				Node cur = _end.left;
+				Node cur = RootNode.left;
 				Node result = null;
 				while (cur != null)
 				{
@@ -158,7 +158,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			}
 			else
 			{
-				Node cur = _end.left;
+				Node cur = RootNode.left;
 				//writefln("------------- (search:%s)", e);
 				while (cur != null)
 				{
@@ -176,52 +176,18 @@ namespace CSharpUtils.Containers.RedBlackTree
 			}
 		}
 
-		/**
-		 * Check if any elements exist in the container.  Returns $(D true) if at least
-		 * one element exists.
-		 */
-		bool empty
-		{
-			get {
-				return IsEmpty;
-			}
-		}
-
 		bool IsEmpty
 		{
 			get {
-				return _end.left == null;
-			}
-		}
-
-		CountType length
-		{
-			get {
-				return Length;
+				return RootNode.left == null;
 			}
 		}
 
 		CountType Length
 		{
 			get {
-				return _length;
+				return _Length;
 			}
-		}
-
-		/**
-		 * Duplicate this container.  The resulting container contains a shallow
-		 * copy of the elements.
-		 *
-		 * Complexity: $(BIGOH n)
-		 */
-		RedBlackTreeWithStats<Type> dup()
-		{
-			return Clone();
-		}
-
-		RedBlackTreeWithStats<Type> Clone()
-		{
-			return new RedBlackTreeWithStats<Type>(Comparer, _end.Clone(), _length);
 		}
 
 		/**
@@ -244,7 +210,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		Type front
 		{
 			get {
-				return _end.leftmost.value;
+				return RootNode.leftmost.value;
 			}
 		}
 
@@ -256,7 +222,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		Type back
 		{
 			get {
-				return _end.prev.value;
+				return RootNode.prev.value;
 			}
 		}
 
@@ -266,8 +232,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 
 		void clear()
 		{
-			_end.left = null;
-			_length = 0;
+			RootNode.left = null;
+			_Length = 0;
 		}
 
 		/**
@@ -298,10 +264,10 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 */
 		Type removeAny()
 		{
-			var n = _end.leftmost;
+			var n = RootNode.leftmost;
 			var result = n.value;
-			n.remove(_end);
-			_length--;
+			n.remove(RootNode);
+			_Length--;
 			return result;
 		}
 
@@ -312,8 +278,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 */
 		void removeFront()
 		{
-			_end.leftmost.remove(_end);
-			_length--;
+			RootNode.leftmost.remove(RootNode);
+			_Length--;
 		}
 
 		/**
@@ -323,8 +289,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 */
 		void removeBack()
 		{
-			_end.prev.remove(_end);
-			_length--;
+			RootNode.prev.remove(RootNode);
+			_Length--;
 		}
 
 		/*
@@ -395,8 +361,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 		private Node _firstGreater(Type e)
 		{
 			// can't use _find, because we cannot return null
-			var cur = _end.left;
-			var result = _end;
+			var cur = RootNode.left;
+			var result = RootNode;
 			while (cur != null)
 			{
 				if(_less(e, cur.value))
@@ -415,8 +381,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 		private Node _firstGreaterEqual(Type e)
 		{
 			// can't use _find, because we cannot return null.
-			var cur = _end.left;
-			var result = _end;
+			var cur = RootNode.left;
+			var result = RootNode;
 			while (cur != null)
 			{
 				if (_less(cur.value, e))
@@ -441,7 +407,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 */
 		Range upperBound(Type e)
 		{
-			return new Range(this, _firstGreater(e), _end);
+			return new Range(this, _firstGreater(e), RootNode);
 		}
 
 		/**
@@ -452,7 +418,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		 */
 		Range lowerBound(Type e)
 		{
-			return new Range(this, _end.leftmost, _firstGreaterEqual(e));
+			return new Range(this, RootNode.leftmost, _firstGreaterEqual(e));
 		}
 
 		/**
@@ -464,7 +430,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		Range equalRange(Type e)
 		{
 			var beg = _firstGreaterEqual(e);
-			if(beg == _end || _less(e, beg.value)) {
+			if(beg == RootNode || _less(e, beg.value)) {
 				// no values are equal
 				return new Range(this, beg, beg);
 			}
@@ -521,8 +487,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 	
 		Node locateNodeAtPosition(CountType positionToFind) {
 			if (positionToFind < 0) throw(new Exception("Negative locateNodeAt"));
-			Node current = _end;
-			CountType currentPosition = _end.ChildCountLeft;
+			Node current = RootNode;
+			CountType currentPosition = RootNode.ChildCountLeft;
 				
 			//writefln("[AA---(%d)]", positionToFind);
 				
@@ -552,22 +518,22 @@ namespace CSharpUtils.Containers.RedBlackTree
 		public Range All {
 			get {
 				//return new Range(_end.leftmost, _end);
-				return new Range(this, _end.leftmost, _end, 0, _length);
+				return new Range(this, RootNode.leftmost, RootNode, 0, _Length);
 			}
 		}
 	
 		CountType DebugValidateStatsNodeSubtree() {
-			return _end.DebugValidateStatsNodeSubtree();
+			return RootNode.DebugValidateStatsNodeSubtree();
 		}
 
 		public void PrintTree()
 		{
-			_end.left.PrintTree();
+			RootNode.left.PrintTree();
 		}
 	
 		public void DebugValidateTree()
 		{
-			int InternalLength = _length;
+			int InternalLength = _Length;
 			int CalculatedLength = DebugValidateStatsNodeSubtree();
 			Assert(CalculatedLength == InternalLength);
 		}
@@ -602,7 +568,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			Node node = _firstGreaterEqual(item);
 			if (node != null)
 			{
-				node.remove(_end);
+				node.remove(RootNode);
 				return true;
 			}
 			else
@@ -621,6 +587,16 @@ namespace CSharpUtils.Containers.RedBlackTree
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
 			return (All as IEnumerable<Type>).GetEnumerator();
+		}
+
+		public RedBlackTreeWithStats<Type> Clone()
+		{
+			return new RedBlackTreeWithStats<Type>(Comparer, RootNode.Clone(), _Length);
+		}
+
+		object ICloneable.Clone()
+		{
+			return new RedBlackTreeWithStats<Type>(Comparer, RootNode.Clone(), _Length);
 		}
 	}
 }
