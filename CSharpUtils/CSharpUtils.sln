@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtilsFastcgiTest", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtilsTemplateTest", "CSharpUtilsTemplateTest\CSharpUtilsTemplateTest.csproj", "{C93718FB-6BA5-4F70-96C7-E9BE0D643899}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtilsSandBox", "CSharpUtilsSandBox\CSharpUtilsSandBox.csproj", "{AB105ACC-EF53-49ED-A59D-5442C33AED20}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = CSharpUtils.vsmdi
@@ -81,6 +83,16 @@ Global
 		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Release|x86.ActiveCfg = Release|x86
 		{C93718FB-6BA5-4F70-96C7-E9BE0D643899}.Release|x86.Build.0 = Release|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Debug|x86.ActiveCfg = Debug|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Debug|x86.Build.0 = Debug|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Release|Any CPU.ActiveCfg = Release|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Release|Mixed Platforms.Build.0 = Release|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Release|x86.ActiveCfg = Release|x86
+		{AB105ACC-EF53-49ED-A59D-5442C33AED20}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,7 +16,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			internal CountType _rbeginPosition;
 			internal CountType _rendPosition;
 		
-			public CountType getOffsetPosition(CountType index) {
+			public CountType GetOffsetPosition(CountType index) {
 				if (_rbeginPosition == -1) {
 					return ParentTree.getNodePosition(_rbegin) + index;
 				}
@@ -40,11 +40,11 @@ namespace CSharpUtils.Containers.RedBlackTree
 				_rendPosition = rendPosition;
 			}
 		
-			public Range clone() {
+			public Range Clone() {
 				return new Range(ParentTree, _rbegin, _rend, _rbeginPosition, _rendPosition);
 			}
 		
-			public Range limit(CountType limitCount) {
+			public Range Limit(CountType limitCount) {
 				Assert(limitCount >= 0);
 			
 				if (_rbeginPosition != -1 && _rendPosition != -1) {
@@ -54,28 +54,30 @@ namespace CSharpUtils.Containers.RedBlackTree
 				} else {
 					// Unsecure.
 				}
-				return limitUnchecked(limitCount);
+				return LimitUnchecked(limitCount);
 			}
 		
-			public Range limitUnchecked(CountType limitCount) {
+			public Range LimitUnchecked(CountType limitCount) {
 				Assert(limitCount >= 0);
 
 				return new Range(
 					ParentTree,
 					_rbegin, null,
-					_rbeginPosition, getOffsetPosition(limitCount)
+					_rbeginPosition, GetOffsetPosition(limitCount)
 				);
 			}
 		
-			public Range skip(CountType skipCount) {
-				return skipUnchecked(skipCount);
+			public Range Skip(CountType skipCount)
+			{
+				return SkipUnchecked(skipCount);
 			}
 		
-			public Range skipUnchecked(CountType skipCount) {
+			public Range SkipUnchecked(CountType skipCount)
+			{
 				return new Range(
 					ParentTree,
 					null, _rend,
-					getOffsetPosition(skipCount), _rendPosition
+					GetOffsetPosition(skipCount), _rendPosition
 				);
 			}
 
@@ -86,29 +88,47 @@ namespace CSharpUtils.Containers.RedBlackTree
 				}
 			}
 
-			CountType length() {
-				//writefln("Begin: %d:%s", countLesser(_begin), *_begin);
-				//writefln("End: %d:%s", countLesser(_end), *_end);
-				//return _begin
-			
-				if (_rbeginPosition != -1 && _rendPosition != -1) {
-					return _rendPosition - _rbeginPosition;
+			public CountType Length
+			{
+				get
+				{
+					//writefln("Begin: %d:%s", countLesser(_begin), *_begin);
+					//writefln("End: %d:%s", countLesser(_end), *_end);
+					//return _begin
+
+					if (_rbeginPosition != -1 && _rendPosition != -1)
+					{
+						return _rendPosition - _rbeginPosition;
+					}
+
+					return ParentTree.countLesser(_rend) - ParentTree.countLesser(_rbegin);
 				}
-
-				return ParentTree.countLesser(_rend) - ParentTree.countLesser(_rbegin);
 			}
 
-			Range Slice() {
-				return this.clone();
+			public Range Slice()
+			{
+				return this.Clone();
 			}
-		
-			Range Slice(CountType start, CountType end) {
+
+			public Range Slice(CountType start, CountType end)
+			{
 				return new Range(
 					ParentTree,
 					null,
 					null,
-					getOffsetPosition(start),
-					getOffsetPosition(end)
+					GetOffsetPosition(start),
+					GetOffsetPosition(end)
+				);
+			}
+
+			public Range Slice(CountType start)
+			{
+				return new Range(
+					ParentTree,
+					null,
+					null,
+					GetOffsetPosition(start),
+					Length
 				);
 			}
 
@@ -116,7 +136,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				get
 				{
-					return ParentTree.locateNodeAtPosition(getOffsetPosition(Index));
+					return ParentTree.locateNodeAtPosition(GetOffsetPosition(Index));
 				}
 			}
 

@@ -179,8 +179,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 				CountType TotalChildCountRight = 0;
 				if (LeftNode != null) TotalChildCountLeft = LeftNode.DebugValidateStatsNodeSubtree();
 				if (RightNode != null) TotalChildCountRight = RightNode.DebugValidateStatsNodeSubtree();
-				DebugAssert(ChildCountLeft != TotalChildCountLeft);
-				DebugAssert(ChildCountRight != TotalChildCountRight);
+				DebugAssert(ChildCountLeft == TotalChildCountLeft);
+				DebugAssert(ChildCountRight == TotalChildCountRight);
 				return 1 + this.ChildCountLeft + this.ChildCountRight;
 			}
 
@@ -188,17 +188,23 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				var PreviousNode = this;
 				var CurrentNode = this.ParentNode;
+
 				while (CurrentNode != null)
 				{
 					// @TODO: Change
 					// prev.isLeftNode
-					if (CurrentNode.LeftNode == PreviousNode)
+
+					if (PreviousNode.IsLeftNode)
 					{
-						CurrentNode.ChildCountLeft += ChildCountRight;
+						CurrentNode.ChildCountLeft += CountIncrement;
 					}
-					else if (CurrentNode.RightNode == PreviousNode)
+					else if (PreviousNode.IsRightNode)
 					{
-						CurrentNode.ChildCountRight += ChildCountRight;
+						CurrentNode.ChildCountRight += CountIncrement;
+					}
+					else
+					{
+						Assert(false);
 					}
 					PreviousNode = CurrentNode;
 					CurrentNode = CurrentNode.ParentNode;

@@ -78,7 +78,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				Node newParent = _end.left;
 				Node nxt;
 
-				while(true)
+				while (true)
 				{
 					if(_less(n, newParent.value))
 					{
@@ -549,7 +549,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			}
 		}
 	
-		Range All {
+		public Range All {
 			get {
 				//return new Range(_end.leftmost, _end);
 				return new Range(this, _end.leftmost, _end, 0, _length);
@@ -557,7 +557,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 		}
 	
 		CountType DebugValidateStatsNodeSubtree() {
-			return _end.left.DebugValidateStatsNodeSubtree();
+			return _end.DebugValidateStatsNodeSubtree();
 		}
 
 		public void PrintTree()
@@ -565,9 +565,11 @@ namespace CSharpUtils.Containers.RedBlackTree
 			_end.left.PrintTree();
 		}
 	
-		internal void DebugValidateTree()
+		public void DebugValidateTree()
 		{
-			Assert(DebugValidateStatsNodeSubtree() == _length);
+			int InternalLength = _length;
+			int CalculatedLength = DebugValidateStatsNodeSubtree();
+			Assert(CalculatedLength == InternalLength);
 		}
 	}
 }
