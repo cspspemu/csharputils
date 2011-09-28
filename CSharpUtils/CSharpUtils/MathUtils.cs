@@ -18,9 +18,7 @@ namespace CSharpUtils
 
 		static public void Swap<Type>(ref Type A, ref Type B)
 		{
-			Type T = A;
-			A = B;
-			B = T;
+			LanguageUtils.Swap(ref A, ref B);
 		}
 
 		/// <summary>
