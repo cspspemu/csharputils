@@ -38,5 +38,21 @@ namespace CSharpUtils.Extensions
 		{
 			return Encoding.GetBytes(This);
 		}
+
+		static public String EscapeString(this String This)
+		{
+			var That = "";
+			foreach (var C in This)
+			{
+				switch (C)
+				{
+					case '\n': That += @"\n"; break;
+					case '\r': That += @"\r"; break;
+					case '\t': That += @"\t"; break;
+					default: That += C; break;
+				}
+			}
+			return That;
+		}
 	}
 }

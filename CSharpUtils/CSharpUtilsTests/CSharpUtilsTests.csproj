@@ -54,6 +54,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acme1FileTest.cs" />
     <Compile Include="AsyncTaskTest.cs" />
     <Compile Include="BitmapExtensionTest.cs" />
     <Compile Include="ConcatStreamTest.cs" />
