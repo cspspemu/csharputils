@@ -35,66 +35,6 @@ namespace CSharpUtils.Containers.RedBlackTree
 			internal TElement Value;
 			internal Color Color;
 
-			internal TElement value
-			{
-				get
-				{
-					return Value;
-				}
-				set
-				{
-					Value = value;
-				}
-			}
-
-			internal Color color
-			{
-				get
-				{
-					return Color;
-				}
-				set
-				{
-					Color = value;
-				}
-			}
-
-			internal Node _left
-			{
-				get
-				{
-					return _LeftNode;
-				}
-				set
-				{
-					_LeftNode = value;
-				}
-			}
-
-			internal Node _right
-			{
-				get
-				{
-					return _RightNode;
-				}
-				set
-				{
-					_RightNode = value;
-				}
-			}
-
-			internal Node _parent
-			{
-				get
-				{
-					return _ParentNode;
-				}
-				set
-				{
-					_ParentNode = value;
-				}
-			}
-
 			internal Node LeftNode
 			{
 				get
@@ -122,40 +62,6 @@ namespace CSharpUtils.Containers.RedBlackTree
 			}
 
 			internal Node ParentNode
-			{
-				get
-				{
-					return _ParentNode;
-				}
-			}
-
-			internal Node left
-			{
-				get
-				{
-					return _LeftNode;
-				}
-				set
-				{
-					_LeftNode = value;
-					if (value != null) value._ParentNode = this;
-				}
-			}
-
-			internal Node right
-			{
-				get
-				{
-					return _RightNode;
-				}
-				set
-				{
-					_RightNode = value;
-					if (value != null) value._ParentNode = this;
-				}
-			}
-
-			internal Node parent
 			{
 				get
 				{
@@ -352,13 +258,13 @@ namespace CSharpUtils.Containers.RedBlackTree
 					if (cur.ParentNode.IsLeftNode)
 					{
 						// parent is left node, y is 'uncle', could be null
-						Node y = cur._parent._parent._right;
+						Node y = cur._ParentNode._ParentNode._RightNode;
 						if (y != null && y.Color == Color.Red)
 						{
-							cur._parent.Color = Color.Black;
+							cur._ParentNode.Color = Color.Black;
 							y.Color = Color.Black;
-							cur = cur._parent._parent;
-							if (cur._parent == End)
+							cur = cur._ParentNode._ParentNode;
+							if (cur._ParentNode == End)
 							{
 								// root node
 								cur.Color = Color.Black;
@@ -368,7 +274,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 							{
 								// not root node
 								cur.Color = Color.Red;
-								if (cur._parent.Color == Color.Black)
+								if (cur._ParentNode.Color == Color.Black)
 								{
 									// satisfied, exit the loop
 									break;
@@ -377,9 +283,9 @@ namespace CSharpUtils.Containers.RedBlackTree
 						}
 						else
 						{
-							if (!cur.IsLeftNode) cur = cur._parent.RotateLeft();
-							cur._parent.Color = Color.Black;
-							cur = cur._parent._parent.RotateRight();
+							if (!cur.IsLeftNode) cur = cur._ParentNode.RotateLeft();
+							cur._ParentNode.Color = Color.Black;
+							cur = cur._ParentNode._ParentNode.RotateRight();
 							cur.Color = Color.Red;
 							// tree should be satisfied now
 							break;
@@ -388,13 +294,13 @@ namespace CSharpUtils.Containers.RedBlackTree
 					else
 					{
 						// parent is right node, y is 'uncle'
-						Node y = cur._parent._parent._left;
+						Node y = cur._ParentNode._ParentNode._LeftNode;
 						if (y != null && y.Color == Color.Red)
 						{
-							cur._parent.Color = Color.Black;
+							cur._ParentNode.Color = Color.Black;
 							y.Color = Color.Black;
-							cur = cur._parent._parent;
-							if (cur._parent == End)
+							cur = cur._ParentNode._ParentNode;
+							if (cur._ParentNode == End)
 							{
 								// root node
 								cur.Color = Color.Black;
@@ -405,7 +311,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 								// not root node
 								cur.Color = Color.Red;
 
-								if (cur._parent.Color == Color.Black)
+								if (cur._ParentNode.Color == Color.Black)
 								{
 									// satisfied, exit the loop
 									break;
@@ -416,10 +322,10 @@ namespace CSharpUtils.Containers.RedBlackTree
 						{
 							if (cur.IsLeftNode)
 							{
-								cur = cur._parent.RotateRight();
+								cur = cur._ParentNode.RotateRight();
 							}
-							cur._parent.Color = Color.Black;
-							cur = cur._parent._parent.RotateLeft();
+							cur._ParentNode.Color = Color.Black;
+							cur = cur._ParentNode._ParentNode.RotateLeft();
 							cur.Color = Color.Red;
 							// tree should be satisfied now
 							break;
@@ -433,15 +339,15 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				if (IsLeftNode)
 				{
-					_parent.LeftNode = newThis;
+					_ParentNode.LeftNode = newThis;
 				}
 				else
 				{
-					_parent.RightNode = newThis;
+					_ParentNode.RightNode = newThis;
 				}
 			}
 
-			internal Node remove(Node end)
+			internal Node NonSynchronizedRemove(Node end)
 			{
 				//
 				// remove this node from the tree, fixing the color if necessary.
@@ -449,7 +355,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				Node x;
 				Node ret;
 
-				if (_left == null || _right == null)
+				if (_LeftNode == null || _RightNode == null)
 				{
 					//static if (hasStats) updateCurrentAndAncestors(-1);
 					ret = NextNode;
@@ -465,9 +371,9 @@ namespace CSharpUtils.Containers.RedBlackTree
 					//
 					Node yp, yl, yr;
 					Node y = NextNode;
-					yp = y._parent;
-					yl = y._left;
-					yr = y._right;
+					yp = y._ParentNode;
+					yl = y._LeftNode;
+					yr = y._RightNode;
 					var y_childCountLeft = y.ChildCountLeft;
 					var y_childCountRight = y.ChildCountRight;
 					var yc = y.Color;
@@ -480,14 +386,14 @@ namespace CSharpUtils.Containers.RedBlackTree
 					//
 					// need special case so y doesn't point back to itself
 					//
-					y.LeftNode = _left;
-					if (_right == y)
+					y.LeftNode = _LeftNode;
+					if (_RightNode == y)
 					{
 						y.RightNode = this;
 					}
 					else
 					{
-						y.RightNode = _right;
+						y.RightNode = _RightNode;
 					}
 					y.Color = Color;
 
@@ -497,17 +403,17 @@ namespace CSharpUtils.Containers.RedBlackTree
 					//
 					// replace this node's structure with structure of y.
 					//
-					left = yl;
-					right = yr;
-					if (_parent != y)
+					LeftNode = yl;
+					RightNode = yr;
+					if (_ParentNode != y)
 					{
 						if (isyleft)
 						{
-							yp.left = this;
+							yp.LeftNode = this;
 						}
 						else
 						{
-							yp.right = this;
+							yp.RightNode = this;
 						}
 					}
 					Color = yc;
@@ -524,13 +430,13 @@ namespace CSharpUtils.Containers.RedBlackTree
 				UpdateCurrentAndAncestors(-1);
 
 				// if this has less than 2 children, remove it
-				if (_left != null)
+				if (_LeftNode != null)
 				{
-					x = _left;
+					x = _LeftNode;
 				}
 				else
 				{
-					x = _right;
+					x = _RightNode;
 				}
 
 				// remove this from the tree at the end of the procedure
@@ -543,33 +449,33 @@ namespace CSharpUtils.Containers.RedBlackTree
 				}
 				else if (IsLeftNode)
 				{
-					_parent.left = x;
+					_ParentNode.LeftNode = x;
 				}
 				else
 				{
-					_parent.right = x;
+					_ParentNode.RightNode = x;
 				}
 
 				// if the color of this is black, then it needs to be fixed
 				if (Color == Color.Black)
 				{
 					// need to recolor the tree.
-					while (x._parent != end && x.Color == Color.Black)
+					while (x._ParentNode != end && x.Color == Color.Black)
 					{
 						if (x.IsLeftNode)
 						{
 							// left node
-							var w = x._parent._right;
+							var w = x._ParentNode._RightNode;
 							if (w.Color == Color.Red)
 							{
 								w.Color = Color.Black;
-								x._parent.Color = Color.Red;
-								x._parent.RotateLeft();
-								w = x._parent._right;
+								x._ParentNode.Color = Color.Red;
+								x._ParentNode.RotateLeft();
+								w = x._ParentNode._RightNode;
 							}
 
-							var wl = w.left;
-							var wr = w.right;
+							var wl = w.LeftNode;
+							var wr = w.RightNode;
 
 							if (
 								(wl == null || wl.Color == Color.Black) &&
@@ -577,67 +483,67 @@ namespace CSharpUtils.Containers.RedBlackTree
 							)
 							{
 								w.Color = Color.Red;
-								x = x._parent;
+								x = x._ParentNode;
 							}
 							else
 							{
 								if (wr == null || wr.Color == Color.Black)
 								{
 									// wl cannot be null here
-									wl.color = Color.Black;
-									w.color = Color.Red;
+									wl.Color = Color.Black;
+									w.Color = Color.Red;
 									w.RotateRight();
-									w = x._parent._right;
+									w = x._ParentNode._RightNode;
 								}
 
-								w.color = x._parent.color;
-								x._parent.color = Color.Black;
-								w._right.color = Color.Black;
-								x._parent.RotateLeft();
-								x = end.left; // x = root
+								w.Color = x._ParentNode.Color;
+								x._ParentNode.Color = Color.Black;
+								w._RightNode.Color = Color.Black;
+								x._ParentNode.RotateLeft();
+								x = end.LeftNode; // x = root
 							}
 						}
 						else
 						{
 							// right node
-							var w = x._parent._left;
-							if (w.color == Color.Red)
+							var w = x._ParentNode._LeftNode;
+							if (w.Color == Color.Red)
 							{
-								w.color = Color.Black;
-								x._parent.color = Color.Red;
-								x._parent.rotateR();
-								w = x._parent._left;
+								w.Color = Color.Black;
+								x._ParentNode.Color = Color.Red;
+								x._ParentNode.rotateR();
+								w = x._ParentNode._LeftNode;
 							}
-							var wl = w.left;
-							var wr = w.right;
+							var wl = w.LeftNode;
+							var wr = w.RightNode;
 							if (
-								(wl == null || wl.color == Color.Black) &&
-								(wr == null || wr.color == Color.Black)
+								(wl == null || wl.Color == Color.Black) &&
+								(wr == null || wr.Color == Color.Black)
 							)
 							{
-								w.color = Color.Red;
-								x = x._parent;
+								w.Color = Color.Red;
+								x = x._ParentNode;
 							}
 							else
 							{
-								if (wl == null || wl.color == Color.Black)
+								if (wl == null || wl.Color == Color.Black)
 								{
 									// wr cannot be null here
-									wr.color = Color.Black;
-									w.color = Color.Red;
+									wr.Color = Color.Black;
+									w.Color = Color.Red;
 									w.rotateL();
-									w = x._parent._left;
+									w = x._ParentNode._LeftNode;
 								}
 
-								w.color = x._parent.color;
-								x._parent.color = Color.Black;
-								w._left.color = Color.Black;
-								x._parent.rotateR();
-								x = end.left; // x = root
+								w.Color = x._ParentNode.Color;
+								x._ParentNode.Color = Color.Black;
+								w._LeftNode.Color = Color.Black;
+								x._ParentNode.rotateR();
+								x = end.LeftNode; // x = root
 							}
 						}
 					}
-					x.color = Color.Black;
+					x.Color = Color.Black;
 				}
 
 				if (removeThis)
@@ -647,56 +553,30 @@ namespace CSharpUtils.Containers.RedBlackTree
 					//
 					if (IsLeftNode)
 					{
-						_parent.left = null;
+						_ParentNode.LeftNode = null;
 					}
 					else
 					{
-						_parent.right = null;
+						_ParentNode.RightNode = null;
 					}
 				}
 
 				return ret;
 			}
 
-			internal Node leftmost
-			{
-				get
-				{
-					return LeftMostNode;
-				}
-			}
-
-			internal Node rightmost
-			{
-				get
-				{
-					return RightMostNode;
-				}
-			}
-
-			internal Node next
-			{
-				get
-				{
-					return NextNode;
-				}
-			}
-
-			internal Node prev
-			{
-				get
-				{
-					return PreviousNode;
-				}
-			}
-
+			// Tail recursion.
 			internal Node LeftMostNode
 			{
 				get
 				{
+					/*
 					var result = this;
-					while (result._left != null) result = result._left;
+					while (result._LeftNode != null) result = result._LeftNode;
 					return result;
+					*/
+					//if (_LeftNode == null) return this;
+					//return _LeftNode.LeftMostNode;
+					return (LeftNode == null) ? this : LeftNode.LeftMostNode;
 				}
 			}
 
@@ -704,9 +584,14 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				get
 				{
+					/*
 					var result = this;
-					while (result._right != null) result = result._right;
+					while (result._RightNode != null) result = result._RightNode;
 					return result;
+					*/
+					//if (_RightNode == null) return this;
+					//return _RightNode.RightMostNode;
+					return (RightNode == null) ? this : RightNode.RightMostNode;
 				}
 			}
 
@@ -715,14 +600,14 @@ namespace CSharpUtils.Containers.RedBlackTree
 				get
 				{
 					Node n = this;
-					if (n.right == null)
+					if (n.RightNode == null)
 					{
-						while (!n.IsLeftNode) n = n._parent;
-						return n._parent;
+						while (!n.IsLeftNode) n = n._ParentNode;
+						return n._ParentNode;
 					}
 					else
 					{
-						return n.right.LeftMostNode;
+						return n.RightNode.LeftMostNode;
 					}
 				}
 			}
@@ -732,14 +617,14 @@ namespace CSharpUtils.Containers.RedBlackTree
 				get
 				{
 					Node n = this;
-					if (n.left == null)
+					if (n.LeftNode == null)
 					{
-						while (n.IsLeftNode) n = n._parent;
-						return n._parent;
+						while (n.IsLeftNode) n = n._ParentNode;
+						return n._ParentNode;
 					}
 					else
 					{
-						return n.left.RightMostNode;
+						return n.LeftNode.RightMostNode;
 					}
 				}
 			}
@@ -751,8 +636,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 				that.Color = this.Color;
 				that.ChildCountLeft = this.ChildCountLeft;
 				that.ChildCountRight = this.ChildCountRight;
-				if (this._left != null) that.left = _left.Clone();
-				if (this._right != null) that.right = _right.Clone();
+				if (this._LeftNode != null) that.LeftNode = _LeftNode.Clone();
+				if (this._RightNode != null) that.RightNode = _RightNode.Clone();
 				return that;
 			}
 		}

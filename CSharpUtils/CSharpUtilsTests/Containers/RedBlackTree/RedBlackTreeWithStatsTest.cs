@@ -2,33 +2,77 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
+using System.Linq;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtilsTests
 {
 	[TestClass]
 	public class RedBlackTreeWithStatsTest
 	{
+		RedBlackTreeWithStats<int> Stats;
+
+		[TestInitialize]
+		public void Initialize1()
+		{
+			Stats = new RedBlackTreeWithStats<int>();
+			Stats.Add(5);
+			//Stats.PrintTree();
+			//Console.WriteLine("-------------------------------");
+			Stats.Add(4);
+			//Stats.PrintTree();
+			//Console.WriteLine("-------------------------------");
+			Stats.Add(6);
+			Stats.Add(3);
+			Stats.Add(2);
+			Stats.Add(1);
+			Stats.Add(11);
+			Stats.Add(7);
+			Stats.Add(8);
+			Stats.Add(9);
+			Stats.Add(10);
+			Stats.Add(0);
+		}
+
 		[TestMethod]
 		public void Test1()
 		{
-			var Stats = new RedBlackTreeWithStats<int>();
-			Stats.insert(5);
-			Stats.PrintTree();
-			Console.WriteLine("-------------------------------");
-			Stats.insert(4);
-			Stats.PrintTree();
-			Console.WriteLine("-------------------------------");
-			Stats.insert(6);
-			Stats.insert(3);
-			Stats.insert(2);
-			Stats.insert(1);
-			Stats.insert(6);
-			Stats.insert(7);
-			Stats.insert(8);
-			Stats.insert(9);
-			Stats.insert(10);
-			Stats.PrintTree();
 			Stats.DebugValidateTree();
+		}
+
+		[TestMethod]
+		public void Test2()
+		{
+			Assert.AreEqual(5, Stats.RealRootNode.Value);
+			Assert.AreEqual(0, Stats.RealRootNode.LeftMostNode.Value);
+			Assert.AreEqual(11, Stats.RealRootNode.RightMostNode.Value);
+
+			Assert.AreEqual(12, Stats.All.Count);
+			Assert.AreEqual(
+				"0,1,2,3,4,5,6,7,8,9,10,11",
+				Stats.All.ToStringArray()
+			);
+			foreach (var Item in Stats.All)
+			{
+				Assert.IsTrue(Stats.All.Contains(Item));
+			}
+			Assert.IsFalse(Stats.All.Contains(-1));
+			Assert.IsFalse(Stats.All.Contains(12));
+		}
+
+		[TestMethod]
+		public void Test3()
+		{
+			var Slice1 = Stats.All.Slice(1, 4);
+			Assert.AreEqual(3, Slice1.Count);
+			Assert.AreEqual(
+				"1,2,3",
+				Slice1.ToStringArray()
+			);
+			Assert.AreEqual(
+				"0,4,5,6,7,8,9,10,11",
+				Stats.All.Where(Item => !Slice1.Contains(Item)).ToStringArray()
+			);
 		}
 	}
 }

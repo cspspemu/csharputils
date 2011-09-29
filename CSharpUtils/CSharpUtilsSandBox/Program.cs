@@ -5,6 +5,7 @@ using System.Text;
 using CSharpUtils.Containers.RedBlackTree;
 using System.Net.Sockets;
 using System.Threading;
+using System.Net;
 
 namespace CSharpUtilsSandBox
 {
@@ -18,7 +19,7 @@ namespace CSharpUtilsSandBox
 				var Start = DateTime.Now;
 				for (int n = 0; n < 500000; n++)
 				{
-					Stats.insert(n); // 1
+					Stats.Add(n); // 1
 				}
 				Console.WriteLine("Time: " + (DateTime.Now - Start).TotalMilliseconds);
 			}
@@ -28,7 +29,7 @@ namespace CSharpUtilsSandBox
 				int Value = 0;
 				for (int n = 0; n < 100; n++)
 				{
-					Value = Stats.All.Length;
+					Value = Stats.All.Count;
 					Value = Stats.All.Skip(250000).Take(240000).Count();
 				}
 				Console.WriteLine(Value);
@@ -40,7 +41,7 @@ namespace CSharpUtilsSandBox
 				for (int n = 0; n < 1000; n++)
 				{
 					Value = Stats.All.GetItemPosition(250000);
-					Value = Stats.Where(Item => Item < 250000).Count();
+					//Value = Stats.Where(Item => Item < 250000).Count();
 				}
 				Console.WriteLine(Value);
 				Console.WriteLine("Time: " + (DateTime.Now - Start).TotalMilliseconds);
@@ -128,19 +129,20 @@ namespace CSharpUtilsSandBox
 
 		static void Test4()
 		{
-			var TcpListener = new TcpListener(9999);
+			var TcpListener = new TcpListener(IPAddress.Parse("0.0.0.0"), 9999);
 			while (true)
 			{
 				var TcpClient = TcpListener.AcceptTcpClient();
 			}
-			var ReaderWriterLock = new ReaderWriterLock();
+			//var ReaderWriterLock = new ReaderWriterLock();
 			//ReaderWriterLock.wr
 		}
 
 		static void Main(string[] args)
 		{
-			Test4();
-			//Test2();
+			//Test4();
+			Test1();
+			Test2();
 			//Test3();
 			//Test4();
 			//Console.ReadKey();

@@ -33,5 +33,31 @@ namespace CSharpUtils.Extensions
 				This.ReleaseWriterLock();
 			}
 		}
+
+		static public T ReaderLock<T>(this ReaderWriterLock This, Func<T> Callback)
+		{
+			This.AcquireReaderLock(int.MaxValue);
+			try
+			{
+				return Callback();
+			}
+			finally
+			{
+				This.ReleaseReaderLock();
+			}
+		}
+
+		static public T WriterLock<T>(this ReaderWriterLock This, Func<T> Callback)
+		{
+			This.AcquireWriterLock(int.MaxValue);
+			try
+			{
+				return Callback();
+			}
+			finally
+			{
+				This.ReleaseWriterLock();
+			}
+		}
 	}
 }

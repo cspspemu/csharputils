@@ -4,53 +4,52 @@ using System.Linq;
 using System.Text;
 using CountType = System.Int32;
 using System.Linq.Expressions;
+using System.Collections;
 
 namespace CSharpUtils.Containers.RedBlackTree
 {
 	public partial class RedBlackTreeWithStats<TElement>
 	{
-		public class Range : IEnumerable<TElement>, ICollection<TElement>, ICloneable/*, IOrderedQueryable<TElement>*/
+		public class Range : IEnumerable<TElement>, ICloneable/*, IOrderedQueryable<TElement>*/
 		{
 			internal RedBlackTreeWithStats<TElement> ParentTree;
-			internal Node _rbegin;
-			internal Node _rend;
-			internal CountType _rbeginPosition;
-			internal CountType _rendPosition;
+			internal Node RangeStartNode;
+			internal Node RangeEndNode;
+			internal CountType RangeStartPosition;
+			internal CountType RangeEndPosition;
 		
-			public CountType GetItemPosition(CountType index) {
-				if (_rbeginPosition == -1) {
-					return ParentTree.getNodePosition(_rbegin) + index;
+			public CountType GetItemPosition(CountType LocalIndex) {
+				if (this.RangeStartPosition == -1) {
+					return ParentTree.GetNodePosition(RangeStartNode) + LocalIndex;
 				}
-				return _rbeginPosition + index;
+				return this.RangeStartPosition + LocalIndex;
 			}
 		
-			internal Range(RedBlackTreeWithStats<TElement> ParentTree, Node b, Node e, CountType rbeginPosition = -1, CountType rendPosition = -1) {
+			internal Range(RedBlackTreeWithStats<TElement> ParentTree, Node RangeStartNode, Node RangeEndNode, CountType RangeStartPosition = -1, CountType RangeEndPosition = -1) {
 				this.ParentTree = ParentTree;
-				if (b == null) b = ParentTree.locateNodeAtPosition(rbeginPosition);
-				if (e == null) e = ParentTree.locateNodeAtPosition(rendPosition);
-				if (b == null || e == null) {
-					//b = _end.left;
-					//e = _end.left;
-					b = e = ParentTree.RootNode;
-					rbeginPosition = -1;
-					rendPosition = -1;
+				if (RangeStartNode == null) RangeStartNode = ParentTree.LocateNodeAtPosition(RangeStartPosition);
+				if (RangeEndNode == null) RangeEndNode = ParentTree.LocateNodeAtPosition(RangeEndPosition);
+				if (RangeStartNode == null || RangeEndNode == null) {
+					RangeStartNode = RangeEndNode = ParentTree.BaseRootNode;
+					RangeStartPosition = -1;
+					RangeEndPosition = -1;
 				}
-				_rbegin = b;
-				_rend = e;
-				_rbeginPosition = rbeginPosition;
-				_rendPosition = rendPosition;
+				this.RangeStartNode = RangeStartNode;
+				this.RangeEndNode = RangeEndNode;
+				this.RangeStartPosition = RangeStartPosition;
+				this.RangeEndPosition = RangeEndPosition;
 			}
 		
 			public Range Clone() {
-				return new Range(ParentTree, _rbegin, _rend, _rbeginPosition, _rendPosition);
+				return new Range(ParentTree, RangeStartNode, RangeEndNode, RangeStartPosition, RangeEndPosition);
 			}
 		
 			public Range Limit(CountType limitCount) {
 				Assert(limitCount >= 0);
 			
-				if (_rbeginPosition != -1 && _rendPosition != -1) {
-					if (_rbeginPosition + limitCount > _rendPosition) {
-						limitCount = _rendPosition - _rbeginPosition; 
+				if (RangeStartPosition != -1 && RangeEndPosition != -1) {
+					if (RangeStartPosition + limitCount > RangeEndPosition) {
+						limitCount = RangeEndPosition - RangeStartPosition; 
 					}
 				} else {
 					// Unsecure.
@@ -63,8 +62,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 
 				return new Range(
 					ParentTree,
-					_rbegin, null,
-					_rbeginPosition, GetItemPosition(limitCount)
+					RangeStartNode, null,
+					RangeStartPosition, GetItemPosition(limitCount)
 				);
 			}
 		
@@ -82,19 +81,19 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				return new Range(
 					ParentTree,
-					null, _rend,
-					GetItemPosition(skipCount), _rendPosition
+					null, RangeEndNode,
+					GetItemPosition(skipCount), RangeEndPosition
 				);
 			}
 
 			bool IsEmpty
 			{
 				get {
-					return _rbegin == _rend;
+					return RangeStartNode == RangeEndNode;
 				}
 			}
 
-			public CountType Length
+			public CountType Count
 			{
 				get
 				{
@@ -102,12 +101,12 @@ namespace CSharpUtils.Containers.RedBlackTree
 					//writefln("End: %d:%s", countLesser(_end), *_end);
 					//return _begin
 
-					if (_rbeginPosition != -1 && _rendPosition != -1)
+					if (RangeStartPosition != -1 && RangeEndPosition != -1)
 					{
-						return _rendPosition - _rbeginPosition;
+						return RangeEndPosition - RangeStartPosition;
 					}
 
-					return ParentTree.countLesser(_rend) - ParentTree.countLesser(_rbegin);
+					return ParentTree.CountLesserThanNode(RangeEndNode) - ParentTree.CountLesserThanNode(RangeStartNode);
 				}
 			}
 
@@ -134,7 +133,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 					null,
 					null,
 					GetItemPosition(start),
-					Length
+					Count
 				);
 			}
 
@@ -142,96 +141,53 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				get
 				{
-					return ParentTree.locateNodeAtPosition(GetItemPosition(Index));
+					return ParentTree.LocateNodeAtPosition(GetItemPosition(Index));
 				}
 			}
 
-			/*
-			Type front
+			TElement FrontElement
 			{
 				get
 				{
-					return _rbegin.value;
+					return RangeStartNode.Value;
 				}
 			}
 
-			Type back
+			TElement BackElement
 			{
 				get
 				{
-					return _rend.prev.value;
+					return RangeEndNode.PreviousNode.Value;
 				}
 			}
-
-			void popFront()
-			{
-				_rbegin = _rbegin.next;
-			}
-		
-			void popBack()
-			{
-				_rend = _rend.prev;
-			}
-			*/
 
 			IEnumerator<TElement> IEnumerable<TElement>.GetEnumerator()
 			{
-				for (Node current = _rbegin; current != _rend; current = current.next)
+				for (var CurrentNode = RangeStartNode; CurrentNode != RangeEndNode; CurrentNode = CurrentNode.NextNode)
 				{
-					yield return current.Value;
+					yield return CurrentNode.Value;
 				}
 			}
 
-			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			IEnumerator System.Collections.IEnumerable.GetEnumerator()
 			{
-				for (Node current = _rbegin; current != _rend; current = current.next)
+				for (Node CurrentNode = RangeStartNode; CurrentNode != RangeEndNode; CurrentNode = CurrentNode.NextNode)
 				{
-					yield return current.Value;
+					yield return CurrentNode.Value;
 				}
 			}
 
-			public void Add(TElement item)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void Clear()
-			{
-				throw new NotImplementedException();
-			}
-
-			public bool Contains(TElement item)
+			public bool Contains(TElement Item)
 			{
 				if (IsEmpty) return false;
-				//Node node = ParentTree._find(item);
-				if (ParentTree.Comparer.Compare(item, _rbegin.value) < 0) return false;
-				if (ParentTree.Comparer.Compare(item, _rend.value) > 0) return false;
-				return true;
-			}
-
-			public void CopyTo(TElement[] array, CountType arrayIndex)
-			{
-				throw new NotImplementedException();
-			}
-
-			public CountType Count
-			{
-				get { return Length; }
-			}
-
-			public bool IsReadOnly
-			{
-				get { return true; }
-			}
-
-			public bool Remove(TElement item)
-			{
-				throw new NotImplementedException();
+				if (ParentTree.Comparer.Compare(Item, RangeStartNode.Value) < 0) return false;
+				if (RangeEndNode != ParentTree.BaseRootNode && ParentTree.Comparer.Compare(Item, RangeEndNode.Value) >= 0) return false;
+				return ParentTree.Contains(Item);
 			}
 
 			object ICloneable.Clone()
 			{
-				return new Range(ParentTree, _rbegin, _rend, _rbeginPosition, _rendPosition);
+				return new Range(ParentTree, RangeStartNode, RangeEndNode, RangeStartPosition, RangeEndPosition);
 			}
 
 			/*
