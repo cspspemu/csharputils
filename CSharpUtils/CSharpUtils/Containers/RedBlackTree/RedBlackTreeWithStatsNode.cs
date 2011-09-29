@@ -186,6 +186,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 
 			internal void UpdateCurrentAndAncestors(CountType CountIncrement)
 			{
+				//return;
+
 				var PreviousNode = this;
 				var CurrentNode = this.ParentNode;
 

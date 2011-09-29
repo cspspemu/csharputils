@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace CSharpUtils.Containers.RedBlackTree
 {
-	public partial class RedBlackTreeWithStats<TElement> : ICollection<TElement>, ICloneable, IOrderedQueryable<TElement>, IQueryable<TElement>
+	public partial class RedBlackTreeWithStats<TElement> : ICollection<TElement>, ICloneable//, IOrderedQueryable<TElement>
 	{
 		Node RootNode = null;
 		CountType _Length = 0;
@@ -603,19 +603,11 @@ namespace CSharpUtils.Containers.RedBlackTree
 		//private readonly Expression _expression;
 		//private readonly RedBlackTreeWithStatsQueryProvider _provider;
 
-		public System.Type ElementType
-		{
-			get { return All.ElementType; }
-		}
 
-		public Expression Expression
-		{
-			get { return All.Expression; }
-		}
-
-		public IQueryProvider Provider
-		{
-			get { return All.Provider; }
-		}
+		/*
+		public System.Type ElementType { get { return All.ElementType; } }
+		public Expression Expression { get { return All.Expression; } }
+		public IQueryProvider Provider { get { return All.Provider; } }
+		*/
 	}
 }

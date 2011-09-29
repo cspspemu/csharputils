@@ -9,7 +9,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 {
 	public partial class RedBlackTreeWithStats<TElement>
 	{
-		public class Range : IEnumerable<TElement>, ICollection<TElement>, ICloneable, IOrderedQueryable<TElement>
+		public class Range : IEnumerable<TElement>, ICollection<TElement>, ICloneable/*, IOrderedQueryable<TElement>*/
 		{
 			internal RedBlackTreeWithStats<TElement> ParentTree;
 			internal Node _rbegin;
@@ -17,7 +17,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			internal CountType _rbeginPosition;
 			internal CountType _rendPosition;
 		
-			public CountType GetOffsetPosition(CountType index) {
+			public CountType GetItemPosition(CountType index) {
 				if (_rbeginPosition == -1) {
 					return ParentTree.getNodePosition(_rbegin) + index;
 				}
@@ -64,7 +64,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				return new Range(
 					ParentTree,
 					_rbegin, null,
-					_rbeginPosition, GetOffsetPosition(limitCount)
+					_rbeginPosition, GetItemPosition(limitCount)
 				);
 			}
 		
@@ -83,7 +83,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				return new Range(
 					ParentTree,
 					null, _rend,
-					GetOffsetPosition(skipCount), _rendPosition
+					GetItemPosition(skipCount), _rendPosition
 				);
 			}
 
@@ -122,8 +122,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 					ParentTree,
 					null,
 					null,
-					GetOffsetPosition(start),
-					GetOffsetPosition(end)
+					GetItemPosition(start),
+					GetItemPosition(end)
 				);
 			}
 
@@ -133,7 +133,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 					ParentTree,
 					null,
 					null,
-					GetOffsetPosition(start),
+					GetItemPosition(start),
 					Length
 				);
 			}
@@ -142,7 +142,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				get
 				{
-					return ParentTree.locateNodeAtPosition(GetOffsetPosition(Index));
+					return ParentTree.locateNodeAtPosition(GetItemPosition(Index));
 				}
 			}
 
@@ -234,20 +234,11 @@ namespace CSharpUtils.Containers.RedBlackTree
 				return new Range(ParentTree, _rbegin, _rend, _rbeginPosition, _rendPosition);
 			}
 
-			public System.Type ElementType
-			{
-				get { return typeof(TElement); }
-			}
-
-			public Expression Expression
-			{
-				get { return Expression.Constant(this); }
-			}
-
-			public IQueryProvider Provider
-			{
-				get { return new RedBlackTreeWithStatsQueryProvider<TElement>(this); }
-			}
+			/*
+			public System.Type ElementType { get { return typeof(TElement); } }
+			public Expression Expression { get { return Expression.Constant(this); } }
+			public IQueryProvider Provider { get { return new RedBlackTreeWithStatsQueryProvider<TElement>(this); } }
+			*/
 		}
 	}
 }
