@@ -599,15 +599,15 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				get
 				{
-					Node n = this;
-					if (n.RightNode == null)
+					Node Node = this;
+					if (Node._RightNode == null)
 					{
-						while (!n.IsLeftNode) n = n._ParentNode;
-						return n._ParentNode;
+						while (!Node.IsLeftNode) Node = Node._ParentNode;
+						return Node._ParentNode;
 					}
 					else
 					{
-						return n.RightNode.LeftMostNode;
+						return Node._RightNode.LeftMostNode;
 					}
 				}
 			}

@@ -17,6 +17,14 @@ namespace CSharpUtils.Containers.RedBlackTree
 			internal Node RangeEndNode;
 			internal CountType RangeStartPosition;
 			internal CountType RangeEndPosition;
+
+			internal Node RangeLastNode
+			{
+				get
+				{
+					return RangeEndNode.PreviousNode;
+				}
+			}
 		
 			public CountType GetItemPosition(CountType LocalIndex) {
 				if (this.RangeStartPosition == -1) {
@@ -66,30 +74,35 @@ namespace CSharpUtils.Containers.RedBlackTree
 					RangeStartPosition, GetItemPosition(limitCount)
 				);
 			}
-		
-			public Range Skip(CountType skipCount)
+
+			public Range SkipTake(CountType SkipCount, CountType TakeCount)
 			{
-				return SkipUnchecked(skipCount);
+				return Skip(SkipCount).Take(TakeCount);
+			}
+		
+			public Range Skip(CountType SkipCount)
+			{
+				return SkipUnchecked(SkipCount);
 			}
 
-			public Range Take(CountType skipCount)
+			public Range Take(CountType SkipCount)
 			{
-				return Limit(skipCount);
+				return Limit(SkipCount);
 			}
 		
-			public Range SkipUnchecked(CountType skipCount)
+			public Range SkipUnchecked(CountType SkipCount)
 			{
 				return new Range(
 					ParentTree,
 					null, RangeEndNode,
-					GetItemPosition(skipCount), RangeEndPosition
+					GetItemPosition(SkipCount), RangeEndPosition
 				);
 			}
 
 			bool IsEmpty
 			{
 				get {
-					return RangeStartNode == RangeEndNode;
+					return (RangeStartNode == RangeEndNode);
 				}
 			}
 
@@ -110,19 +123,24 @@ namespace CSharpUtils.Containers.RedBlackTree
 				}
 			}
 
+			/// <summary>
+			/// Slice is immutable, so don't need to clone.
+			/// </summary>
+			/// <returns></returns>
 			public Range Slice()
 			{
-				return this.Clone();
+				//return this.Clone();
+				return this;
 			}
 
-			public Range Slice(CountType start, CountType end)
+			public Range Slice(CountType StartIndex, CountType EndIndex)
 			{
 				return new Range(
 					ParentTree,
 					null,
 					null,
-					GetItemPosition(start),
-					GetItemPosition(end)
+					GetItemPosition(StartIndex),
+					GetItemPosition(EndIndex)
 				);
 			}
 
@@ -157,7 +175,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				get
 				{
-					return RangeEndNode.PreviousNode.Value;
+					return RangeLastNode.Value;
 				}
 			}
 
@@ -169,7 +187,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				}
 			}
 
-			IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			IEnumerator IEnumerable.GetEnumerator()
 			{
 				for (Node CurrentNode = RangeStartNode; CurrentNode != RangeEndNode; CurrentNode = CurrentNode.NextNode)
 				{
@@ -181,7 +199,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			{
 				if (IsEmpty) return false;
 				if (ParentTree.Comparer.Compare(Item, RangeStartNode.Value) < 0) return false;
-				if (RangeEndNode != ParentTree.BaseRootNode && ParentTree.Comparer.Compare(Item, RangeEndNode.Value) >= 0) return false;
+				if (ParentTree.Comparer.Compare(Item, RangeLastNode.Value) > 0) return false;
 				return ParentTree.Contains(Item);
 			}
 

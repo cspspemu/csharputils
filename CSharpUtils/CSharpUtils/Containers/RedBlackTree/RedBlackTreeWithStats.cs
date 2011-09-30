@@ -15,11 +15,33 @@ namespace CSharpUtils.Containers.RedBlackTree
 		CountType _Length = 0;
 		IComparer<TElement> Comparer = null;
 		bool AllowDuplicates = false;
-		bool Concurrent;
+		bool _Concurrent;
+
+		bool Concurrent
+		{
+			get
+			{
+				return _Concurrent;
+			}
+			set
+			{
+				if (value == true) throw(new NotImplementedException());
+				_Concurrent = value;
+			}
+		}
+
 		ReaderWriterLock ReaderWriterLock = new ReaderWriterLock();
 		//const bool AllowDuplicates = false;
 
-		public RedBlackTreeWithStats(bool Concurrent = true)
+		public RedBlackTreeWithStats(IComparer<TElement> Comparer, bool Concurrent = false)
+		{
+			this.Comparer = Comparer;
+			this.Concurrent = Concurrent;
+			//this.allowDuplicates = false;
+			_setup();
+		}
+
+		public RedBlackTreeWithStats(bool Concurrent = false)
 		{
 			this.Comparer = Comparer<TElement>.Default;
 			this.Concurrent = Concurrent;
@@ -27,20 +49,12 @@ namespace CSharpUtils.Containers.RedBlackTree
 			_setup();
 		}
 
-		public RedBlackTreeWithStats(IComparer<TElement> Comparer, Node _end, int _length, bool Concurrent = true)
+		internal RedBlackTreeWithStats(IComparer<TElement> Comparer, Node _end, int _length, bool Concurrent = false)
 		{
 			this.Comparer = Comparer;
 			this.BaseRootNode = _end;
 			this._Length = _length;
 			this.Concurrent = Concurrent;
-		}
-
-		public RedBlackTreeWithStats(IComparer<TElement> Comparer, bool Concurrent = true)
-		{
-			this.Comparer = Comparer;
-			this.Concurrent = Concurrent;
-			//this.allowDuplicates = false;
-			_setup();
 		}
 
 		private void _setup()
@@ -68,22 +82,22 @@ namespace CSharpUtils.Containers.RedBlackTree
 
 		private void ConcurrentAcquireWriterLock()
 		{
-			if (this.Concurrent) ReaderWriterLock.AcquireWriterLock(Int32.MaxValue);
+			if (this._Concurrent) ReaderWriterLock.AcquireWriterLock(Int32.MaxValue);
 		}
 
 		private void ConcurrentReleaseWriterLock()
 		{
-			if (this.Concurrent) ReaderWriterLock.ReleaseWriterLock();
+			if (this._Concurrent) ReaderWriterLock.ReleaseWriterLock();
 		}
 
 		private void ConcurrentAcquireReaderLock()
 		{
-			if (this.Concurrent) ReaderWriterLock.AcquireReaderLock(Int32.MaxValue);
+			if (this._Concurrent) ReaderWriterLock.AcquireReaderLock(Int32.MaxValue);
 		}
 
 		private void ConcurrentReleaseReaderLock()
 		{
-			if (this.Concurrent) ReaderWriterLock.ReleaseReaderLock();
+			if (this._Concurrent) ReaderWriterLock.ReleaseReaderLock();
 		}
 
 		private Node NonConcurrentAdd(TElement n)

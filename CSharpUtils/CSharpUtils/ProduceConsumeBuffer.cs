@@ -37,6 +37,11 @@ namespace CSharpUtils
 			return Items.Slice(0, Length);
 		}
 
+		public ArraySegment<T> ConsumePeekArraySegment(int Length)
+		{
+			return new ArraySegment<T>(Items, 0, Length);
+		}
+
 		public int Consume(T[] Buffer, int Offset, int Length)
 		{
 			Length = Math.Min(Length, ConsumeRemaining);

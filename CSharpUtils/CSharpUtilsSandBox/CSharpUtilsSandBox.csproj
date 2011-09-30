@@ -45,6 +45,11 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\BaseClientHandler.cs" />
+    <Compile Include="Server\ClientHandler.cs" />
+    <Compile Include="Server\ServerIndices.cs" />
+    <Compile Include="Server\Packet.cs" />
+    <Compile Include="Server\ServerHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">

@@ -74,5 +74,20 @@ namespace CSharpUtilsTests
 				Stats.All.Where(Item => !Slice1.Contains(Item)).ToStringArray()
 			);
 		}
+
+		[TestMethod]
+		public void Test4()
+		{
+			var Slice1 = Stats.All.Slice(1, 6).Slice(2, 4);
+			Assert.AreEqual(2, Slice1.Count);
+			Assert.AreEqual(
+				"3,4",
+				Slice1.ToStringArray()
+			);
+			Assert.AreEqual(
+				"0,1,2,5,6,7,8,9,10,11",
+				Stats.All.Where(Item => !Slice1.Contains(Item)).ToStringArray()
+			);
+		}
 	}
 }
