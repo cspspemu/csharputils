@@ -69,10 +69,12 @@
     <Compile Include="Compression\LzBufferTest.cs" />
     <Compile Include="MemoryFileSystemTest.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsTest.cs" />
+    <Compile Include="Net\NetworkUtilitiesTest.cs" />
     <Compile Include="ReaderWriterLockExtensionsTest.cs" />
     <Compile Include="SliceStreamTest.cs" />
     <Compile Include="Streams\StreamChunker2Test.cs" />
     <Compile Include="Streams\StreamChunkerTest.cs" />
+    <Compile Include="Net\TcpTestServerTest.cs" />
     <Compile Include="Templates\DynaGenTest\DynaGenTest.cs" />
     <Compile Include="Templates\DynamicUtilsTest.cs" />
     <Compile Include="Templates\TemplateTest.cs" />

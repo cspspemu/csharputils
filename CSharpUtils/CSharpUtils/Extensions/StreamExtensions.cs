@@ -108,8 +108,13 @@ namespace CSharpUtils.Extensions
 		static public byte[] ReadBytes(this Stream Stream, int ToRead)
 		{
 			var Buffer = new byte[ToRead];
-			var Readed = Stream.Read(Buffer, 0, (int)ToRead);
-			if (Readed != ToRead) throw(new Exception("Unable to read " + ToRead + " bytes, readed " + Readed + "."));
+			int Readed = 0;
+			while (Readed < ToRead)
+			{
+				int ReadedNow = Stream.Read(Buffer, Readed, ToRead - Readed);
+				if (ReadedNow <= 0) throw (new Exception("Unable to read " + ToRead + " bytes, readed " + Readed + "."));
+				Readed += ReadedNow;
+			}
 			return Buffer;
 		}
 
