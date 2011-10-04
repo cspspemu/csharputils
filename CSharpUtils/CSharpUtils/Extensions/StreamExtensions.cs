@@ -17,13 +17,21 @@ namespace CSharpUtils.Extensions
 			return Stream.Available() <= 0;
 		}
 
-		static public Stream PreservePositionAndLock(this Stream Stream, Action Callback)
+		static public TStream PreservePositionAndLock<TStream>(this TStream Stream, Action Callback) where TStream : Stream
+		{
+			return Stream.PreservePositionAndLock(() =>
+			{
+				Callback();
+			});
+		}
+
+		static public TStream PreservePositionAndLock<TStream>(this TStream Stream, Action<Stream> Callback) where TStream : Stream
 		{
 			lock (Stream)
 			{
 				var OldPosition = Stream.Position;
 				{
-					Callback();
+					Callback(Stream);
 				}
 				Stream.Position = OldPosition;
 			}
@@ -142,10 +150,13 @@ namespace CSharpUtils.Extensions
 			if (ToRead == -1)
 			{
 				var Temp = new MemoryStream();
-				byte Byte;
-				while ((Byte = (byte)Stream.ReadByte()) != 0)
+				while (true)
 				{
-					Temp.WriteByte(Byte);
+					int Readed = Stream.ReadByte();
+					//if (Readed < 0) break;
+					if (Readed < 0) throw(new EndOfStreamException("ReadStringz reached the end of the stream without finding a \\0 character at Position=" + Stream.Position + "."));
+					if (Readed == 0) break;
+					Temp.WriteByte((byte)Readed);
 				}
 				return Encoding.GetString(Temp.ToArray());
 			}
@@ -357,6 +368,11 @@ namespace CSharpUtils.Extensions
 					Stream.Position = OldPosition;
 				}
 			}
+		}
+
+		static public SliceStream Slice(this Stream BaseStream)
+		{
+			return SliceStream.CreateWithLength(BaseStream);
 		}
 
 		static public SliceStream SliceWithLength(this Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)

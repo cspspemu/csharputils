@@ -528,7 +528,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 
 		public CountType Count
 		{
-			get { return Count; }
+			get { return _Length; }
 		}
 
 		public bool IsReadOnly

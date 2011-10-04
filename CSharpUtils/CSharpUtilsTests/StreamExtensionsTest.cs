@@ -43,5 +43,19 @@ namespace CSharpUtilsTests
 			Assert.AreEqual("rld", Encoding.ASCII.GetString(SliceStream2.ReadBytes(3)));
 			Assert.AreEqual(0, SliceStream2.Available());
 		}
+
+		[TestMethod]
+		public void PreservePositionAndLockWithNewMemoryStreamTest()
+		{
+			Assert.AreEqual(
+				"010203",
+				new MemoryStream().PreservePositionAndLock((Stream) =>
+				{
+					Stream.WriteByte(1);
+					Stream.WriteByte(2);
+					Stream.WriteByte(3);
+				}).ToArray().ToHexString()
+			);
+		}
 	}
 }
