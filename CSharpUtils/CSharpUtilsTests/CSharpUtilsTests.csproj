@@ -65,6 +65,7 @@
     <Compile Include="Http\HttpUtilsTest.cs" />
     <Compile Include="Http\MultipartDecoderTest.cs" />
     <Compile Include="Compression\HuffmanTest.cs" />
+    <Compile Include="Json\JSONTest.cs" />
     <Compile Include="ListExtensionsTest.cs" />
     <Compile Include="Compression\LzBufferTest.cs" />
     <Compile Include="MemoryFileSystemTest.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Templates\DynamicUtilsTest.cs" />
     <Compile Include="Templates\TemplateTest.cs" />
     <Compile Include="Templates\TemplateTokenizeTest.cs" />
+    <Compile Include="TypeUtilsTest.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFromPathTest.cs" />
     <Compile Include="LinqExExtensionsTest.cs" />
     <Compile Include="Process\ProcessTest.cs" />

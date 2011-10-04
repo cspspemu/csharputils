@@ -8,6 +8,11 @@ using System.Threading;
 
 namespace CSharpUtils.Net
 {
+	/// <summary>
+	/// Creates a TcpListener and connects a Socket to it.
+	/// It stores the two TcpClient on the object: the local to the listener and the remote one.
+	/// Very useful for unittesting components that requires sockets.
+	/// </summary>
 	public class TcpTestServer
 	{
 		public TcpListener TcpListener;

@@ -83,6 +83,7 @@
     <Compile Include="Http\HttpUtils.cs" />
     <Compile Include="Http\MultipartDecoder.cs" />
     <Compile Include="Http\Server\HttpServer.cs" />
+    <Compile Include="Json\JSON.cs" />
     <Compile Include="LanguageUtils.cs" />
     <Compile Include="Misc\Acme1\Acme1File.cs" />
     <Compile Include="Net\NetworkUtilities.cs" />
@@ -361,6 +362,7 @@
     <Compile Include="Templates\Tokenizers\TokenReader.cs" />
     <Compile Include="Templates\Utils\StringUtils.cs" />
     <Compile Include="TimeSampler.cs" />
+    <Compile Include="TypeUtils.cs" />
     <Compile Include="VirtualFileSystem\BaseFileSystem.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanNet.cs" />
     <Compile Include="VirtualFileSystem\Dokan\DokanOperations.cs" />
