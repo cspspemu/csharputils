@@ -15,15 +15,20 @@ namespace CSharpUtilsTest
 		{
 			var ThisEncoding = Encoding.UTF8;
 
-			var DataString1 = "Hola. Esto es una prueba para ver si funciona la compresión Huffman.";
-			var DataBytes1 = ThisEncoding.GetBytes(DataString1);
-			var DataStream = new MemoryStream(DataBytes1);
-			var UsageTable = Huffman.CalculateUsageTable(DataBytes1);
-			var EncodingTable = Huffman.BuildTable(UsageTable);
-			var DataBytes2 = Huffman.Uncompress(Huffman.Compress(DataStream, EncodingTable), (uint)DataBytes1.Length, EncodingTable).ReadAll();
-			var DataString2 = ThisEncoding.GetString(DataBytes2);
+			var InputString = "Hola. Esto es una prueba para ver si funciona la compresión Huffman.";
+			var InputBytes = ThisEncoding.GetBytes(InputString);
+			var InputStream = new MemoryStream(InputBytes);
 
-			Assert.AreEqual(DataString1, DataString2);
+			var InputUsageTable = Huffman.CalculateUsageTable(InputBytes);
+			var InputEncodingTable = Huffman.BuildTable(InputUsageTable);
+
+			var CompressedStream = Huffman.Compress(InputStream, InputEncodingTable);
+
+			var DecompressedStream = Huffman.Uncompress(CompressedStream, (uint)InputBytes.Length, InputEncodingTable);
+			var DecompressedBytes = DecompressedStream.ReadAll();
+			var DecompressedString = ThisEncoding.GetString(DecompressedBytes);
+
+			Assert.AreEqual(InputString, DecompressedString);
 		}
 	}
 }

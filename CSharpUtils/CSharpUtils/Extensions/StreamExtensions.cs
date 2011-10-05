@@ -19,7 +19,7 @@ namespace CSharpUtils.Extensions
 
 		static public TStream PreservePositionAndLock<TStream>(this TStream Stream, Action Callback) where TStream : Stream
 		{
-			return Stream.PreservePositionAndLock(() =>
+			return Stream.PreservePositionAndLock((_Stream) =>
 			{
 				Callback();
 			});
