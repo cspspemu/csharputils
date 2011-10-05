@@ -84,6 +84,7 @@
     <Compile Include="Http\HttpUtils.cs" />
     <Compile Include="Http\MultipartDecoder.cs" />
     <Compile Include="Http\Server\HttpServer.cs" />
+    <Compile Include="Json\IJsonSerializable.cs" />
     <Compile Include="Json\JSON.cs" />
     <Compile Include="LanguageUtils.cs" />
     <Compile Include="Misc\Acme1\Acme1File.cs" />

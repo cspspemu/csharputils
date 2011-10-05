@@ -65,6 +65,12 @@ namespace CSharpUtils.Json
 				return "[" + Str + "]";
 			}
 
+			var IJsonSerializable = ObjectToEncode as IJsonSerializable;
+			if (IJsonSerializable != null)
+			{
+				return IJsonSerializable.ToJson();
+			}
+
 			double NumericResult;
 			string NumericStr = Convert.ToString(ObjectToEncode, CultureInfo.InvariantCulture.NumberFormat);
 			if (Double.TryParse(NumericStr, out NumericResult))

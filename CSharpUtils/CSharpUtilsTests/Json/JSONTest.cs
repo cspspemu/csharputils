@@ -8,6 +8,14 @@ namespace CSharpUtilsTests
 	[TestClass]
 	public class JSONTest
 	{
+		class TestJsonSerializable : IJsonSerializable
+		{
+			public string ToJson()
+			{
+				return "TestJsonSerializable(123)";
+			}
+		}
+
 		[TestMethod]
 		public void StringifyNullTest()
 		{
@@ -61,6 +69,15 @@ namespace CSharpUtilsTests
 				{ "three", 3 },
 				{ "four", 4 },
 			}));
+		}
+
+		[TestMethod]
+		public void StringifyJsonSerializableTest()
+		{
+			Assert.AreEqual(
+				"TestJsonSerializable(123)",
+				JSON.Stringify(new TestJsonSerializable())
+			);
 		}
 	}
 }
