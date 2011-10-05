@@ -449,7 +449,12 @@ namespace CSharpUtils.Containers.RedBlackTree
 		public CountType GetNodePosition(Node Node) {
 			return CountLesserThanNode(Node);
 		}
-	
+
+		public CountType GetItemPosition(TElement Element)
+		{
+			return CountLesserThanNode(NonConcurrentFindNodeFromElement(Element));
+		}
+
 		internal Node LocateNodeAtPosition(CountType PositionToFind) {
 			if (PositionToFind < 0) throw(new Exception("Negative locateNodeAt"));
 			Node current = BaseRootNode;

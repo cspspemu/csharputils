@@ -229,6 +229,14 @@ namespace CSharpUtils.Extensions
 			return Vector;
 		}
 
+		public static T[] ReadStructVectorUntilTheEndOfStream<T>(this Stream Stream) where T : struct
+		{
+			var EntrySize = Marshal.SizeOf(typeof(T));
+			var BytesAvailable = Stream.Available();
+			Console.WriteLine("BytesAvailable={0}/EntrySize={1}", BytesAvailable, EntrySize);
+			return Stream.ReadStructVector<T>((uint)(BytesAvailable / EntrySize));
+		}
+
 		public static Stream WriteStruct<T>(this Stream Stream, T Struct) where T : struct
 		{
 			byte[] Bytes = StructUtils.StructToBytes(Struct);
