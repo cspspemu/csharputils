@@ -214,8 +214,7 @@ namespace CSharpUtils.Extensions
 		public static T ReadStruct<T>(this Stream Stream) where T : struct
 		{
 			var Size = Marshal.SizeOf(typeof(T));
-			var Buffer = new byte[Size];
-			Stream.Read(Buffer, 0, Size);
+			var Buffer = Stream.ReadBytes(Size);
 			return StructUtils.BytesToStruct<T>(Buffer);
 		}
 
@@ -233,7 +232,7 @@ namespace CSharpUtils.Extensions
 		{
 			var EntrySize = Marshal.SizeOf(typeof(T));
 			var BytesAvailable = Stream.Available();
-			Console.WriteLine("BytesAvailable={0}/EntrySize={1}", BytesAvailable, EntrySize);
+			//Console.WriteLine("BytesAvailable={0}/EntrySize={1}", BytesAvailable, EntrySize);
 			return Stream.ReadStructVector<T>((uint)(BytesAvailable / EntrySize));
 		}
 

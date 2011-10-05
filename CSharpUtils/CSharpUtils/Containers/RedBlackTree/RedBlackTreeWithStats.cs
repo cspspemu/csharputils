@@ -492,7 +492,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 				{
 					return new Range(
 						this,
-						RealRootNode.LeftMostNode,
+						(RealRootNode != null) ? RealRootNode.LeftMostNode : null,
 						BaseRootNode,
 						0,
 						_Length

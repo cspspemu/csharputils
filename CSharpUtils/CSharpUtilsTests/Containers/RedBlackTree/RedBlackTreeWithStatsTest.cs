@@ -89,5 +89,12 @@ namespace CSharpUtilsTests
 				Stats.All.Where(Item => !Slice1.Contains(Item)).ToStringArray()
 			);
 		}
+
+		[TestMethod]
+		public void Test5()
+		{
+			var Stats2 = new RedBlackTreeWithStats<int>();
+			Assert.AreEqual(0, Stats2.All.ToArray().Length);
+		}
 	}
 }
