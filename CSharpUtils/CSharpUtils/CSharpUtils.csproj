@@ -363,6 +363,7 @@
     <Compile Include="Templates\Tokenizers\TemplateTokenizer.cs" />
     <Compile Include="Templates\Tokenizers\TokenReader.cs" />
     <Compile Include="Templates\Utils\StringUtils.cs" />
+    <Compile Include="Threading\CustomThreadPool.cs" />
     <Compile Include="TimeSampler.cs" />
     <Compile Include="TypeUtils.cs" />
     <Compile Include="VirtualFileSystem\BaseFileSystem.cs" />

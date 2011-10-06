@@ -59,6 +59,8 @@
     <Compile Include="BitmapExtensionTest.cs" />
     <Compile Include="ConcatStreamTest.cs" />
     <Compile Include="ConsumerMemoryStreamTest.cs" />
+    <Compile Include="Getopt\GetoptTest.cs" />
+    <Compile Include="Threading\CustomThreadPoolTest.cs" />
     <Compile Include="FastcgiHandlerTest.cs" />
     <Compile Include="Html\HtmlUtilsTest.cs" />
     <Compile Include="Http\HttpHeaderTest.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="Templates\DynamicUtilsTest.cs" />
     <Compile Include="Templates\TemplateTest.cs" />
     <Compile Include="Templates\TemplateTokenizeTest.cs" />
+    <Compile Include="Threading\List.cs" />
     <Compile Include="TypeUtilsTest.cs" />
     <Compile Include="VirtualFileSystem\FileSystemFromPathTest.cs" />
     <Compile Include="LinqExExtensionsTest.cs" />
