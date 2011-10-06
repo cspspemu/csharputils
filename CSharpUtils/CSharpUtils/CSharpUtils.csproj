@@ -90,6 +90,7 @@
     <Compile Include="Misc\Acme1\Acme1File.cs" />
     <Compile Include="Net\NetworkUtilities.cs" />
     <Compile Include="Net\TcpTestServer.cs" />
+    <Compile Include="Scgi\ScgiServer.cs" />
     <Compile Include="Streams\ConcatStream.cs" />
     <Compile Include="Streams\ConsumerMemoryStream.cs" />
     <Compile Include="Fastcgi\FascgiRequestInputStream.cs" />

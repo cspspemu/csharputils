@@ -54,7 +54,7 @@ namespace CSharpUtils.Extensions
 			return Chunk;
 		}
 
-		static public byte[] ReadUntil(this Stream Stream, byte ExpectedByte, bool IncludeExpectedByte)
+		static public byte[] ReadUntil(this Stream Stream, byte ExpectedByte, bool IncludeExpectedByte = false)
 		{
 			bool Found = false;
 			var Buffer = new MemoryStream();
@@ -74,7 +74,7 @@ namespace CSharpUtils.Extensions
 			return Buffer.ToArray();
 		}
 
-		static public String ReadUntilString(this Stream Stream, byte ExpectedByte, Encoding Encoding, bool IncludeExpectedByte)
+		static public String ReadUntilString(this Stream Stream, byte ExpectedByte, Encoding Encoding, bool IncludeExpectedByte = false)
 		{
 			return Encoding.GetString(Stream.ReadUntil(ExpectedByte, IncludeExpectedByte));
 		}
@@ -164,6 +164,20 @@ namespace CSharpUtils.Extensions
 			{
 				return Encoding.GetString(Stream.ReadBytes(ToRead)).TrimEnd('\0');
 			}
+		}
+
+		static public Stream WriteStringzPair(this Stream Stream, String Value1, String Value2, Encoding Encoding = null)
+		{
+			Stream.WriteStringz(Value1, -1, Encoding);
+			Stream.WriteStringz(Value2, -1, Encoding);
+			return Stream;
+		}
+
+		static public Stream WriteString(this Stream Stream, String Value, Encoding Encoding = null)
+		{
+			if (Encoding == null) Encoding = Encoding.ASCII;
+			Stream.WriteBytes(Encoding.GetBytes(Value));
+			return Stream;
 		}
 
 		static public Stream WriteStringz(this Stream Stream, String Value, int ToWrite = -1, Encoding Encoding = null)
