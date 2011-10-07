@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Net;
 
 namespace CSharpUtils.Net
 {
@@ -36,7 +38,17 @@ namespace CSharpUtils.Net
 			{
 				if (!IsPortBusy.ContainsKey((ushort)Port))
 				{
-					return (ushort)Port;
+					var TestTcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), (ushort)Port);
+					try
+					{
+						TestTcpListener.Start();
+
+						return (ushort)Port;
+					}
+					finally
+					{
+						TestTcpListener.Stop();
+					}
 				}
 			}
 

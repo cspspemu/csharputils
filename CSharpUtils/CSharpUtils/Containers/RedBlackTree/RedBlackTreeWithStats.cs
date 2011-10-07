@@ -336,9 +336,11 @@ namespace CSharpUtils.Containers.RedBlackTree
 			RemoveNode(BaseRootNode.LeftMostNode);
 		}
 
-		public void RemoveBack()
+		public TElement RemoveBack()
 		{
-			RemoveNode(BaseRootNode.PreviousNode);
+			var LastNode = BaseRootNode.PreviousNode;
+			RemoveNode(LastNode);
+			return LastNode.Value;
 		}
 
 		public void Remove(IEnumerable<TElement> Elements)
