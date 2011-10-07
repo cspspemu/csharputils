@@ -227,11 +227,6 @@ namespace CSharpUtils.Containers.RedBlackTree
 				return this;
 			}
 
-			internal void setColor(Node End)
-			{
-				SetColor(End);
-			}
-
 			internal void SetColor(Node End)
 			{
 				//writefln("Updating tree...");

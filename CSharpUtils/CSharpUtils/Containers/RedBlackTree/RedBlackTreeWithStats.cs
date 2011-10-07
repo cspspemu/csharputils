@@ -17,6 +17,13 @@ namespace CSharpUtils.Containers.RedBlackTree
 		bool AllowDuplicates = false;
 		bool _Concurrent;
 
+		/// <summary>
+		/// Max number of elements that the collection will have.
+		/// If inserted more, it will remove the tail of the collection.
+		/// If this value is -1, that means that the collection is not capped.
+		/// </summary>
+		public int CappedToNumberOfElements = -1;
+
 		bool Concurrent
 		{
 			get
@@ -106,12 +113,12 @@ namespace CSharpUtils.Containers.RedBlackTree
 			return NonConcurrentAdd(n, out added);
 		}
 
-		private Node NonConcurrentAdd(TElement ElementToAdd, out bool added)
+		private Node NonConcurrentAdd(TElement ElementToAdd, out bool Added)
 		{
 			//bool added = false;
 			//var Node = ReaderWriterLock.WriterLock<Node>(() =>
 			Node result = null;
-			added = true;
+			Added = true;
 
 			if (RealRootNode == null)
 			{
@@ -143,7 +150,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 							if (!_less(newParent.Value, ElementToAdd))
 							{
 								result = newParent;
-								added = false;
+								Added = false;
 								break;
 							}
 						}
@@ -163,22 +170,35 @@ namespace CSharpUtils.Containers.RedBlackTree
 				}
 			}
 
-			if (AllowDuplicates)
+			try
 			{
-				result.UpdateCurrentAndAncestors(+1);
-				result.setColor(BaseRootNode);
-				_Length++;
-				return result;
-			}
-			else
-			{
-				if (added)
+				if (AllowDuplicates)
 				{
 					result.UpdateCurrentAndAncestors(+1);
-					result.setColor(BaseRootNode);
+					result.SetColor(BaseRootNode);
+					_Length++;
+					return result;
 				}
-				_Length++;
-				return result;
+				else
+				{
+					if (Added)
+					{
+						result.UpdateCurrentAndAncestors(+1);
+						result.SetColor(BaseRootNode);
+					}
+					_Length++;
+					return result;
+				}
+			}
+			finally
+			{
+				if (Added && this.CappedToNumberOfElements >= 0)
+				{
+					if (this.Count > this.CappedToNumberOfElements)
+					{
+						RemoveBack();
+					}
+				}
 			}
 		}
 
@@ -392,7 +412,7 @@ namespace CSharpUtils.Containers.RedBlackTree
 			return new Range(this, BaseRootNode.LeftMostNode, FindFirstGreaterEqualNode(e));
 		}
 
-		Range equalRange(TElement e)
+		Range EqualRange(TElement e)
 		{
 			var beg = FindFirstGreaterEqualNode(e);
 			if(beg == BaseRootNode || _less(e, beg.Value)) {

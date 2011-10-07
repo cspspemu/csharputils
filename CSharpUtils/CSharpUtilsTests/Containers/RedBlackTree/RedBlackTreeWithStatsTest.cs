@@ -96,5 +96,24 @@ namespace CSharpUtilsTests
 			var Stats2 = new RedBlackTreeWithStats<int>();
 			Assert.AreEqual(0, Stats2.All.ToArray().Length);
 		}
+
+		[TestMethod]
+		public void CappedCollectionTest()
+		{
+			var Stats2 = new RedBlackTreeWithStats<int>();
+			Stats2.CappedToNumberOfElements = 4;
+			Stats2.Add(0);
+			Stats2.Add(1);
+			Stats2.Add(2);
+			Stats2.Add(3);
+			Assert.AreEqual("0,1,2,3", Stats2.All.ToStringArray());
+			Assert.AreEqual(4, Stats2.Count);
+			Stats2.Add(4);
+			Assert.AreEqual("0,1,2,3", Stats2.All.ToStringArray());
+			Assert.AreEqual(4, Stats2.Count);
+			Stats2.Add(-1);
+			Assert.AreEqual("-1,0,1,2", Stats2.All.ToStringArray());
+			Assert.AreEqual(4, Stats2.Count);
+		}
 	}
 }
