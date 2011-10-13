@@ -71,6 +71,7 @@
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\ReaderWriterLockExtensions.cs" />
+    <Compile Include="Extensions\SerializationExtensions.cs" />
     <Compile Include="Extensions\StructExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Fastcgi\Http\FastcgiHttpServer.cs" />
