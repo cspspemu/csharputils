@@ -7,6 +7,11 @@ namespace CSharpUtils.Extensions
 {
 	static public class StructExtensions
 	{
+		static public String ToJson<T>(this T Object)
+		{
+			return Json.JSON.Encode(Object);
+		}
+
 		static public string ToStringDefault<T>(this T Struct) where T : struct
 		{
 			var Ret = "";
