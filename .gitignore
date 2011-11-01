@@ -24,3 +24,8 @@
 /CSharpUtils/CSharpUtilsDokanMount/obj
 /CSharpUtils/CSharpUtilsFastcgiTest/obj
 /CSharpUtils/CSharpUtilsTemplateTest/obj
+/CSharpUtils/CSharpUtils.Drawing/obj
+/CSharpUtils/CSharpUtils.Drawing/bin
+/CSharpUtils/CSharpUtils.Forms/obj
+/CSharpUtils/CSharpUtils.Forms/bin
+/CSharpUtils/CSharpUtilsFastcgiTest/bin

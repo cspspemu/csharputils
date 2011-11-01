@@ -37,10 +37,10 @@ namespace Tamir.SharpSsh.jsch.jce
 	{
 		internal byte[] p;
 		internal byte[] g;
-		internal byte[] e;  // my public key
+		//internal byte[] e;  // my public key
 		internal byte[] e_array;
 		internal byte[] f;  // your public key
-		internal byte[] K;  // shared secret key
+		//internal byte[] K;  // shared secret key
 		internal byte[] K_array;
 
 		private DiffieHellman dh;

@@ -12,8 +12,7 @@
     <AssemblyName>CSharpUtils</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,23 +37,16 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayEqualityComparer.cs" />
     <Compile Include="AsyncTask.cs" />
-    <Compile Include="BitmapChannel.cs" />
-    <Compile Include="BitmapUtils.cs" />
-    <Compile Include="ColorUtils.cs" />
     <Compile Include="Compression\Huffman.cs" />
     <Compile Include="Compression\Lz\LzBuffer.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStats.cs" />
@@ -66,7 +58,6 @@
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
-    <Compile Include="Extensions\BitmapExtension.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -91,15 +82,8 @@
     <Compile Include="DateTimeRange.cs" />
     <Compile Include="Endianness.cs" />
     <Compile Include="EnumerableComparer.cs" />
-    <Compile Include="Forms\ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ProgressForm.Designer.cs">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="LinqEqualityComparer.cs" />
     <Compile Include="FileUtils.cs" />
-    <Compile Include="Forms\TimerTaskQueue.cs" />
     <Compile Include="LazyHolder.cs" />
     <Compile Include="Extensions\LinqExExtensions.cs" />
     <Compile Include="Logger.cs" />
@@ -123,11 +107,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wildcard.cs" />
     <Compile Include="XmlSerializerUtils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Forms\ProgressForm.resx">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
