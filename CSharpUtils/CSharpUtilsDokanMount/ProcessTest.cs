@@ -28,15 +28,26 @@ namespace CSharpUtilsDokanMount
 			{
 				Output.AddLast("[");
 				//Output.AddLast(String.Join(",", Process.allProcesses));
-				mainProcess._ExecuteProcess();
-				mainProcess._DrawProcess();
+				mainProcess.ExecuteTree();
+				mainProcess.DrawTree(null);
 				//f1._ExecuteProcess();
 				//Console.WriteLine("RemoveOld[1/2]");
-				Process._removeOld();
+				ProcessBase._removeOld();
 				//Console.WriteLine("RemoveOld[2/2]");
 				Output.AddLast("]");
 			}
 			//Console.ReadKey();
+		}
+	}
+
+	class MainProcess : ProcessBase
+	{
+		protected override void Main()
+		{
+			while (State == State.Running)
+			{
+				Yield();
+			}
 		}
 	}
 
@@ -49,7 +60,7 @@ namespace CSharpUtilsDokanMount
 		}
 	}
 
-	abstract class MyProcess : Process
+	abstract class MyProcess : ProcessBase
 	{
 		int n = 0;
 		public delegate void DrawedHandler(object sender, EventArgs e);
@@ -73,7 +84,7 @@ namespace CSharpUtilsDokanMount
 			}
 		}
 
-		override protected void Draw()
+		override protected void DrawItem(object _Context)
 		{
 			if (Drawed != null) Drawed(this, new DrawedEventArgs(n));
 			//Console.WriteLine(n);
@@ -83,7 +94,7 @@ namespace CSharpUtilsDokanMount
 
 	class MyProcess1 : MyProcess
 	{
-		override protected void main()
+		override protected void Main()
 		{
 			increment();
 			decrement();
@@ -92,7 +103,7 @@ namespace CSharpUtilsDokanMount
 
 	class MyProcess2 : MyProcess
 	{
-		override protected void main()
+		override protected void Main()
 		{
 			decrement();
 			increment();
