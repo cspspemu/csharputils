@@ -74,6 +74,8 @@
     <Compile Include="Extensions\SerializationExtensions.cs" />
     <Compile Include="Extensions\StructExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Factory\Factory.cs" />
+    <Compile Include="Factory\MockeableFactory.cs" />
     <Compile Include="Fastcgi\Http\FastcgiHttpServer.cs" />
     <Compile Include="Fastcgi\Http\HttpFile.cs" />
     <Compile Include="Fastcgi\Http\HttpRequest.cs" />
