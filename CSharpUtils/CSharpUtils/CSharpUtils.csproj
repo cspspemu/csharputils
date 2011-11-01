@@ -146,8 +146,7 @@
     <Compile Include="Process\Impl\ProcessBaseImplFibers.cs" />
     <Compile Include="Process\Impl\ProcessBaseImplUcontext.cs" />
     <Compile Include="Process\Impl\ProcessBaseImplThreads.cs" />
-    <Compile Include="Process\MainProcess.cs" />
-    <Compile Include="Process\Process.cs" />
+    <Compile Include="Process\ProcessBase.cs" />
     <Compile Include="Net\Security\Certificates\Certificate.cs" />
     <Compile Include="Net\Security\Certificates\CertificateChain.cs" />
     <Compile Include="Net\Security\Certificates\CertificateException.cs" />
@@ -324,7 +323,7 @@
     <Compile Include="Net\SharpSSH\Streams\PipedOutputStream.cs" />
     <Compile Include="Net\SharpSSH\Streams\PipedStream.cs" />
     <Compile Include="Net\SharpSSH\Streams\ProtectedConsoleStream.cs" />
-    <Compile Include="Process\ProcessBase.cs" />
+    <Compile Include="Process\ProcessBaseCore.cs" />
     <Compile Include="Process\RunDelegate.cs" />
     <Compile Include="Process\State.cs" />
     <Compile Include="Streams\FilterStream.cs" />

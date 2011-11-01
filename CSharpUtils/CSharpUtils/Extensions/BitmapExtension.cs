@@ -66,7 +66,29 @@ namespace CSharpUtils.Extensions
 
 		unsafe static public byte[] GetChannelsDataInterleaved(this Bitmap Bitmap, params BitmapChannel[] Channels)
 		{
-			throw(new NotImplementedException());
+			int NChannels = Channels.Length;
+			int PixelCount = Bitmap.Width * Bitmap.Height;
+			int BufferSize = PixelCount * NChannels;
+			var Buffer = new byte[BufferSize];
+			Bitmap.LockBitsUnlock(PixelFormat.Format32bppArgb, (BitmapData) =>
+			{
+				var StartPtr = ((byte*)BitmapData.Scan0.ToPointer());
+				fixed (byte* StartBufferPtr = &Buffer[0])
+				{
+					int CurrentChannel = 0;
+					foreach (var Channel in Channels)
+					{
+						var Ptr = StartPtr + (int)Channel;
+						var BufferPtr = StartBufferPtr + CurrentChannel;
+						for (int n = CurrentChannel; n < BufferSize; n += NChannels, BufferPtr += NChannels, Ptr += 4)
+						{
+							*BufferPtr = *Ptr;
+						}
+						CurrentChannel++;
+					}
+				}
+			});
+			return Buffer;
 		}
 
 		static public void LockBitsUnlock(this Bitmap Bitmap, PixelFormat PixelFormat, Action<BitmapData> Callback)
