@@ -38,8 +38,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtils.Forms", "CSharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtils.Drawing", "CSharpUtils.Drawing\CSharpUtils.Drawing.csproj", "{9B217880-48AE-43B6-AE1F-DC732FCCBC7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtils (Portable)", "CSharpUtils (Portable)\CSharpUtils (Portable).csproj", "{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}"
-EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = CSharpUtils.vsmdi
@@ -203,16 +201,6 @@ Global
 		{9B217880-48AE-43B6-AE1F-DC732FCCBC7A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9B217880-48AE-43B6-AE1F-DC732FCCBC7A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9B217880-48AE-43B6-AE1F-DC732FCCBC7A}.Release|x86.ActiveCfg = Release|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Release|Any CPU.Build.0 = Release|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{53FC73A9-BBC4-41FC-88FC-3F3131D3E263}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
