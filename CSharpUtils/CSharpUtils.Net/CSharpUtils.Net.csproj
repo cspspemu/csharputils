@@ -237,6 +237,7 @@
     <Compile Include="Net\SharpSSH\Streams\ProtectedConsoleStream.cs" />
     <Compile Include="Net\TcpTestServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Streams\SocketStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Net\DiffieHellman\license.txt" />
