@@ -6,6 +6,7 @@ using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Templates.Runtime;
 using CSharpUtils.Templates.Tokenizers;
 using CSharpUtils.Extensions;
+using CSharpUtils.Templates.Templates;
 
 namespace CSharpUtils.Templates
 {
@@ -23,7 +24,8 @@ namespace CSharpUtils.Templates
 
 		protected Type GetTemplateCodeTypeByString(String TemplateString)
 		{
-			return new TemplateCodeGen(TemplateString, this).GetTemplateCodeType();
+			//return new TemplateCodeGen(TemplateString, this).GetTemplateCodeType();
+			return new TemplateCodeGenRoslyn(TemplateString, this).GetTemplateCodeType();
 		}
 
 		protected Type GetTemplateCodeTypeByFile(String Name)

@@ -32,6 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Roslyn.Compilers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Roslyn.Compilers.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,6 +59,7 @@
     <Compile Include="Templates\Runtime\TemplateContext.cs" />
     <Compile Include="Templates\Runtime\TemplateScope.cs" />
     <Compile Include="Templates\TemplateCodeGen.cs" />
+    <Compile Include="Templates\TemplateCodeGenRoslyn.cs" />
     <Compile Include="Templates\TemplateFactory.cs" />
     <Compile Include="Templates\TemplateParser.cs" />
     <Compile Include="Templates\TemplateProvider\ITemplateProvider.cs" />

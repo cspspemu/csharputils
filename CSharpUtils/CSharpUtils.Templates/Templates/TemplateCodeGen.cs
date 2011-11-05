@@ -10,6 +10,8 @@ using CSharpUtils.Templates.Utils;
 using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
+using Roslyn.Compilers.CSharp;
+using Roslyn.Compilers;
 
 namespace CSharpUtils.Templates
 {
@@ -17,16 +19,6 @@ namespace CSharpUtils.Templates
 	{
 		TemplateFactory TemplateFactory;
 		TokenReader Tokens;
-
-		static public TemplateCode CompileTemplateCodeByString(String TemplateString, TemplateFactory TemplateFactory = null)
-		{
-			return (TemplateCode)Activator.CreateInstance(CompileTemplateCodeTypeByString(TemplateString, TemplateFactory), TemplateFactory);
-		}
-
-		static public Type CompileTemplateCodeTypeByString(String TemplateString, TemplateFactory TemplateFactory = null)
-		{
-			return (new TemplateCodeGen(TemplateString, TemplateFactory)).GetTemplateCodeType();
-		}
 
 		public TemplateCodeGen(String TemplateString, TemplateFactory TemplateFactory = null)
 		{
@@ -58,7 +50,7 @@ namespace CSharpUtils.Templates
 			Context.WriteLine("using CSharpUtils.Templates.Runtime;");
 			Context.WriteLine("using CSharpUtils.Templates.TemplateProvider;");
 			Context.WriteLine("");
-			Context.WriteLine("namespace CSharpUtils.Templates.CompiledTemplates {");
+			//Context.WriteLine("namespace CSharpUtils.Templates.CompiledTemplates {");
 			Context.Indent(delegate()
 			{
 				Context.WriteLine("class CompiledTemplate_TempTemplate : TemplateCode {");
@@ -101,13 +93,11 @@ namespace CSharpUtils.Templates
 				Context.WriteLine("}"); // class
 			});
 
-			Context.WriteLine("}"); // namespace
+			//Context.WriteLine("}"); // namespace
 		}
 
-		protected Type GetTemplateCodeTypeByCode(String Code)
+		virtual protected Type GetTemplateCodeTypeByCode(String Code)
 		{
-			//Console.WriteLine(Code);
-
 			CSharpCodeProvider CSharpCodeProvider = new CSharpCodeProvider();
 			//Console.WriteLine(Assembly.GetExecutingAssembly().FullName);
 
@@ -124,7 +114,7 @@ namespace CSharpUtils.Templates
 			if (CompilerResults.NativeCompilerReturnValue == 0)
 			{
 				Assembly assembly = CompilerResults.CompiledAssembly;
-				Type Type = assembly.GetType("CSharpUtils.Templates.CompiledTemplates.CompiledTemplate_TempTemplate");
+				Type Type = assembly.GetType("CompiledTemplate_TempTemplate");
 				return Type;
 			}
 			else
@@ -138,6 +128,11 @@ namespace CSharpUtils.Templates
 
 				throw (new Exception("Error Compiling"));
 			}
+		}
+
+		public TemplateCode GetTemplateCode()
+		{
+			return (TemplateCode)Activator.CreateInstance(GetTemplateCodeType(), TemplateFactory);
 		}
 
 		public Type GetTemplateCodeType()

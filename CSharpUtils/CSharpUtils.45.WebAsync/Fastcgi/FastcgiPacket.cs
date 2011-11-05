@@ -67,5 +67,21 @@ namespace CSharpUtils.Web._45.Fastcgi
 
 			return this;
 		}
+
+		async static public Task WriteMemoryStreamToAsync(ushort RequestId, Fastcgi.PacketType PacketType, MemoryStream From, Stream ClientStream)
+		{
+			var Buffer = From.GetBuffer();
+			var BufferRealLength = (int)From.Length;
+
+			for (int n = 0; n < BufferRealLength; n += ushort.MaxValue)
+			{
+				await new FastcgiPacket()
+				{
+					RequestId = RequestId,
+					Type = PacketType,
+					Content = new ArraySegment<byte>(Buffer, n, Math.Min(ushort.MaxValue, BufferRealLength - n)),
+				}.WriteToAsync(ClientStream);
+			}
+		}
 	}
 }
