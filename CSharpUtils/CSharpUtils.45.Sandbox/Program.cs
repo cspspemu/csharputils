@@ -12,10 +12,9 @@ namespace CSharpUtils._45.Sandbox
 	{
 		class MyFastcgiServerAsync : FastcgiServerAsync
 		{
-			public override async Task HandleRequest(FastcgiServerClientRequestHandlerAsync FastcgiServerClientRequestHandlerAsync)
+			public override async Task HandleRequestAsync(FastcgiRequestAsync Request)
 			{
-				//await Console.Out.WriteLineAsync("HandleRequest!");
-				var StreamWriter = new StreamWriter(FastcgiServerClientRequestHandlerAsync.StdoutStream);
+				var StreamWriter = new StreamWriter(Request.Stdout);
 				await StreamWriter.WriteAsync("Content-type: text/html\r\n");
 				await StreamWriter.WriteAsync("\r\n");
 				await StreamWriter.WriteAsync("Hello World!");
@@ -25,7 +24,6 @@ namespace CSharpUtils._45.Sandbox
 
 		static void Main(string[] args)
 		{
-			//new MyFastcgiServerAsync().Listen(9000);
 			new MyFastcgiServerAsync().Listen(8000);
 		}
 	}
