@@ -9,10 +9,10 @@ namespace CSharpUtils
 	{
 		// http://www.lambda-computing.com/publications/articles/generics2/
 		// http://www.codeproject.com/KB/cs/genericoperators.aspx
-		static public T Clamp<T>(T Value, T Min, T Max)
+		static public T Clamp<T>(T Value, T Min, T Max) where T : IComparable
 		{
-			if ((dynamic)Value < (dynamic)Min) return Min;
-			if ((dynamic)Value > (dynamic)Max) return Max;
+			if (Value.CompareTo(Min) < 0) return Min;
+			if (Value.CompareTo(Max) > 0) return Max;
 			return Value;
 		}
 

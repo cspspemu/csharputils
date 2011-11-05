@@ -12,7 +12,8 @@
     <AssemblyName>CSharpUtils</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,8 +48,6 @@
   <ItemGroup>
     <Compile Include="ArrayEqualityComparer.cs" />
     <Compile Include="AsyncTask.cs" />
-    <Compile Include="Compression\Huffman.cs" />
-    <Compile Include="Compression\Lz\LzBuffer.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStats.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsNode.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsQueryProvider.cs" />
@@ -57,7 +56,6 @@
     <Compile Include="Extensions\BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
     <Compile Include="BitWriter.cs" />
-    <Compile Include="Compression\Zip\ZipArchive.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -91,12 +89,7 @@
     <Compile Include="Streams\FilterStream.cs" />
     <Compile Include="Streams\ProxyStream.cs" />
     <Compile Include="Streams\SliceStream.cs" />
-    <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocatorStream.cs" />
-    <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
-    <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />
-    <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
-    <Compile Include="Streams\SocketStream.cs" />
     <Compile Include="Streams\StreamChunker.cs" />
     <Compile Include="Streams\StreamChunker2.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

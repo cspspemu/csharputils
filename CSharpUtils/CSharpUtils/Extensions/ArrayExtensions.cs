@@ -37,5 +37,25 @@ namespace CSharpUtils.Extensions
 		{
 			return This.Slice(Start, This.Length - Start);
 		}
+
+		static public IEnumerable<T[]> Split<T>(this T[] This, int ChunkSize)
+		{
+			int CompleteChunksCount = This.Length / ChunkSize;
+			int PartialChunkSize = This.Length % ChunkSize;
+			int Offset = 0;
+			for (int n = 0; n < CompleteChunksCount; n++)
+			{
+				var Chunk = new T[PartialChunkSize];
+				Array.Copy(This, Offset, Chunk, 0, CompleteChunksCount); Offset += CompleteChunksCount;
+				yield return Chunk;
+			}
+			if (PartialChunkSize > 0)
+			{
+				var Chunk = new T[PartialChunkSize];
+				Array.Copy(This, Offset, Chunk, 0, PartialChunkSize); Offset += PartialChunkSize;
+				//Chunk.CopyTo);
+				yield return Chunk;
+			}
+		}
 	}
 }

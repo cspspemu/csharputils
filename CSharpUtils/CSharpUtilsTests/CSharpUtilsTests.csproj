@@ -111,6 +111,10 @@
       <Project>{9B217880-48AE-43B6-AE1F-DC732FCCBC7A}</Project>
       <Name>CSharpUtils.Drawing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSharpUtils.Ext\CSharpUtils.Ext.csproj">
+      <Project>{C017FBBE-EF10-4030-A69E-204E766C8F9D}</Project>
+      <Name>CSharpUtils.Ext</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils.Forms\CSharpUtils.Forms.csproj">
       <Project>{584318B9-0059-4AC2-98E2-F8D6E32CF71E}</Project>
       <Name>CSharpUtils.Forms</Name>
