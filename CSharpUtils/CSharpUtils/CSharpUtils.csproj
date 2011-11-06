@@ -95,6 +95,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="StructUtils.cs" />
     <Compile Include="Threading\CustomThreadPool.cs" />
+    <Compile Include="Threading\GreenThread.cs" />
     <Compile Include="TimeSampler.cs" />
     <Compile Include="TypeUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

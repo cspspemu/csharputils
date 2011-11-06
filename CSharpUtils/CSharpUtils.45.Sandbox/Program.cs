@@ -9,6 +9,7 @@ using CSharpUtils.Templates;
 using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Web._45.Fastcgi;
 using CSharpUtils.Extensions;
+using CSharpUtils.Threading;
 
 namespace CSharpUtils._45.Sandbox
 {
@@ -51,7 +52,34 @@ namespace CSharpUtils._45.Sandbox
 
 		static void Main(string[] args)
 		{
-			new MyFastcgiServerAsync().Listen(8000);
+			//new MyFastcgiServerAsync().Listen(8000);
+
+			var Values = new List<int>();
+
+			var Thread1 = new GreenThread();
+			var Thread2 = new GreenThread();
+			Thread1.InitAndStartStopped(() =>
+			{
+				Values.Add(1);
+				Console.WriteLine(1);
+				GreenThread.Yield();
+				Console.WriteLine(3);
+			});
+			Thread2.InitAndStartStopped(() =>
+			{
+				Values.Add(2);
+				Console.WriteLine(2);
+				GreenThread.Yield();
+				Console.WriteLine(4);
+			});
+
+			Console.WriteLine("a");
+			Thread1.SwitchTo();
+			Thread2.SwitchTo();
+			Thread1.SwitchTo();
+			Thread2.SwitchTo();
+			Console.WriteLine("b");
+			Console.ReadKey();
 		}
 	}
 }

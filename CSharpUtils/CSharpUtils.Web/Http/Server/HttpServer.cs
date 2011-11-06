@@ -46,7 +46,7 @@ namespace CSharpUtils.Http.Server
 
 			using (var Socket = (Socket)_Socket)
 			//using (var SocketStream = new BufferedStream(new SocketStream(Socket)))
-			using (var SocketStream = new SocketStream(Socket))
+			using (var SocketStream = new NetworkStream(Socket))
 			using (var SocketStreamReader = new StreamReader(SocketStream))
 			using (var SocketStreamWriter = new StreamWriter(SocketStream))
 			{
