@@ -54,5 +54,85 @@ namespace CSharpUtils.Extensions
 			}
 			return That;
 		}
+
+		static public String Sprintf(this String This, params Object[] _Params)
+		{
+			String Ret = "";
+			var Params = new Queue<Object>(_Params);
+			for (int n = 0; n < This.Length; n++)
+			{
+				char C = This[n];
+				if (C == '%')
+				{
+					C = This[++n];
+					if (C == '%')
+					{
+						Ret += "%";
+					}
+					else
+					{
+						int PadDir = +1;
+						char PadChar = ' ';
+						int Pad = 0;
+						var Param = Params.Dequeue();
+						var Result = "";
+						for (; n < This.Length; n++)
+						{
+							C = This[n];
+							switch (C) {
+								case '-':
+									PadDir = -1;
+									break;
+								/*
+								case 'c': arg = String.fromCharCode(arg); goto EndParamLabel;
+								case 'd': arg = parseInt(arg, 10); goto EndParamLabel;
+								case 'e': arg = match[7] ? arg.toExponential(match[7]) : arg.toExponential(); goto EndParamLabel;
+								case 'f': arg = match[7] ? parseFloat(arg).toFixed(match[7]) : parseFloat(arg); goto EndParamLabel;
+								case 'o': arg = arg.toString(8); goto EndParamLabel;
+								case 's': arg = ((arg = String(arg)) && match[7] ? arg.substring(0, match[7]) : arg); goto EndParamLabel;
+								case 'u': arg = Math.abs(arg); goto EndParamLabel;
+								*/
+								case 'b': Result = Convert.ToString(Convert.ToInt32(Param), 2); break;
+								case 'x': Result = Convert.ToString(Convert.ToInt32(Param), 16); break;
+								case 'X': Result = Convert.ToString(Convert.ToInt32(Param), 16).ToUpper(); break;
+								default:
+									if (C >= '0' && C <= '9')
+									{
+										if (C == '0' && Pad == 0)
+										{
+											PadChar = '0';
+										}
+										else
+										{
+											Pad *= 10;
+											Pad += C - '0';
+										}
+									}
+									break;
+									
+							}
+							if (Result.Length > 0) break;
+						}
+						if (PadDir > 0)
+						{
+							Result = Result.PadLeft(Pad, PadChar);
+						}
+						else
+						{
+							Result = Result.PadRight(Pad, PadChar);
+						}
+						//Console.WriteLine(Pad);
+						//Console.WriteLine(PadChar);
+						//Console.WriteLine("{[0}']", Result);
+						Ret += Result;
+					}
+				}
+				else
+				{
+					Ret += C;
+				}
+			}
+			return Ret;
+		}
 	}
 }

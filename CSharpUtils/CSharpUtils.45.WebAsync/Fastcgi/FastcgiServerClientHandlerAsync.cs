@@ -26,24 +26,34 @@ namespace CSharpUtils.Web._45.Fastcgi
 			if (FastcgiServerAsync.Debug) await Console.Out.WriteLineAsync(String.Format("Handling Client"));
 			var ClientStream = Client.GetStream();
 
-			while (Client.Connected)
+			try
 			{
-				FastcgiPacket Packet;
-				try
+				while (Client.Connected)
 				{
-					Packet = await new FastcgiPacket().ReadFromAsync(ClientStream);
+					FastcgiPacket Packet;
+					try
+					{
+						Packet = await new FastcgiPacket().ReadFromAsync(ClientStream);
+					}
+					catch (IOException)
+					{
+						Console.Error.WriteLineAsync("Error Reading");
+						break;
+					}
+					FastcgiServerClientRequestHandlerAsync Handler;
+					if (!this.Handlers.TryGetValue(Packet.RequestId, out Handler))
+					{
+						Handler = this.Handlers[Packet.RequestId] = new FastcgiServerClientRequestHandlerAsync(this, ClientStream, Packet.RequestId);
+					}
+					await Handler.HandlePacket(Packet);
 				}
-				catch (IOException)
+			}
+			catch (IOException IOException)
+			{
+				if (FastcgiServerAsync.Debug)
 				{
-					Console.Error.WriteLineAsync("Error Reading");
-					break;
+					Console.Error.WriteAsync(IOException.ToString());
 				}
-				FastcgiServerClientRequestHandlerAsync Handler;
-				if (!this.Handlers.TryGetValue(Packet.RequestId, out Handler))
-				{
-					Handler = this.Handlers[Packet.RequestId] = new FastcgiServerClientRequestHandlerAsync(this, ClientStream, Packet.RequestId);
-				}
-				await Handler.HandlePacket(Packet);
 			}
 		}
 	}

@@ -12,5 +12,6 @@ namespace CSharpUtils.Web._45.Fastcgi
 		public FastcgiInputStream Stdin;
 		public FastcgiOutputStream Stdout;
 		public FastcgiOutputStream Stderr;
+		public FastcgiHeaders Headers;
 	}
 }

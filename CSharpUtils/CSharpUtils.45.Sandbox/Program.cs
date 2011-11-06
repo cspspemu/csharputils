@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CSharpUtils.Templates;
 using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Web._45.Fastcgi;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtils._45.Sandbox
 {
@@ -38,12 +39,12 @@ namespace CSharpUtils._45.Sandbox
 				var Html = TemplateFactory.GetTemplateCodeByFile("Test.html").RenderToString();
 				Stopwatch.Stop();
 
-				StreamWriter.Write(Html);
-
 				StreamWriter.Write("Content-type: text/html\r\n");
 				StreamWriter.Write("X-Time: {0}\r\n", Stopwatch.Elapsed);
 				StreamWriter.Write("\r\n");
 
+				StreamWriter.Write(Html);
+				StreamWriter.Write(Request.Params.ToJson());
 				//throw (new Exception("Error!"));
 			}
 		}

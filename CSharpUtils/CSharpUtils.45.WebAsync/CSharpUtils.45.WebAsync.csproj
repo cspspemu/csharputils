@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fastcgi\Fastcgi.cs" />
+    <Compile Include="Fastcgi\FastcgiHeaders.cs" />
     <Compile Include="Fastcgi\FastcgiInputStream.cs" />
     <Compile Include="Fastcgi\FastcgiOutputStream.cs" />
     <Compile Include="Fastcgi\FastcgiPacket.cs" />

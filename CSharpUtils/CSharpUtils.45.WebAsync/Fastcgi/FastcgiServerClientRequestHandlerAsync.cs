@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,7 @@ namespace CSharpUtils.Web._45.Fastcgi
 				Stdin = new FastcgiInputStream(),
 				Stdout = new FastcgiOutputStream(),
 				Stderr = new FastcgiOutputStream(),
+				Headers = new FastcgiHeaders(),
 			};
 		}
 
@@ -83,6 +85,9 @@ namespace CSharpUtils.Web._45.Fastcgi
 					{
 						FastcgiRequestAsync.Stdin.Position = 0;
 						Exception Exception = null;
+						var Stopwatch = new Stopwatch();
+
+						Stopwatch.Start();
 						try
 						{
 							await FastcgiServerClientHandlerAsync.FastcgiServerAsync.HandleRequestAsync(this.FastcgiRequestAsync);
@@ -91,6 +96,7 @@ namespace CSharpUtils.Web._45.Fastcgi
 						{
 							Exception = _Exception;
 						}
+						Stopwatch.Stop();
 
 						if (Exception != null)
 						{
@@ -98,8 +104,28 @@ namespace CSharpUtils.Web._45.Fastcgi
 							StreamWriter.WriteLine(String.Format("{0}", Exception));
 							StreamWriter.Flush();
 						}
+						var HeaderPlusOutputStream = new MemoryStream();
 
-						await FastcgiPacket.WriteMemoryStreamToAsync(RequestId: RequestId, PacketType: Fastcgi.PacketType.FCGI_STDOUT, From: FastcgiRequestAsync.Stdout, ClientStream: ClientStream);
+						var HeaderStream = new MemoryStream();
+						var HeaderStreamWriter = new StreamWriter(HeaderStream);
+						HeaderStreamWriter.AutoFlush = true;
+
+						FastcgiRequestAsync.Headers.Add("Content-Type", "text/html");
+						FastcgiRequestAsync.Headers.Add("X-Time", Stopwatch.Elapsed.ToString());
+
+						foreach (var Header in FastcgiRequestAsync.Headers.Headers)
+						{
+							HeaderStreamWriter.Write("{0}: {1}\r\n", Header.Key, Header.Value);
+						}
+						HeaderStreamWriter.Write("\r\n");
+
+						HeaderStream.Position = 0;
+						HeaderStream.CopyToFast(HeaderPlusOutputStream);
+						FastcgiRequestAsync.Stdout.Position = 0;
+						FastcgiRequestAsync.Stdout.CopyToFast(HeaderPlusOutputStream);
+						HeaderPlusOutputStream.Position = 0;
+
+						await FastcgiPacket.WriteMemoryStreamToAsync(RequestId: RequestId, PacketType: Fastcgi.PacketType.FCGI_STDOUT, From: HeaderPlusOutputStream, ClientStream: ClientStream);
 						await FastcgiPacket.WriteMemoryStreamToAsync(RequestId: RequestId, PacketType: Fastcgi.PacketType.FCGI_STDERR, From: FastcgiRequestAsync.Stderr, ClientStream: ClientStream);
 
 						await new FastcgiPacket() { Type = Fastcgi.PacketType.FCGI_STDOUT, RequestId = RequestId, Content = new ArraySegment<byte>() }.WriteToAsync(ClientStream);
