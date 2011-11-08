@@ -17,6 +17,15 @@ namespace CSharpUtils.Extensions
 			return Stream.Available() <= 0;
 		}
 
+		static public TStream PreservePositionAndLock<TStream>(this TStream Stream, long Position, Action Callback) where TStream : Stream
+		{
+			return Stream.PreservePositionAndLock(() =>
+			{
+				Stream.Position = Position;
+				Callback();
+			});
+		}
+
 		static public TStream PreservePositionAndLock<TStream>(this TStream Stream, Action Callback) where TStream : Stream
 		{
 			return Stream.PreservePositionAndLock((_Stream) =>
@@ -230,6 +239,17 @@ namespace CSharpUtils.Extensions
 			var Size = Marshal.SizeOf(typeof(T));
 			var Buffer = Stream.ReadBytes(Size);
 			return StructUtils.BytesToStruct<T>(Buffer);
+		}
+
+		public static TType[] ReadStructVectorAt<TType>(this Stream Stream, long Offset, uint Count, int EntrySize = -1) where TType : struct
+		{
+			TType[] Value = null;
+			Stream.PreservePositionAndLock(() =>
+			{
+				Stream.Position = Offset;
+				Value = Stream.ReadStructVector<TType>(Count, EntrySize);
+			});
+			return Value;
 		}
 
 		public static TType[] ReadStructVector<TType>(this Stream Stream, uint Count, int EntrySize = -1) where TType : struct

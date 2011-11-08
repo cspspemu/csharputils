@@ -71,6 +71,7 @@
     <Compile Include="Json\JSON.cs" />
     <Compile Include="LanguageUtils.cs" />
     <Compile Include="Misc\Acme1\Acme1File.cs" />
+    <Compile Include="PointerUtils.cs" />
     <Compile Include="Streams\ConcatStream.cs" />
     <Compile Include="Streams\ConsumerMemoryStream.cs" />
     <Compile Include="FieldMapping.cs" />
