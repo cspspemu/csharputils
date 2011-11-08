@@ -232,13 +232,30 @@ namespace CSharpUtils.Extensions
 			return StructUtils.BytesToStruct<T>(Buffer);
 		}
 
-		public static T[] ReadStructVector<T>(this Stream Stream, uint Size) where T : struct
+		public static TType[] ReadStructVector<TType>(this Stream Stream, uint Count, int EntrySize = -1) where TType : struct
 		{
-			T[] Vector = new T[Size];
-			for (int n = 0; n < Size; n++)
+			TType[] Vector = new TType[Count];
+			int SkipSize;
+			if (EntrySize == -1)
 			{
-				Vector[n] = ReadStruct<T>(Stream);
+				SkipSize = 0;
 			}
+			else
+			{
+				SkipSize = EntrySize - Marshal.SizeOf(typeof(TType));
+			}
+
+			if (SkipSize < 0)
+			{
+				throw (new Exception("Invalid Size"));
+			}
+
+			for (int n = 0; n < Count; n++)
+			{
+				Vector[n] = ReadStruct<TType>(Stream);
+				Stream.Skip(SkipSize);
+			}
+
 			return Vector;
 		}
 

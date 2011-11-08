@@ -53,7 +53,20 @@ namespace CSharpUtils
 			TransferChannelsDataLinear(Bitmap.GetFullRectangle(), Bitmap, NewData, Direction, Channels);
 		}
 
+		unsafe static public void TransferChannelsDataLinear(Bitmap Bitmap, byte* NewDataPtr, Direction Direction, params BitmapChannel[] Channels)
+		{
+			TransferChannelsDataLinear(Bitmap.GetFullRectangle(), Bitmap, NewDataPtr, Direction, Channels);
+		}
+
 		unsafe static public void TransferChannelsDataLinear(Rectangle Rectangle, Bitmap Bitmap, byte[] NewData, Direction Direction, params BitmapChannel[] Channels)
+		{
+			fixed (byte* NewDataPtr = &NewData[0])
+			{
+				TransferChannelsDataLinear(Rectangle, Bitmap, NewDataPtr, Direction, Channels);
+			}
+		}
+
+		unsafe static public void TransferChannelsDataLinear(Rectangle Rectangle, Bitmap Bitmap, byte* NewDataPtr, Direction Direction, params BitmapChannel[] Channels)
 		{
 			int WidthHeight = Bitmap.Width * Bitmap.Height;
 			var FullRectangle = Bitmap.GetFullRectangle();
@@ -86,7 +99,7 @@ namespace CSharpUtils
 				int RectangleLeft = Rectangle.Left;
 				int RectangleRight = Rectangle.Right;
 
-				fixed (byte* OutputPtrStart = &NewData[0])
+				byte* OutputPtrStart = NewDataPtr;
 				{
 					byte* OutputPtr = OutputPtrStart;
 					foreach (var Channel in Channels)
