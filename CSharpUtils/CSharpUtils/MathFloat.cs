@@ -39,13 +39,25 @@ namespace CSharpUtils
 			return MathFloat.Round(Value);
 		}
 
-		public static uint ReinterpretAsUInt(float Value)
+		public static uint ReinterpretFloatAsUInt(float Value)
 		{
+			Console.WriteLine("ReinterpretFloatAsUInt:{0}", Value);
 			var Values = new float[1];
 			Values[0] = Value;
 			fixed (float *ValuePtr = &Values[0])
 			{
 				return *((uint*)ValuePtr);
+			}
+		}
+
+		public static float ReinterpretUIntAsFloat(uint Value)
+		{
+			Console.WriteLine("ReinterpretUIntAsFloat:{0}", Value);
+			var Values = new uint[1];
+			Values[0] = Value;
+			fixed (uint* ValuePtr = &Values[0])
+			{
+				return *((float*)ValuePtr);
 			}
 		}
 	}

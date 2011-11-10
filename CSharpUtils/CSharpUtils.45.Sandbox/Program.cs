@@ -10,6 +10,7 @@ using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Web._45.Fastcgi;
 using CSharpUtils.Extensions;
 using CSharpUtils.Threading;
+using CSharpUtils._45.Redis;
 
 namespace CSharpUtils._45.Sandbox
 {
@@ -50,7 +51,7 @@ namespace CSharpUtils._45.Sandbox
 			}
 		}
 
-		static void Main(string[] args)
+		static void Test1(string[] args)
 		{
 			//new MyFastcgiServerAsync().Listen(8000);
 
@@ -79,6 +80,21 @@ namespace CSharpUtils._45.Sandbox
 			Thread1.SwitchTo();
 			Thread2.SwitchTo();
 			Console.WriteLine("b");
+			Console.ReadKey();
+		}
+
+		async static Task Test2Async()
+		{
+			var RedisClient = new RedisClientAsync();
+			await RedisClient.Connect("localhost", 6379);
+			Console.WriteLine((await RedisClient.Command("set", "hello-csharp", "999")).ToJson());
+			Console.WriteLine((await RedisClient.Command("get", "hello-csharp")).ToJson());
+		}
+
+		static void Main(string[] args)
+		{
+			//Test2Async().
+			Test2Async().Wait();
 			Console.ReadKey();
 		}
 	}

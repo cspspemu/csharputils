@@ -48,6 +48,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CSharpUtils.45.Redis\CSharpUtils.45.RedisAsync.csproj">
+      <Project>{fd75ff71-53ee-439d-a0ca-2787dac59a09}</Project>
+      <Name>CSharpUtils.45.RedisAsync</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils.45.WebAsync\CSharpUtils.45.WebAsync.csproj">
       <Project>{c1e966e7-eac4-4962-9354-4f5382c2c176}</Project>
       <Name>CSharpUtils.45.WebAsync</Name>
