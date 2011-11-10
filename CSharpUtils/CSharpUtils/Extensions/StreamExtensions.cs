@@ -153,6 +153,16 @@ namespace CSharpUtils.Extensions
 			return Stream.ReadBytes(ToRead).GetString(Encoding);
 		}
 
+		static public String ReadStringzAt(this Stream Stream, long Offset, Encoding Encoding = null)
+		{
+			String Return = null;
+			Stream.PreservePositionAndLock(Offset, () =>
+			{
+				Return = Stream.ReadStringz(-1, Encoding);
+			});
+			return Return;
+		}
+
 		static public String ReadStringz(this Stream Stream, int ToRead = -1, Encoding Encoding = null)
 		{
 			if (Encoding == null) Encoding = Encoding.ASCII;
@@ -330,8 +340,10 @@ namespace CSharpUtils.Extensions
 		{
 			/// TODO: Create a buffer and reuse it once for each thread.
 			var BufferSize = Math.Min((int)FromStream.Length, 2 * 1024 * 1024);
-
-			FromStream.CopyTo(ToStream, BufferSize);
+			if (BufferSize > 0)
+			{
+				FromStream.CopyTo(ToStream, BufferSize);
+			}
 		}
 #endif
 
@@ -355,9 +367,19 @@ namespace CSharpUtils.Extensions
 			return Stream;
 		}
 
-		public static Stream WriteByteRepeated(this Stream Stream, byte Byte, uint Count = 1)
+		unsafe public static Stream WriteByteRepeated(this Stream Stream, byte Byte, uint Count = 1)
 		{
-			for (int n = 0; n < Count; n++) Stream.WriteByte(Byte);
+			if (Count > 0)
+			{
+				var Bytes = new byte[Count];
+				fixed (byte* BytesPtr = &Bytes[0])
+				{
+					PointerUtils.Memset(BytesPtr, Byte, Count);
+				}
+
+				Stream.WriteBytes(Bytes);
+			}
+
 			return Stream;
 		}
 

@@ -43,5 +43,17 @@ namespace CSharpUtils.Extensions
 			for (int n = 0; n < Count; n++) List[n] = RepeatedValue;
 			return List;
 		}
+
+		public static uint ExtractUnsigned(this ushort Value, int Offset, int Count)
+		{
+			var Mask = (1 << Count) - 1;
+			return (uint)((Value >> Offset) & Mask);
+		}
+
+		public static uint ExtractUnsignedScale(this ushort Value, int Offset, int Count, int Scale)
+		{
+			var Mask = (1 << Count) - 1;
+			return (uint)((Value.ExtractUnsigned(Offset, Count) * Scale) / Mask);
+		}
 	}
 }

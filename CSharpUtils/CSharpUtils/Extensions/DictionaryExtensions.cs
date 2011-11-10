@@ -21,5 +21,15 @@ namespace CSharpUtils.Extensions
 		{
 			return This.GetOrCreate(Key, () => { return new TValue(); });
 		}
+
+		static public TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> This, TKey Key, TValue DefaultValue)
+		{
+			TValue Item;
+			if (This.TryGetValue(Key, out Item))
+			{
+				return Item;
+			}
+			return DefaultValue;
+		}
 	}
 }

@@ -19,30 +19,10 @@ namespace CSharpUtils.Threading
 
 		static public Thread MonitorThread;
 
+		private Exception RethrowException;
+
 		public GreenThread()
 		{
-			/*
-			if (MonitorThread == null)
-			{
-				MonitorThread = new Thread(() => {
-					//Thread.CurrentThread.IsAlive
-					var Process = System.Diagnostics.Process.GetCurrentProcess();
-					while (true)
-					{
-						foreach (var _ProcessThread in Process.Threads)
-						{
-							var ProcessThread = _ProcessThread as ProcessThread;
-
-							Console.WriteLine(ProcessThread.);
-							//Thread.ThreadState
-						}
-						//Thread
-						Thread.Sleep(200);
-					}
-				});
-				MonitorThread.Start();
-			}
-			*/
 		}
 
 		~GreenThread()
@@ -85,6 +65,10 @@ namespace CSharpUtils.Threading
 				{
 					Action();
 				}
+				catch (Exception Exception)
+				{
+					RethrowException = Exception;
+				}
 				finally
 				{
 					ParentSemaphore.Release();
@@ -105,6 +89,17 @@ namespace CSharpUtils.Threading
 			ParentThread = Thread.CurrentThread;
 			ThisSemaphore.Release();
 			ParentSemaphore.WaitOne();
+			if (RethrowException != null)
+			{
+				try
+				{
+					throw (new Exception("GreenThread Exception", RethrowException));
+				}
+				finally
+				{
+					RethrowException = null;
+				}
+			}
 		}
 
 		/// <summary>

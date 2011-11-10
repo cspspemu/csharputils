@@ -93,8 +93,21 @@ namespace CSharpUtils.Extensions
 								case 'u': arg = Math.abs(arg); goto EndParamLabel;
 								*/
 								case 'b': Result = Convert.ToString(Convert.ToInt32(Param), 2); break;
-								case 'x': Result = Convert.ToString(Convert.ToInt32(Param), 16); break;
-								case 'X': Result = Convert.ToString(Convert.ToInt32(Param), 16).ToUpper(); break;
+								case 'X':
+								case 'x':
+									if (Param.GetType() == typeof(uint))
+									{
+										Result = Convert.ToString(Convert.ToUInt32(Param), 16);
+									}
+									else
+									{
+										Result = Convert.ToString(Convert.ToInt32(Param), 16);
+									}
+									if (C == 'X')
+									{
+										Result = Result.ToUpper();
+									}
+								break;
 								default:
 									if (C >= '0' && C <= '9')
 									{

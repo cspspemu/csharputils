@@ -49,6 +49,8 @@
     <Compile Include="AnonymousComparer.cs" />
     <Compile Include="ArrayEqualityComparer.cs" />
     <Compile Include="AsyncTask.cs" />
+    <Compile Include="BitUtils.cs" />
+    <Compile Include="ConsoleUtils.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStats.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsNode.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsQueryProvider.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Json\IJsonSerializable.cs" />
     <Compile Include="Json\JSON.cs" />
     <Compile Include="LanguageUtils.cs" />
+    <Compile Include="MathFloat.cs" />
     <Compile Include="Misc\Acme1\Acme1File.cs" />
     <Compile Include="PointerUtils.cs" />
     <Compile Include="Streams\ConcatStream.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="StructUtils.cs" />
     <Compile Include="Threading\CustomThreadPool.cs" />
     <Compile Include="Threading\GreenThread.cs" />
+    <Compile Include="Threading\TaskQueue.cs" />
     <Compile Include="TimeSampler.cs" />
     <Compile Include="TypeUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

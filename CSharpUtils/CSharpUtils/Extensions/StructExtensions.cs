@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using System.Reflection;
 
 namespace CSharpUtils.Extensions
 {
@@ -15,16 +16,43 @@ namespace CSharpUtils.Extensions
 			Ret += typeof(T).Name;
 			Ret += "(";
 			var MemberCount = 0;
-			foreach (var FieldInfo in typeof(T).GetFields())
+
+			//FieldInfo fi;
+			//PropertyInfo pi;
+			foreach (var MemberInfo in typeof(T).GetMembers())
 			{
-				if (MemberCount > 0)
+				bool ValueSet = false;
+				object Value = null;
+
+				if (MemberInfo is FieldInfo)
 				{
-					Ret += ",";
+					ValueSet = true;
+					Value = (MemberInfo as FieldInfo).GetValue(Struct);
 				}
-				Ret += FieldInfo.Name;
-				Ret += "=";
-				Ret += FieldInfo.GetValue(Struct);
-				MemberCount++;
+				else if (MemberInfo is PropertyInfo)
+				{
+					ValueSet = true;
+					Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
+				}
+
+				if (ValueSet)
+				{
+					if (MemberCount > 0)
+					{
+						Ret += ",";
+					}
+					Ret += MemberInfo.Name;
+					Ret += "=";
+					if (Value.GetType() == typeof(uint))
+					{
+						Ret += String.Format("0x{0:X}", Value);
+					}
+					else
+					{
+						Ret += Value;
+					}
+					MemberCount++;
+				}
 			}
 			Ret += ")";
 			return Ret;
