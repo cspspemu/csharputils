@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9B217880-48AE-43B6-AE1F-DC732FCCBC7A}</ProjectGuid>
+    <ProjectGuid>{48DCFF18-BC78-44F9-AD9B-9C5A35A73023}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSharpUtils.Drawing</RootNamespace>
-    <AssemblyName>CSharpUtils.Drawing</AssemblyName>
+    <RootNamespace>CSharpUtils._45.MongoAsync</RootNamespace>
+    <AssemblyName>CSharpUtils.45.MongoAsync</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +19,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,7 +31,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,15 +38,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitmapChannel.cs" />
-    <Compile Include="BitmapUtils.cs" />
-    <Compile Include="ColorUtils.cs" />
-    <Compile Include="Extensions\BitmapExtension.cs" />
+    <Compile Include="MongoClientAsync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bson\Bson.csproj">
+      <Project>{0e9a3a2a-49cd-4f6c-847c-dc79b4b65ce6}</Project>
+      <Name>Bson</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
-      <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
+      <Project>{746fadf2-d613-4ffd-8551-2181adae3cd1}</Project>
       <Name>CSharpUtils</Name>
     </ProjectReference>
   </ItemGroup>

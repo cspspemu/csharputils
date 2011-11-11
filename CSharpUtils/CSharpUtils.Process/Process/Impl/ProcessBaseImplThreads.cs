@@ -74,7 +74,13 @@ namespace CSharpUtils.Process.Impl
 		{
 			//Console.WriteLine("Yield(" + Parent + ")");
 			SemaphoreGlobal.Release();
-			Semaphore.WaitOne();
+			while (!Semaphore.WaitOne(TimeSpan.FromMilliseconds(50)))
+			{
+				if (!MainThread.IsAlive)
+				{
+					Thread.CurrentThread.Abort();
+				}
+			}
 		}
 	}
 }
