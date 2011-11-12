@@ -15,7 +15,7 @@ namespace CSharpUtils
 			return Encoding.GetString(Bytes.ToArray());
 		}
 
-		static public void Memset(byte* Pointer, byte Value, uint Count)
+		static public void Memset(byte* Pointer, byte Value, int Count)
 		{
 			for (int n = 0; n < Count; n++)
 			{

@@ -37,3 +37,7 @@
 /CSharpUtils/CSharpUtils.45.Tests/bin
 /CSharpUtils/CSharpUtils.45.Sandbox/obj
 /CSharpUtils/CSharpUtils.45.Sandbox/bin
+/CSharpUtils/CSharpUtils.45.Redis/obj
+/CSharpUtils/CSharpUtils.45.Redis/bin
+/CSharpUtils/CSharpUtils.45.MongoAsync/obj
+/CSharpUtils/CSharpUtils.45.MongoAsync/bin

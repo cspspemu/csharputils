@@ -367,7 +367,7 @@ namespace CSharpUtils.Extensions
 			return Stream;
 		}
 
-		unsafe public static Stream WriteByteRepeated(this Stream Stream, byte Byte, uint Count = 1)
+		unsafe public static Stream WriteByteRepeated(this Stream Stream, byte Byte, int Count = 1)
 		{
 			if (Count > 0)
 			{
