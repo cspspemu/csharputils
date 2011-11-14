@@ -38,5 +38,23 @@ namespace CSharpUtils
 			}
 			return Value;
 		}
+
+		public static uint PrevAligned(uint Value, int Alignment)
+		{
+			if ((Value % Alignment) != 0)
+			{
+				Value += (uint)(Alignment - (Value % Alignment));
+			}
+			return Value;
+		}
+
+		public static uint NextAligned(uint Value, int Alignment)
+		{
+			if ((Value % Alignment) != 0)
+			{
+				Value += (uint)((Value % Alignment));
+			}
+			return Value;
+		}
 	}
 }

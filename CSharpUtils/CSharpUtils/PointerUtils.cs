@@ -15,6 +15,16 @@ namespace CSharpUtils
 			return Encoding.GetString(Bytes.ToArray());
 		}
 
+		static public void StoreStringOnPtr(string String, Encoding Encoding, byte* Pointer, int PointerMaxLength = 0x10000)
+		{
+			var Bytes = Encoding.GetBytes(String);
+			foreach (var Byte in Bytes)
+			{
+				*Pointer++ = Byte;
+			}
+			*Pointer++ = 0;
+		}
+
 		static public void Memset(byte* Pointer, byte Value, int Count)
 		{
 			for (int n = 0; n < Count; n++)

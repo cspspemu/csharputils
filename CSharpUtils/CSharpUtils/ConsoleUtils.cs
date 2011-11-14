@@ -9,16 +9,19 @@ namespace CSharpUtils
 	{
 		static public void SaveRestoreConsoleState(Action Action)
 		{
-			var BackBackgroundColor = Console.BackgroundColor;
-			var BackForegroundColor = Console.ForegroundColor;
-			try
+			lock (Console.Out)
 			{
-				Action();
-			}
-			finally
-			{
-				Console.BackgroundColor = BackBackgroundColor;
-				Console.ForegroundColor = BackForegroundColor;
+				var BackBackgroundColor = Console.BackgroundColor;
+				var BackForegroundColor = Console.ForegroundColor;
+				try
+				{
+					Action();
+				}
+				finally
+				{
+					Console.BackgroundColor = BackBackgroundColor;
+					Console.ForegroundColor = BackForegroundColor;
+				}
 			}
 		}
 	}
