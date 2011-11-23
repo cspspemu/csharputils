@@ -12,16 +12,17 @@ namespace CSharpUtils.Process
 	{
 		static protected ProcessBase CurrentExecutingProcess = null;
 
-		public int priority = 0;
-		public float x = 0, y = 0, z = 0;
-		public float angle = 0, scaleX = 1, scaleY = 1;
+		public int Priority = 0;
+		public float X = 0, Y = 0, Z = 0;
+		public float Angle = 0, ScaleX = 1, ScaleY = 1;
+		public float Scale = 1;
 
-		protected ProcessBase Parent = null;
+		protected ProcessBase _Parent = null;
 		protected LinkedList<ProcessBase> Childs;
 
 		static private LinkedList<ProcessBase> _AllProcesses = new LinkedList<ProcessBase>();
 
-		static public LinkedList<ProcessBase> allProcesses
+		static public LinkedList<ProcessBase> AllProcesses
 		{
 			get
 			{
@@ -29,22 +30,22 @@ namespace CSharpUtils.Process
 			}
 		}
 
-		static public void _removeOld()
+		static public void _RemoveOld()
 		{
-			foreach (var process in allProcesses)
+			foreach (var Process in AllProcesses)
 			{
-				if (process.State == State.Ended) process._Remove();
+				if (Process.State == State.Ended) Process._Remove();
 			}
 		}
 
 		private void ExecuteTreeBefore()
 		{
-			foreach (var process in Childs.Where(process => process.priority < 0).OrderBy(process => process.priority)) process.ExecuteTree();
+			foreach (var process in Childs.Where(process => process.Priority < 0).OrderBy(process => process.Priority)) process.ExecuteTree();
 		}
 
 		private void ExecuteTreeAfter()
 		{
-			foreach (var process in Childs.Where(process => process.priority >= 0).OrderBy(process => process.priority)) process.ExecuteTree();
+			foreach (var process in Childs.Where(process => process.Priority >= 0).OrderBy(process => process.Priority)) process.ExecuteTree();
 		}
 
 		public void ExecuteTree()
@@ -62,12 +63,12 @@ namespace CSharpUtils.Process
 
 		private void DrawTreeBefore(object _Context)
 		{
-			foreach (var Process in Childs.Where(process => process.z < 0).OrderBy(process => process.z)) Process.DrawTree(_Context);
+			foreach (var Process in Childs.Where(process => process.Z < 0).OrderBy(process => process.Z)) Process.DrawTree(_Context);
 		}
 
 		private void DrawTreeAfter(object _Context)
 		{
-			foreach (var process in Childs.Where(process => process.z >= 0).OrderBy(process => process.z)) process.DrawTree(_Context);
+			foreach (var process in Childs.Where(process => process.Z >= 0).OrderBy(process => process.Z)) process.DrawTree(_Context);
 		}
 
 		virtual public void DrawTree(object _Context)
@@ -82,15 +83,33 @@ namespace CSharpUtils.Process
 			//Console.WriteLine(this);
 		}
 
+		public ProcessBase Parent
+		{
+			get
+			{
+				return _Parent;
+			}
+			set
+			{
+				if (_Parent != null)
+				{
+					_Parent.Childs.Remove(this);
+				}
+				{
+					_Parent = value;
+				}
+				if (_Parent != null)
+				{
+					_Parent.Childs.AddLast(this);
+				}
+			}
+		}
+
 		public ProcessBase() : base()
 		{
 			_AllProcesses.AddLast(this);
 			Childs = new LinkedList<ProcessBase>();
 			Parent = CurrentExecutingProcess;
-			if (Parent != null)
-			{
-				Parent.Childs.AddLast(this);
-			}
 		}
 
 		~ProcessBase()
@@ -100,10 +119,7 @@ namespace CSharpUtils.Process
 
 		override protected void _Remove()
 		{
-			if (Parent != null)
-			{
-				Parent.Childs.Remove(this);
-			}
+			Parent = null;
 			_AllProcesses.Remove(this);
 			base._Remove();
 		}

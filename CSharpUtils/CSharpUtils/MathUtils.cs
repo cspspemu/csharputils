@@ -43,7 +43,7 @@ namespace CSharpUtils
 		{
 			if ((Value % Alignment) != 0)
 			{
-				Value += (uint)(Alignment - (Value % Alignment));
+				Value -= (uint)((Value % Alignment));
 			}
 			return Value;
 		}
@@ -55,6 +55,13 @@ namespace CSharpUtils
 				Value += (uint)((Value % Alignment));
 			}
 			return Value;
+		}
+
+		public static int NextPowerOfTwo(int BaseValue)
+		{
+			int NextPowerOfTwoValue = 1;
+			while (NextPowerOfTwoValue < BaseValue) NextPowerOfTwoValue <<= 1;
+			return NextPowerOfTwoValue;
 		}
 	}
 }
