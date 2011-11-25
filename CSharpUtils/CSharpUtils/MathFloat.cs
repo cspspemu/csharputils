@@ -22,9 +22,9 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		public static float Floor(float Value)
+		public static int Floor(float Value)
 		{
-			return (float)Math.Floor((double)Value);
+			return (int)Math.Floor((double)Value);
 		}
 
 		/// <summary>
@@ -32,9 +32,9 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		public static float Ceil(float Value)
+		public static int Ceil(float Value)
 		{
-			return (float)Math.Ceiling((double)Value);
+			return (int)Math.Ceiling((double)Value);
 		}
 
 		/// <summary>
@@ -42,9 +42,9 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		public static float Round(float Value)
+		public static int Round(float Value)
 		{
-			return (float)Math.Round((double)Value);
+			return (int)Math.Round((double)Value);
 		}
 
 		/// <summary>
