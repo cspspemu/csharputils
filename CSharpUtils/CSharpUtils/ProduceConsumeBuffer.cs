@@ -13,6 +13,7 @@ namespace CSharpUtils
 	public class ProduceConsumeBuffer<T>
 	{
 		public T[] Items = new T[0];
+		public long TotalConsumed = 0;
 
 		public void Produce(T[] NewBytes)
 		{
@@ -47,6 +48,7 @@ namespace CSharpUtils
 			Length = Math.Min(Length, ConsumeRemaining);
 			Array.Copy(Items, 0, Buffer, Offset, Length);
 			Items = Items.Slice(Length);
+			TotalConsumed += Length;
 			return Length;
 		}
 
@@ -54,6 +56,7 @@ namespace CSharpUtils
 		{
 			var Return = ConsumePeek(Length);
 			Items = Items.Slice(Length);
+			TotalConsumed += Length;
 			return Return;
 		}
 
