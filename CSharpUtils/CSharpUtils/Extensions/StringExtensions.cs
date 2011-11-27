@@ -55,6 +55,16 @@ namespace CSharpUtils.Extensions
 			return That;
 		}
 
+		static public long GetLong(object Value)
+		{
+			return Convert.ToInt64(Value);
+		}
+
+		static public ulong GetUnsignedLong(object Value)
+		{
+			return Convert.ToUInt64(Value);
+		}
+
 		static public String Sprintf(this String This, params Object[] _Params)
 		{
 			String Ret = "";
@@ -95,9 +105,9 @@ namespace CSharpUtils.Extensions
 								case 'b': Result = Convert.ToString(Convert.ToInt32(Param), 2); break;
 								case 'X':
 								case 'x':
-									if (Param.GetType() == typeof(uint))
+									if (Param.GetType() == typeof(long) || Param.GetType() == typeof(ulong))
 									{
-										Result = Convert.ToString(Convert.ToUInt32(Param), 16);
+										Result = Convert.ToString(GetLong(Param), 16);
 									}
 									else
 									{
