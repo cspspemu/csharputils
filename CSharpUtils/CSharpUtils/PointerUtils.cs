@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace CSharpUtils
@@ -12,6 +13,14 @@ namespace CSharpUtils
 			if (Pointer == null) return null;
 			List<byte> Bytes = new List<byte>();
 			for (; *Pointer != 0; Pointer++) Bytes.Add(*Pointer);
+			return Encoding.GetString(Bytes.ToArray());
+		}
+
+		static public String PtrToString(byte* Pointer, int Length, Encoding Encoding)
+		{
+			if (Pointer == null) return null;
+			List<byte> Bytes = new List<byte>();
+			for (int n = 0; n < Length; n++) Bytes.Add(Pointer[n]);
 			return Encoding.GetString(Bytes.ToArray());
 		}
 
@@ -31,6 +40,12 @@ namespace CSharpUtils
 			{
 				Pointer[n] = Value;
 			}
+		}
+
+		public static void Memcpy(byte* Destination, byte* Source, int Size)
+		{
+			//Marshal.Copy(new IntPtr(Source), new IntPtr(Destination), 0, Size);
+			for (int n = 0; n < Size; n++) Destination[n] = Source[n];
 		}
 	}
 }

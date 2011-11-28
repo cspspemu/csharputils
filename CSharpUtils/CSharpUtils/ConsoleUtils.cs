@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -22,6 +23,29 @@ namespace CSharpUtils
 					Console.BackgroundColor = BackBackgroundColor;
 					Console.ForegroundColor = BackForegroundColor;
 				}
+			}
+		}
+
+		static public String CaptureOutput(Action Action)
+		{
+			var OldOut = Console.Out;
+			var StringWriter = new StringWriter();
+			try
+			{
+				Console.SetOut(StringWriter);
+				Action();
+			}
+			finally
+			{
+				Console.SetOut(OldOut);
+			}
+			try
+			{
+				return StringWriter.ToString();
+			}
+			catch
+			{
+				return "";
 			}
 		}
 	}

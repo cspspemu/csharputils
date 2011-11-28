@@ -130,5 +130,46 @@ namespace CSharpUtils
 				}
 			});
 		}
+
+		public static unsafe void TransferChannelsDataInterleaved(Rectangle Rectangle, Bitmap Bitmap, byte* NewDataPtr, Direction Direction, params BitmapChannel[] Channels)
+		{
+			int NumberOfChannels = 1;
+			foreach (var Channel in Channels)
+			{
+				if (Channel != BitmapChannel.Indexed)
+				{
+					NumberOfChannels = 4;
+					break;
+				}
+			}
+
+			Bitmap.LockBitsUnlock(Rectangle, (NumberOfChannels == 1) ? PixelFormat.Format8bppIndexed : PixelFormat.Format32bppArgb, (BitmapData) =>
+			{
+				for (int y = 0; y < BitmapData.Height; y++)
+				{
+					byte* BitmapPtr = ((byte*)BitmapData.Scan0.ToPointer()) + BitmapData.Stride * y;
+					byte* DataPtr = NewDataPtr + (NumberOfChannels * BitmapData.Width) * y;
+					int z = 0;
+					for (int x = 0; x < BitmapData.Width; x++)
+					{
+						for (int c = 0; c < NumberOfChannels; c++)
+						{
+							byte* DataPtrPtr = &DataPtr[z + c];
+							byte* BitmapPtrPtr = &BitmapPtr[z + (int)Channels[c]];
+
+							if (Direction == BitmapUtils.Direction.FromBitmapToData)
+							{
+								*DataPtrPtr = *BitmapPtrPtr;
+							}
+							else
+							{
+								*BitmapPtrPtr  = * DataPtrPtr;
+							}
+						}
+						z += NumberOfChannels;
+					}
+				}
+			});
+		}
 	}
 }

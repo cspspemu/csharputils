@@ -16,10 +16,13 @@ namespace CSharpUtils.Threading
 		protected Semaphore ParentSemaphore;
 		protected Semaphore ThisSemaphore;
 		static protected ThreadLocal<GreenThread> ThisGreenThreadList = new ThreadLocal<GreenThread>();
+		static public int GreenThreadLastId = 0;
 
 		static public Thread MonitorThread;
 
 		private Exception RethrowException;
+
+		public bool Running { get; protected set; }
 
 		public GreenThread()
 		{
@@ -63,6 +66,7 @@ namespace CSharpUtils.Threading
 				ThisSemaphoreWaitOrParentThreadStopped();
 				try
 				{
+					Running = true;
 					Action();
 				}
 				catch (Exception Exception)
@@ -75,7 +79,7 @@ namespace CSharpUtils.Threading
 				}
 			});
 
-			this.CurrentThread.Name = "GreenThread";
+			this.CurrentThread.Name = "GreenThread-" + GreenThreadLastId++;
 
 			this.CurrentThread.Start();
 		}
@@ -93,7 +97,8 @@ namespace CSharpUtils.Threading
 			{
 				try
 				{
-					throw (new Exception("GreenThread Exception", RethrowException));
+					//throw (new Exception("GreenThread Exception", RethrowException));
+					throw (RethrowException);
 				}
 				finally
 				{
@@ -111,8 +116,19 @@ namespace CSharpUtils.Threading
 			if (ThisGreenThreadList.IsValueCreated)
 			{
 				var GreenThread = ThisGreenThreadList.Value;
-				GreenThread.ParentSemaphore.Release();
-				GreenThread.ThisSemaphoreWaitOrParentThreadStopped();
+				if (GreenThread.Running)
+				{
+					try
+					{
+						GreenThread.Running = false;
+						GreenThread.ParentSemaphore.Release();
+						GreenThread.ThisSemaphoreWaitOrParentThreadStopped();
+					}
+					finally
+					{
+						GreenThread.Running = true;
+					}
+				}
 			}
 		}
 

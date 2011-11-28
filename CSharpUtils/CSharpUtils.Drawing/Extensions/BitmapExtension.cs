@@ -91,15 +91,23 @@ namespace CSharpUtils.Extensions
 			return Buffer;
 		}
 
-		static public void LockBitsUnlock(this Bitmap Bitmap, PixelFormat PixelFormat, Action<BitmapData> Callback)
+		static public void LockBitsUnlock(this Bitmap Bitmap, Rectangle Rectangle, PixelFormat PixelFormat, Action<BitmapData> Callback)
 		{
-			var BitmapData = Bitmap.LockBits(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat);
-			
-			try {
+			var BitmapData = Bitmap.LockBits(Rectangle, ImageLockMode.ReadWrite, PixelFormat);
+
+			try
+			{
 				Callback(BitmapData);
-			} finally {
+			}
+			finally
+			{
 				Bitmap.UnlockBits(BitmapData);
 			}
+		}
+
+		static public void LockBitsUnlock(this Bitmap Bitmap, PixelFormat PixelFormat, Action<BitmapData> Callback)
+		{
+			Bitmap.LockBitsUnlock(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), PixelFormat, Callback);
 		}
 
 		static public void ForEach(this Bitmap Bitmap, Action<Color, int, int> Delegate)
