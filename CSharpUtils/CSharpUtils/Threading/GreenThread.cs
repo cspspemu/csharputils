@@ -97,8 +97,9 @@ namespace CSharpUtils.Threading
 			{
 				try
 				{
-					//throw (new Exception("GreenThread Exception", RethrowException));
-					throw (RethrowException);
+					//StackTraceUtils.PreserveStackTrace(RethrowException);
+					throw (new GreenThreadException("GreenThread Exception", RethrowException));
+					//throw (RethrowException);
 				}
 				finally
 				{

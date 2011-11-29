@@ -12,6 +12,11 @@ namespace CSharpUtils
 			return (uint)((1 << Size) - 1);
 		}
 
+		static public void Insert(ref uint Value, int Offset, int Count, uint ValueToInsert)
+		{
+			Value = Insert(Value, Offset, Count, ValueToInsert);
+		}
+
 		static public uint Insert(uint InitialValue, int Offset, int Count, uint ValueToInsert)
 		{
 			uint Mask = CreateMask(Count);

@@ -90,5 +90,38 @@ namespace CSharpUtils
 				return *((float*)ValuePtr);
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		public static int ReinterpretFloatAsInt(float Value)
+		{
+			//Console.WriteLine("ReinterpretFloatAsUInt:{0}", Value);
+			var Values = new float[1];
+			Values[0] = Value;
+			fixed (float* ValuePtr = &Values[0])
+			{
+				return *((int*)ValuePtr);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		public static float ReinterpretIntAsFloat(int Value)
+		{
+			//Console.WriteLine("ReinterpretUIntAsFloat:{0}", Value);
+			var Values = new int[1];
+			Values[0] = Value;
+			fixed (int* ValuePtr = &Values[0])
+			{
+				return *((float*)ValuePtr);
+			}
+		}
+
 	}
 }

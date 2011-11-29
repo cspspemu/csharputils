@@ -74,6 +74,7 @@
     <Compile Include="MathFloat.cs" />
     <Compile Include="Misc\Acme1\Acme1File.cs" />
     <Compile Include="PointerUtils.cs" />
+    <Compile Include="StackTraceUtils.cs" />
     <Compile Include="Streams\ConcatStream.cs" />
     <Compile Include="Streams\ConsumerMemoryStream.cs" />
     <Compile Include="FieldMapping.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="StructUtils.cs" />
     <Compile Include="Threading\CustomThreadPool.cs" />
     <Compile Include="Threading\GreenThread.cs" />
+    <Compile Include="Threading\GreenThreadException.cs" />
     <Compile Include="Threading\TaskQueue.cs" />
     <Compile Include="TimeSampler.cs" />
     <Compile Include="TimeSpanUtils.cs" />
