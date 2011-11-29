@@ -123,5 +123,14 @@ namespace CSharpUtils
 			}
 		}
 
+		static public float Cos(float Angle)
+		{
+			return (float)Math.Cos(Angle);
+		}
+
+		static public float Sin(float Angle)
+		{
+			return (float)Math.Sin(Angle);
+		}
 	}
 }
