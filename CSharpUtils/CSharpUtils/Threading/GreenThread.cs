@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace CSharpUtils.Threading
 {
-	public class GreenThread
+	public class GreenThread : IDisposable
 	{
 		protected Action Action;
 
@@ -75,8 +75,11 @@ namespace CSharpUtils.Threading
 				}
 				finally
 				{
+					Running = false;
 					ParentSemaphore.Release();
 				}
+
+				//Console.WriteLine("GreenThread.Running: {0}", Running);
 			});
 
 			this.CurrentThread.Name = "GreenThread-" + GreenThreadLastId++;
@@ -130,6 +133,10 @@ namespace CSharpUtils.Threading
 						GreenThread.Running = true;
 					}
 				}
+				else
+				{
+					throw(new InvalidOperationException("GreenThread has finalized"));
+				}
 			}
 		}
 
@@ -141,6 +148,10 @@ namespace CSharpUtils.Threading
 		public void Stop()
 		{
 			CurrentThread.Abort();
+		}
+
+		public void Dispose()
+		{
 		}
 	}
 }
