@@ -22,6 +22,29 @@ namespace CSharpUtils
 		}
 
 		/// <summary>
+		/// Useful for converting LittleEndian to BigEndian and viceversa.
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		static public ushort ByteSwap(ushort Value)
+		{
+			return (ushort)((Value >> 8) | (Value << 8));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		static public uint ByteSwap(uint Value)
+		{
+			return (
+				((uint)ByteSwap((ushort)(Value >> 0)) << 16) |
+				((uint)ByteSwap((ushort)(Value >> 16)) << 0)
+			);
+		}
+
+		/// <summary>
 		/// Returns the upper minimum value that will be divisible by AlignValue.
 		/// </summary>
 		/// <example>
@@ -53,6 +76,15 @@ namespace CSharpUtils
 			if ((Value % Alignment) != 0)
 			{
 				Value += (uint)((Value % Alignment));
+			}
+			return Value;
+		}
+
+		public static long NextAligned(long Value, long Alignment)
+		{
+			if ((Value % Alignment) != 0)
+			{
+				Value += (long)((Value % Alignment));
 			}
 			return Value;
 		}

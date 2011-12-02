@@ -40,5 +40,11 @@ namespace CSharpUtils
 			}
 			return _Value;
 		}
+
+		public static float ExtractUnsignedScaled(uint Value, int Offset, int Count, float Scale = 1.0f)
+		{
+			return ((float)Extract(Value, Offset, Count) / (float)CreateMask(Count)) * Scale;
+			throw new NotImplementedException();
+		}
 	}
 }

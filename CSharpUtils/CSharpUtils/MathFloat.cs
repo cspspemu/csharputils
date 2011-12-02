@@ -132,5 +132,12 @@ namespace CSharpUtils
 		{
 			return (float)Math.Sin(Angle);
 		}
+
+		static public float Clamp(float Value, float Min, float Max)
+		{
+			if (Value < Min) Value = Min;
+			else if (Value > Max) Value = Max;
+			return Value;
+		}
 	}
 }
