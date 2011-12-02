@@ -139,5 +139,10 @@ namespace CSharpUtils
 			else if (Value > Max) Value = Max;
 			return Value;
 		}
+
+		static public float Sqrt(float Value)
+		{
+			return (float)Math.Sqrt((double)Value);
+		}
 	}
 }
