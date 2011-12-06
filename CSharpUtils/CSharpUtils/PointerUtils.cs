@@ -47,5 +47,15 @@ namespace CSharpUtils
 			//Marshal.Copy(new IntPtr(Source), new IntPtr(Destination), 0, Size);
 			for (int n = 0; n < Size; n++) Destination[n] = Source[n];
 		}
+
+		public static unsafe byte[] PointerToByteArray(byte* Pointer, int Size)
+		{
+			var Data = new byte[Size];
+			fixed (byte* DataPtr = Data)
+			{
+				Memcpy(DataPtr, Pointer, Size);
+			}
+			return Data;
+		}
 	}
 }

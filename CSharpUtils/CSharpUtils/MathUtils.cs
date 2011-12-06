@@ -73,18 +73,14 @@ namespace CSharpUtils
 
 		public static uint NextAligned(uint Value, int Alignment)
 		{
-			if ((Value % Alignment) != 0)
-			{
-				Value += (uint)((Value % Alignment));
-			}
-			return Value;
+			return (uint)NextAligned((long)Value, (long)Alignment);
 		}
 
 		public static long NextAligned(long Value, long Alignment)
 		{
 			if ((Value % Alignment) != 0)
 			{
-				Value += (long)((Value % Alignment));
+				Value += (long)(Alignment - (Value % Alignment));
 			}
 			return Value;
 		}

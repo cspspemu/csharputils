@@ -26,25 +26,33 @@ namespace CSharpUtils
 			}
 		}
 
-		static public String CaptureOutput(Action Action)
+		static public String CaptureOutput(Action Action, bool Capture = true)
 		{
-			var OldOut = Console.Out;
-			var StringWriter = new StringWriter();
-			try
+			if (Capture)
 			{
-				Console.SetOut(StringWriter);
+				var OldOut = Console.Out;
+				var StringWriter = new StringWriter();
+				try
+				{
+					Console.SetOut(StringWriter);
+					Action();
+				}
+				finally
+				{
+					Console.SetOut(OldOut);
+				}
+				try
+				{
+					return StringWriter.ToString();
+				}
+				catch
+				{
+					return "";
+				}
+			}
+			else
+			{
 				Action();
-			}
-			finally
-			{
-				Console.SetOut(OldOut);
-			}
-			try
-			{
-				return StringWriter.ToString();
-			}
-			catch
-			{
 				return "";
 			}
 		}
