@@ -9,6 +9,10 @@ namespace CSharpUtils.Threading
 {
 	public class GreenThread : IDisposable
 	{
+		public class StopException : Exception
+		{
+		}
+
 		protected Action Action;
 
 		protected Thread ParentThread;
@@ -23,6 +27,7 @@ namespace CSharpUtils.Threading
 		private Exception RethrowException;
 
 		public bool Running { get; protected set; }
+		protected bool Kill;
 
 		public GreenThread()
 		{
@@ -37,7 +42,12 @@ namespace CSharpUtils.Threading
 			while (true)
 			{
 				// If the parent thread have been stopped. We should not wait any longer.
-				if (!ParentThread.IsAlive) Thread.CurrentThread.Abort();
+				if (Kill || !ParentThread.IsAlive)
+				{
+					break;
+					//throw(new StopException());
+					//Thread.CurrentThread.Abort();
+				}
 
 				if (ThisSemaphore.WaitOne(20))
 				{
@@ -45,6 +55,8 @@ namespace CSharpUtils.Threading
 					break;
 				}
 			}
+
+			if (Kill || !ParentThread.IsAlive) throw (new StopException());
 		}
 
 		public void InitAndStartStopped(Action Action)
@@ -69,6 +81,9 @@ namespace CSharpUtils.Threading
 					Running = true;
 					Action();
 				}
+				catch (StopException)
+				{
+				}
 				catch (Exception Exception)
 				{
 					RethrowException = Exception;
@@ -76,7 +91,13 @@ namespace CSharpUtils.Threading
 				finally
 				{
 					Running = false;
-					ParentSemaphore.Release();
+					try
+					{
+						ParentSemaphore.Release();
+					}
+					catch
+					{
+					}
 				}
 
 				//Console.WriteLine("GreenThread.Running: {0}", Running);
@@ -147,11 +168,15 @@ namespace CSharpUtils.Threading
 
 		public void Stop()
 		{
-			CurrentThread.Abort();
+			Kill = true;
+			ThisSemaphore.Release();
+			//CurrentThread.Abort();
 		}
 
 		public void Dispose()
 		{
+			Stop();
+			//Stop();
 		}
 	}
 }
