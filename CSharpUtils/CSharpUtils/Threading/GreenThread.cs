@@ -56,7 +56,11 @@ namespace CSharpUtils.Threading
 				}
 			}
 
-			if (Kill || !ParentThread.IsAlive) throw (new StopException());
+			if (Kill || !ParentThread.IsAlive)
+			{
+				//throw (new StopException());
+				Thread.CurrentThread.Abort();
+			}
 		}
 
 		public void InitAndStartStopped(Action Action)
@@ -116,6 +120,11 @@ namespace CSharpUtils.Threading
 		{
 			ParentThread = Thread.CurrentThread;
 			ThisSemaphore.Release();
+			if (Kill)
+			{
+				Thread.CurrentThread.Abort();
+			}
+			//ThisSemaphoreWaitOrParentThreadStopped();
 			ParentSemaphore.WaitOne();
 			if (RethrowException != null)
 			{
