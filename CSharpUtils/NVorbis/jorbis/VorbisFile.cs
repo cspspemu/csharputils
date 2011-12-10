@@ -1,94 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using NVorbis.jogg;
 
 namespace NVorbis.jorbis
 {
 	public class VorbisFile{
-	  static final int CHUNKSIZE=8500;
-	  static final int SEEK_SET=0;
-	  static final int SEEK_CUR=1;
-	  static final int SEEK_END=2;
+	  internal const int CHUNKSIZE=8500;
+	  internal const int SEEK_SET=0;
+	  internal const int SEEK_CUR=1;
+	  internal const int SEEK_END=2;
 
-	  static final int OV_FALSE=-1;
-	  static final int OV_EOF=-2;
-	  static final int OV_HOLE=-3;
+	  internal const int OV_FALSE=-1;
+	  internal const int OV_EOF=-2;
+	  internal const int OV_HOLE=-3;
 
-	  static final int OV_EREAD=-128;
-	  static final int OV_EFAULT=-129;
-	  static final int OV_EIMPL=-130;
-	  static final int OV_EINVAL=-131;
-	  static final int OV_ENOTVORBIS=-132;
-	  static final int OV_EBADHEADER=-133;
-	  static final int OV_EVERSION=-134;
-	  static final int OV_ENOTAUDIO=-135;
-	  static final int OV_EBADPACKET=-136;
-	  static final int OV_EBADLINK=-137;
-	  static final int OV_ENOSEEK=-138;
+	  internal const int OV_EREAD=-128;
+	  internal const int OV_EFAULT=-129;
+	  internal const int OV_EIMPL=-130;
+	  internal const int OV_EINVAL=-131;
+	  internal const int OV_ENOTVORBIS=-132;
+	  internal const int OV_EBADHEADER=-133;
+	  internal const int OV_EVERSION=-134;
+	  internal const int OV_ENOTAUDIO=-135;
+	  internal const int OV_EBADPACKET=-136;
+	  internal const int OV_EBADLINK=-137;
+	  internal const int OV_ENOSEEK=-138;
 
-	  InputStream datasource;
-	  boolean seekable=false;
-	  long offset;
-	  long end;
+	  internal Stream datasource;
+	  internal bool _seekable=false;
+	  internal long offset;
+	  internal long end;
 
-	  SyncState oy=new SyncState();
+	  internal SyncState oy=new SyncState();
 
-	  int links;
-	  long[] offsets;
-	  long[] dataoffsets;
-	  int[] serialnos;
-	  long[] pcmlengths;
-	  Info[] vi;
-	  Comment[] vc;
+	  internal int links;
+	  internal long[] offsets;
+	  internal long[] dataoffsets;
+	  internal int[] serialnos;
+	  internal long[] pcmlengths;
+	  internal Info[] vi;
+	  internal Comment[] vc;
 
 	  // Decoding working state local storage
-	  long pcm_offset;
-	  boolean decode_ready=false;
+	  internal long pcm_offset;
+	  internal bool decode_ready=false;
 
-	  int current_serialno;
-	  int current_link;
+	  internal int current_serialno;
+	  internal int current_link;
 
-	  float bittrack;
-	  float samptrack;
+	  internal float bittrack;
+	  internal float samptrack;
 
-	  StreamState os=new StreamState(); // take physical pages, weld into a logical
+	  internal StreamState os; // take physical pages, weld into a logical
 	  // stream of packets
-	  DspState vd=new DspState(); // central working state for 
+	  internal DspState vd; // central working state for 
 	  // the packet->PCM decoder
-	  Block vb=new Block(vd); // local working space for packet->PCM decode
+	  internal Block vb; // local working space for packet->PCM decode
 
 	  //ov_callbacks callbacks;
 
-	  public VorbisFile(String file) throws JOrbisException{
-		super();
-		InputStream is=null;
+		private void _init()
+		{
+			os=new StreamState();
+			vd=new DspState();
+			vb = new Block(vd);
+		}
+
+	  public VorbisFile(String file)
+	  {
+		  _init();
+		Stream _is=null;
 		try{
-		  is=new SeekableInputStream(file);
-		  int ret=open(is, null, 0);
+		  _is=File.OpenRead(file);
+		  int ret=open(_is, null, 0);
 		  if(ret==-1){
 			throw new JOrbisException("VorbisFile: open return -1");
 		  }
 		}
 		catch(Exception e){
-		  throw new JOrbisException("VorbisFile: "+e.toString());
+		  throw new JOrbisException("VorbisFile: "+e.ToString());
 		}
 		finally{
-		  if(is!=null){
+		  if(_is!=null){
 			try{
-			  is.close();
+			  _is.Close();
 			}
 			catch(IOException e){
-			  e.printStackTrace();
+				Console.Error.WriteLine(e);
 			}
 		  }
 		}
 	  }
 
-	  public VorbisFile(InputStream is, byte[] initial, int ibytes)
-		  throws JOrbisException{
-		super();
-		int ret=open(is, initial, ibytes);
+	  public VorbisFile(Stream _is, byte[] initial, int ibytes) {
+		  _init();
+		int ret=open(_is, initial, ibytes);
 		if(ret==-1){
 		}
 	  }
@@ -98,7 +107,7 @@ namespace NVorbis.jorbis
 		byte[] buffer=oy.data;
 		int bytes=0;
 		try{
-		  bytes=datasource.read(buffer, index, CHUNKSIZE);
+		  bytes=datasource.Read(buffer, index, CHUNKSIZE);
 		}
 		catch(Exception e){
 		  return OV_EREAD;
@@ -146,7 +155,8 @@ namespace NVorbis.jorbis
 		}
 	  }
 
-	  private int get_prev_page(Page page) throws JOrbisException{
+	  private int get_prev_page(Page page)
+	  {
 		long begin=offset; //!!!
 		int ret;
 		int offst=-1;
@@ -289,8 +299,7 @@ namespace NVorbis.jorbis
 	  // vorbis_info structs and PCM positions.  Only called by the seekable
 	  // initialization (local stream storage is hacked slightly; pay
 	  // attention to how that's done)
-	  void prefetch_all_headers(Info first_i, Comment first_c, int dataoffset)
-		  throws JOrbisException{
+	  void prefetch_all_headers(Info first_i, Comment first_c, int dataoffset) {
 		Page og=new Page();
 		int ret;
 
@@ -348,14 +357,15 @@ namespace NVorbis.jorbis
 
 	  private int make_decode_ready(){
 		if(decode_ready)
-		  System.exit(1);
+		  Environment.Exit(1);
 		vd.synthesis_init(vi[0]);
 		vb.init(vd);
 		decode_ready=true;
 		return (0);
 	  }
 
-	  int open_seekable() throws JOrbisException{
+	  int open_seekable()
+	  {
 		Info initial_i=new Info();
 		Comment initial_c=new Comment();
 		int serialno;
@@ -374,7 +384,7 @@ namespace NVorbis.jorbis
 		if(ret<0)
 		  return (ret);
 		// we can seek, so set out learning all about this file
-		seekable=true;
+		_seekable=true;
 		fseek(datasource, 0, SEEK_END);
 		offset=ftell(datasource);
 		end=offset;
@@ -424,8 +434,8 @@ namespace NVorbis.jorbis
 		vd.clear();
 		vb.clear();
 		decode_ready=false;
-		bittrack=0.f;
-		samptrack=0.f;
+		bittrack=0.0f;
+		samptrack=0.0f;
 	  }
 
 	  // fetch and process a packet.  Handles the case where we're at a
@@ -473,7 +483,7 @@ namespace NVorbis.jorbis
 
 				// update the pcm offset.
 				if(granulepos!=-1&&op.e_o_s==0){
-				  int link=(seekable ? current_link : 0);
+				  int link=(_seekable ? current_link : 0);
 				  int samples;
 				  // this packet has a pcm_offset on it (the last packet
 				  // completed on a page carries the offset) After processing
@@ -528,7 +538,7 @@ namespace NVorbis.jorbis
 
 		  if(!decode_ready){
 			int i;
-			if(seekable){
+			if(_seekable){
 			  current_serialno=og.serialno();
 
 			  // match the serialno to bitstream section.  We use this rather than
@@ -550,7 +560,7 @@ namespace NVorbis.jorbis
 			else{
 			  // we're streaming
 			  // fetch the three header packets, build the info struct
-			  int foo[]=new int[1];
+				int[] foo = new int[1];
 			  int ret=fetch_headers(vi[0], vc[0], foo, og);
 			  current_serialno=foo[0];
 			  if(ret!=0)
@@ -592,15 +602,17 @@ namespace NVorbis.jorbis
 		return (0);
 	  }
 
-	  static int fseek(InputStream fis, long off, int whence){
-		if(fis instanceof SeekableInputStream){
-		  SeekableInputStream sis=(SeekableInputStream)fis;
+	  static int fseek(Stream fis, long off, int whence){
+		if(fis is Stream){
+		  Stream sis=(Stream)fis;
 		  try{
 			if(whence==SEEK_SET){
-			  sis.seek(off);
+				sis.Seek(off, SeekOrigin.Begin);
+			  //sis.seek(off);
 			}
 			else if(whence==SEEK_END){
-			  sis.seek(sis.getLength()-off);
+			  //sis.seek(sis.getLength()-off);
+				sis.Seek(sis.Length-off, SeekOrigin.Begin);
 			}
 			else{
 			}
@@ -611,9 +623,9 @@ namespace NVorbis.jorbis
 		}
 		try{
 		  if(whence==0){
-			fis.reset();
+			  fis.Position = 0;
 		  }
-		  fis.skip(off);
+			fis.Position += off;
 		}
 		catch(Exception e){
 		  return -1;
@@ -621,11 +633,11 @@ namespace NVorbis.jorbis
 		return 0;
 	  }
 
-	  static long ftell(InputStream fis){
+	  static long ftell(Stream fis){
 		try{
-		  if(fis instanceof SeekableInputStream){
-			SeekableInputStream sis=(SeekableInputStream)fis;
-			return (sis.tell());
+		  if(fis is Stream){
+			Stream sis=(Stream)fis;
+			return (sis.Position);
 		  }
 		}
 		catch(Exception e){
@@ -640,14 +652,16 @@ namespace NVorbis.jorbis
 	  // return: -1) error
 	  //          0) OK
 
-	  int open(InputStream is, byte[] initial, int ibytes) throws JOrbisException{
-		return open_callbacks(is, initial, ibytes);
+	  int open(Stream _is, byte[] initial, int ibytes)
+	  {
+		return open_callbacks(_is, initial, ibytes);
 	  }
 
-	  int open_callbacks(InputStream is, byte[] initial, int ibytes//, callbacks callbacks
-	  ) throws JOrbisException{
+	  int open_callbacks(Stream _is, byte[] initial, int ibytes//, callbacks callbacks
+	  )
+	  {
 		int ret;
-		datasource=is;
+		datasource=_is;
 
 		oy.init();
 
@@ -657,11 +671,11 @@ namespace NVorbis.jorbis
 		// stream)
 		if(initial!=null){
 		  int index=oy.buffer(ibytes);
-		  System.arraycopy(initial, 0, oy.data, index, ibytes);
+		  Array.Copy(initial, 0, oy.data, index, ibytes);
 		  oy.wrote(ibytes);
 		}
 		// can we seek? Stevens suggests the seek test was portable
-		if(is instanceof SeekableInputStream){
+		if(_is is Stream){
 		  ret=open_seekable();
 		}
 		else{
@@ -680,8 +694,8 @@ namespace NVorbis.jorbis
 	  }
 
 	  // Is the FILE * associated with vf seekable?
-	  public boolean seekable(){
-		return seekable;
+	  public bool seekable(){
+		return _seekable;
 	  }
 
 	  // returns the bitrate for a given logical bitstream or the entire
@@ -696,19 +710,19 @@ namespace NVorbis.jorbis
 	  public int bitrate(int i){
 		if(i>=links)
 		  return (-1);
-		if(!seekable&&i!=0)
+		if(!_seekable&&i!=0)
 		  return (bitrate(0));
 		if(i<0){
 		  long bits=0;
 		  for(int j=0; j<links; j++){
 			bits+=(offsets[j+1]-dataoffsets[j])*8;
 		  }
-		  return ((int)Math.rint(bits/time_total(-1)));
+		  return ((int)Math.Round(bits/time_total(-1)));
 		}
 		else{
-		  if(seekable){
+		  if(_seekable){
 			// return the actual bitrate
-			return ((int)Math.rint((offsets[i+1]-dataoffsets[i])*8/time_total(i)));
+			return ((int)Math.Round((offsets[i+1]-dataoffsets[i])*8/time_total(i)));
 		  }
 		  else{
 			// return nominal if set
@@ -733,19 +747,19 @@ namespace NVorbis.jorbis
 	  // returns the actual bitrate since last call.  returns -1 if no
 	  // additional data to offer since last call (or at beginning of stream)
 	  public int bitrate_instant(){
-		int _link=(seekable ? current_link : 0);
+		int _link=(_seekable ? current_link : 0);
 		if(samptrack==0)
 		  return (-1);
 		int ret=(int)(bittrack/samptrack*vi[_link].rate+.5);
-		bittrack=0.f;
-		samptrack=0.f;
+		bittrack=0.0f;
+		samptrack=0.0f;
 		return (ret);
 	  }
 
 	  public int serialnumber(int i){
 		if(i>=links)
 		  return (-1);
-		if(!seekable&&i>=0)
+		if(!_seekable&&i>=0)
 		  return (serialnumber(-1));
 		if(i<0){
 		  return (current_serialno);
@@ -760,7 +774,7 @@ namespace NVorbis.jorbis
 	  //          -1 if the stream is not seekable (we can't know the length)
 
 	  public long raw_total(int i){
-		if(!seekable||i>=links)
+		if(!_seekable||i>=links)
 		  return (-1);
 		if(i<0){
 		  long acc=0; // bug?
@@ -778,7 +792,7 @@ namespace NVorbis.jorbis
 	  //          PCM length (samples) of that logical bitstream for i==0 to n
 	  //          -1 if the stream is not seekable (we can't know the length)
 	  public long pcm_total(int i){
-		if(!seekable||i>=links)
+		if(!_seekable||i>=links)
 		  return (-1);
 		if(i<0){
 		  long acc=0;
@@ -796,7 +810,7 @@ namespace NVorbis.jorbis
 	  //          seconds in that logical bitstream for i==0 to n
 	  //          -1 if the stream is not seekable (we can't know the length)
 	  public float time_total(int i){
-		if(!seekable||i>=links)
+		if(!_seekable||i>=links)
 		  return (-1);
 		if(i<0){
 		  float acc=0;
@@ -819,7 +833,7 @@ namespace NVorbis.jorbis
 	  // returns zero on success, nonzero on failure
 
 	  public int raw_seek(int pos){
-		if(!seekable)
+		if(!_seekable)
 		  return (-1); // don't dump machine if we can't seek
 		if(pos<0||pos>offsets[links]){
 		  //goto seek_error;
@@ -890,7 +904,7 @@ namespace NVorbis.jorbis
 		int link=-1;
 		long total=pcm_total(-1);
 
-		if(!seekable)
+		if(!_seekable)
 		  return (-1); // don't dump machine if we can't seek
 		if(pos<0||pos>total){
 		  //goto seek_error;
@@ -1002,10 +1016,10 @@ namespace NVorbis.jorbis
 		// translate time to PCM position and call pcm_seek
 
 		int link=-1;
-		long pcm_total=pcm_total(-1);
-		float time_total=time_total(-1);
+		long pcm_total=this.pcm_total(-1);
+		float time_total=this.time_total(-1);
 
-		if(!seekable)
+		if(!_seekable)
 		  return (-1); // don't dump machine if we can't seek
 		if(seconds<0||seconds>time_total){
 		  //goto seek_error;
@@ -1017,7 +1031,7 @@ namespace NVorbis.jorbis
 		// which bitstream section does this time offset occur in?
 		for(link=links-1; link>=0; link--){
 		  pcm_total-=pcmlengths[link];
-		  time_total-=time_total(link);
+		  time_total-=this.time_total(link);
 		  if(seconds>=time_total)
 			break;
 		}
@@ -1052,16 +1066,16 @@ namespace NVorbis.jorbis
 
 		int link=-1;
 		long pcm_total=0;
-		float time_total=0.f;
+		float time_total=0.0f;
 
-		if(seekable){
-		  pcm_total=pcm_total(-1);
-		  time_total=time_total(-1);
+		if(_seekable){
+		  pcm_total=this.pcm_total(-1);
+		  time_total=this.time_total(-1);
 
 		  // which bitstream section does this time offset occur in?
 		  for(link=links-1; link>=0; link--){
 			pcm_total-=pcmlengths[link];
-			time_total-=time_total(link);
+			time_total-=this.time_total(link);
 			if(pcm_offset>=pcm_total)
 			  break;
 		  }
@@ -1079,7 +1093,7 @@ namespace NVorbis.jorbis
 	  // initialized
 
 	  public Info getInfo(int link){
-		if(seekable){
+		if(_seekable){
 		  if(link<0){
 			if(decode_ready){
 			  return vi[current_link];
@@ -1108,7 +1122,7 @@ namespace NVorbis.jorbis
 	  }
 
 	  public Comment getComment(int link){
-		if(seekable){
+		if(_seekable){
 		  if(link<0){
 			if(decode_ready){
 			  return vc[current_link];
@@ -1136,7 +1150,7 @@ namespace NVorbis.jorbis
 		}
 	  }
 
-	  int host_is_big_endian(){
+	  internal int host_is_big_endian(){
 		return 1;
 		//    short pattern = 0xbabe;
 		//    unsigned char *bytewise = (unsigned char *)&pattern;
@@ -1176,7 +1190,7 @@ namespace NVorbis.jorbis
 	  // 
 	  // *section) set to the logical bitstream number
 
-	  int read(byte[] buffer, int length, int bigendianp, int word, int sgned,
+	  internal int read(byte[] buffer, int length, int bigendianp, int word, int sgned,
 		  int[] bitstream){
 		int host_endian=host_is_big_endian();
 		int index=0;
@@ -1202,7 +1216,7 @@ namespace NVorbis.jorbis
 				  int off=(sgned!=0 ? 0 : 128);
 				  for(int j=0; j<samples; j++){
 					for(int i=0; i<channels; i++){
-					  val=(int)(pcm[i][_index[i]+j]*128.+0.5);
+					  val=(int)(pcm[i][_index[i]+j]*128.0f+0.5);
 					  if(val>127)
 						val=127;
 					  else if(val<-128)
@@ -1220,12 +1234,12 @@ namespace NVorbis.jorbis
 						int src=_index[i];
 						int dest=i;
 						for(int j=0; j<samples; j++){
-						  val=(int)(pcm[i][src+j]*32768.+0.5);
+						  val=(int)(pcm[i][src+j]*32768.0f+0.5);
 						  if(val>32767)
 							val=32767;
 						  else if(val<-32768)
 							val=-32768;
-						  buffer[dest]=(byte)(val>>>8);
+						  buffer[dest]=(byte)(((uint)val)>>8);
 						  buffer[dest+1]=(byte)(val);
 						  dest+=channels*2;
 						}
@@ -1236,12 +1250,12 @@ namespace NVorbis.jorbis
 						float[] src=pcm[i];
 						int dest=i;
 						for(int j=0; j<samples; j++){
-						  val=(int)(src[j]*32768.+0.5);
+						  val=(int)(src[j]*32768.0f+0.5);
 						  if(val>32767)
 							val=32767;
 						  else if(val<-32768)
 							val=-32768;
-						  buffer[dest]=(byte)((val+off)>>>8);
+						  buffer[dest]=(byte)(((uint)(val+off))>>8);
 						  buffer[dest+1]=(byte)(val+off);
 						  dest+=channels*2;
 						}
@@ -1251,13 +1265,13 @@ namespace NVorbis.jorbis
 				  else if(bigendianp!=0){
 					for(int j=0; j<samples; j++){
 					  for(int i=0; i<channels; i++){
-						val=(int)(pcm[i][j]*32768.+0.5);
+						val=(int)(pcm[i][j]*32768.0f+0.5);
 						if(val>32767)
 						  val=32767;
 						else if(val<-32768)
 						  val=-32768;
 						val+=off;
-						buffer[index++]=(byte)(val>>>8);
+						buffer[index++]=(byte)(((uint)val)>>8);
 						buffer[index++]=(byte)val;
 					  }
 					}
@@ -1266,14 +1280,14 @@ namespace NVorbis.jorbis
 					//int val;
 					for(int j=0; j<samples; j++){
 					  for(int i=0; i<channels; i++){
-						val=(int)(pcm[i][j]*32768.+0.5);
+						val=(int)(pcm[i][j]*32768.0f+0.5);
 						if(val>32767)
 						  val=32767;
 						else if(val<-32768)
 						  val=-32768;
 						val+=off;
 						buffer[index++]=(byte)val;
-						buffer[index++]=(byte)(val>>>8);
+						buffer[index++]=(byte)(((uint)val)>>8);
 					  }
 					}
 				  }
@@ -1308,65 +1322,9 @@ namespace NVorbis.jorbis
 		return vc;
 	  }
 
-	  public void close() throws java.io.IOException{
-		datasource.close();
+	  public void close() {
+		datasource.Close();
 	  }
-
-	  class SeekableInputStream extends InputStream{
-		java.io.RandomAccessFile raf=null;
-		final String mode="r";
-
-		SeekableInputStream(String file) throws java.io.IOException{
-		  raf=new java.io.RandomAccessFile(file, mode);
-		}
-
-		public int read() throws java.io.IOException{
-		  return raf.read();
-		}
-
-		public int read(byte[] buf) throws java.io.IOException{
-		  return raf.read(buf);
-		}
-
-		public int read(byte[] buf, int s, int len) throws java.io.IOException{
-		  return raf.read(buf, s, len);
-		}
-
-		public long skip(long n) throws java.io.IOException{
-		  return (long)(raf.skipBytes((int)n));
-		}
-
-		public long getLength() throws java.io.IOException{
-		  return raf.length();
-		}
-
-		public long tell() throws java.io.IOException{
-		  return raf.getFilePointer();
-		}
-
-		public int available() throws java.io.IOException{
-		  return (raf.length()==raf.getFilePointer()) ? 0 : 1;
-		}
-
-		public void close() throws java.io.IOException{
-		  raf.close();
-		}
-
-		public synchronized void mark(int m){
-		}
-
-		public synchronized void reset() throws java.io.IOException{
-		}
-
-		public boolean markSupported(){
-		  return false;
-		}
-
-		public void seek(long pos) throws java.io.IOException{
-		  raf.seek(pos);
-		}
-	  }
-
 	}
 
 }

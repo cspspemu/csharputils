@@ -5,11 +5,13 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class Floor1 extends FuncFloor{
-	  static final int floor1_rangedb=140;
-	  static final int VIF_POSIT=63;
+	class Floor1 : FuncFloor
+	{
+	  internal const int floor1_rangedb=140;
+	  internal const int VIF_POSIT=63;
 
-	  void pack(Object i, Buffer opb){
+	  override internal void pack(Object i, NVorbis.jogg.Buffer opb)
+	  {
 		InfoFloor1 info=(InfoFloor1)i;
 
 		int count=0;
@@ -50,7 +52,8 @@ namespace NVorbis.jorbis
 		}
 	  }
 
-	  Object unpack(Info vi, Buffer opb){
+	  override internal Object unpack(Info vi, NVorbis.jogg.Buffer opb)
+	  {
 		int count=0, maxclass=-1, rangebits;
 		InfoFloor1 info=new InfoFloor1();
 
@@ -106,7 +109,8 @@ namespace NVorbis.jorbis
 		return (info);
 	  }
 
-	  Object look(DspState vd, InfoMode mi, Object i){
+	  override internal Object look(DspState vd, InfoMode mi, Object i)
+	  {
 		int _n=0;
 
 		int[] sortpointer=new int[VIF_POSIT+2];
@@ -177,6 +181,7 @@ namespace NVorbis.jorbis
 			break;
 		  default:
 			look.quant_q=-1;
+			break;
 		}
 
 		/* discover our neighbors for decode where we don't use fit flags
@@ -205,20 +210,25 @@ namespace NVorbis.jorbis
 		return look;
 	  }
 
-	  void free_info(Object i){
+	  override internal void free_info(Object i)
+	  {
 	  }
 
-	  void free_look(Object i){
+	  override internal void free_look(Object i)
+	  {
 	  }
 
-	  void free_state(Object vs){
+	  override internal void free_state(Object vs)
+	  {
 	  }
 
-	  int forward(Block vb, Object i, float[] in, float[] out, Object vs){
+	  override internal int forward(Block vb, Object i, float[] In, float[] Out, Object vs)
+	  {
 		return 0;
 	  }
 
-	  Object inverse1(Block vb, Object ii, Object memo){
+	  override internal Object inverse1(Block vb, Object ii, Object memo)
+	  {
 		LookFloor1 look=(LookFloor1)ii;
 		InfoFloor1 info=look.vi;
 		CodeBook[] books=vb.vd.fullbooks;
@@ -226,14 +236,14 @@ namespace NVorbis.jorbis
 		/* unpack wrapped/predicted values from stream */
 		if(vb.opb.read(1)==1){
 		  int[] fit_value=null;
-		  if(memo instanceof int[]){
+		  if(memo is int[]){
 			fit_value=(int[])memo;
 		  }
-		  if(fit_value==null||fit_value.length<look.posts){
+		  if(fit_value==null||fit_value.Length<look.posts){
 			fit_value=new int[look.posts];
 		  }
 		  else{
-			for(int i=0; i<fit_value.length; i++)
+			for(int i=0; i<fit_value.Length; i++)
 			  fit_value[i]=0;
 		  }
 
@@ -246,20 +256,20 @@ namespace NVorbis.jorbis
 			int cdim=info.class_dim[clss];
 			int csubbits=info.class_subs[clss];
 			int csub=1<<csubbits;
-			int cval=0;
+			uint cval=0;
 
 			/* decode the partition's first stage cascade value */
 			if(csubbits!=0){
-			  cval=books[info.class_book[clss]].decode(vb.opb);
+			  cval=(uint)books[info.class_book[clss]].decode(vb.opb);
 
-			  if(cval==-1){
+			  if(unchecked(cval==-1)){
 				return (null);
 			  }
 			}
 
 			for(int k=0; k<cdim; k++){
 			  int book=info.class_subbook[clss][cval&(csub-1)];
-			  cval>>>=csubbits;
+			  cval>>=csubbits;
 			  if(book>=0){
 				if((fit_value[j+k]=books[book].decode(vb.opb))==-1){
 				  return (null);
@@ -294,7 +304,7 @@ namespace NVorbis.jorbis
 			  }
 			  else{
 				if((val&1)!=0){
-				  val=-((val+1)>>>1);
+				  val=-(int)(((uint)(val+1)) >>1);
 				}
 				else{
 				  val>>=1;
@@ -322,7 +332,7 @@ namespace NVorbis.jorbis
 		{
 		  int dy=y1-y0;
 		  int adx=x1-x0;
-		  int ady=Math.abs(dy);
+		  int ady=Math.Abs(dy);
 		  int err=ady*(x-x0);
 
 		  int off=(int)(err/adx);
@@ -332,7 +342,8 @@ namespace NVorbis.jorbis
 		}
 	  }
 
-	  int inverse2(Block vb, Object i, Object memo, float[] out){
+	  override internal int inverse2(Block vb, Object i, Object memo, float[] Out)
+	  {
 		LookFloor1 look=(LookFloor1)i;
 		InfoFloor1 info=look.vi;
 		int n=vb.vd.vi.blocksizes[vb.mode]/2;
@@ -350,19 +361,19 @@ namespace NVorbis.jorbis
 			  hy*=info.mult;
 			  hx=info.postlist[current];
 
-			  render_line(lx, hx, ly, hy, out);
+			  render_line(lx, hx, ly, hy, Out);
 
 			  lx=hx;
 			  ly=hy;
 			}
 		  }
 		  for(int j=hx; j<n; j++){
-			out[j]*=out[j-1]; /* be certain */
+			Out[j]*=Out[j-1]; /* be certain */
 		  }
 		  return (1);
 		}
 		for(int j=0; j<n; j++){
-		  out[j]=0.f;
+		  Out[j]=0.0f;
 		}
 		return (0);
 	  }
@@ -427,19 +438,19 @@ namespace NVorbis.jorbis
 		  0.34289114F, 0.36517414F, 0.38890521F, 0.41417847F, 0.44109412F,
 		  0.46975890F, 0.50028648F, 0.53279791F, 0.56742212F, 0.60429640F,
 		  0.64356699F, 0.68538959F, 0.72993007F, 0.77736504F, 0.82788260F,
-		  0.88168307F, 0.9389798F, 1.F};
+		  0.88168307F, 0.9389798F, 1.0F};
 
 	  private static void render_line(int x0, int x1, int y0, int y1, float[] d){
 		int dy=y1-y0;
 		int adx=x1-x0;
-		int ady=Math.abs(dy);
-		int base=dy/adx;
-		int sy=(dy<0 ? base-1 : base+1);
+		int ady=Math.Abs(dy);
+		int _base=dy/adx;
+		int sy = (dy < 0 ? _base - 1 : _base + 1);
 		int x=x0;
 		int y=y0;
 		int err=0;
 
-		ady-=Math.abs(base*adx);
+		ady -= Math.Abs(_base * adx);
 
 		d[x]*=FLOOR_fromdB_LOOKUP[y];
 		while(++x<x1){
@@ -449,49 +460,49 @@ namespace NVorbis.jorbis
 			y+=sy;
 		  }
 		  else{
-			y+=base;
+			  y += _base;
 		  }
 		  d[x]*=FLOOR_fromdB_LOOKUP[y];
 		}
 	  }
 
-	  class InfoFloor1{
-		static final int VIF_POSIT=63;
-		static final int VIF_CLASS=16;
-		static final int VIF_PARTS=31;
+	  internal class InfoFloor1{
+		internal const int VIF_POSIT=63;
+		internal const int VIF_CLASS=16;
+		internal const int VIF_PARTS=31;
 
-		int partitions; /* 0 to 31 */
-		int[] partitionclass=new int[VIF_PARTS]; /* 0 to 15 */
+		internal int partitions; /* 0 to 31 */
+		internal int[] partitionclass=new int[VIF_PARTS]; /* 0 to 15 */
 
-		int[] class_dim=new int[VIF_CLASS]; /* 1 to 8 */
-		int[] class_subs=new int[VIF_CLASS]; /* 0,1,2,3 (bits: 1<<n poss) */
-		int[] class_book=new int[VIF_CLASS]; /* subs ^ dim entries */
-		int[][] class_subbook=new int[VIF_CLASS][]; /* [VIF_CLASS][subs] */
+		internal int[] class_dim=new int[VIF_CLASS]; /* 1 to 8 */
+		internal int[] class_subs=new int[VIF_CLASS]; /* 0,1,2,3 (bits: 1<<n poss) */
+		internal int[] class_book=new int[VIF_CLASS]; /* subs ^ dim entries */
+		internal int[][] class_subbook=new int[VIF_CLASS][]; /* [VIF_CLASS][subs] */
 
-		int mult; /* 1 2 3 or 4 */
-		int[] postlist=new int[VIF_POSIT+2]; /* first two implicit */
+		internal int mult; /* 1 2 3 or 4 */
+		internal int[] postlist=new int[VIF_POSIT+2]; /* first two implicit */
 
 		/* encode side analysis parameters */
-		float maxover;
-		float maxunder;
-		float maxerr;
+		internal float maxover;
+		internal float maxunder;
+		internal float maxerr;
 
-		int twofitminsize;
-		int twofitminused;
-		int twofitweight;
-		float twofitatten;
-		int unusedminsize;
-		int unusedmin_n;
+		internal int twofitminsize;
+		internal int twofitminused;
+		internal int twofitweight;
+		internal float twofitatten;
+		internal int unusedminsize;
+		internal int unusedmin_n;
 
-		int n;
+		internal int n;
 
-		InfoFloor1(){
-		  for(int i=0; i<class_subbook.length; i++){
+		internal InfoFloor1(){
+		  for(int i=0; i<class_subbook.Length; i++){
 			class_subbook[i]=new int[8];
 		  }
 		}
 
-		void free(){
+		internal void free(){
 		  partitionclass=null;
 		  class_dim=null;
 		  class_subs=null;
@@ -500,23 +511,22 @@ namespace NVorbis.jorbis
 		  postlist=null;
 		}
 
-		Object copy_info(){
+		internal Object copy_info(){
 		  InfoFloor1 info=this;
 		  InfoFloor1 ret=new InfoFloor1();
 
 		  ret.partitions=info.partitions;
-		  System
-			  .arraycopy(info.partitionclass, 0, ret.partitionclass, 0, VIF_PARTS);
-		  System.arraycopy(info.class_dim, 0, ret.class_dim, 0, VIF_CLASS);
-		  System.arraycopy(info.class_subs, 0, ret.class_subs, 0, VIF_CLASS);
-		  System.arraycopy(info.class_book, 0, ret.class_book, 0, VIF_CLASS);
+		  Array.Copy(info.partitionclass, 0, ret.partitionclass, 0, VIF_PARTS);
+		  Array.Copy(info.class_dim, 0, ret.class_dim, 0, VIF_CLASS);
+		  Array.Copy(info.class_subs, 0, ret.class_subs, 0, VIF_CLASS);
+		  Array.Copy(info.class_book, 0, ret.class_book, 0, VIF_CLASS);
 
 		  for(int j=0; j<VIF_CLASS; j++){
-			System.arraycopy(info.class_subbook[j], 0, ret.class_subbook[j], 0, 8);
+			Array.Copy(info.class_subbook[j], 0, ret.class_subbook[j], 0, 8);
 		  }
 
 		  ret.mult=info.mult;
-		  System.arraycopy(info.postlist, 0, ret.postlist, 0, VIF_POSIT+2);
+		  Array.Copy(info.postlist, 0, ret.postlist, 0, VIF_POSIT+2);
 
 		  ret.maxover=info.maxover;
 		  ret.maxunder=info.maxunder;
@@ -536,25 +546,27 @@ namespace NVorbis.jorbis
 
 	  }
 
-	  class LookFloor1{
-		static final int VIF_POSIT=63;
+	  internal class LookFloor1
+	  {
+		internal const int VIF_POSIT=63;
 
-		int[] sorted_index=new int[VIF_POSIT+2];
-		int[] forward_index=new int[VIF_POSIT+2];
-		int[] reverse_index=new int[VIF_POSIT+2];
-		int[] hineighbor=new int[VIF_POSIT];
-		int[] loneighbor=new int[VIF_POSIT];
-		int posts;
+		internal int[] sorted_index = new int[VIF_POSIT + 2];
+		internal int[] forward_index = new int[VIF_POSIT + 2];
+		internal int[] reverse_index = new int[VIF_POSIT + 2];
+		internal int[] hineighbor = new int[VIF_POSIT];
+		internal int[] loneighbor = new int[VIF_POSIT];
+		internal int posts;
 
-		int n;
-		int quant_q;
-		InfoFloor1 vi;
+		internal int n;
+		internal int quant_q;
+		internal InfoFloor1 vi;
 
-		int phrasebits;
-		int postbits;
-		int frames;
+		internal int phrasebits;
+		internal int postbits;
+		internal int frames;
 
-		void free(){
+		internal void free()
+		{
 		  sorted_index=null;
 		  forward_index=null;
 		  reverse_index=null;
@@ -563,27 +575,29 @@ namespace NVorbis.jorbis
 		}
 	  }
 
-	  class Lsfit_acc{
-		long x0;
-		long x1;
+	  internal class Lsfit_acc
+	  {
+		  internal long x0;
+		internal long x1;
 
-		long xa;
-		long ya;
-		long x2a;
-		long y2a;
-		long xya;
-		long n;
-		long an;
-		long un;
-		long edgey0;
-		long edgey1;
+		internal long xa;
+		internal long ya;
+		internal long x2a;
+		internal long y2a;
+		internal long xya;
+		internal long n;
+		internal long an;
+		internal long un;
+		internal long edgey0;
+		internal long edgey1;
 	  }
 
-	  class EchstateFloor1{
-		int[] codewords;
-		float[] curve;
-		long frameno;
-		long codes;
+	  internal class EchstateFloor1
+	  {
+		  internal int[] codewords;
+		internal float[] curve;
+		internal long frameno;
+		internal long codes;
 	  }
 	}
 

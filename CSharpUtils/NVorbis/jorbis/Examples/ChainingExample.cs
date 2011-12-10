@@ -38,11 +38,12 @@ namespace NVorbis.jorbis
 			VorbisFile ov=null;
 
 			try{
-			  if(arg.length>0){
+			  if(arg.Length>0){
 				ov=new VorbisFile(arg[0]);
 			  }
 			  else{
-				ov=new VorbisFile(System.in, null, -1);
+				  throw(new NotImplementedException());
+				//ov=new VorbisFile(Console.In, null, -1);
 			  }
 			}
 			catch(Exception e){

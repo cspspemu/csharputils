@@ -5,9 +5,10 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class Floor0 extends FuncFloor{
+	class Floor0 : FuncFloor
+	{
 
-	  void pack(Object i, Buffer opb){
+	  override internal void pack(Object i, NVorbis.jogg.Buffer opb){
 		InfoFloor0 info=(InfoFloor0)i;
 		opb.write(info.order, 8);
 		opb.write(info.rate, 16);
@@ -19,7 +20,8 @@ namespace NVorbis.jorbis
 		  opb.write(info.books[j], 8);
 	  }
 
-	  Object unpack(Info vi, Buffer opb){
+	  override internal Object unpack(Info vi, NVorbis.jogg.Buffer opb)
+	  {
 		InfoFloor0 info=new InfoFloor0();
 		info.order=opb.read(8);
 		info.rate=opb.read(16);
@@ -41,7 +43,8 @@ namespace NVorbis.jorbis
 		return (info);
 	  }
 
-	  Object look(DspState vd, InfoMode mi, Object i){
+	  override internal Object look(DspState vd, InfoMode mi, Object i)
+	  {
 		float scale;
 		Info vi=vd.vi;
 		InfoFloor0 info=(InfoFloor0)i;
@@ -53,7 +56,7 @@ namespace NVorbis.jorbis
 		look.lpclook.init(look.ln, look.m);
 
 		// we choose a scaling constant so that:
-		scale=look.ln/toBARK((float)(info.rate/2.));
+		scale=look.ln/toBARK((float)(info.rate/2.0f));
 
 		// the mapping from a linear scale to a smaller bark scale is
 		// straightforward.  We do *not* make sure that the linear mapping
@@ -63,7 +66,7 @@ namespace NVorbis.jorbis
 		// accurate
 		look.linearmap=new int[look.n];
 		for(int j=0; j<look.n; j++){
-		  int val=(int)Math.floor(toBARK((float)((info.rate/2.)/look.n*j))*scale); // bark numbers represent band edges
+		  int val=(int)Math.Floor(toBARK((float)((info.rate/2.0f)/look.n*j))*scale); // bark numbers represent band edges
 		  if(val>=look.ln)
 			val=look.ln; // guard against the approximation
 		  look.linearmap[j]=val;
@@ -71,11 +74,13 @@ namespace NVorbis.jorbis
 		return look;
 	  }
 
-	  static float toBARK(float f){
-		return (float)(13.1*Math.atan(.00074*(f))+2.24*Math.atan((f)*(f)*1.85e-8)+1e-4*(f));
+	  static internal float toBARK(float f)
+	  {
+		return (float)(13.1*Math.Atan(.00074*(f))+2.24*Math.Atan((f)*(f)*1.85e-8)+1e-4*(f));
 	  }
 
-	  Object state(Object i){
+	  internal Object state(Object i)
+	  {
 		EchstateFloor0 state=new EchstateFloor0();
 		InfoFloor0 info=(InfoFloor0)i;
 
@@ -86,22 +91,27 @@ namespace NVorbis.jorbis
 		return (state);
 	  }
 
-	  void free_info(Object i){
+	  override internal void free_info(Object i)
+	  {
 	  }
 
-	  void free_look(Object i){
+	  override internal void free_look(Object i)
+	  {
 	  }
 
-	  void free_state(Object vs){
+	  override internal void free_state(Object vs)
+	  {
 	  }
 
-	  int forward(Block vb, Object i, float[] in, float[] out, Object vs){
+	  override internal int forward(Block vb, Object i, float[] On, float[] Out, Object vs)
+	  {
 		return 0;
 	  }
 
-	  float[] lsp=null;
+	  internal float[] lsp = null;
 
-	  int inverse(Block vb, Object i, float[] out){
+	  internal int inverse(Block vb, Object i, float[] Out)
+	  {
 		//System.err.println("Floor0.inverse "+i.getClass()+"]");
 		LookFloor0 look=(LookFloor0)i;
 		InfoFloor0 info=look.vi;
@@ -113,25 +123,25 @@ namespace NVorbis.jorbis
 
 		  if(booknum!=-1&&booknum<info.numbooks){
 
-			synchronized(this){
-			  if(lsp==null||lsp.length<look.m){
+			lock(this){
+			  if(lsp==null||lsp.Length<look.m){
 				lsp=new float[look.m];
 			  }
 			  else{
 				for(int j=0; j<look.m; j++)
-				  lsp[j]=0.f;
+				  lsp[j]=0.0f;
 			  }
 
 			  CodeBook b=vb.vd.fullbooks[info.books[booknum]];
-			  float last=0.f;
+			  float last=0.0f;
 
 			  for(int j=0; j<look.m; j++)
-				out[j]=0.0f;
+				Out[j]=0.0f;
 
 			  for(int j=0; j<look.m; j+=b.dim){
 				if(b.decodevs(lsp, j, vb.opb, 1, -1)==-1){
 				  for(int k=0; k<look.n; k++)
-					out[k]=0.0f;
+					Out[k]=0.0f;
 				  return (0);
 				}
 			  }
@@ -141,7 +151,7 @@ namespace NVorbis.jorbis
 				last=lsp[j-1];
 			  }
 			  // take the coefficients back to a spectral envelope curve
-			  Lsp.lsp_to_curve(out, look.linearmap, look.n, look.ln, lsp, look.m,
+			  Lsp.lsp_to_curve(Out, look.linearmap, look.n, look.ln, lsp, look.m,
 				  amp, info.ampdB);
 
 			  return (1);
@@ -151,11 +161,12 @@ namespace NVorbis.jorbis
 		return (0);
 	  }
 
-	  Object inverse1(Block vb, Object i, Object memo){
+	  override internal Object inverse1(Block vb, Object i, Object memo)
+	  {
 		LookFloor0 look=(LookFloor0)i;
 		InfoFloor0 info=look.vi;
 		float[] lsp=null;
-		if(memo instanceof float[]){
+		if(memo is float[]){
 		  lsp=(float[])memo;
 		}
 
@@ -167,14 +178,14 @@ namespace NVorbis.jorbis
 
 		  if(booknum!=-1&&booknum<info.numbooks){
 			CodeBook b=vb.vd.fullbooks[info.books[booknum]];
-			float last=0.f;
+			float last=0.0f;
 
-			if(lsp==null||lsp.length<look.m+1){
+			if(lsp==null||lsp.Length<look.m+1){
 			  lsp=new float[look.m+1];
 			}
 			else{
-			  for(int j=0; j<lsp.length; j++)
-				lsp[j]=0.f;
+			  for(int j=0; j<lsp.Length; j++)
+				lsp[j]=0.0f;
 			}
 
 			for(int j=0; j<look.m; j+=b.dim){
@@ -195,7 +206,8 @@ namespace NVorbis.jorbis
 		return (null);
 	  }
 
-	  int inverse2(Block vb, Object i, Object memo, float[] out){
+	  override internal int inverse2(Block vb, Object i, Object memo, float[] Out)
+	  {
 		LookFloor0 look=(LookFloor0)i;
 		InfoFloor0 info=look.vi;
 
@@ -203,21 +215,20 @@ namespace NVorbis.jorbis
 		  float[] lsp=(float[])memo;
 		  float amp=lsp[look.m];
 
-		  Lsp.lsp_to_curve(out, look.linearmap, look.n, look.ln, lsp, look.m, amp,
-			  info.ampdB);
+		  Lsp.lsp_to_curve(Out, look.linearmap, look.n, look.ln, lsp, look.m, amp, info.ampdB);
 		  return (1);
 		}
 		for(int j=0; j<look.n; j++){
-		  out[j]=0.f;
+		  Out[j]=0.0f;
 		}
 		return (0);
 	  }
 
-	  static float fromdB(float x){
-		return (float)(Math.exp((x)*.11512925));
+	  static internal float fromdB(float x){
+		return (float)(Math.Exp((x)*.11512925));
 	  }
 
-	  static void lsp_to_lpc(float[] lsp, float[] lpc, int m){
+	  static internal void lsp_to_lpc(float[] lsp, float[] lpc, int m){
 		int i, j, m2=m/2;
 		float[] O=new float[m2];
 		float[] E=new float[m2];
@@ -231,23 +242,23 @@ namespace NVorbis.jorbis
 
 		// even/odd roots setup
 		for(i=0; i<m2; i++){
-		  O[i]=(float)(-2.*Math.cos(lsp[i*2]));
-		  E[i]=(float)(-2.*Math.cos(lsp[i*2+1]));
+		  O[i]=(float)(-2.0f*Math.Cos(lsp[i*2]));
+		  E[i]=(float)(-2.0f*Math.Cos(lsp[i*2+1]));
 		}
 
 		// set up impulse response
 		for(j=0; j<m2; j++){
-		  Ae[j]=0.f;
-		  Ao[j]=1.f;
-		  Be[j]=0.f;
-		  Bo[j]=1.f;
+		  Ae[j]=0.0f;
+		  Ao[j]=1.0f;
+		  Be[j]=0.0f;
+		  Bo[j]=1.0f;
 		}
-		Ao[j]=1.f;
-		Ae[j]=1.f;
+		Ao[j]=1.0f;
+		Ae[j]=1.0f;
 
 		// run impulse response
 		for(i=1; i<m+1; i++){
-		  A=B=0.f;
+		  A=B=0.0f;
 		  for(j=0; j<m2; j++){
 			temp=O[j]*Ao[j]+Ae[j];
 			Ae[j]=Ao[j];
@@ -265,10 +276,10 @@ namespace NVorbis.jorbis
 		}
 	  }
 
-	  static void lpc_to_curve(float[] curve, float[] lpc, float amp, LookFloor0 l,
+	  static internal void lpc_to_curve(float[] curve, float[] lpc, float amp, LookFloor0 l,
 		  String name, int frameno){
 		// l->m+1 must be less than l->ln, but guard in case we get a bad stream
-		float[] lcurve=new float[Math.max(l.ln*2, l.m*2+2)];
+		float[] lcurve=new float[Math.Max(l.ln*2, l.m*2+2)];
 
 		if(amp==0){
 		  for(int j=0; j<l.n; j++)
@@ -281,33 +292,36 @@ namespace NVorbis.jorbis
 		  curve[i]=lcurve[l.linearmap[i]];
 	  }
 
-	  class InfoFloor0{
-		int order;
-		int rate;
-		int barkmap;
+	  internal class InfoFloor0
+	  {
+		  internal int order;
+		  internal int rate;
+		  internal int barkmap;
 
-		int ampbits;
-		int ampdB;
+		  internal int ampbits;
+		  internal int ampdB;
 
-		int numbooks; // <= 16
-		int[] books=new int[16];
+		  internal int numbooks; // <= 16
+		  internal int[] books = new int[16];
 	  }
 
-	  class LookFloor0{
-		int n;
-		int ln;
-		int m;
-		int[] linearmap;
+	  internal class LookFloor0
+	  {
+		  internal int n;
+		  internal int ln;
+		  internal int m;
+		  internal int[] linearmap;
 
-		InfoFloor0 vi;
-		Lpc lpclook=new Lpc();
+		  internal InfoFloor0 vi;
+		  internal Lpc lpclook = new Lpc();
 	  }
 
-	  class EchstateFloor0{
-		int[] codewords;
-		float[] curve;
-		long frameno;
-		long codes;
+	  internal class EchstateFloor0
+	  {
+		  internal int[] codewords;
+		  internal float[] curve;
+		  internal long frameno;
+		  internal long codes;
 	  }
 	}
 

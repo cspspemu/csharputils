@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpUtils.45.MongoAsync",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bson", "Bson\Bson.csproj", "{0E9A3A2A-49CD-4F6C-847C-DC79B4B65CE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVorbis", "NVorbis\NVorbis.csproj", "{17F87208-BB96-4500-8E9A-FE800B67A578}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = CSharpUtils.vsmdi
@@ -85,6 +87,16 @@ Global
 		{0F59FC59-890A-4180-A918-E2FC31419098}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0F59FC59-890A-4180-A918-E2FC31419098}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0F59FC59-890A-4180-A918-E2FC31419098}.Release|x86.ActiveCfg = Release|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{17F87208-BB96-4500-8E9A-FE800B67A578}.Release|x86.ActiveCfg = Release|Any CPU
 		{1ED2F70F-882E-4E15-8604-AFA2E00F3A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1ED2F70F-882E-4E15-8604-AFA2E00F3A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ED2F70F-882E-4E15-8604-AFA2E00F3A17}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

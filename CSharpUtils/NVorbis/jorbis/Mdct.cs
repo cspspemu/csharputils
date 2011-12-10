@@ -5,21 +5,22 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class Mdct{
+	class Mdct
+	{
 
-	  int n;
-	  int log2n;
+	  internal int n;
+	  internal int log2n;
 
-	  float[] trig;
-	  int[] bitrev;
+	  internal float[] trig;
+	  internal int[] bitrev;
 
-	  float scale;
+	  internal float scale;
 
-	  void init(int n){
+	  internal void init(int n){
 		bitrev=new int[n/4];
 		trig=new float[n+n/4];
 
-		log2n=(int)Math.rint(Math.Log(n)/Math.Log(2));
+		log2n=(int)Math.Round(Math.Log(n)/Math.Log(2));
 		this.n=n;
 
 		int AE=0;
@@ -45,38 +46,41 @@ namespace NVorbis.jorbis
 		  int msb=1<<(log2n-2);
 		  for(int i=0; i<n/8; i++){
 			int acc=0;
-			for(int j=0; msb>>>j!=0; j++)
-			  if(((msb>>>j)&i)!=0)
+			for(int j=0; ((uint)msb)>>j!=0; j++)
+			  if(((((uint)msb)>>j)&i)!=0)
 				acc|=1<<j;
 			bitrev[i*2]=((~acc)&mask);
 			//	bitrev[i*2]=((~acc)&mask)-1;
 			bitrev[i*2+1]=acc;
 		  }
 		}
-		scale=4.f/n;
+		scale=4.0f/n;
 	  }
 
-	  void clear(){
+	  internal void clear(){
 	  }
 
-	  void forward(float[] in, float[] out){
+	  internal void forward(float[] In, float[] Out){
 	  }
 
-	  float[] _x=new float[1024];
-	  float[] _w=new float[1024];
+	  internal float[] _x = new float[1024];
+	  internal float[] _w = new float[1024];
 
-	  synchronized void backward(float[] in, float[] out){
-		if(_x.length<n/2){
+	  internal void backward(float[] In, float[] Out)
+	  {
+		  lock (this)
+		  {
+		if(_x.Length<n/2){
 		  _x=new float[n/2];
 		}
-		if(_w.length<n/2){
+		if(_w.Length<n/2){
 		  _w=new float[n/2];
 		}
 		float[] x=_x;
 		float[] w=_w;
-		int n2=n>>>1;
-		int n4=n>>>2;
-		int n8=n>>>3;
+		int n2=(int)(((uint)n)>>1);
+		int n4=(int)(((uint)n)>>2);
+		int n8=(int)(((uint)n)>>3);
 
 		// rotate + step 1
 		{
@@ -87,8 +91,8 @@ namespace NVorbis.jorbis
 		  int i;
 		  for(i=0; i<n8; i++){
 			A-=2;
-			x[xO++]=-in[inO+2]*trig[A+1]-in[inO]*trig[A];
-			x[xO++]=in[inO]*trig[A+1]-in[inO+2]*trig[A];
+			x[xO++]=-In[inO+2]*trig[A+1]-In[inO]*trig[A];
+			x[xO++]=In[inO]*trig[A+1]-In[inO+2]*trig[A];
 			inO+=4;
 		  }
 
@@ -96,8 +100,8 @@ namespace NVorbis.jorbis
 
 		  for(i=0; i<n8; i++){
 			A-=2;
-			x[xO++]=in[inO]*trig[A+1]+in[inO+2]*trig[A];
-			x[xO++]=in[inO]*trig[A]-in[inO+2]*trig[A+1];
+			x[xO++]=In[inO]*trig[A+1]+In[inO+2]*trig[A];
+			x[xO++]=In[inO]*trig[A]-In[inO+2]*trig[A+1];
 			inO-=4;
 		  }
 		}
@@ -116,10 +120,10 @@ namespace NVorbis.jorbis
 			float temp1=(xxx[xx]*trig[B+1]-xxx[xx+1]*trig[B]);
 			float temp2=-(xxx[xx]*trig[B]+xxx[xx+1]*trig[B+1]);
 
-			out[o1]=-temp1;
-			out[o2]=temp1;
-			out[o3]=temp2;
-			out[o4]=temp2;
+			Out[o1]=-temp1;
+			Out[o2]=temp1;
+			Out[o3]=temp2;
+			Out[o4]=temp2;
 
 			o1++;
 			o2--;
@@ -129,6 +133,7 @@ namespace NVorbis.jorbis
 			B+=2;
 		  }
 		}
+	  }
 	  }
 
 	  private float[] mdct_kernel(float[] x, float[] w, int n, int n2, int n4,
@@ -159,14 +164,14 @@ namespace NVorbis.jorbis
 
 		{
 		  for(int i=0; i<log2n-3; i++){
-			int k0=n>>>(i+2);
+			int k0=(int)(((uint)n)>>(i+2));
 			int k1=1<<(i+3);
 			int wbase=n2-2;
 
 			A=0;
 			float[] temp;
 
-			for(int r=0; r<(k0>>>2); r++){
+			for(int r=0; r<(int)(((uint)k0)>>2); r++){
 			  int w1=wbase;
 			  w2=w1-(k0>>1);
 			  float AEv=trig[A], wA;

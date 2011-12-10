@@ -28,21 +28,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NVorbis.jogg;
 
 namespace NVorbis.jorbis
 {
 	public class Info{
-	  private static final int OV_EBADPACKET=-136;
-	  private static final int OV_ENOTAUDIO=-135;
+	  private const int OV_EBADPACKET=-136;
+	  private const int OV_ENOTAUDIO=-135;
 
-	  private static byte[] _vorbis="vorbis".getBytes();
-	  private static final int VI_TIMEB=1;
+	  private static byte[] _vorbis=Util.InternalEncoding.GetBytes("vorbis");
+	  private const int VI_TIMEB=1;
 	  //  private static final int VI_FLOORB=1;
-	  private static final int VI_FLOORB=2;
+	  private const int VI_FLOORB=2;
 	  //  private static final int VI_RESB=1;
-	  private static final int VI_RESB=3;
-	  private static final int VI_MAPB=1;
-	  private static final int VI_WINDOWB=1;
+	  private const int VI_RESB=3;
+	  private const int VI_MAPB=1;
+	  private const int VI_WINDOWB = 1;
 
 	  public int version;
 	  public int channels;
@@ -62,50 +63,50 @@ namespace NVorbis.jorbis
 	  // none set:
 	  //  the coder does not care to speculate.
 
-	  int bitrate_upper;
-	  int bitrate_nominal;
-	  int bitrate_lower;
+	  internal int bitrate_upper;
+	  internal int bitrate_nominal;
+	  internal int bitrate_lower;
 
 	  // Vorbis supports only short and long blocks, but allows the
 	  // encoder to choose the sizes
 
-	  int[] blocksizes=new int[2];
+	  internal int[] blocksizes = new int[2];
 
 	  // modes are the primary means of supporting on-the-fly different
 	  // blocksizes, different channel mappings (LR or mid-side),
 	  // different residue backends, etc.  Each mode consists of a
 	  // blocksize flag and a mapping (along with the mapping setup
 
-	  int modes;
-	  int maps;
-	  int times;
-	  int floors;
-	  int residues;
-	  int books;
-	  int psys; // encode only
+	  internal int modes;
+	  internal int maps;
+	  internal int times;
+	  internal int floors;
+	  internal int residues;
+	  internal int books;
+	  internal int psys; // encode only
 
-	  InfoMode[] mode_param=null;
+	  internal InfoMode[] mode_param = null;
 
-	  int[] map_type=null;
-	  Object[] map_param=null;
+	  internal int[] map_type = null;
+	  internal Object[] map_param = null;
 
-	  int[] time_type=null;
-	  Object[] time_param=null;
+	  internal int[] time_type = null;
+	  internal Object[] time_param = null;
 
-	  int[] floor_type=null;
-	  Object[] floor_param=null;
+	  internal int[] floor_type = null;
+	  internal Object[] floor_param = null;
 
-	  int[] residue_type=null;
-	  Object[] residue_param=null;
+	  internal int[] residue_type = null;
+	  internal Object[] residue_param = null;
 
-	  StaticCodeBook[] book_param=null;
+	  internal StaticCodeBook[] book_param = null;
 
-	  PsyInfo[] psy_param=new PsyInfo[64]; // encode only
+	  internal PsyInfo[] psy_param = new PsyInfo[64]; // encode only
 
 	  // for block long/sort tuning; encode only
-	  int envelopesa;
-	  float preecho_thresh;
-	  float preecho_clamp;
+	  internal int envelopesa;
+	  internal float preecho_thresh;
+	  internal float preecho_clamp;
 
 	  // used by synthesis, which has a full, alloced vi
 	  public void init(){
@@ -159,7 +160,7 @@ namespace NVorbis.jorbis
 	  }
 
 	  // Header packing/unpacking
-	  int unpack_info(Buffer opb){
+	  int unpack_info(NVorbis.jogg.Buffer opb){
 		version=opb.read(32);
 		if(version!=0)
 		  return (-1);
@@ -184,11 +185,12 @@ namespace NVorbis.jorbis
 
 	  // all of the real encoding details are here.  The modes, books,
 	  // everything
-	  int unpack_books(Buffer opb){
+	  int unpack_books(NVorbis.jogg.Buffer opb)
+	  {
 
 		books=opb.read(8)+1;
 
-		if(book_param==null||book_param.length!=books)
+		if(book_param==null||book_param.Length!=books)
 		  book_param=new StaticCodeBook[books];
 		for(int i=0; i<books; i++){
 		  book_param[i]=new StaticCodeBook();
@@ -200,9 +202,9 @@ namespace NVorbis.jorbis
 
 		// time backend settings
 		times=opb.read(6)+1;
-		if(time_type==null||time_type.length!=times)
+		if(time_type==null||time_type.Length!=times)
 		  time_type=new int[times];
-		if(time_param==null||time_param.length!=times)
+		if(time_param==null||time_param.Length!=times)
 		  time_param=new Object[times];
 		for(int i=0; i<times; i++){
 		  time_type[i]=opb.read(16);
@@ -219,9 +221,9 @@ namespace NVorbis.jorbis
 
 		// floor backend settings
 		floors=opb.read(6)+1;
-		if(floor_type==null||floor_type.length!=floors)
+		if(floor_type==null||floor_type.Length!=floors)
 		  floor_type=new int[floors];
-		if(floor_param==null||floor_param.length!=floors)
+		if(floor_param==null||floor_param.Length!=floors)
 		  floor_param=new Object[floors];
 
 		for(int i=0; i<floors; i++){
@@ -241,10 +243,10 @@ namespace NVorbis.jorbis
 		// residue backend settings
 		residues=opb.read(6)+1;
 
-		if(residue_type==null||residue_type.length!=residues)
+		if(residue_type==null||residue_type.Length!=residues)
 		  residue_type=new int[residues];
 
-		if(residue_param==null||residue_param.length!=residues)
+		if(residue_param==null||residue_param.Length!=residues)
 		  residue_param=new Object[residues];
 
 		for(int i=0; i<residues; i++){
@@ -262,9 +264,9 @@ namespace NVorbis.jorbis
 
 		// map backend settings
 		maps=opb.read(6)+1;
-		if(map_type==null||map_type.length!=maps)
+		if(map_type==null||map_type.Length!=maps)
 		  map_type=new int[maps];
-		if(map_param==null||map_param.length!=maps)
+		if(map_param==null||map_param.Length!=maps)
 		  map_param=new Object[maps];
 		for(int i=0; i<maps; i++){
 		  map_type[i]=opb.read(16);
@@ -281,7 +283,7 @@ namespace NVorbis.jorbis
 
 		// mode settings
 		modes=opb.read(6)+1;
-		if(mode_param==null||mode_param.length!=modes)
+		if(mode_param==null||mode_param.Length!=modes)
 		  mode_param=new InfoMode[modes];
 		for(int i=0; i<modes; i++){
 		  mode_param[i]=new InfoMode();
@@ -312,7 +314,7 @@ namespace NVorbis.jorbis
 	  // codebook.
 
 	  public int synthesis_headerin(Comment vc, Packet op){
-		Buffer opb=new Buffer();
+		  NVorbis.jogg.Buffer opb = new NVorbis.jogg.Buffer();
 
 		if(op!=null){
 		  opb.readinit(op.packet_base, op.packet, op.bytes);
@@ -362,7 +364,8 @@ namespace NVorbis.jorbis
 	  }
 
 	  // pack side
-	  int pack_info(Buffer opb){
+	  int pack_info(NVorbis.jogg.Buffer opb)
+	  {
 		// preamble
 		opb.write(0x01, 8);
 		opb.write(_vorbis);
@@ -382,7 +385,8 @@ namespace NVorbis.jorbis
 		return (0);
 	  }
 
-	  int pack_books(Buffer opb){
+	  int pack_books(NVorbis.jogg.Buffer opb)
+	  {
 		opb.write(0x05, 8);
 		opb.write(_vorbis);
 
@@ -437,7 +441,7 @@ namespace NVorbis.jorbis
 
 	  public int blocksize(Packet op){
 		//codec_setup_info
-		Buffer opb=new Buffer();
+		NVorbis.jogg.Buffer opb=new NVorbis.jogg.Buffer();
 
 		int mode;
 
@@ -450,10 +454,10 @@ namespace NVorbis.jorbis
 		}
 		{
 		  int modebits=0;
-		  int v=modes;
+		  uint v=(uint)modes;
 		  while(v>1){
 			modebits++;
-			v>>>=1;
+			v>>=1;
 		  }
 
 		  /* read our mode and pre/post windowsize */
@@ -464,10 +468,11 @@ namespace NVorbis.jorbis
 		return (blocksizes[mode_param[mode].blockflag]);
 	  }
 
-	  public String toString(){
-		return "version:"+new Integer(version)+", channels:"+new Integer(channels)
-			+", rate:"+new Integer(rate)+", bitrate:"+new Integer(bitrate_upper)
-			+","+new Integer(bitrate_nominal)+","+new Integer(bitrate_lower);
+	  public override string ToString()
+	  {
+		  return "version:" + (version) + ", channels:" + (channels)
+			  + ", rate:" + (rate) + ", bitrate:" + (bitrate_upper)
+			  + "," + (bitrate_nominal) + "," + (bitrate_lower);
 	  }
 	}
 

@@ -47,7 +47,7 @@ namespace NVorbis.jogg
 				fill -= returned;
 				if (fill > 0)
 				{
-					System.arraycopy(data, returned, data, 0, fill);
+					Array.Copy(data, returned, data, 0, fill);
 				}
 				returned = 0;
 			}
@@ -59,7 +59,7 @@ namespace NVorbis.jogg
 				if (data != null)
 				{
 					byte[] foo = new byte[newsize];
-					System.arraycopy(data, 0, foo, 0, data.length);
+					Array.Copy(data, 0, foo, 0, data.Length);
 					data = foo;
 				}
 				else
@@ -87,7 +87,7 @@ namespace NVorbis.jogg
 		// -n) skipped n bytes
 		//  0) page not ready; more data (no bytes skipped)
 		//  n) page synced at current location; page length n bytes
-		private Page pageseek = new Page();
+		private Page _pageseek = new Page();
 		private byte[] chksum = new byte[4];
 
 		public int pageseek(Page og){
@@ -137,17 +137,17 @@ namespace NVorbis.jogg
       return (0);
 
     // The whole test page is buffered.  Verify the checksum
-    synchronized(chksum){
+    lock (chksum) {
       // Grab the checksum bytes, set the header field to zero
 
-      System.arraycopy(data, page+22, chksum, 0, 4);
+      Array.Copy(data, page+22, chksum, 0, 4);
       data[page+22]=0;
       data[page+23]=0;
       data[page+24]=0;
       data[page+25]=0;
 
       // set up a temp page struct and recompute the checksum
-      Page log=pageseek;
+      Page log=_pageseek;
       log.header_base=data;
       log.header=page;
       log.header_len=headerbytes;
@@ -162,7 +162,7 @@ namespace NVorbis.jogg
           ||chksum[2]!=data[page+24]||chksum[3]!=data[page+25]){
         // D'oh.  Mismatch! Corrupt page (or miscapture and not a page at all)
         // replace the computed checksum with the one actually read in
-        System.arraycopy(chksum, 0, data, page+22, 4);
+			  Array.Copy(chksum, 0, data, page + 22, 4);
         // Bad checksum. Lose sync */
 
         headerbytes=0;

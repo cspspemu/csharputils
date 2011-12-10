@@ -5,19 +5,19 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class PsyLook
+	internal class PsyLook
 	{
-		int n;
-		PsyInfo vi;
+		internal int n;
+		internal PsyInfo vi;
 
-		float[][][] tonecurves;
-		float[][] peakatt;
-		float[][][] noisecurves;
+		internal float[][][] tonecurves;
+		internal float[][] peakatt;
+		internal float[][][] noisecurves;
 
-		float[] ath;
-		int[] octave;
+		internal float[] ath;
+		internal int[] octave;
 
-		void init(PsyInfo vi, int n, int rate)
+		internal void init(PsyInfo vi, int n, int rate)
 		{
 		}
 	}

@@ -32,70 +32,70 @@ using System.Text;
 namespace NVorbis.jorbis
 {
 	public class DspState{
-	  static final float M_PI=3.1415926539f;
-	  static final int VI_TRANSFORMB=1;
-	  static final int VI_WINDOWB=1;
+		internal const float M_PI = 3.1415926539f;
+	  internal const int VI_TRANSFORMB = 1;
+	  internal const int VI_WINDOWB = 1;
 
-	  int analysisp;
-	  Info vi;
-	  int modebits;
+	  internal int analysisp;
+	  internal Info vi;
+	  internal int modebits;
 
-	  float[][] pcm;
-	  int pcm_storage;
-	  int pcm_current;
-	  int pcm_returned;
+	  internal float[][] pcm;
+	  internal int pcm_storage;
+	  internal int pcm_current;
+	  internal int pcm_returned;
 
-	  float[] multipliers;
-	  int envelope_storage;
-	  int envelope_current;
+	  internal float[] multipliers;
+	  internal int envelope_storage;
+	  internal int envelope_current;
 
-	  int eofflag;
+	  internal int eofflag;
 
-	  int lW;
-	  int W;
-	  int nW;
-	  int centerW;
+	  internal int lW;
+	  internal int W;
+	  internal int nW;
+	  internal int centerW;
 
-	  long granulepos;
-	  long sequence;
+	  internal long granulepos;
+	  internal long sequence;
 
-	  long glue_bits;
-	  long time_bits;
-	  long floor_bits;
-	  long res_bits;
+	  internal long glue_bits;
+	  internal long time_bits;
+	  internal long floor_bits;
+	  internal long res_bits;
 
 	  // local lookup storage
-	  float[][][][][] window; // block, leadin, leadout, type
-	  Object[][] transform;
-	  CodeBook[] fullbooks;
+	  internal float[][][][][] _window; // block, leadin, leadout, type
+	  internal Object[][] transform;
+	  internal CodeBook[] fullbooks;
 	  // backend lookups are tied to the mode, not the backend or naked mapping
-	  Object[] mode;
+	  internal Object[] mode;
 
 	  // local storage, only used on the encoding side.  This way the
 	  // application does not need to worry about freeing some packets'
 	  // memory and not others'; packet storage is always tracked.
 	  // Cleared next call to a _dsp_ function
-	  byte[] header;
-	  byte[] header1;
-	  byte[] header2;
+	  internal byte[] header;
+	  internal byte[] header1;
+	  internal byte[] header2;
 
 	  public DspState(){
 		transform=new Object[2][];
-		window=new float[2][][][][];
-		window[0]=new float[2][][][];
-		window[0][0]=new float[2][][];
-		window[0][1]=new float[2][][];
-		window[0][0][0]=new float[2][];
-		window[0][0][1]=new float[2][];
-		window[0][1][0]=new float[2][];
-		window[0][1][1]=new float[2][];
-		window[1]=new float[2][][][];
-		window[1][0]=new float[2][][];
-		window[1][1]=new float[2][][];
-		window[1][0][0]=new float[2][];
-		window[1][0][1]=new float[2][];
-		window[1][1][0]=new float[2][];
-		window[1][1][1]=new float[2][];
+		_window=new float[2][][][][];
+		_window[0]=new float[2][][][];
+		_window[0][0]=new float[2][][];
+		_window[0][1]=new float[2][][];
+		_window[0][0][0]=new float[2][];
+		_window[0][0][1]=new float[2][];
+		_window[0][1][0]=new float[2][];
+		_window[0][1][1]=new float[2][];
+		_window[1]=new float[2][][][];
+		_window[1][0]=new float[2][][];
+		_window[1][1]=new float[2][][];
+		_window[1][0][0]=new float[2][];
+		_window[1][0][1]=new float[2][];
+		_window[1][1][0]=new float[2][];
+		_window[1][1][1]=new float[2][];
 	  }
 
 	  static float[] window(int type, int window, int left, int right){
@@ -108,24 +108,24 @@ namespace NVorbis.jorbis
 			int rightbegin=window-window/4-right/2;
 
 			for(int i=0; i<left; i++){
-			  float x=(float)((i+.5)/left*M_PI/2.);
-			  x=(float)Math.sin(x);
+			  float x=(float)((i+.5)/left*M_PI/2.0f);
+			  x=(float)Math.Sin(x);
 			  x*=x;
-			  x*=M_PI/2.;
-			  x=(float)Math.sin(x);
+			  x*=M_PI/2.0f;
+			  x=(float)Math.Sin(x);
 			  ret[i+leftbegin]=x;
 			}
 
 			for(int i=leftbegin+left; i<rightbegin; i++){
-			  ret[i]=1.f;
+			  ret[i]=1.0f;
 			}
 
 			for(int i=0; i<right; i++){
-			  float x=(float)((right-i-.5)/right*M_PI/2.);
-			  x=(float)Math.sin(x);
+			  float x=(float)((right-i-.5)/right*M_PI/2.0f);
+			  x=(float)Math.Sin(x);
 			  x*=x;
-			  x*=M_PI/2.;
-			  x=(float)Math.sin(x);
+			  x*=M_PI/2.0f;
+			  x=(float)Math.Sin(x);
 			  ret[i+rightbegin]=x;
 			}
 		  }
@@ -141,7 +141,7 @@ namespace NVorbis.jorbis
 	  // here and not in analysis.c (which is for analysis transforms only).
 	  // The init is here because some of it is shared
 
-	  int init(Info vi, boolean encp){
+	  int init(Info vi, bool encp){
 		this.vi=vi;
 		modebits=Util.ilog2(vi.modes);
 
@@ -155,25 +155,25 @@ namespace NVorbis.jorbis
 		((Mdct)transform[0][0]).init(vi.blocksizes[0]);
 		((Mdct)transform[1][0]).init(vi.blocksizes[1]);
 
-		window[0][0][0]=new float[VI_WINDOWB][];
-		window[0][0][1]=window[0][0][0];
-		window[0][1][0]=window[0][0][0];
-		window[0][1][1]=window[0][0][0];
-		window[1][0][0]=new float[VI_WINDOWB][];
-		window[1][0][1]=new float[VI_WINDOWB][];
-		window[1][1][0]=new float[VI_WINDOWB][];
-		window[1][1][1]=new float[VI_WINDOWB][];
+		_window[0][0][0]=new float[VI_WINDOWB][];
+		_window[0][0][1]=_window[0][0][0];
+		_window[0][1][0]=_window[0][0][0];
+		_window[0][1][1]=_window[0][0][0];
+		_window[1][0][0]=new float[VI_WINDOWB][];
+		_window[1][0][1]=new float[VI_WINDOWB][];
+		_window[1][1][0]=new float[VI_WINDOWB][];
+		_window[1][1][1]=new float[VI_WINDOWB][];
 
 		for(int i=0; i<VI_WINDOWB; i++){
-		  window[0][0][0][i]=window(i, vi.blocksizes[0], vi.blocksizes[0]/2,
+		  _window[0][0][0][i]=window(i, vi.blocksizes[0], vi.blocksizes[0]/2,
 			  vi.blocksizes[0]/2);
-		  window[1][0][0][i]=window(i, vi.blocksizes[1], vi.blocksizes[0]/2,
+		  _window[1][0][0][i]=window(i, vi.blocksizes[1], vi.blocksizes[0]/2,
 			  vi.blocksizes[0]/2);
-		  window[1][0][1][i]=window(i, vi.blocksizes[1], vi.blocksizes[0]/2,
+		  _window[1][0][1][i]=window(i, vi.blocksizes[1], vi.blocksizes[0]/2,
 			  vi.blocksizes[1]/2);
-		  window[1][1][0][i]=window(i, vi.blocksizes[1], vi.blocksizes[1]/2,
+		  _window[1][1][0][i]=window(i, vi.blocksizes[1], vi.blocksizes[1]/2,
 			  vi.blocksizes[0]/2);
-		  window[1][1][1][i]=window(i, vi.blocksizes[1], vi.blocksizes[1]/2,
+		  _window[1][1][1][i]=window(i, vi.blocksizes[1], vi.blocksizes[1]/2,
 			  vi.blocksizes[1]/2);
 		}
 
@@ -228,7 +228,7 @@ namespace NVorbis.jorbis
 	  }
 
 	  DspState(Info vi){
-		this();
+		//this();
 		init(vi, false);
 		// Adjust centerW to allow an easier mechanism for determining output
 		pcm_returned=centerW;
@@ -256,7 +256,7 @@ namespace NVorbis.jorbis
 		  pcm_returned-=shiftPCM;
 		  if(shiftPCM!=0){
 			for(int i=0; i<vi.channels; i++){
-			  System.arraycopy(pcm[i], shiftPCM, pcm[i], 0, pcm_current);
+			  Array.Copy(pcm[i], shiftPCM, pcm[i], 0, pcm_current);
 			}
 		  }
 		}
@@ -289,7 +289,7 @@ namespace NVorbis.jorbis
 			pcm_storage=endW+vi.blocksizes[1];
 			for(int i=0; i<vi.channels; i++){
 			  float[] foo=new float[pcm_storage];
-			  System.arraycopy(pcm[i], 0, foo, 0, pcm[i].length);
+			  Array.Copy(pcm[i], 0, foo, 0, pcm[i].Length);
 			  pcm[i]=foo;
 			}
 		  }
@@ -338,7 +338,7 @@ namespace NVorbis.jorbis
 			if(vb.granulepos!=-1&&granulepos!=vb.granulepos){
 			  if(granulepos>vb.granulepos&&vb.eofflag!=0){
 				// partial last frame.  Strip the padding off
-				_centerW-=(granulepos-vb.granulepos);
+				_centerW-=(int)(granulepos-vb.granulepos);
 			  }// else{ Shouldn't happen *unless* the bitstream is out of
 			  // spec.  Either way, believe the bitstream }
 			  granulepos=vb.granulepos;

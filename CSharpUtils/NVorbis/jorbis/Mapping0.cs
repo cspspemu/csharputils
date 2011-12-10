@@ -8,13 +8,15 @@ namespace NVorbis.jorbis
 class Mapping0 : FuncMapping{
   static int seq=0;
 
-  void free_info(Object imap){
+  override internal void free_info(Object imap){
   }
 
-  void free_look(Object imap){
+  override internal void free_look(Object imap)
+  {
   }
 
-  Object look(DspState vd, InfoMode vm, Object m){
+  override internal Object look(DspState vd, InfoMode vm, Object m)
+  {
     //System.err.println("Mapping0.look");
     Info vi=vd.vi;
     LookMapping0 look=new LookMapping0();
@@ -54,7 +56,8 @@ class Mapping0 : FuncMapping{
     return (look);
   }
 
-  void pack(Info vi, Object imap, Buffer opb){
+  override internal void pack(Info vi, Object imap, NVorbis.jogg.Buffer opb)
+  {
     InfoMapping0 info=(InfoMapping0)imap;
 
     /* another 'we meant to do it this way' hack...  up to beta 4, we
@@ -99,7 +102,8 @@ class Mapping0 : FuncMapping{
   }
 
   // also responsible for range checking
-  Object unpack(Info vi, Buffer opb){
+  override internal Object unpack(Info vi, NVorbis.jogg.Buffer opb)
+  {
     InfoMapping0 info=new InfoMapping0();
 
     if(opb.read(1)!=0){
@@ -160,12 +164,13 @@ class Mapping0 : FuncMapping{
     return info;
   }
 
-  float[][] pcmbundle=null;
-  int[] zerobundle=null;
-  int[] nonzero=null;
-  Object[] floormemo=null;
+  internal float[][] pcmbundle = null;
+  internal int[] zerobundle = null;
+  internal int[] nonzero = null;
+  internal Object[] floormemo = null;
 
-  synchronized int inverse(Block vb, Object l){
+  override internal int inverse(Block vb, Object l){
+	  lock (this) {
     DspState vd=vb.vd;
     Info vi=vd.vi;
     LookMapping0 look=(LookMapping0)l;
@@ -173,8 +178,8 @@ class Mapping0 : FuncMapping{
     InfoMode mode=look.mode;
     int n=vb.pcmend=vi.blocksizes[vb.W];
 
-    float[] window=vd.window[vb.W][vb.lW][vb.nW][mode.windowtype];
-    if(pcmbundle==null||pcmbundle.length<vi.channels){
+    float[] window=vd._window[vb.W][vb.lW][vb.nW][mode.windowtype];
+    if(pcmbundle==null||pcmbundle.Length<vi.channels){
       pcmbundle=new float[vi.channels][];
       nonzero=new int[vi.channels];
       zerobundle=new int[vi.channels];
@@ -294,7 +299,7 @@ class Mapping0 : FuncMapping{
       }
       else{
         for(int j=0; j<n; j++){
-          pcm[j]=0.f;
+          pcm[j]=0.0f;
         }
       }
     }
@@ -304,21 +309,22 @@ class Mapping0 : FuncMapping{
     // all done!
     return (0);
   }
+  }
 
-  class InfoMapping0{
-    int submaps; // <= 16
-    int[] chmuxlist=new int[256]; // up to 256 channels in a Vorbis stream
+  internal class InfoMapping0{
+    internal int submaps; // <= 16
+    internal int[] chmuxlist=new int[256]; // up to 256 channels in a Vorbis stream
 
-    int[] timesubmap=new int[16]; // [mux]
-    int[] floorsubmap=new int[16]; // [mux] submap to floors
-    int[] residuesubmap=new int[16];// [mux] submap to residue
-    int[] psysubmap=new int[16]; // [mux]; encode only
+    internal int[] timesubmap=new int[16]; // [mux]
+    internal int[] floorsubmap=new int[16]; // [mux] submap to floors
+    internal int[] residuesubmap=new int[16];// [mux] submap to residue
+    internal int[] psysubmap=new int[16]; // [mux]; encode only
 
-    int coupling_steps;
-    int[] coupling_mag=new int[256];
-    int[] coupling_ang=new int[256];
+    internal int coupling_steps;
+    internal int[] coupling_mag=new int[256];
+    internal int[] coupling_ang=new int[256];
 
-    void free(){
+    internal void free(){
       chmuxlist=null;
       timesubmap=null;
       floorsubmap=null;
@@ -330,22 +336,22 @@ class Mapping0 : FuncMapping{
     }
   }
 
-  class LookMapping0{
-    InfoMode mode;
-    InfoMapping0 map;
-    Object[] time_look;
-    Object[] floor_look;
-    Object[] floor_state;
-    Object[] residue_look;
-    PsyLook[] psy_look;
+  internal class LookMapping0{
+    internal InfoMode mode;
+    internal InfoMapping0 map;
+    internal Object[] time_look;
+    internal Object[] floor_look;
+    internal Object[] floor_state;
+    internal Object[] residue_look;
+    internal PsyLook[] psy_look;
 
-    FuncTime[] time_func;
-    FuncFloor[] floor_func;
-    FuncResidue[] residue_func;
+    internal FuncTime[] time_func;
+    internal FuncFloor[] floor_func;
+    internal FuncResidue[] residue_func;
 
-    int ch;
-    float[][] decay;
-    int lastframe; // if a different mode is called, we need to 
+    internal int ch;
+    internal float[][] decay;
+    internal int lastframe; // if a different mode is called, we need to 
     // invalidate decay and floor state
   }
 

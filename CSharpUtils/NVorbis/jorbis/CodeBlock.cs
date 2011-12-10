@@ -5,17 +5,19 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class CodeBook{
-	  int dim; // codebook dimensions (elements per vector)
-	  int entries; // codebook entries
-	  StaticCodeBook c=new StaticCodeBook();
+	class CodeBook
+	{
+	  internal int dim; // codebook dimensions (elements per vector)
+	  internal int entries; // codebook entries
+	  internal StaticCodeBook c = new StaticCodeBook();
 
-	  float[] valuelist; // list of dim*entries actual entry values
-	  int[] codelist; // list of bitstream codewords for each entry
-	  DecodeAux decode_tree;
+	  internal float[] valuelist; // list of dim*entries actual entry values
+	  internal int[] codelist; // list of bitstream codewords for each entry
+	  internal DecodeAux decode_tree;
 
 	  // returns the number of bits
-	  int encode(int a, Buffer b){
+	  internal int encode(int a, NVorbis.jogg.Buffer b)
+	  {
 		b.write(codelist[a], c.lengthlist[a]);
 		return (c.lengthlist[a]);
 	  }
@@ -35,8 +37,9 @@ namespace NVorbis.jorbis
 
 	  // floor0 LSP (single stage, non interleaved, nearest match)
 	  // returns entry number and *modifies a* to the quantization value
-	  int errorv(float[] a){
-		int best=best(a, 1);
+	  internal int errorv(float[] a)
+	  {
+		int best=this.best(a, 1);
 		for(int k=0; k<dim; k++){
 		  a[k]=valuelist[best*dim+k];
 		}
@@ -44,28 +47,33 @@ namespace NVorbis.jorbis
 	  }
 
 	  // returns the number of bits and *modifies a* to the quantization value
-	  int encodev(int best, float[] a, Buffer b){
+	  internal int encodev(int best, float[] a, NVorbis.jogg.Buffer b)
+	  {
 		for(int k=0; k<dim; k++){
 		  a[k]=valuelist[best*dim+k];
 		}
-		return (encode(best, b));
+		return (this.encode(best, b));
 	  }
 
 	  // res0 (multistage, interleave, lattice)
 	  // returns the number of bits and *modifies a* to the remainder value
-	  int encodevs(float[] a, Buffer b, int step, int addmul){
+	  internal int encodevs(float[] a, NVorbis.jogg.Buffer b, int step, int addmul)
+	  {
 		int best=besterror(a, step, addmul);
-		return (encode(best, b));
+		return (this.encode(best, b));
 	  }
 
 	  private int[] t=new int[15]; // decodevs_add is synchronized for re-using t.
 
-	  synchronized int decodevs_add(float[] a, int offset, Buffer b, int n){
+	  internal int decodevs_add(float[] a, int offset, NVorbis.jogg.Buffer b, int n)
+	  {
+		  lock (this)
+		  {
 		int step=n/dim;
 		int entry;
 		int i, j, o;
 
-		if(t.length<step){
+		if(t.Length<step){
 		  t=new int[step];
 		}
 
@@ -82,9 +90,11 @@ namespace NVorbis.jorbis
 		}
 
 		return (0);
+		  }
 	  }
 
-	  int decodev_add(float[] a, int offset, Buffer b, int n){
+	  internal int decodev_add(float[] a, int offset, NVorbis.jogg.Buffer b, int n)
+	  {
 		int i, j, entry;
 		int t;
 
@@ -109,20 +119,28 @@ namespace NVorbis.jorbis
 			switch(dim){
 			  case 8:
 				a[offset+(i++)]+=valuelist[t+(j++)];
+				goto case 7;
 			  case 7:
 				a[offset+(i++)]+=valuelist[t+(j++)];
+				goto case 6;
 			  case 6:
 				a[offset+(i++)]+=valuelist[t+(j++)];
+				goto case 5;
 			  case 5:
 				a[offset+(i++)]+=valuelist[t+(j++)];
+				goto case 4;
 			  case 4:
 				a[offset+(i++)]+=valuelist[t+(j++)];
+				goto case 3;
 			  case 3:
 				a[offset+(i++)]+=valuelist[t+(j++)];
+				goto case 2;
 			  case 2:
 				a[offset+(i++)]+=valuelist[t+(j++)];
+				goto case 1;
 			  case 1:
 				a[offset+(i++)]+=valuelist[t+(j++)];
+				goto case 0;
 			  case 0:
 				break;
 			}
@@ -131,7 +149,8 @@ namespace NVorbis.jorbis
 		return (0);
 	  }
 
-	  int decodev_set(float[] a, int offset, Buffer b, int n){
+	  internal int decodev_set(float[] a, int offset, NVorbis.jogg.Buffer b, int n)
+	  {
 		int i, j, entry;
 		int t;
 
@@ -147,7 +166,8 @@ namespace NVorbis.jorbis
 		return (0);
 	  }
 
-	  int decodevv_add(float[][] a, int offset, int ch, Buffer b, int n){
+	  internal int decodevv_add(float[][] a, int offset, int ch, NVorbis.jogg.Buffer b, int n)
+	  {
 		int i, j, entry;
 		int chptr=0;
 
@@ -183,7 +203,8 @@ namespace NVorbis.jorbis
 	  // stage==2 -> multiplicitive
 
 	  // returns the entry number or -1 on eof
-	  int decode(Buffer b){
+	  internal int decode(NVorbis.jogg.Buffer b)
+	  {
 		int ptr=0;
 		DecodeAux t=decode_tree;
 		int lok=b.look(t.tabn);
@@ -213,7 +234,8 @@ namespace NVorbis.jorbis
 	  }
 
 	  // returns the entry number or -1 on eof
-	  int decodevs(float[] a, int index, Buffer b, int step, int addmul){
+	  internal int decodevs(float[] a, int index, NVorbis.jogg.Buffer b, int step, int addmul)
+	  {
 		int entry=decode(b);
 		if(entry==-1)
 		  return (-1);
@@ -232,15 +254,17 @@ namespace NVorbis.jorbis
 			break;
 		  default:
 			//System.err.println("CodeBook.decodeves: addmul="+addmul); 
+			break;
 		}
 		return (entry);
 	  }
 
-	  int best(float[] a, int step){
+	  internal int best(float[] a, int step)
+	  {
 		// brute force it!
 		{
 		  int besti=-1;
-		  float best=0.f;
+		  float best=0.0f;
 		  int e=0;
 		  for(int i=0; i<entries; i++){
 			if(c.lengthlist[i]>0){
@@ -257,8 +281,9 @@ namespace NVorbis.jorbis
 	  }
 
 	  // returns the entry number and *modifies a* to the remainder value
-	  int besterror(float[] a, int step, int addmul){
-		int best=best(a, step);
+	  internal int besterror(float[] a, int step, int addmul)
+	  {
+		int best=this.best(a, step);
 		switch(addmul){
 		  case 0:
 			for(int i=0, o=0; i<dim; i++, o+=step)
@@ -279,19 +304,20 @@ namespace NVorbis.jorbis
 		return (best);
 	  }
 
-	  void clear(){
+	  internal void clear()
+	  {
 	  }
 
-	  private static float dist(int el, float[] ref, int index, float[] b, int step){
-		float acc=(float)0.;
+	  private static float dist(int el, float[] Ref, int index, float[] b, int step){
+		float acc=(float)0.0f;
 		for(int i=0; i<el; i++){
-		  float val=(ref[index+i]-b[i*step]);
+		  float val=(Ref[index+i]-b[i*step]);
 		  acc+=val*val;
 		}
 		return (acc);
 	  }
 
-	  int init_decode(StaticCodeBook s){
+	  internal int init_decode(StaticCodeBook s){
 		c=s;
 		entries=s.entries;
 		dim=s.dim;
@@ -323,7 +349,7 @@ namespace NVorbis.jorbis
 			// above for leaves
 
 			// update ourself
-			if(length<32&&(entry>>>length)!=0){
+			if(length<32&&((((uint)entry)>>length))!=0){
 			  // error condition; the lengths must specify an overpopulated tree
 			  //free(r);
 			  return (null);
@@ -351,7 +377,7 @@ namespace NVorbis.jorbis
 			// markers were dangling from our just-taken node.  Dangle them
 			// from our *new* node.
 			for(int j=length+1; j<33; j++){
-			  if((marker[j]>>>1)==entry){
+			  if((((uint)marker[j])>>1)==entry){
 				entry=marker[j];
 				marker[j]=marker[j-1]<<1;
 			  }
@@ -368,7 +394,7 @@ namespace NVorbis.jorbis
 		  int temp=0;
 		  for(int j=0; j<l[i]; j++){
 			temp<<=1;
-			temp|=(r[i]>>>j)&1;
+			temp|=(int)((((uint)r[i])>>j)&1);
 		  }
 		  r[i]=temp;
 		}
@@ -377,7 +403,8 @@ namespace NVorbis.jorbis
 	  }
 
 	  // build the decode helper tree from the codewords 
-	  DecodeAux make_decode_tree(){
+	  internal DecodeAux make_decode_tree()
+	  {
 		int top=0;
 		DecodeAux t=new DecodeAux();
 		int[] ptr0=t.ptr0=new int[entries*2];
@@ -393,7 +420,7 @@ namespace NVorbis.jorbis
 			int ptr=0;
 			int j;
 			for(j=0; j<c.lengthlist[i]-1; j++){
-			  int bit=(codelist[i]>>>j)&1;
+			  int bit=(int)(((uint)codelist[i]>>j)&1);
 			  if(bit==0){
 				if(ptr0[ptr]==0){
 				  ptr0[ptr]=++top;
@@ -408,7 +435,7 @@ namespace NVorbis.jorbis
 			  }
 			}
 
-			if(((codelist[i]>>>j)&1)==0){
+			if(((((uint)codelist[i])>>j)&1)==0){
 			  ptr0[ptr]=-i;
 			}
 			else{
@@ -443,14 +470,14 @@ namespace NVorbis.jorbis
 		return (t);
 	  }
 
-	  class DecodeAux{
-		int[] tab;
-		int[] tabl;
-		int tabn;
+	  internal class DecodeAux{
+		internal int[] tab;
+		internal int[] tabl;
+		internal int tabn;
 
-		int[] ptr0;
-		int[] ptr1;
-		int aux; // number of tree entries
+		internal int[] ptr0;
+		internal int[] ptr1;
+		internal int aux; // number of tree entries
 	  }
 	}
 

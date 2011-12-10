@@ -5,21 +5,22 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class StaticCodeBook{
-	  int dim; // codebook dimensions (elements per vector)
-	  int entries; // codebook entries
-	  int[] lengthlist; // codeword lengths in bits
+	internal class StaticCodeBook
+	{
+	  internal int dim; // codebook dimensions (elements per vector)
+	  internal int entries; // codebook entries
+	  internal int[] lengthlist; // codeword lengths in bits
 
 	  // mapping
-	  int maptype; // 0=none
+	  internal int maptype; // 0=none
 	  // 1=implicitly populated values from map column 
 	  // 2=listed arbitrary values
 
 	  // The below does a linear, single monotonic sequence mapping.
-	  int q_min; // packed 32 bit float; quant value 0 maps to minval
-	  int q_delta; // packed 32 bit float; val 1 - val 0 == delta
-	  int q_quant; // bits: 0 < quant <= 16
-	  int q_sequencep; // bitflag
+	  internal int q_min; // packed 32 bit float; quant value 0 maps to minval
+	  internal int q_delta; // packed 32 bit float; val 1 - val 0 == delta
+	  internal int q_quant; // bits: 0 < quant <= 16
+	  internal int q_sequencep; // bitflag
 
 	  // additional information for log (dB) mapping; the linear mapping
 	  // is assumed to actually be values in dB.  encodebias is used to
@@ -28,15 +29,16 @@ namespace NVorbis.jorbis
 	  // indicates if we're to represent negative linear values in a
 	  // mirror of the positive mapping.
 
-	  int[] quantlist; // map == 1: (int)(entries/dim) element column map
+	  internal int[] quantlist; // map == 1: (int)(entries/dim) element column map
 	  // map == 2: list of dim*entries quantized entry vals
 
-	  StaticCodeBook(){
+	  internal StaticCodeBook(){
 	  }
 
-	  int pack(Buffer opb){
+	  internal int pack(NVorbis.jogg.Buffer opb)
+	  {
 		int i;
-		boolean ordered=false;
+		bool ordered=false;
 
 		opb.write(0x564342, 24);
 		opb.write(dim, 16);
@@ -144,7 +146,7 @@ namespace NVorbis.jorbis
 
 			  // quantized values
 			  for(i=0; i<quantvals; i++){
-				opb.write(Math.abs(quantlist[i]), q_quant);
+				opb.write(Math.Abs(quantlist[i]), q_quant);
 			  }
 			}
 			break;
@@ -157,7 +159,8 @@ namespace NVorbis.jorbis
 
 	  // unpacks a codebook from the packet buffer into the codebook struct,
 	  // readies the codebook auxiliary structures for decode
-	  int unpack(Buffer opb){
+	  internal int unpack(NVorbis.jogg.Buffer opb)
+	  {
 		int i;
 		//memset(s,0,sizeof(static_codebook));
 
@@ -294,7 +297,7 @@ namespace NVorbis.jorbis
 	  // that's portable and totally safe against roundoff, but I haven't
 	  // thought of it.  Therefore, we opt on the side of caution
 	  private int maptype1_quantvals(){
-		int vals=(int)(Math.floor(Math.pow(entries, 1./dim)));
+		int vals=(int)(Math.Floor(Math.Pow(entries, 1.0f/dim)));
 
 		// the above *should* be reliable, but we'll not assume that FP is
 		// ever reliable when bitstream sync is at stake; verify via integer
@@ -322,7 +325,8 @@ namespace NVorbis.jorbis
 		}
 	  }
 
-	  void clear(){
+	  internal void clear()
+	  {
 	  }
 
 	  // unpack the quantized list of values for encode/decode
@@ -330,7 +334,7 @@ namespace NVorbis.jorbis
 	  // generated algorithmically (each column of the vector counts through
 	  // the values in the quant vector). in map type 2, all the values came
 	  // in in an explicit list.  Both value lists must be unpacked
-	  float[] unquantize(){
+	  internal float[] unquantize(){
 
 		if(maptype==1||maptype==2){
 		  int quantvals;
@@ -350,12 +354,12 @@ namespace NVorbis.jorbis
 			  // values (and are wasted).  So don't generate codebooks like that
 			  quantvals=maptype1_quantvals();
 			  for(int j=0; j<entries; j++){
-				float last=0.f;
+				float last=0.0f;
 				int indexdiv=1;
 				for(int k=0; k<dim; k++){
 				  int index=(j/indexdiv)%quantvals;
 				  float val=quantlist[index];
-				  val=Math.abs(val)*delta+mindel+last;
+				  val=Math.Abs(val)*delta+mindel+last;
 				  if(q_sequencep!=0)
 					last=val;
 				  r[j*dim+k]=val;
@@ -365,17 +369,18 @@ namespace NVorbis.jorbis
 			  break;
 			case 2:
 			  for(int j=0; j<entries; j++){
-				float last=0.f;
+				float last=0.0f;
 				for(int k=0; k<dim; k++){
 				  float val=quantlist[j*dim+k];
 				  //if((j*dim+k)==0){System.err.println(" | 0 -> "+val+" | ");}
-				  val=Math.abs(val)*delta+mindel+last;
+				  val=Math.Abs(val)*delta+mindel+last;
 				  if(q_sequencep!=0)
 					last=val;
 				  r[j*dim+k]=val;
 				  //if((j*dim+k)==0){System.err.println(" $ r[0] -> "+r[0]+" | ");}
 				}
 			  }
+			  break;
 			  //System.err.println("\nr[0]="+r[0]);
 		  }
 		  return (r);
@@ -387,35 +392,38 @@ namespace NVorbis.jorbis
 	  // biased exponent) : neeeeeee eeemmmmm mmmmmmmm mmmmmmmm 
 	  // Why not IEEE?  It's just not that important here.
 
-	  static final int VQ_FEXP=10;
-	  static final int VQ_FMAN=21;
-	  static final int VQ_FEXP_BIAS=768; // bias toward values smaller than 1.
+	  internal const int VQ_FEXP = 10;
+	  internal const int VQ_FMAN = 21;
+	  internal const int VQ_FEXP_BIAS = 768; // bias toward values smaller than 1.
 
 	  // doesn't currently guard under/overflow 
-	  static long float32_pack(float val){
+	  static internal long float32_pack(float val)
+	  {
 		int sign=0;
 		int exp;
 		int mant;
 		if(val<0){
-		  sign=0x80000000;
+		  sign=unchecked((int)0x80000000);
 		  val=-val;
 		}
-		exp=(int)Math.floor(Math.log(val)/Math.log(2));
-		mant=(int)Math.rint(Math.pow(val, (VQ_FMAN-1)-exp));
+		exp = (int)Math.Floor(Math.Log(val) / Math.Log(2));
+		mant=(int)Math.Round(Math.Pow(val, (VQ_FMAN-1)-exp));
 		exp=(exp+VQ_FEXP_BIAS)<<VQ_FMAN;
 		return (sign|exp|mant);
 	  }
 
-	  static float float32_unpack(int val){
-		float mant=val&0x1fffff;
-		float exp=(val&0x7fe00000)>>>VQ_FMAN;
-		if((val&0x80000000)!=0)
-		  mant=-mant;
-		return (ldexp(mant, ((int)exp)-(VQ_FMAN-1)-VQ_FEXP_BIAS));
+	  static internal float float32_unpack(int _val)
+	  {
+		  uint val = (uint)_val;
+			float mant=val&0x1fffff;
+			float exp=(val&0x7fe00000)>>VQ_FMAN;
+			if ((val&0x80000000)!=0) mant=-mant;
+			return (ldexp(mant, ((int)exp)-(VQ_FMAN-1)-VQ_FEXP_BIAS));
 	  }
 
-	  static float ldexp(float foo, int e){
-		return (float)(foo*Math.pow(2, e));
+	  static internal float ldexp(float foo, int e)
+	  {
+		return (float)(foo*Math.Pow(2, e));
 	  }
 	}
 

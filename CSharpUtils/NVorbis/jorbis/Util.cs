@@ -5,33 +5,71 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class Util
+	unsafe internal class Util
 	{
-		static int ilog(int v){
-			int ret=0;
-			while(v!=0){
+		static internal int ilog(int _v)
+		{
+			uint v = (uint)_v;
+			uint ret = 0;
+			while (v != 0)
+			{
 				ret++;
-				v>>>=1;
+				v >>= 1;
 			}
-			return (ret);
+			return (int)(ret);
 		}
 
-		static int ilog2(int v){
-			int ret=0;
-			while(v>1){
+		static internal int ilog2(int _v)
+		{
+			uint v = (uint)_v;
+			uint ret = 0;
+			while (v > 1)
+			{
 				ret++;
-				v>>>=1;
+				v >>= 1;
 			}
-			return (ret);
+			return (int)(ret);
 		}
 
-		static int icount(int v){
-			int ret=0;
-			while(v!=0){
-				ret+=(v&1);
-				v>>>=1;
+		static internal int icount(int _v)
+		{
+			uint v = (uint)_v;
+
+			uint ret = 0;
+			while (v != 0)
+			{
+				ret += (v & 1);
+				v >>= 1;
 			}
-			return (ret);
+			return (int)(ret);
+		}
+
+		static internal int floatToIntBits(float v)
+		{
+			float[] vv = new float[1];
+			vv[0] = v;
+			fixed (float* ptr = vv)
+			{
+				return *(int*)ptr;
+			}
+		}
+
+		static internal float intBitsToFloat(int v)
+		{
+			int[] vv = new int[1];
+			vv[0] = v;
+			fixed (int* ptr = vv)
+			{
+				return *(float*)ptr;
+			}
+		}
+
+		static internal Encoding InternalEncoding
+		{
+			get
+			{
+				return Encoding.ASCII;
+			}
 		}
 	}
 

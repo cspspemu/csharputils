@@ -5,27 +5,33 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class Time0 extends FuncTime{
-	  void pack(Object i, Buffer opb){
-	  }
+	class Time0 : FuncTime
+	{
+		override internal void pack(Object i, NVorbis.jogg.Buffer opb)
+		{
+		}
 
-	  Object unpack(Info vi, Buffer opb){
-		return "";
-	  }
+		override internal Object unpack(Info vi, NVorbis.jogg.Buffer opb)
+		{
+			return "";
+		}
 
-	  Object look(DspState vd, InfoMode mi, Object i){
-		return "";
-	  }
+		override internal Object look(DspState vd, InfoMode mi, Object i)
+		{
+			return "";
+		}
 
-	  void free_info(Object i){
-	  }
+		override internal void free_info(Object i)
+		{
+		}
 
-	  void free_look(Object i){
-	  }
+		override internal void free_look(Object i)
+		{
+		}
 
-	  int inverse(Block vb, Object i, float[] in, float[] out){
-		return 0;
-	  }
+		override internal int inverse(Block vb, Object i, float[] In, float[] Out)
+		{
+			return 0;
+		}
 	}
-
 }

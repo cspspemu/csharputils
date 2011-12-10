@@ -44,7 +44,7 @@ namespace NVorbis.jogg
 
 		StreamState(int serialno)
 		{
-			this();
+			//this();
 			init(serialno);
 		}
 
@@ -65,11 +65,11 @@ namespace NVorbis.jogg
 			}
 			else
 			{
-				for (int i = 0; i < body_data.length; i++)
+				for (int i = 0; i < body_data.Length; i++)
 					body_data[i] = 0;
-				for (int i = 0; i < lacing_vals.length; i++)
+				for (int i = 0; i < lacing_vals.Length; i++)
 					lacing_vals[i] = 0;
-				for (int i = 0; i < granule_vals.length; i++)
+				for (int i = 0; i < granule_vals.Length; i++)
 					granule_vals[i] = 0;
 			}
 			this.serialno = serialno;
@@ -93,7 +93,7 @@ namespace NVorbis.jogg
 			{
 				body_storage += (needed + 1024);
 				byte[] foo = new byte[body_storage];
-				System.arraycopy(body_data, 0, foo, 0, body_data.length);
+				Array.Copy(body_data, 0, foo, 0, body_data.Length);
 				body_data = foo;
 			}
 		}
@@ -104,11 +104,11 @@ namespace NVorbis.jogg
 			{
 				lacing_storage += (needed + 32);
 				int[] foo = new int[lacing_storage];
-				System.arraycopy(lacing_vals, 0, foo, 0, lacing_vals.length);
+				Array.Copy(lacing_vals, 0, foo, 0, lacing_vals.Length);
 				lacing_vals = foo;
 
 				long[] bar = new long[lacing_storage];
-				System.arraycopy(granule_vals, 0, bar, 0, granule_vals.length);
+				Array.Copy(granule_vals, 0, bar, 0, granule_vals.Length);
 				granule_vals = bar;
 			}
 		}
@@ -127,7 +127,7 @@ namespace NVorbis.jogg
 				body_fill -= body_returned;
 				if (body_fill != 0)
 				{
-					System.arraycopy(body_data, body_returned, body_data, 0, body_fill);
+					Array.Copy(body_data, body_returned, body_data, 0, body_fill);
 				}
 				body_returned = 0;
 			}
@@ -141,7 +141,7 @@ namespace NVorbis.jogg
 			   will actually be fairly easy to eliminate the extra copy in the
 			   future */
 
-			System.arraycopy(op.packet_base, op.packet, body_data, body_fill, op.bytes);
+			Array.Copy(op.packet_base, op.packet, body_data, body_fill, op.bytes);
 			body_fill += op.bytes;
 
 			/* Store lacing vals for this packet */
@@ -256,7 +256,7 @@ namespace NVorbis.jogg
 					body_fill -= br;
 					if (body_fill != 0)
 					{
-						System.arraycopy(body_data, br, body_data, 0, body_fill);
+						Array.Copy(body_data, br, body_data, 0, body_fill);
 					}
 					body_returned = 0;
 				}
@@ -266,8 +266,8 @@ namespace NVorbis.jogg
 					// segment table
 					if ((lacing_fill - lr) != 0)
 					{
-						System.arraycopy(lacing_vals, lr, lacing_vals, 0, lacing_fill - lr);
-						System.arraycopy(granule_vals, lr, granule_vals, 0, lacing_fill - lr);
+						Array.Copy(lacing_vals, lr, lacing_vals, 0, lacing_fill - lr);
+						Array.Copy(granule_vals, lr, granule_vals, 0, lacing_fill - lr);
 					}
 					lacing_fill -= lr;
 					lacing_packet -= lr;
@@ -325,7 +325,7 @@ namespace NVorbis.jogg
 			if (bodysize != 0)
 			{
 				body_expand(bodysize);
-				System.arraycopy(body_base, body, body_data, body_fill, bodysize);
+				Array.Copy(body_base, body, body_data, body_fill, bodysize);
 				body_fill += bodysize;
 			}
 
@@ -392,7 +392,7 @@ namespace NVorbis.jogg
     int maxvals=(lacing_fill>255 ? 255 : lacing_fill);
     int bytes=0;
     int acc=0;
-    long granule_pos=granule_vals[0];
+    ulong granule_pos=(ulong)granule_vals[0];
 
     if(maxvals==0)
       return (0);
@@ -416,12 +416,12 @@ namespace NVorbis.jogg
         if(acc>4096)
           break;
         acc+=(lacing_vals[vals]&0x0ff);
-        granule_pos=granule_vals[vals];
+        granule_pos=(ulong)granule_vals[vals];
       }
     }
 
     /* construct the header in temp storage */
-    System.arraycopy("OggS".getBytes(), 0, header, 0, 4);
+    Array.Copy(Encoding.ASCII.GetBytes("OggS"), 0, header, 0, 4);
 
     /* stream structure version */
     header[4]=0x00;
@@ -441,15 +441,15 @@ namespace NVorbis.jogg
     /* 64 bits of PCM position */
     for(i=6; i<14; i++){
       header[i]=(byte)granule_pos;
-      granule_pos>>>=8;
+      granule_pos>>=8;
     }
 
     /* 32 bits of stream serial number */
     {
-      int _serialno=serialno;
+      uint _serialno=(uint)serialno;
       for(i=14; i<18; i++){
         header[i]=(byte)_serialno;
-        _serialno>>>=8;
+        _serialno>>=8;
       }
     }
 
@@ -462,10 +462,10 @@ namespace NVorbis.jogg
                 encode stream, but it has
                 plausible uses */
     {
-      int _pageno=pageno++;
+		uint _pageno = (uint)pageno++;
       for(i=18; i<22; i++){
         header[i]=(byte)_pageno;
-        _pageno>>>=8;
+        _pageno>>=8;
       }
     }
 
@@ -493,8 +493,8 @@ namespace NVorbis.jogg
     /* advance the lacing data and set the body_returned pointer */
 
     lacing_fill-=vals;
-    System.arraycopy(lacing_vals, vals, lacing_vals, 0, lacing_fill*4);
-    System.arraycopy(granule_vals, vals, granule_vals, 0, lacing_fill*8);
+    Array.Copy(lacing_vals, vals, lacing_vals, 0, lacing_fill*4);
+	Array.Copy(granule_vals, vals, granule_vals, 0, lacing_fill * 8);
     body_returned+=bytes;
 
     /* calculate the checksum */

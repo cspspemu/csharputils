@@ -28,31 +28,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NVorbis.jogg;
 
 namespace NVorbis.jorbis
 {
 	public class Block
 	{
 		///necessary stream state for linking to the framing abstraction
-		float[][] pcm = new float[0][]; // this is a pointer into local storage
-		Buffer opb = new Buffer();
+		internal float[][] pcm = new float[0][]; // this is a pointer into local storage
+		internal NVorbis.jogg.Buffer opb = new NVorbis.jogg.Buffer();
 
-		int lW;
-		int W;
-		int nW;
-		int pcmend;
-		int mode;
+		internal int lW;
+		internal int W;
+		internal int nW;
+		internal int pcmend;
+		internal int mode;
 
-		int eofflag;
-		long granulepos;
-		long sequence;
-		DspState vd; // For read-only access of configuration
+		internal int eofflag;
+		internal long granulepos;
+		internal long sequence;
+		internal DspState vd; // For read-only access of configuration
 
 		// bitmetrics for the frame
-		int glue_bits;
-		int time_bits;
-		int floor_bits;
-		int res_bits;
+		internal int glue_bits;
+		internal int time_bits;
+		internal int floor_bits;
+		internal int res_bits;
 
 		public Block(DspState vd)
 		{
@@ -121,13 +122,13 @@ namespace NVorbis.jorbis
 
 			// alloc pcm passback storage
 			pcmend = vi.blocksizes[W];
-			if (pcm.length < vi.channels)
+			if (pcm.Length < vi.channels)
 			{
 				pcm = new float[vi.channels][];
 			}
 			for (int i = 0; i < vi.channels; i++)
 			{
-				if (pcm[i] == null || pcm[i].length < pcmend)
+				if (pcm[i] == null || pcm[i].Length < pcmend)
 				{
 					pcm[i] = new float[pcmend];
 				}

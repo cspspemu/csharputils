@@ -5,12 +5,13 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class Lpc{
+	internal class Lpc
+	{
 	  // en/decode lookups
-	  Drft fft=new Drft();;
+	  internal Drft fft=new Drft();
 
-	  int ln;
-	  int m;
+	  internal int ln;
+	  internal int m;
 
 	  // Autocorrelation LPC coeff generation algorithm invented by
 	  // N. Levinson in 1947, modified by J. Durbin in 1959.
@@ -18,7 +19,8 @@ namespace NVorbis.jorbis
 	  // Input : n elements of time doamin data
 	  // Output: m lpc coefficients, excitation energy
 
-	  static float lpc_from_data(float[] data, float[] lpc, int n, int m){
+	  static internal float lpc_from_data(float[] data, float[] lpc, int n, int m)
+	  {
 		float[] aut=new float[m+1];
 		float error;
 		int i, j;
@@ -72,7 +74,7 @@ namespace NVorbis.jorbis
 		  if(i%2!=0)
 			lpc[j]+=lpc[j]*r;
 
-		  error*=1.0-r*r;
+		  error*=1.0f-r*r;
 		}
 
 		// we need the error value to know how big an impulse to hit the
@@ -84,7 +86,8 @@ namespace NVorbis.jorbis
 	  // Input : n element envelope spectral curve
 	  // Output: m lpc coefficients, excitation energy
 
-	  float lpc_from_curve(float[] curve, float[] lpc){
+	  internal float lpc_from_curve(float[] curve, float[] lpc)
+	  {
 		int n=ln;
 		float[] work=new float[n+n];
 		float fscale=(float)(.5/n);
@@ -113,7 +116,8 @@ namespace NVorbis.jorbis
 		return (lpc_from_data(work, lpc, n, m));
 	  }
 
-	  void init(int mapped, int m){
+	  internal void init(int mapped, int m)
+	  {
 		ln=mapped;
 		this.m=m;
 
@@ -121,12 +125,14 @@ namespace NVorbis.jorbis
 		fft.init(mapped*2);
 	  }
 
-	  void clear(){
+	  internal void clear()
+	  {
 		fft.clear();
 	  }
 
-	  static float FAST_HYPOT(float a, float b){
-		return (float)Math.sqrt((a)*(a)+(b)*(b));
+	  static internal float FAST_HYPOT(float a, float b)
+	  {
+		return (float)Math.Sqrt((a)*(a)+(b)*(b));
 	  }
 
 	  // One can do this the long way by generating the transfer function in
@@ -136,7 +142,8 @@ namespace NVorbis.jorbis
 	  // This version does a linear curve generation and then later
 	  // interpolates the log curve from the linear curve.
 
-	  void lpc_to_curve(float[] curve, float[] lpc, float amp){
+	  internal void lpc_to_curve(float[] curve, float[] lpc, float amp)
+	  {
 
 		for(int i=0; i<ln*2; i++)
 		  curve[i]=0.0f;
@@ -153,8 +160,8 @@ namespace NVorbis.jorbis
 
 		{
 		  int l2=ln*2;
-		  float unit=(float)(1./amp);
-		  curve[0]=(float)(1./(curve[0]*2+unit));
+		  float unit=(float)(1.0f/amp);
+		  curve[0]=(float)(1.0f/(curve[0]*2+unit));
 		  for(int i=1; i<ln; i++){
 			float real=(curve[i]+curve[l2-i]);
 			float imag=(curve[i]-curve[l2-i]);

@@ -34,10 +34,10 @@ namespace NVorbis.jorbis
 	// the comments are not part of vorbis_info so that vorbis_info can be
 	// static storage
 	public class Comment{
-	  private static byte[] _vorbis="vorbis".getBytes();
-	  private static byte[] _vendor="Xiphophorus libVorbis I 20000508".getBytes();
+	  private static byte[] _vorbis=Encoding.ASCII.GetBytes("vorbis");
+	  private static byte[] _vendor=Encoding.ASCII.GetBytes("Xiphophorus libVorbis I 20000508");
 
-	  private static final int OV_EIMPL=-130;
+	  private const int OV_EIMPL=-130;
 
 	  // unlimited user comment fields.
 	  public byte[][] user_comments;
@@ -52,26 +52,26 @@ namespace NVorbis.jorbis
 	  }
 
 	  public void add(String comment){
-		add(comment.getBytes());
+		add(Encoding.Default.GetBytes(comment));
 	  }
 
 	  private void add(byte[] comment){
 		byte[][] foo=new byte[comments+2][];
 		if(user_comments!=null){
-		  System.arraycopy(user_comments, 0, foo, 0, comments);
+		  Array.Copy(user_comments, 0, foo, 0, comments);
 		}
 		user_comments=foo;
 
 		int[] goo=new int[comments+2];
 		if(comment_lengths!=null){
-		  System.arraycopy(comment_lengths, 0, goo, 0, comments);
+			Array.Copy(comment_lengths, 0, goo, 0, comments);
 		}
 		comment_lengths=goo;
 
-		byte[] bar=new byte[comment.length+1];
-		System.arraycopy(comment, 0, bar, 0, comment.length);
+		byte[] bar=new byte[comment.Length+1];
+		Array.Copy(comment, 0, bar, 0, comment.Length);
 		user_comments[comments]=bar;
-		comment_lengths[comments]=comment.length;
+		comment_lengths[comments]=comment.Length;
 		comments++;
 		user_comments[comments]=null;
 	  }
@@ -82,7 +82,7 @@ namespace NVorbis.jorbis
 		add(tag+"="+contents);
 	  }
 
-	  static boolean tagcompare(byte[] s1, byte[] s2, int n){
+	  static bool tagcompare(byte[] s1, byte[] s2, int n){
 		int c=0;
 		byte u1, u2;
 		while(c<n){
@@ -105,13 +105,14 @@ namespace NVorbis.jorbis
 	  }
 
 	  public String query(String tag, int count){
-		int foo=query(tag.getBytes(), count);
+		int foo=query(Encoding.ASCII.GetBytes(tag), count);
 		if(foo==-1)
 		  return null;
 		byte[] comment=user_comments[foo];
 		for(int i=0; i<comment_lengths[foo]; i++){
 		  if(comment[i]=='='){
-			return new String(comment, i+1, comment_lengths[foo]-(i+1));
+
+			  return Util.InternalEncoding.GetString(comment, i + 1, comment_lengths[foo] - (i + 1));
 		  }
 		}
 		return null;
@@ -120,10 +121,10 @@ namespace NVorbis.jorbis
 	  private int query(byte[] tag, int count){
 		int i=0;
 		int found=0;
-		int fulltaglen=tag.length+1;
+		int fulltaglen=tag.Length+1;
 		byte[] fulltag=new byte[fulltaglen];
-		System.arraycopy(tag, 0, fulltag, 0, tag.length);
-		fulltag[tag.length]=(byte)'=';
+		Array.Copy(tag, 0, fulltag, 0, tag.Length);
+		fulltag[tag.Length] = (byte)'=';
 
 		for(i=0; i<comments; i++){
 		  if(tagcompare(user_comments[i], fulltag, fulltaglen)){
@@ -140,7 +141,8 @@ namespace NVorbis.jorbis
 		return -1;
 	  }
 
-	  int unpack(Buffer opb){
+	  internal int unpack(NVorbis.jogg.Buffer opb)
+	  {
 		int vendorlen=opb.read(32);
 		if(vendorlen<0){
 		  clear();
@@ -174,13 +176,14 @@ namespace NVorbis.jorbis
 		return (0);
 	  }
 
-	  int pack(Buffer opb){
+	  internal int pack(NVorbis.jogg.Buffer opb)
+	  {
 		// preamble
 		opb.write(0x03, 8);
 		opb.write(_vorbis);
 
 		// vendor
-		opb.write(_vendor.length, 32);
+		opb.write(_vendor.Length, 32);
 		opb.write(_vendor);
 
 		// comments
@@ -200,8 +203,9 @@ namespace NVorbis.jorbis
 		return (0);
 	  }
 
-	  public int header_out(Packet op){
-		Buffer opb=new Buffer();
+	  public int header_out(NVorbis.jogg.Packet op)
+	  {
+		  NVorbis.jogg.Buffer opb = new NVorbis.jogg.Buffer();
 		opb.writeinit();
 
 		if(pack(opb)!=0)
@@ -210,14 +214,14 @@ namespace NVorbis.jorbis
 		op.packet_base=new byte[opb.bytes()];
 		op.packet=0;
 		op.bytes=opb.bytes();
-		System.arraycopy(opb.buffer(), 0, op.packet_base, 0, op.bytes);
+		Array.Copy(opb.buffer(), 0, op.packet_base, 0, op.bytes);
 		op.b_o_s=0;
 		op.e_o_s=0;
 		op.granulepos=0;
 		return 0;
 	  }
 
-	  void clear(){
+	  internal void clear(){
 		for(int i=0; i<comments; i++)
 		  user_comments[i]=null;
 		user_comments=null;
@@ -225,20 +229,20 @@ namespace NVorbis.jorbis
 	  }
 
 	  public String getVendor(){
-		return new String(vendor, 0, vendor.length-1);
+		  return Util.InternalEncoding.GetString(vendor, 0, vendor.Length - 1);
 	  }
 
 	  public String getComment(int i){
 		if(comments<=i)
 		  return null;
-		return new String(user_comments[i], 0, user_comments[i].length-1);
+		return Util.InternalEncoding.GetString(user_comments[i], 0, user_comments[i].Length - 1);
 	  }
 
 	  public String toString(){
-		String foo="Vendor: "+new String(vendor, 0, vendor.length-1);
+		  String foo = "Vendor: " + Util.InternalEncoding.GetString(vendor, 0, vendor.Length - 1);
 		for(int i=0; i<comments; i++){
 		  foo=foo+"\nComment: "
-			  +new String(user_comments[i], 0, user_comments[i].length-1);
+			  + Util.InternalEncoding.GetString(user_comments[i], 0, user_comments[i].Length - 1);
 		}
 		foo=foo+"\n";
 		return foo;

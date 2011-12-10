@@ -5,20 +5,20 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-	class Drft
+	internal class Drft
 	{
-		int n;
-		float[] trigcache;
-		int[] splitcache;
+		internal int n;
+		internal float[] trigcache;
+		internal int[] splitcache;
 
-		void backward(float[] data)
+		internal void backward(float[] data)
 		{
 			if (n == 1)
 				return;
 			drftb1(n, data, trigcache, trigcache, n, splitcache);
 		}
 
-		void init(int n)
+		internal void init(int n)
 		{
 			this.n = n;
 			trigcache = new float[3 * n];
@@ -26,7 +26,7 @@ namespace NVorbis.jorbis
 			fdrffti(n, trigcache, splitcache);
 		}
 
-		void clear()
+		internal void clear()
 		{
 			if (trigcache != null)
 				trigcache = null;
@@ -34,25 +34,27 @@ namespace NVorbis.jorbis
 				splitcache = null;
 		}
 
-		static int[] ntryh = { 4, 2, 3, 5 };
-		static float tpi = 6.28318530717958647692528676655900577f;
-		static float hsqt2 = .70710678118654752440084436210485f;
-		static float taui = .86602540378443864676372317075293618f;
-		static float taur = -.5f;
-		static float sqrt2 = 1.4142135623730950488016887242097f;
+		static internal int[] ntryh = { 4, 2, 3, 5 };
+		static internal float tpi = 6.28318530717958647692528676655900577f;
+		static internal float hsqt2 = .70710678118654752440084436210485f;
+		static internal float taui = .86602540378443864676372317075293618f;
+		static internal float taur = -.5f;
+		static internal float sqrt2 = 1.4142135623730950488016887242097f;
 
-		static void drfti1(int n, float[] wa, int index, int[] ifac){
+		static internal void drfti1(int n, float[] wa, int index, int[] ifac)
+		{
     float arg, argh, argld, fi;
     int ntry=0, i, j=-1;
     int k1, l1, l2, ib;
-    int ld, ii, ip, is, nq, nr;
+    int ld, ii, ip, _is, nq, nr;
     int ido, ipm, nfm1;
     int nl=n;
     int nf=0;
 
     int state=101;
 
-    loop: while(true){
+    //loop:
+	while(true){
       switch(state){
         case 101:
           j++;
@@ -60,7 +62,9 @@ namespace NVorbis.jorbis
             ntry=ntryh[j];
           else
             ntry+=2;
-        case 104:
+
+		  goto case 104;
+		case 104:
           nq=nl/ntry;
           nr=nl-ntry*nq;
           if(nr!=0){
@@ -84,6 +88,7 @@ namespace NVorbis.jorbis
             ifac[ib+1]=ifac[ib];
           }
           ifac[2]=2;
+		  goto case 107;
         case 107:
           if(nl!=1){
             state=104;
@@ -92,7 +97,7 @@ namespace NVorbis.jorbis
           ifac[0]=n;
           ifac[1]=nf;
           argh=tpi/n;
-          is=0;
+          _is=0;
           nfm1=nf-1;
           l1=1;
 
@@ -108,22 +113,24 @@ namespace NVorbis.jorbis
 
             for(j=0; j<ipm; j++){
               ld+=l1;
-              i=is;
+              i=_is;
               argld=(float)ld*argh;
-              fi=0.f;
+              fi=0.0f;
               for(ii=2; ii<ido; ii+=2){
-                fi+=1.f;
+                fi+=1.0f;
                 arg=fi*argld;
-                wa[index+i++]=(float)Math.cos(arg);
-                wa[index+i++]=(float)Math.sin(arg);
+                wa[index+i++]=(float)Math.Cos(arg);
+                wa[index+i++]=(float)Math.Sin(arg);
               }
-              is+=ido;
+              _is+=ido;
             }
             l1=l2;
           }
-          break loop;
+          //break loop;
+			  goto endloop;
       }
     }
+endloop: ;
   }
 
 		static void fdrffti(int n, float[] wsave, int[] ifac)
@@ -304,7 +311,7 @@ namespace NVorbis.jorbis
 
 		static void dradfg(int ido, int ip, int l1, int idl1, float[] cc, float[] c1,
 			float[] c2, float[] ch, float[] ch2, float[] wa, int index){
-    int idij, ipph, i, j, k, l, ic, ik, is;
+    int idij, ipph, i, j, k, l, ic, ik, _is;
     int t0, t1, t2=0, t3, t4, t5, t6, t7, t8, t9, t10;
     float dc2, ai1, ai2, ar1, ar2, ds2;
     int nbd;
@@ -312,8 +319,8 @@ namespace NVorbis.jorbis
     int idp2, ipp2;
 
     arg=tpi/(float)ip;
-    dcp=(float)Math.cos(arg);
-    dsp=(float)Math.sin(arg);
+    dcp=(float)Math.Cos(arg);
+    dsp=(float)Math.Sin(arg);
     ipph=(ip+1)>>1;
     ipp2=ip;
     idp2=ido;
@@ -322,7 +329,8 @@ namespace NVorbis.jorbis
     t10=ip*ido;
 
     int state=100;
-    loop: while(true){
+    //loop:
+	while(true){
       switch(state){
         case 101:
           if(ido==1){
@@ -342,15 +350,15 @@ namespace NVorbis.jorbis
             }
           }
 
-          is=-ido;
+          _is=-ido;
           t1=0;
           if(nbd>l1){
             for(j=1; j<ip; j++){
               t1+=t0;
-              is+=ido;
+              _is+=ido;
               t2=-ido+t1;
               for(k=0; k<l1; k++){
-                idij=is-1;
+                idij=_is-1;
                 t2+=ido;
                 t3=t2;
                 for(i=2; i<ido; i+=2){
@@ -365,8 +373,8 @@ namespace NVorbis.jorbis
           else{
 
             for(j=1; j<ip; j++){
-              is+=ido;
-              idij=is-1;
+              _is+=ido;
+              idij=_is-1;
               t1+=t0;
               t2=t1;
               for(i=2; i<ido; i+=2){
@@ -428,6 +436,7 @@ namespace NVorbis.jorbis
               }
             }
           }
+		  goto case 119;
         case 119:
           for(ik=0; ik<idl1; ik++)
             c2[ik]=ch2[ik];
@@ -447,8 +456,8 @@ namespace NVorbis.jorbis
             }
           }
 
-          ar1=1.f;
-          ai1=0.f;
+          ar1=1.0f;
+          ai1=0.0f;
           t1=0;
           t2=ipp2*idl1;
           t3=(ip-1)*idl1;
@@ -529,6 +538,7 @@ namespace NVorbis.jorbis
               t2+=t10;
             }
           }
+		  goto case 135;
         case 135:
           t1=0;
           t2=ido<<1;
@@ -614,9 +624,11 @@ namespace NVorbis.jorbis
               }
             }
           }
-          break loop;
+          //break loop;
+		  goto endloop;
       }
     }
+			endloop:;
   }
 
 		static void drftf1(int n, float[] c, float[] ch, float[] wa, int[] ifac){
@@ -639,7 +651,8 @@ namespace NVorbis.jorbis
       na=1-na;
 
       int state=100;
-      loop: while(true){
+      //loop:
+		while(true){
         switch(state){
           case 100:
             if(ip!=4){
@@ -669,6 +682,7 @@ namespace NVorbis.jorbis
             break;
           case 103:
             dradf2(ido, l1, ch, c, wa, iw-1);
+			goto case 104;
           case 104:
             if(ido==1)
               na=1-na;
@@ -683,11 +697,14 @@ namespace NVorbis.jorbis
           case 109:
             dradfg(ido, ip, l1, idl1, ch, ch, ch, c, c, wa, iw-1);
             na=0;
+			goto case 110;
           case 110:
             l2=l1;
-            break loop;
+            //break loop;
+			goto endloop;
         }
       }
+	endloop:;
     }
     if(na==1)
       return;
@@ -918,7 +935,7 @@ namespace NVorbis.jorbis
 		static void dradbg(int ido, int ip, int l1, int idl1, float[] cc, float[] c1,
 			float[] c2, float[] ch, float[] ch2, float[] wa, int index){
 
-    int idij, ipph=0, i, j, k, l, ik, is, t0=0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10=0, t11, t12;
+    int idij, ipph=0, i, j, k, l, ik, _is, t0=0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10=0, t11, t12;
     float dc2, ai1, ai2, ar1, ar2, ds2;
     int nbd=0;
     float dcp=0, arg, dsp=0, ar1h, ar2h;
@@ -932,11 +949,11 @@ namespace NVorbis.jorbis
           t10=ip*ido;
           t0=l1*ido;
           arg=tpi/(float)ip;
-          dcp=(float)Math.cos(arg);
-          dsp=(float)Math.sin(arg);
-          nbd=(ido-1)>>>1;
+          dcp=(float)Math.Cos(arg);
+          dsp=(float)Math.Sin(arg);
+          nbd=(int)(((uint)(ido-1))>>1);
           ipp2=ip;
-          ipph=(ip+1)>>>1;
+          ipph=(int)(((uint)(ip+1))>>1);
           if(ido<l1){
             state=103;
             break;
@@ -968,6 +985,7 @@ namespace NVorbis.jorbis
             }
             t1++;
           }
+		  goto case 106;
         case 106:
           t1=0;
           t2=ipp2*t0;
@@ -1062,9 +1080,10 @@ namespace NVorbis.jorbis
               }
             }
           }
+		  goto case 116;
         case 116:
-          ar1=1.f;
-          ai1=0.f;
+          ar1=1.0f;
+          ai1=0.0f;
           t1=0;
           t9=(t2=ipp2*idl1);
           t3=(ip-1)*idl1;
@@ -1187,6 +1206,7 @@ namespace NVorbis.jorbis
               }
             }
           }
+		  goto case 132;
         case 132:
           if(ido==1)
             return;
@@ -1208,12 +1228,12 @@ namespace NVorbis.jorbis
             break;
           }
 
-          is=-ido-1;
+          _is=-ido-1;
           t1=0;
           for(j=1; j<ip; j++){
-            is+=ido;
+            _is+=ido;
             t1+=t0;
-            idij=is;
+            idij=_is;
             t2=t1;
             for(i=2; i<ido; i+=2){
               t2+=2;
@@ -1229,14 +1249,14 @@ namespace NVorbis.jorbis
           return;
 
         case 139:
-          is=-ido-1;
+          _is=-ido-1;
           t1=0;
           for(j=1; j<ip; j++){
-            is+=ido;
+            _is+=ido;
             t1+=t0;
             t2=t1;
             for(k=0; k<l1; k++){
-              idij=is;
+              idij=_is;
               t3=t2;
               for(i=2; i<ido; i+=2){
                 idij+=2;
@@ -1247,9 +1267,11 @@ namespace NVorbis.jorbis
               t2+=ido;
             }
           }
-          break loop;
+          //break loop;
+		  goto endloop;
       }
     }
+			endloop:;
   }
 
 		static void drftb1(int n, float[] c, float[] ch, float[] wa, int index,
@@ -1265,7 +1287,8 @@ namespace NVorbis.jorbis
 
     for(k1=0; k1<nf; k1++){
       int state=100;
-      loop: while(true){
+      //loop:
+	while(true){
         switch(state){
           case 100:
             ip=ifac[k1+2];
@@ -1323,13 +1346,15 @@ namespace NVorbis.jorbis
               dradbg(ido, ip, l1, idl1, c, c, c, ch, ch, wa, index+iw-1);
             if(ido==1)
               na=1-na;
-
+			goto case 115;
           case 115:
             l1=l2;
             iw+=(ip-1)*ido;
-            break loop;
+            //break loop;
+				goto endloop;
         }
       }
+	endloop:;
     }
     if(na==0)
       return;

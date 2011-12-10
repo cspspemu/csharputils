@@ -43,9 +43,9 @@ namespace NVorbis.jorbis
 {
 class Lsp{
 
-  const float M_PI=(float)(3.1415926539);
+	internal const float M_PI = (float)(3.1415926539);
 
-  static void lsp_to_curve(float[] curve, int[] map, int n, int ln,
+  static internal void lsp_to_curve(float[] curve, int[] map, int n, int ln,
       float[] lsp, int m, float amp, float ampoffset){
     int i;
     float wdel=M_PI/ln;
@@ -70,17 +70,17 @@ class Lsp{
         /* the last coefficient */
         q*=lsp[m-1]-w;
         q*=q;
-        p*=p*(1.f-w*w);
+        p*=p*(1.0f-w*w);
       }
       else{
         /* even order filter; still symmetric */
-        q*=q*(1.f+w);
-        p*=p*(1.f-w);
+        q*=q*(1.0f+w);
+        p*=p*(1.0f-w);
       }
 
       //  q=frexp(p+q,&qexp);
       q=p+q;
-      int hx=Float.floatToIntBits(q);
+	  int hx = Util.floatToIntBits(q);
       int ix=0x7fffffff&hx;
       int qexp=0;
 
@@ -89,14 +89,14 @@ class Lsp{
       }
       else{
         if(ix<0x00800000){ // subnormal
-          q*=3.3554432000e+07; // 0x4c000000
-          hx=Float.floatToIntBits(q);
+          q*=3.3554432000e+07F; // 0x4c000000
+		  hx = Util.floatToIntBits(q);
           ix=0x7fffffff&hx;
           qexp=-25;
         }
-        qexp+=((ix>>>23)-126);
-        hx=(hx&0x807fffff)|0x3f000000;
-        q=Float.intBitsToFloat(hx);
+        qexp+=(((int)(((uint)ix)>>23))-126);
+		hx = (int)unchecked((uint)(hx & 0x807fffff) | (uint)0x3f000000);
+		q = Util.intBitsToFloat(hx);
       }
 
       q=Lookup.fromdBlook(amp*Lookup.invsqlook(q)*Lookup.invsq2explook(qexp+m)

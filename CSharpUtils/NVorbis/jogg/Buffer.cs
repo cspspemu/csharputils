@@ -6,9 +6,9 @@ using System.Text;
 namespace NVorbis.jogg
 {
 	public class Buffer{
-	  private static final int BUFFER_INCREMENT=256;
+	  private const int BUFFER_INCREMENT=256;
 
-	  private static final int[] mask= {0x00000000, 0x00000001, 0x00000003,
+	  private readonly uint[] mask= {0x00000000, 0x00000001, 0x00000003,
 		  0x00000007, 0x0000000f, 0x0000001f, 0x0000003f, 0x0000007f, 0x000000ff,
 		  0x000001ff, 0x000003ff, 0x000007ff, 0x00000fff, 0x00001fff, 0x00003fff,
 		  0x00007fff, 0x0000ffff, 0x0001ffff, 0x0003ffff, 0x0007ffff, 0x000fffff,
@@ -16,20 +16,20 @@ namespace NVorbis.jogg
 		  0x07ffffff, 0x0fffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, 0xffffffff};
 
 	  int ptr=0;
-	  byte[] buffer=null;
+	  byte[] _buffer=null;
 	  int endbit=0;
 	  int endbyte=0;
 	  int storage=0;
 
 	  public void writeinit(){
-		buffer=new byte[BUFFER_INCREMENT];
+		_buffer=new byte[BUFFER_INCREMENT];
 		ptr=0;
-		buffer[0]=(byte)'\0';
+		_buffer[0]=(byte)'\0';
 		storage=BUFFER_INCREMENT;
 	  }
 
 	  public void write(byte[] s){
-		for(int i=0; i<s.length; i++){
+		for(int i=0; i<s.Length; i++){
 		  if(s[i]==0)
 			break;
 		  write(s[i], 8);
@@ -45,12 +45,12 @@ namespace NVorbis.jogg
 
 	  void reset(){
 		ptr=0;
-		buffer[0]=(byte)'\0';
+		_buffer[0]=(byte)'\0';
 		endbit=endbyte=0;
 	  }
 
 	  public void writeclear(){
-		buffer=null;
+		_buffer=null;
 	  }
 
 	  public void readinit(byte[] buf, int bytes){
@@ -59,34 +59,35 @@ namespace NVorbis.jogg
 
 	  public void readinit(byte[] buf, int start, int bytes){
 		ptr=start;
-		buffer=buf;
+		_buffer=buf;
 		endbit=endbyte=0;
 		storage=bytes;
 	  }
 
-	  public void write(int value, int bits){
+	  public void write(int _value, int bits){
+		  uint value = (uint)_value;
 		if(endbyte+4>=storage){
 		  byte[] foo=new byte[storage+BUFFER_INCREMENT];
-		  System.arraycopy(buffer, 0, foo, 0, storage);
-		  buffer=foo;
+		  Array.Copy(_buffer, 0, foo, 0, storage);
+		  _buffer=foo;
 		  storage+=BUFFER_INCREMENT;
 		}
 
 		value&=mask[bits];
 		bits+=endbit;
-		buffer[ptr]|=(byte)(value<<endbit);
+		_buffer[ptr]|=(byte)(value<<endbit);
 
 		if(bits>=8){
-		  buffer[ptr+1]=(byte)(value>>>(8-endbit));
+		  _buffer[ptr+1]=(byte)(value>>(8-endbit));
 		  if(bits>=16){
-			buffer[ptr+2]=(byte)(value>>>(16-endbit));
+			_buffer[ptr+2]=(byte)(value>>(16-endbit));
 			if(bits>=24){
-			  buffer[ptr+3]=(byte)(value>>>(24-endbit));
+			  _buffer[ptr+3]=(byte)(value>>(24-endbit));
 			  if(bits>=32){
 				if(endbit>0)
-				  buffer[ptr+4]=(byte)(value>>>(32-endbit));
+				  _buffer[ptr+4]=(byte)(value>>(32-endbit));
 				else
-				  buffer[ptr+4]=0;
+				  _buffer[ptr+4]=0;
 			  }
 			}
 		  }
@@ -99,7 +100,7 @@ namespace NVorbis.jogg
 
 	  public int look(int bits){
 		int ret;
-		int m=mask[bits];
+		uint m=mask[bits];
 
 		bits+=endbit;
 
@@ -108,26 +109,26 @@ namespace NVorbis.jogg
 			return (-1);
 		}
 
-		ret=((buffer[ptr])&0xff)>>>endbit;
+		ret=((_buffer[ptr])&0xff)>>endbit;
 		if(bits>8){
-		  ret|=((buffer[ptr+1])&0xff)<<(8-endbit);
+		  ret|=((_buffer[ptr+1])&0xff)<<(8-endbit);
 		  if(bits>16){
-			ret|=((buffer[ptr+2])&0xff)<<(16-endbit);
+			ret|=((_buffer[ptr+2])&0xff)<<(16-endbit);
 			if(bits>24){
-			  ret|=((buffer[ptr+3])&0xff)<<(24-endbit);
+			  ret|=((_buffer[ptr+3])&0xff)<<(24-endbit);
 			  if(bits>32&&endbit!=0){
-				ret|=((buffer[ptr+4])&0xff)<<(32-endbit);
+				ret|=((_buffer[ptr+4])&0xff)<<(32-endbit);
 			  }
 			}
 		  }
 		}
-		return (m&ret);
+		return (int)(m&ret);
 	  }
 
 	  public int look1(){
 		if(endbyte>=storage)
 		  return (-1);
-		return ((buffer[ptr]>>endbit)&1);
+		return ((_buffer[ptr]>>endbit)&1);
 	  }
 
 	  public void adv(int bits){
@@ -147,30 +148,30 @@ namespace NVorbis.jogg
 	  }
 
 	  public int read(int bits){
-		int ret;
-		int m=mask[bits];
+		uint ret;
+		uint m=mask[bits];
 
 		bits+=endbit;
 
 		if(endbyte+4>=storage){
-		  ret=-1;
+		  ret=unchecked((uint)-1);
 		  if(endbyte+(bits-1)/8>=storage){
 			ptr+=bits/8;
 			endbyte+=bits/8;
 			endbit=bits&7;
-			return (ret);
+			return (int)(ret);
 		  }
 		}
 
-		ret=((buffer[ptr])&0xff)>>>endbit;
+		ret=(uint)((_buffer[ptr])&0xff)>>endbit;
 		if(bits>8){
-		  ret|=((buffer[ptr+1])&0xff)<<(8-endbit);
+		  ret|=(uint)((_buffer[ptr+1])&0xff)<<(8-endbit);
 		  if(bits>16){
-			ret|=((buffer[ptr+2])&0xff)<<(16-endbit);
+			ret|=(uint)((_buffer[ptr+2])&0xff)<<(16-endbit);
 			if(bits>24){
-			  ret|=((buffer[ptr+3])&0xff)<<(24-endbit);
+			  ret|=(uint)((_buffer[ptr+3])&0xff)<<(24-endbit);
 			  if(bits>32&&endbit!=0){
-				ret|=((buffer[ptr+4])&0xff)<<(32-endbit);
+				ret|=(uint)((_buffer[ptr+4])&0xff)<<(32-endbit);
 			  }
 			}
 		  }
@@ -181,7 +182,7 @@ namespace NVorbis.jogg
 		ptr+=bits/8;
 		endbyte+=bits/8;
 		endbit=bits&7;
-		return (ret);
+		return (int)(ret);
 	  }
 
 	  public int readB(int bits){
@@ -201,19 +202,22 @@ namespace NVorbis.jogg
 		  }
 		}
 
-		ret=(buffer[ptr]&0xff)<<(24+endbit);
+		ret=(_buffer[ptr]&0xff)<<(24+endbit);
 		if(bits>8){
-		  ret|=(buffer[ptr+1]&0xff)<<(16+endbit);
+		  ret|=(_buffer[ptr+1]&0xff)<<(16+endbit);
 		  if(bits>16){
-			ret|=(buffer[ptr+2]&0xff)<<(8+endbit);
+			ret|=(_buffer[ptr+2]&0xff)<<(8+endbit);
 			if(bits>24){
-			  ret|=(buffer[ptr+3]&0xff)<<(endbit);
+			  ret|=(_buffer[ptr+3]&0xff)<<(endbit);
 			  if(bits>32&&(endbit!=0))
-				ret|=(buffer[ptr+4]&0xff)>>(8-endbit);
+				ret|=(_buffer[ptr+4]&0xff)>>(8-endbit);
 			}
 		  }
 		}
-		ret=(ret>>>(m>>1))>>>((m+1)>>1);
+		  // CHECK!
+		//ret=(ret>>>(m>>1))>>>((m+1)>>1);
+
+		ret=(int)(uint)((uint)ret>>(m>>1))>>((m+1)>>1);
 
 		ptr+=bits/8;
 		endbyte+=bits/8;
@@ -234,7 +238,7 @@ namespace NVorbis.jogg
 		  return (ret);
 		}
 
-		ret=(buffer[ptr]>>endbit)&1;
+		ret=(_buffer[ptr]>>endbit)&1;
 
 		endbit++;
 		if(endbit>7){
@@ -254,21 +258,21 @@ namespace NVorbis.jogg
 	  }
 
 	  public byte[] buffer(){
-		return (buffer);
+		return (_buffer);
 	  }
 
-	  public static int ilog(int v){
+	  public static int ilog(uint v){
 		int ret=0;
 		while(v>0){
 		  ret++;
-		  v>>>=1;
+		  v>>=1;
 		}
 		return (ret);
 	  }
 
-	  public static void report(String in){
-		System.err.println(in);
-		System.exit(1);
+	  public static void report(String In){
+		  Console.Error.WriteLine(In);
+		  Environment.Exit(1);
 	  }
 	}
 

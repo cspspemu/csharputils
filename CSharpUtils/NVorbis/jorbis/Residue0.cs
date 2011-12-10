@@ -5,8 +5,10 @@ using System.Text;
 
 namespace NVorbis.jorbis
 {
-class Residue0 extends FuncResidue{
-  void pack(Object vr, Buffer opb){
+class Residue0 : FuncResidue
+{
+	static Object StatickLock = new Object();
+  override internal void pack(Object vr, NVorbis.jogg.Buffer opb){
     InfoResidue0 info=(InfoResidue0)vr;
     int acc=0;
     opb.write(info.begin, 24);
@@ -26,7 +28,7 @@ class Residue0 extends FuncResidue{
         /* yes, this is a minor hack due to not thinking ahead */
         opb.write(i, 3);
         opb.write(1, 1);
-        opb.write(i>>>3, 5);
+        opb.write((int)(((uint)i)>>3), 5);
       }
       else{
         opb.write(i, 4); /* trailing zero */
@@ -38,7 +40,8 @@ class Residue0 extends FuncResidue{
     }
   }
 
-  Object unpack(Info vi, Buffer opb){
+  override internal Object unpack(Info vi, NVorbis.jogg.Buffer opb)
+  {
     int acc=0;
     InfoResidue0 info=new InfoResidue0();
     info.begin=opb.read(24);
@@ -74,7 +77,8 @@ class Residue0 extends FuncResidue{
     return (info);
   }
 
-  Object look(DspState vd, InfoMode vm, Object vr){
+  override internal Object look(DspState vd, InfoMode vm, Object vr)
+  {
     InfoResidue0 info=(InfoResidue0)vr;
     LookResidue0 look=new LookResidue0();
     int acc=0;
@@ -106,7 +110,7 @@ class Residue0 extends FuncResidue{
       }
     }
 
-    look.partvals=(int)Math.rint(Math.pow(look.parts, dim));
+    look.partvals=(int)Math.Round(Math.Pow(look.parts, dim));
     look.stages=maxstage;
     look.decodemap=new int[look.partvals][];
     for(int j=0; j<look.partvals; j++){
@@ -124,17 +128,20 @@ class Residue0 extends FuncResidue{
     return (look);
   }
 
-  void free_info(Object i){
+  override internal void free_info(Object i)
+  {
   }
 
-  void free_look(Object i){
+  override internal void free_look(Object i)
+  {
   }
 
   private static int[][][] _01inverse_partword=new int[2][][]; // _01inverse is synchronized for
 
   // re-using partword
-  synchronized static int _01inverse(Block vb, Object vl, float[][] in, int ch,
-      int decodepart){
+  static internal int _01inverse(Block vb, Object vl, float[][] In, int ch, int decodepart)
+  {
+	  lock (StatickLock) {
     int i, j, k, l, s;
     LookResidue0 look=(LookResidue0)vl;
     InfoResidue0 info=look.info;
@@ -147,12 +154,12 @@ class Residue0 extends FuncResidue{
     int partvals=n/samples_per_partition;
     int partwords=(partvals+partitions_per_word-1)/partitions_per_word;
 
-    if(_01inverse_partword.length<ch){
+    if(_01inverse_partword.Length<ch){
       _01inverse_partword=new int[ch][][];
     }
 
     for(j=0; j<ch; j++){
-      if(_01inverse_partword[j]==null||_01inverse_partword[j].length<partwords){
+      if(_01inverse_partword[j]==null||_01inverse_partword[j].Length<partwords){
         _01inverse_partword[j]=new int[partwords][];
       }
     }
@@ -184,13 +191,13 @@ class Residue0 extends FuncResidue{
               CodeBook stagebook=look.fullbooks[look.partbooks[index][s]];
               if(stagebook!=null){
                 if(decodepart==0){
-                  if(stagebook.decodevs_add(in[j], offset, vb.opb,
+                  if(stagebook.decodevs_add(In[j], offset, vb.opb,
                       samples_per_partition)==-1){
                     return (0);
                   }
                 }
                 else if(decodepart==1){
-                  if(stagebook.decodev_add(in[j], offset, vb.opb,
+					if (stagebook.decodev_add(In[j], offset, vb.opb,
                       samples_per_partition)==-1){
                     return (0);
                   }
@@ -202,10 +209,12 @@ class Residue0 extends FuncResidue{
     }
     return (0);
   }
+  }
 
-  static int[][] _2inverse_partword=null;
+  static internal int[][] _2inverse_partword = null;
 
-  synchronized static int _2inverse(Block vb, Object vl, float[][] in, int ch){
+  static internal int _2inverse(Block vb, Object vl, float[][] In, int ch){
+	  lock (StatickLock) {
     int i, k, l, s;
     LookResidue0 look=(LookResidue0)vl;
     InfoResidue0 info=look.info;
@@ -218,7 +227,7 @@ class Residue0 extends FuncResidue{
     int partvals=n/samples_per_partition;
     int partwords=(partvals+partitions_per_word-1)/partitions_per_word;
 
-    if(_2inverse_partword==null||_2inverse_partword.length<partwords){
+    if(_2inverse_partword==null||_2inverse_partword.Length<partwords){
       _2inverse_partword=new int[partwords][];
     }
     for(s=0; s<look.stages; s++){
@@ -242,7 +251,7 @@ class Residue0 extends FuncResidue{
           if((info.secondstages[index]&(1<<s))!=0){
             CodeBook stagebook=look.fullbooks[look.partbooks[index][s]];
             if(stagebook!=null){
-              if(stagebook.decodevv_add(in, offset, ch, vb.opb,
+              if(stagebook.decodevv_add(In, offset, ch, vb.opb,
                   samples_per_partition)==-1){
                 return (0);
               }
@@ -253,55 +262,58 @@ class Residue0 extends FuncResidue{
     }
     return (0);
   }
+  }
 
-  int inverse(Block vb, Object vl, float[][] in, int[] nonzero, int ch){
+  override internal int inverse(Block vb, Object vl, float[][] In, int[] nonzero, int ch)
+  {
     int used=0;
     for(int i=0; i<ch; i++){
       if(nonzero[i]!=0){
-        in[used++]=in[i];
+        In[used++]=In[i];
       }
     }
     if(used!=0)
-      return (_01inverse(vb, vl, in, used, 0));
+		return (_01inverse(vb, vl, In, used, 0));
     else
       return (0);
   }
 
-  class LookResidue0{
-    InfoResidue0 info;
-    int map;
+  internal class LookResidue0{
+	  internal InfoResidue0 info;
+	  internal int map;
 
-    int parts;
-    int stages;
-    CodeBook[] fullbooks;
-    CodeBook phrasebook;
-    int[][] partbooks;
+	  internal int parts;
+	  internal int stages;
+	  internal CodeBook[] fullbooks;
+	  internal CodeBook phrasebook;
+	  internal int[][] partbooks;
 
-    int partvals;
-    int[][] decodemap;
+	  internal int partvals;
+	  internal int[][] decodemap;
 
-    int postbits;
-    int phrasebits;
-    int frames;
+	  internal int postbits;
+	  internal int phrasebits;
+	  internal int frames;
   }
 
-  class InfoResidue0{
+  internal class InfoResidue0
+  {
     // block-partitioned VQ coded straight residue
-    int begin;
-    int end;
+	  internal int begin;
+	  internal int end;
 
     // first stage (lossless partitioning)
-    int grouping; // group n vectors per partition
-    int partitions; // possible codebooks for a partition
-    int groupbook; // huffbook for partitioning
-    int[] secondstages=new int[64]; // expanded out to pointers in lookup
-    int[] booklist=new int[256]; // list of second stage books
+	  internal int grouping; // group n vectors per partition
+	  internal int partitions; // possible codebooks for a partition
+	  internal int groupbook; // huffbook for partitioning
+	  internal int[] secondstages = new int[64]; // expanded out to pointers in lookup
+	  internal int[] booklist = new int[256]; // list of second stage books
 
     // encode-only heuristic settings
-    float[] entmax=new float[64]; // book entropy threshholds
-    float[] ampmax=new float[64]; // book amp threshholds
-    int[] subgrp=new int[64]; // book heuristic subgroup size
-    int[] blimit=new int[64]; // subgroup position limits
+	  internal float[] entmax = new float[64]; // book entropy threshholds
+	  internal float[] ampmax = new float[64]; // book amp threshholds
+	  internal int[] subgrp = new int[64]; // book heuristic subgroup size
+	  internal int[] blimit = new int[64]; // subgroup position limits
   }
 
 }

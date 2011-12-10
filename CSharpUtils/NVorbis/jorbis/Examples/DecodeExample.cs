@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using NVorbis.jogg;
 
 namespace NVorbis.jorbis.Examples
 {
@@ -15,15 +17,19 @@ namespace NVorbis.jorbis.Examples
 		static byte[] convbuffer = new byte[convsize]; // take 8k out of the data segment, not the stack
 
 		public static void main(String[] arg){
-    java.io.InputStream input=System.in;
-    if(arg.length>0){
-      try{
-        input=new java.io.FileInputStream(arg[0]);
-      }
-      catch(Exception e){
-        System.err.println(e);
-      }
-    }
+			Stream input = null;
+			//java.io.InputStream input=System.In;
+			if(arg.Length>0){
+				try{
+					input=File.OpenRead(arg[0]);
+				} catch(Exception e){
+					Console.Error.WriteLine(e);
+				}
+			} else {
+				throw(new NotImplementedException());
+			}
+
+			if (input == null) throw(new NotImplementedException());
 
     SyncState oy=new SyncState(); // sync and verify incoming physical bitstream
     StreamState os=new StreamState(); // take physical pages, weld into a logical stream of packets
@@ -54,11 +60,11 @@ namespace NVorbis.jorbis.Examples
       int index=oy.buffer(4096);
       buffer=oy.data;
       try{
-        bytes=input.read(buffer, index, 4096);
+        bytes=input.Read(buffer, index, 4096);
       }
       catch(Exception e){
-        System.err.println(e);
-        System.exit(-1);
+        Console.Error.WriteLine(e);
+        Environment.Exit(-1);
       }
       oy.wrote(bytes);
 
@@ -69,8 +75,8 @@ namespace NVorbis.jorbis.Examples
           break;
 
         // error case.  Must not be Vorbis data
-        System.err.println("Input does not appear to be an Ogg bitstream.");
-        System.exit(1);
+        Console.Error.WriteLine("Input does not appear to be an Ogg bitstream.");
+        Environment.Exit(1);
       }
 
       // Get the serial number and set up the rest of decode.
@@ -89,21 +95,20 @@ namespace NVorbis.jorbis.Examples
       vc.init();
       if(os.pagein(og)<0){
         // error; stream version mismatch perhaps
-        System.err.println("Error reading first page of Ogg bitstream data.");
-        System.exit(1);
+        Console.Error.WriteLine("Error reading first page of Ogg bitstream data.");
+        Environment.Exit(1);
       }
 
       if(os.packetout(op)!=1){
         // no page? must not be vorbis
-        System.err.println("Error reading initial header packet.");
-        System.exit(1);
+        Console.Error.WriteLine("Error reading initial header packet.");
+        Environment.Exit(1);
       }
 
       if(vi.synthesis_headerin(vc, op)<0){
         // error case; not a vorbis header
-        System.err
-            .println("This Ogg bitstream does not contain Vorbis audio data.");
-        System.exit(1);
+        Console.Error.WriteLine("This Ogg bitstream does not contain Vorbis audio data.");
+        Environment.Exit(1);
       }
 
       // At this point, we're sure we're Vorbis.  We've set up the logical
@@ -137,8 +142,8 @@ namespace NVorbis.jorbis.Examples
               if(result==-1){
                 // Uh oh; data at some point was corrupted or missing!
                 // We can't tolerate that in a header.  Die.
-                System.err.println("Corrupt secondary header.  Exiting.");
-                System.exit(1);
+                Console.Error.WriteLine("Corrupt secondary header.  Exiting.");
+                Environment.Exit(1);
               }
               vi.synthesis_headerin(vc, op);
               i++;
@@ -149,15 +154,15 @@ namespace NVorbis.jorbis.Examples
         index=oy.buffer(4096);
         buffer=oy.data;
         try{
-          bytes=input.read(buffer, index, 4096);
+          bytes=input.Read(buffer, index, 4096);
         }
         catch(Exception e){
-          System.err.println(e);
-          System.exit(1);
+          Console.Error.WriteLine(e);
+			Environment.Exit(1);
         }
         if(bytes==0&&i<2){
-          System.err.println("End of file before finding all Vorbis headers!");
-          System.exit(1);
+          Console.Error.WriteLine("End of file before finding all Vorbis headers!");
+			Environment.Exit(1);
         }
         oy.wrote(bytes);
       }
@@ -166,15 +171,15 @@ namespace NVorbis.jorbis.Examples
       // decoding
       {
         byte[][] ptr=vc.user_comments;
-        for(int j=0; j<ptr.length; j++){
+        for(int j=0; j<ptr.Length; j++){
           if(ptr[j]==null)
             break;
-          System.err.println(new String(ptr[j], 0, ptr[j].length-1));
+		  Console.Error.WriteLine(Util.InternalEncoding.GetString(ptr[j], 0, ptr[j].Length - 1));
         }
-        System.err.println("\nBitstream is "+vi.channels+" channel, "+vi.rate
+        Console.Error.WriteLine("\nBitstream is "+vi.channels+" channel, "+vi.rate
             +"Hz");
-        System.err.println("Encoded by: "
-            +new String(vc.vendor, 0, vc.vendor.length-1)+"\n");
+        Console.Error.WriteLine("Encoded by: "
+			+ Util.InternalEncoding.GetString(vc.vendor, 0, vc.vendor.Length - 1) + "\n");
       }
 
       convsize=4096/vi.channels;
@@ -198,8 +203,7 @@ namespace NVorbis.jorbis.Examples
           if(result==0)
             break; // need more data
           if(result==-1){ // missing or corrupt data at this page position
-            System.err
-                .println("Corrupt or missing data in bitstream; continuing...");
+            Console.Error.WriteLine("Corrupt or missing data in bitstream; continuing...");
           }
           else{
             os.pagein(og); // can safely ignore errors at
@@ -235,7 +239,7 @@ namespace NVorbis.jorbis.Examples
                     //int ptr=i;
                     int mono=_index[i];
                     for(int j=0; j<bout; j++){
-                      int val=(int)(pcm[i][mono+j]*32767.);
+                      int val=(int)(pcm[i][mono+j]*32767.0);
                       //		      short val=(short)(pcm[i][mono+j]*32767.);
                       //		      int val=(int)Math.round(pcm[i][mono+j]*32767.);
                       // might as well guard against clipping
@@ -248,12 +252,13 @@ namespace NVorbis.jorbis.Examples
                       if(val<0)
                         val=val|0x8000;
                       convbuffer[ptr]=(byte)(val);
-                      convbuffer[ptr+1]=(byte)(val>>>8);
+                      convbuffer[ptr+1]=(byte)(((uint)val)>>8);
                       ptr+=2*(vi.channels);
                     }
                   }
 
-                  System.out.write(convbuffer, 0, 2*vi.channels*bout);
+//                  System.out.write(convbuffer, 0, 2*vi.channels*bout);
+					throw(new NotImplementedException());
 
                   // tell libvorbis how
                   // many samples we
@@ -270,11 +275,11 @@ namespace NVorbis.jorbis.Examples
           index=oy.buffer(4096);
           buffer=oy.data;
           try{
-            bytes=input.read(buffer, index, 4096);
+            bytes=input.Read(buffer, index, 4096);
           }
           catch(Exception e){
-            System.err.println(e);
-            System.exit(1);
+            Console.Error.WriteLine(e);
+            Environment.Exit(1);
           }
           oy.wrote(bytes);
           if(bytes==0)
@@ -297,7 +302,7 @@ namespace NVorbis.jorbis.Examples
 
     // OK, clean up the framer
     oy.clear();
-    System.err.println("Done.");
+    Console.Error.WriteLine("Done.");
   }
 	}
 

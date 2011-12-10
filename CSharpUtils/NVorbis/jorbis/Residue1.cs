@@ -7,8 +7,8 @@ namespace NVorbis.jorbis
 {
 	class Residue1 : Residue0
 	{
-
-	  int inverse(Block vb, Object vl, float[][] In, int[] nonzero, int ch){
+		override internal int inverse(Block vb, Object vl, float[][] In, int[] nonzero, int ch)
+		{
 		int used=0;
 		for(int i=0; i<ch; i++){
 		  if(nonzero[i]!=0){

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>c61b9fb8-40a0-4241-9e2a-2e9ba13e1b7f</ProjectGuid>
+    <ProjectGuid>{17F87208-BB96-4500-8E9A-FE800B67A578}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NVorbis</RootNamespace>
@@ -19,6 +19,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,7 +39,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="jogg\Buffer.cs" />
+    <Compile Include="jogg\Packet.cs" />
+    <Compile Include="jogg\Page.cs" />
+    <Compile Include="jogg\StreamState.cs" />
+    <Compile Include="jogg\SyncState.cs" />
+    <Compile Include="jorbis\Block.cs" />
+    <Compile Include="jorbis\Drft.cs" />
+    <Compile Include="jorbis\DspState.cs" />
+    <Compile Include="jorbis\Examples\ChainingExample.cs" />
+    <Compile Include="jorbis\CodeBlock.cs" />
+    <Compile Include="jorbis\Comment.cs" />
+    <Compile Include="jorbis\Examples\DecodeExample.cs" />
+    <Compile Include="jorbis\Floor0.cs" />
+    <Compile Include="jorbis\Floor1.cs" />
+    <Compile Include="jorbis\FuncFloor.cs" />
+    <Compile Include="jorbis\FuncMapping.cs" />
+    <Compile Include="jorbis\FuncResidue.cs" />
+    <Compile Include="jorbis\FuncTime.cs" />
+    <Compile Include="jorbis\Info.cs" />
+    <Compile Include="jorbis\InfoMode.cs" />
+    <Compile Include="jorbis\JOrbisException.cs" />
+    <Compile Include="jorbis\Lcp.cs" />
+    <Compile Include="jorbis\Lookup.cs" />
+    <Compile Include="jorbis\Lsp.cs" />
+    <Compile Include="jorbis\Mapping0.cs" />
+    <Compile Include="jorbis\Mdct.cs" />
+    <Compile Include="jorbis\PsyInfo.cs" />
+    <Compile Include="jorbis\PsyLook.cs" />
+    <Compile Include="jorbis\Residue0.cs" />
+    <Compile Include="jorbis\Residue1.cs" />
+    <Compile Include="jorbis\Residue2.cs" />
+    <Compile Include="jorbis\StaticCodeBook.cs" />
+    <Compile Include="jorbis\Time0.cs" />
+    <Compile Include="jorbis\Util.cs" />
+    <Compile Include="jorbis\VorbisFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
