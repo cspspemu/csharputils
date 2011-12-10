@@ -45,8 +45,6 @@ namespace CSharpUtils.Threading
 				if (Kill || !ParentThread.IsAlive)
 				{
 					break;
-					//throw(new StopException());
-					//Thread.CurrentThread.Abort();
 				}
 
 				if (ThisSemaphore.WaitOne(20))
@@ -56,7 +54,12 @@ namespace CSharpUtils.Threading
 				}
 			}
 
-			if (Kill || !ParentThread.IsAlive) throw (new StopException());
+			if (Kill || !ParentThread.IsAlive)
+			{
+				//throw(new StopException());
+				Thread.CurrentThread.Abort();
+				//throw (new StopException());
+			}
 		}
 
 		public void InitAndStartStopped(Action Action)

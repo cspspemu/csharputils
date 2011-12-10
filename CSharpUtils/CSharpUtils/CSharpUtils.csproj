@@ -54,6 +54,7 @@
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsQueryProvider.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsRange.cs" />
     <Compile Include="Diff.cs" />
+    <Compile Include="Endian\EndianStructs.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\BinaryReaderWriterExtensions.cs" />
     <Compile Include="BitReader.cs" />
