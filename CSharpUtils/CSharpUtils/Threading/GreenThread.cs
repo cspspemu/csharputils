@@ -119,6 +119,11 @@ namespace CSharpUtils.Threading
 		{
 			ParentThread = Thread.CurrentThread;
 			ThisSemaphore.Release();
+			if (Kill)
+			{
+				Thread.CurrentThread.Abort();
+			}
+			//ThisSemaphoreWaitOrParentThreadStopped();
 			ParentSemaphore.WaitOne();
 			if (RethrowException != null)
 			{
