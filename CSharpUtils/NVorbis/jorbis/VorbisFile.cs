@@ -8,116 +8,128 @@ using NVorbis.jogg;
 namespace NVorbis.jorbis
 {
 	public class VorbisFile{
-	  internal const int CHUNKSIZE=8500;
-	  internal const int SEEK_SET=0;
-	  internal const int SEEK_CUR=1;
-	  internal const int SEEK_END=2;
+		internal const int CHUNKSIZE=8500;
+		internal const int SEEK_SET=0;
+		internal const int SEEK_CUR=1;
+		internal const int SEEK_END=2;
 
-	  internal const int OV_FALSE=-1;
-	  internal const int OV_EOF=-2;
-	  internal const int OV_HOLE=-3;
+		internal const int OV_FALSE=-1;
+		internal const int OV_EOF=-2;
+		internal const int OV_HOLE=-3;
 
-	  internal const int OV_EREAD=-128;
-	  internal const int OV_EFAULT=-129;
-	  internal const int OV_EIMPL=-130;
-	  internal const int OV_EINVAL=-131;
-	  internal const int OV_ENOTVORBIS=-132;
-	  internal const int OV_EBADHEADER=-133;
-	  internal const int OV_EVERSION=-134;
-	  internal const int OV_ENOTAUDIO=-135;
-	  internal const int OV_EBADPACKET=-136;
-	  internal const int OV_EBADLINK=-137;
-	  internal const int OV_ENOSEEK=-138;
+		internal const int OV_EREAD=-128;
+		internal const int OV_EFAULT=-129;
+		internal const int OV_EIMPL=-130;
+		internal const int OV_EINVAL=-131;
+		internal const int OV_ENOTVORBIS=-132;
+		internal const int OV_EBADHEADER=-133;
+		internal const int OV_EVERSION=-134;
+		internal const int OV_ENOTAUDIO=-135;
+		internal const int OV_EBADPACKET=-136;
+		internal const int OV_EBADLINK=-137;
+		internal const int OV_ENOSEEK=-138;
 
-	  internal Stream datasource;
-	  internal bool _seekable=false;
-	  internal long offset;
-	  internal long end;
+		internal Stream datasource;
+		internal bool _seekable=false;
+		internal long offset;
+		internal long end;
 
-	  internal SyncState oy=new SyncState();
+		internal SyncState oy=new SyncState();
 
-	  internal int links;
-	  internal long[] offsets;
-	  internal long[] dataoffsets;
-	  internal int[] serialnos;
-	  internal long[] pcmlengths;
-	  internal Info[] vi;
-	  internal Comment[] vc;
+		internal int links;
+		internal long[] offsets;
+		internal long[] dataoffsets;
+		internal int[] serialnos;
+		internal long[] pcmlengths;
+		internal Info[] vi;
+		internal Comment[] vc;
 
-	  // Decoding working state local storage
-	  internal long pcm_offset;
-	  internal bool decode_ready=false;
+		// Decoding working state local storage
+		internal long pcm_offset;
+		internal bool decode_ready=false;
 
-	  internal int current_serialno;
-	  internal int current_link;
+		internal int current_serialno;
+		internal int current_link;
 
-	  internal float bittrack;
-	  internal float samptrack;
+		internal float bittrack;
+		internal float samptrack;
 
-	  internal StreamState os; // take physical pages, weld into a logical
-	  // stream of packets
-	  internal DspState vd; // central working state for 
-	  // the packet->PCM decoder
-	  internal Block vb; // local working space for packet->PCM decode
+		internal StreamState os; // take physical pages, weld into a logical
+		// stream of packets
+		internal DspState vd; // central working state for 
+		// the packet->PCM decoder
+		internal Block vb; // local working space for packet->PCM decode
 
-	  //ov_callbacks callbacks;
+		//ov_callbacks callbacks;
 
 		private void _init()
 		{
-			os=new StreamState();
-			vd=new DspState();
+			os = new StreamState();
+			vd = new DspState();
 			vb = new Block(vd);
 		}
 
-	  public VorbisFile(String file)
-	  {
-		  _init();
-		Stream _is=null;
-		try{
-		  _is=File.OpenRead(file);
-		  int ret=open(_is, null, 0);
-		  if(ret==-1){
-			throw new JOrbisException("VorbisFile: open return -1");
-		  }
-		}
-		catch(Exception e){
-		  throw new JOrbisException("VorbisFile: "+e.ToString());
-		}
-		finally{
-		  if(_is!=null){
-			try{
-			  _is.Close();
+		public VorbisFile(String file)
+		{
+			_init();
+			Stream _is=null;
+			try
+			{
+				_is = File.OpenRead(file);
+				int ret = open(_is, null, 0);
+				if (ret == -1){
+					throw new JOrbisException("VorbisFile: open return -1");
+				}
 			}
-			catch(IOException e){
-				Console.Error.WriteLine(e);
+			catch(Exception e)
+			{
+				throw new JOrbisException("VorbisFile: "+e.ToString());
 			}
-		  }
+			finally
+			{
+				if (_is != null)
+				{
+					try
+					{
+						_is.Close();
+					}
+					catch (IOException e)
+					{
+						Console.Error.WriteLine(e);
+					}
+				}
+			}
 		}
-	  }
 
-	  public VorbisFile(Stream _is, byte[] initial, int ibytes) {
-		  _init();
-		int ret=open(_is, initial, ibytes);
-		if(ret==-1){
+		public VorbisFile(Stream _is, byte[] initial, int ibytes)
+		{
+			_init();
+			int ret = open(_is, initial, ibytes);
+			if (ret == -1)
+			{
+			}
 		}
-	  }
 
-	  private int get_data(){
-		int index=oy.buffer(CHUNKSIZE);
-		byte[] buffer=oy.data;
-		int bytes=0;
-		try{
-		  bytes=datasource.Read(buffer, index, CHUNKSIZE);
+		private int get_data()
+		{
+			int index = oy.buffer(CHUNKSIZE);
+			byte[] buffer = oy.data;
+			int bytes = 0;
+			try
+			{
+				bytes=datasource.Read(buffer, index, CHUNKSIZE);
+			}
+			catch (Exception e)
+			{
+				return OV_EREAD;
+			}
+			oy.wrote(bytes);
+			if (bytes == -1)
+			{
+				bytes = 0;
+			}
+			return bytes;
 		}
-		catch(Exception e){
-		  return OV_EREAD;
-		}
-		oy.wrote(bytes);
-		if(bytes==-1){
-		  bytes=0;
-		}
-		return bytes;
-	  }
 
 	  private void seek_helper(long offst){
 		fseek(datasource, offst, SEEK_SET);
@@ -356,15 +368,17 @@ namespace NVorbis.jorbis
 	  }
 
 	  private int make_decode_ready(){
-		if(decode_ready)
-		  Environment.Exit(1);
+		  if (decode_ready)
+		  {
+			  throw (new Exception("make_decode_ready can't call be twice"));
+		  }
 		vd.synthesis_init(vi[0]);
 		vb.init(vd);
 		decode_ready=true;
 		return (0);
 	  }
 
-	  int open_seekable()
+	  public int open_seekable()
 	  {
 		Info initial_i=new Info();
 		Comment initial_c=new Comment();
@@ -411,7 +425,7 @@ namespace NVorbis.jorbis
 		return 0;
 	  }
 
-	  int open_nonseekable(){
+	  public int open_nonseekable(){
 		// we cannot seek. Set up a 'single' (current) logical bitstream entry
 		links=1;
 		vi=new Info[links];
@@ -1150,13 +1164,9 @@ namespace NVorbis.jorbis
 		}
 	  }
 
-	  internal int host_is_big_endian(){
-		return 1;
-		//    short pattern = 0xbabe;
-		//    unsigned char *bytewise = (unsigned char *)&pattern;
-		//    if (bytewise[0] == 0xba) return 1;
-		//    assert(bytewise[0] == 0xbe);
-		//    return 0;
+	  internal int host_is_big_endian()
+	  {
+		return BitConverter.IsLittleEndian ? 0 : 1;
 	  }
 
 	  // up to this point, everything could more or less hide the multiple
@@ -1190,10 +1200,11 @@ namespace NVorbis.jorbis
 	  // 
 	  // *section) set to the logical bitstream number
 
-	  internal int read(byte[] buffer, int length, int bigendianp, int word, int sgned,
-		  int[] bitstream){
+	  internal int read(byte[] buffer, int length, int bigendianp, int word, int sgned, int[] bitstream = null){
 		int host_endian=host_is_big_endian();
 		int index=0;
+
+		if (!decode_ready) throw(new Exception("Decode not ready yet"));
 
 		while(true){
 		  if(decode_ready){
@@ -1201,6 +1212,7 @@ namespace NVorbis.jorbis
 			float[][][] _pcm=new float[1][][];
 			int[] _index=new int[getInfo(-1).channels];
 			int samples=vd.synthesis_pcmout(_pcm, _index);
+			//Console.WriteLine("Samples: " + samples);
 			pcm=_pcm[0];
 			if(samples!=0){
 			  // yay! proceed to pack data into the byte buffer

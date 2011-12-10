@@ -74,8 +74,7 @@ namespace NVorbis.jogg
 
 		public int wrote(int bytes)
 		{
-			if (fill + bytes > storage)
-				return (-1);
+			if (fill + bytes > storage) return (-1);
 			fill += bytes;
 			return (0);
 		}
