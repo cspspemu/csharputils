@@ -16,9 +16,14 @@ namespace CSharpUtils.Web._45.Fastcgi
 		protected CancellationToken CancellationToken;
 		public bool Debug = false;
 
-		abstract public Task HandleRequestAsync(FastcgiRequestAsync Request);
+		abstract public Task HandleRequestAsync(FastcgiRequestAsync Request, FastcgiResponseAsync Response);
 
-		async public void ListenAsync(ushort Port, string Address = "0.0.0.0")
+		public void ListenAsyncAndWait(ushort Port, string Address = "0.0.0.0")
+		{
+			ListenAsync(Port, Address).Wait();
+		}
+
+		async public Task ListenAsync(ushort Port, string Address = "0.0.0.0")
 		{
 			TcpListener = new TcpListener(IPAddress.Parse(Address), Port);
 			TcpListener.Start();
@@ -30,7 +35,8 @@ namespace CSharpUtils.Web._45.Fastcgi
 			while (true)
 			{
 				var FastcgiServerClientHandlerAsync = new FastcgiServerClientHandlerAsync(this, await TcpListener.AcceptTcpClientAsync());
-				await FastcgiServerClientHandlerAsync.Handle();
+				FastcgiServerClientHandlerAsync.Handle();
+				//await FastcgiServerClientHandlerAsync.Handle();
 			}
 		}
 

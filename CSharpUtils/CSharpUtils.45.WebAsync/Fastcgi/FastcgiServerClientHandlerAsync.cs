@@ -45,7 +45,7 @@ namespace CSharpUtils.Web._45.Fastcgi
 					{
 						Handler = this.Handlers[Packet.RequestId] = new FastcgiServerClientRequestHandlerAsync(this, ClientStream, Packet.RequestId);
 					}
-					await Handler.HandlePacket(Packet);
+					await Handler.HandlePacket(Client, Packet);
 				}
 			}
 			catch (IOException IOException)

@@ -44,6 +44,7 @@
     <Compile Include="Fastcgi\FastcgiOutputStream.cs" />
     <Compile Include="Fastcgi\FastcgiPacket.cs" />
     <Compile Include="Fastcgi\FastcgiRequestAsync.cs" />
+    <Compile Include="Fastcgi\FastcgiResponseAsync.cs" />
     <Compile Include="Fastcgi\FastcgiServerClientHandlerAsync.cs" />
     <Compile Include="Fastcgi\FastcgiServerClientRequestHandlerAsync.cs" />
     <Compile Include="Streams\BinaryReaderAsync.cs" />
