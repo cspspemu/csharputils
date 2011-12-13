@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{17F87208-BB96-4500-8E9A-FE800B67A578}</ProjectGuid>
+    <ProjectGuid>{DD49EF62-8244-4E83-82C8-B1844ACF2F5F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NVorbis</RootNamespace>
-    <AssemblyName>NVorbis</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>CSharpUtils._45.MysqlAsync</RootNamespace>
+    <AssemblyName>CSharpUtils.45.MysqlAsync</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,7 +19,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,9 +27,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -42,44 +38,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="jogg\Buffer.cs" />
-    <Compile Include="jogg\Packet.cs" />
-    <Compile Include="jogg\Page.cs" />
-    <Compile Include="jogg\StreamState.cs" />
-    <Compile Include="jogg\SyncState.cs" />
-    <Compile Include="jorbis\Block.cs" />
-    <Compile Include="jorbis\Drft.cs" />
-    <Compile Include="jorbis\DspState.cs" />
-    <Compile Include="jorbis\Examples\ChainingExample.cs" />
-    <Compile Include="jorbis\CodeBlock.cs" />
-    <Compile Include="jorbis\Comment.cs" />
-    <Compile Include="jorbis\Examples\DecodeExample.cs" />
-    <Compile Include="jorbis\Floor0.cs" />
-    <Compile Include="jorbis\Floor1.cs" />
-    <Compile Include="jorbis\FuncFloor.cs" />
-    <Compile Include="jorbis\FuncMapping.cs" />
-    <Compile Include="jorbis\FuncResidue.cs" />
-    <Compile Include="jorbis\FuncTime.cs" />
-    <Compile Include="jorbis\Info.cs" />
-    <Compile Include="jorbis\InfoMode.cs" />
-    <Compile Include="jorbis\JOrbisException.cs" />
-    <Compile Include="jorbis\Lcp.cs" />
-    <Compile Include="jorbis\Lookup.cs" />
-    <Compile Include="jorbis\Lsp.cs" />
-    <Compile Include="jorbis\Mapping0.cs" />
-    <Compile Include="jorbis\Mdct.cs" />
-    <Compile Include="jorbis\PsyInfo.cs" />
-    <Compile Include="jorbis\PsyLook.cs" />
-    <Compile Include="jorbis\Residue0.cs" />
-    <Compile Include="jorbis\Residue1.cs" />
-    <Compile Include="jorbis\Residue2.cs" />
-    <Compile Include="jorbis\StaticCodeBook.cs" />
-    <Compile Include="jorbis\Time0.cs" />
-    <Compile Include="jorbis\Util.cs" />
-    <Compile Include="jorbis\VorbisFile.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="MysqlClientAsync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Wav.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">

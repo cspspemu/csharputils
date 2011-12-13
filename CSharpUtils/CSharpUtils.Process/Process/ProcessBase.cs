@@ -16,6 +16,7 @@ namespace CSharpUtils.Process
 		public float X = 0, Y = 0, Z = 0;
 		public float Angle = 0, ScaleX = 1, ScaleY = 1;
 		public float Scale = 1;
+		public float Alpha = 1;
 
 		protected ProcessBase _Parent = null;
 		protected LinkedList<ProcessBase> Childs;
@@ -61,6 +62,7 @@ namespace CSharpUtils.Process
 			this.ExecuteTreeAfter();
 		}
 
+		/*
 		private void DrawTreeBefore(object _Context)
 		{
 			foreach (var Process in Childs.Where(process => process.Z < 0).OrderBy(process => process.Z)) Process.DrawTree(_Context);
@@ -70,12 +72,25 @@ namespace CSharpUtils.Process
 		{
 			foreach (var process in Childs.Where(process => process.Z >= 0).OrderBy(process => process.Z)) process.DrawTree(_Context);
 		}
+		*/
 
-		virtual public void DrawTree(object _Context)
+		virtual public void DrawTree(object _Context, int Level = 0)
 		{
-			this.DrawTreeBefore(_Context);
-			this.DrawItem(_Context);
-			this.DrawTreeAfter(_Context);
+			foreach (var Item in Childs.Concat(new ProcessBase[] { this }).OrderBy(process => process.Z))
+			{
+				//Console.WriteLine("DrawItem: " + Item + " : " + Item.Z);
+				if (Item == this)
+				{
+					Item.DrawItem(_Context);
+				}
+				else
+				{
+					Item.DrawTree(_Context, Level + 1);
+				}
+			}
+			//this.DrawTreeBefore(_Context);
+			//this.DrawItem(_Context);
+			//this.DrawTreeAfter(_Context);
 		}
 
 		virtual protected void DrawItem(object _Context)

@@ -244,6 +244,32 @@ namespace CSharpUtils.Extensions
 			return Stream;
 		}
 
+		public static TType ReadManagedStruct<TType>(this Stream Stream) where TType : struct
+		{
+			var Struct = new TType();
+			var BinaryReader = new BinaryReader(Stream);
+			foreach (var Field in typeof(TType).GetFields())
+			{
+				if (Field.FieldType == typeof(int))
+				{
+					Field.SetValueDirect(__makeref(Struct), BinaryReader.ReadInt32());
+				}
+				else if (Field.FieldType == typeof(uint))
+				{
+					Field.SetValueDirect(__makeref(Struct), BinaryReader.ReadUInt32());
+				}
+				else if (Field.FieldType == typeof(string))
+				{
+					Field.SetValueDirect(__makeref(Struct), Stream.ReadStringz());
+				}
+				else
+				{
+					throw(new NotImplementedException());
+				}
+			}
+			return Struct;
+		}
+
 		public static T ReadStruct<T>(this Stream Stream) where T : struct
 		{
 			var Size = Marshal.SizeOf(typeof(T));

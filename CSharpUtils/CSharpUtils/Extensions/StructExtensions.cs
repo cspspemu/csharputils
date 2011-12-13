@@ -10,7 +10,7 @@ namespace CSharpUtils.Extensions
 {
 	static public class StructExtensions
 	{
-		static public string ToStringDefault<T>(this T Struct) where T : struct
+		static public string ToStringDefault<T>(this T Struct) //where T : struct
 		{
 			var Ret = "";
 			Ret += typeof(T).Name;

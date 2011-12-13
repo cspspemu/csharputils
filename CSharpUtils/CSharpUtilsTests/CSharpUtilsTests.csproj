@@ -60,6 +60,7 @@
     <Compile Include="BitmapExtensionTest.cs" />
     <Compile Include="ConcatStreamTest.cs" />
     <Compile Include="ConsumerMemoryStreamTest.cs" />
+    <Compile Include="Extensions\StreamExtensionsTest.cs" />
     <Compile Include="Getopt\GetoptTest.cs" />
     <Compile Include="Factory\MockeableFactoryTest.cs" />
     <Compile Include="Threading\GreenThreadTest.cs" />

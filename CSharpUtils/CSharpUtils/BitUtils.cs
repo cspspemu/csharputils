@@ -46,5 +46,17 @@ namespace CSharpUtils
 			return ((float)Extract(Value, Offset, Count) / (float)CreateMask(Count)) * Scale;
 			throw new NotImplementedException();
 		}
+
+		public static byte[] XorBytes(params byte[][] Arrays)
+		{
+			int Length = Arrays[0].Length;
+			foreach (var Array in Arrays) if (Array.Length != Length) throw(new InvalidOperationException("Arrays sizes must match"));
+			var Bytes = new byte[Length];
+			foreach (var Array in Arrays)
+			{
+				for (int n = 0; n < Length; n++) Bytes[n] ^= Array[n];
+			}
+			return Bytes;
+		}
 	}
 }

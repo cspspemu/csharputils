@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using CSharpUtils.Process.Impl;
+using System.Diagnostics;
 
 namespace CSharpUtils.Process
 {
@@ -114,6 +115,38 @@ namespace CSharpUtils.Process
 				State = State.Ended;
 				Impl.Remove();
 			}
+		}
+
+		protected void Animate(TimeSpan Time, Action<float> StepAction)
+		{
+			Stopwatch Stopwatch = new Stopwatch();
+			//Stopwatch.
+			//Stopwatch.StartNew();
+			Stopwatch.Start();
+			//var Start = DateTime.Now;
+			//var End = Start + Time;
+
+			StepAction(0);
+			while (true)
+			{
+				var ElapsedPercent = (float)((double)Stopwatch.ElapsedMilliseconds / (double)Time.TotalMilliseconds);
+				//Console.WriteLine(Stopwatch.Elapsed.TotalMilliseconds);
+				if (ElapsedPercent >= 1)
+				{
+					StepAction(1);
+					break;
+				}
+				else
+				{
+					StepAction(ElapsedPercent);
+				}
+				Yield();
+			}
+		}
+
+		protected void YieldWhile(Func<bool> Predicate)
+		{
+			while (Predicate()) Yield();
 		}
 
 		protected void Yield(int count = 1)
