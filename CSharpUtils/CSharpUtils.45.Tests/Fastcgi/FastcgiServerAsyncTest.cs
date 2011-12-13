@@ -15,7 +15,7 @@ namespace CSharpUtils._45.Tests
 	{
 		protected class TestFastcgiServerAsync : FastcgiServerAsync
 		{
-			public override Task HandleRequestAsync(FastcgiRequestAsync Request)
+			public override Task HandleRequestAsync(FastcgiRequestAsync Request, FastcgiResponseAsync Response)
 			{
 				throw new NotImplementedException();
 			}

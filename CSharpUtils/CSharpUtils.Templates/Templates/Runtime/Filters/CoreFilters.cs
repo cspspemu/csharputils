@@ -23,7 +23,7 @@ namespace CSharpUtils.Templates.Runtime.Filters
 		[TemplateFilter(Name = "escape")]
 		static public RawWrapper Escape(dynamic Object)
 		{
-			return RawWrapper.Get(HtmlUtils.EscapeHtmlCharacters(Object));
+			return RawWrapper.Get(HtmlUtils.EscapeHtmlCharacters("" + Object));
 		}
 
 		[TemplateFilter(Name = "e")]

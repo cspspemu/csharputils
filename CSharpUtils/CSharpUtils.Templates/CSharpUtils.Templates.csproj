@@ -49,6 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\ParserNodes\ForeachParserNode.cs" />
     <Compile Include="Templates\ParserNodes\ParserNode.cs" />
+    <Compile Include="Templates\ParserNodes\ParserNodeAutoescape.cs" />
     <Compile Include="Templates\ParserNodes\ParserNodeBinaryOperation.cs" />
     <Compile Include="Templates\ParserNodes\ParserNodeContext.cs" />
     <Compile Include="Templates\ParserNodes\ParserNodeFilter.cs" />

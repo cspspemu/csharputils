@@ -7,6 +7,7 @@ using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Html;
 using CSharpUtils.Templates.Runtime.Filters;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace CSharpUtils.Templates.Runtime
 {
@@ -63,11 +64,11 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 
-		public void OutputWriteAutoFiltered(dynamic Value)
+		async public Task OutputWriteAutoFilteredAsync(dynamic Value)
 		{
 			if (Value != null)
 			{
-				Output.Write(AutoFilter(Value));
+				await Output.WriteAsync("" + AutoFilter(Value));
 			}
 		}
 

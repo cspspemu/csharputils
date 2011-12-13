@@ -19,6 +19,7 @@ namespace CSharpUtils.Templates
 	{
 		TemplateFactory TemplateFactory;
 		TokenReader Tokens;
+		public bool OutputGeneratedCode = false;
 
 		public TemplateCodeGen(String TemplateString, TemplateFactory TemplateFactory = null)
 		{
@@ -46,6 +47,7 @@ namespace CSharpUtils.Templates
 			//OptimizedParserNode.Dump();
 			Context.WriteLine("using System;");
 			Context.WriteLine("using System.Collections.Generic;");
+			Context.WriteLine("using System.Threading.Tasks;");
 			Context.WriteLine("using CSharpUtils.Templates;");
 			Context.WriteLine("using CSharpUtils.Templates.Runtime;");
 			Context.WriteLine("using CSharpUtils.Templates.TemplateProvider;");
@@ -71,7 +73,7 @@ namespace CSharpUtils.Templates
 					Context.WriteLine("}");
 					Context.WriteLine("");
 
-					Context.WriteLine("override protected void LocalRender(TemplateContext Context) {");
+					Context.WriteLine("async override protected Task LocalRenderAsync(TemplateContext Context) {");
 					Context.Indent(delegate()
 					{
 						ParserNode.OptimizeAndWrite(Context);
@@ -81,7 +83,7 @@ namespace CSharpUtils.Templates
 					foreach (var BlockPair in TemplateHandler.Blocks)
 					{
 						Context.WriteLine("");
-						Context.WriteLine("public void Block_" + BlockPair.Key + "(TemplateContext Context) {");
+						Context.WriteLine("async public Task Block_" + BlockPair.Key + "(TemplateContext Context) {");
 						Context.Indent(delegate()
 						{
 							BlockPair.Value.OptimizeAndWrite(Context);
@@ -110,6 +112,11 @@ namespace CSharpUtils.Templates
 				}),
 				Code
 			);
+
+			if (OutputGeneratedCode)
+			{
+				Console.Error.WriteLine(Code);
+			}
 
 			if (CompilerResults.NativeCompilerReturnValue == 0)
 			{

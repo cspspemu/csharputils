@@ -9,6 +9,8 @@ using Roslyn.Compilers.CSharp;
 
 namespace CSharpUtils.Templates.Templates
 {
+// Disabled until stable
+#if false
 	public class TemplateCodeGenRoslyn : TemplateCodeGen
 	{
 		public TemplateCodeGenRoslyn(String TemplateString, TemplateFactory TemplateFactory = null)
@@ -43,4 +45,5 @@ namespace CSharpUtils.Templates.Templates
 			return compiledAssembly.GetType("CompiledTemplate_TempTemplate");
 		}
 	}
+#endif
 }

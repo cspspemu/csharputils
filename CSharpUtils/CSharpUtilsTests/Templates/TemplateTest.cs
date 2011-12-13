@@ -15,7 +15,9 @@ namespace CSharpUtilsTests.Templates
 	public class TemplateTest
 	{
 		static protected TemplateCode CompileTemplateCodeByString(String Code) {
-			return new TemplateCodeGen(Code).GetTemplateCode();
+			var TemplateCodeGen = new TemplateCodeGen(Code);
+			TemplateCodeGen.OutputGeneratedCode = true;
+			return TemplateCodeGen.GetTemplateCode();
 		}
 
 		[TestMethod]
@@ -235,7 +237,17 @@ namespace CSharpUtilsTests.Templates
 		public void TestExecFilter()
 		{
 			Assert.AreEqual("Hello World", CompileTemplateCodeByString("{{ 'Hello {0}'|format('World') }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecFilterShouldEscape()
+		{
 			Assert.AreEqual("Hello &lt;World&gt;", CompileTemplateCodeByString("{{ 'Hello {0}'|format('<World>') }}").RenderToString());
+		}
+
+		[TestMethod]
+		public void TestExecFilterCombinedRaw()
+		{
 			Assert.AreEqual("Hello <World>", CompileTemplateCodeByString("{{ 'Hello {0}'|format('<World>')|raw }}").RenderToString());
 		}
 
@@ -278,7 +290,7 @@ namespace CSharpUtilsTests.Templates
 		public void TestExecBasicInheritance()
 		{
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
-			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider);
+			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider, OutputGeneratedCode: true);
 
 			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
 			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}Not{% block Body %}Ex{% endblock %}Rendered");
@@ -290,7 +302,7 @@ namespace CSharpUtilsTests.Templates
 		public void TestExecInheritanceWithParent()
 		{
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
-			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider);
+			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider, OutputGeneratedCode: true);
 
 			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
 			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}Not{% block Body %}1{% parent %}2{% endblock %}Rendered");
@@ -303,7 +315,7 @@ namespace CSharpUtilsTests.Templates
 		public void TestExecInheritanceWithParentOutside()
 		{
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
-			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider);
+			TemplateFactory TemplateFactory = new TemplateFactory(TemplateProvider, OutputGeneratedCode: true);
 
 			TemplateProvider.Add("Base.html", "Test{% block Body %}Base{% endblock %}Test");
 			TemplateProvider.Add("Test.html", "{% extends 'Base.html' %}Not{% block Body %}12{% endblock %}{% parent %}Rendered");

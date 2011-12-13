@@ -62,5 +62,15 @@ namespace CSharpUtils.Templates.ParserNodes
 				TextWriter.Write(Text);
 			}
 		}
+
+		internal String _GetContextWriteMethod()
+		{
+			return "await Context.Output.WriteAsync";
+		}
+
+		internal string _GetContextWriteAutoFilteredMethod()
+		{
+			return "await Context.OutputWriteAutoFilteredAsync";
+		}
 	}
 }

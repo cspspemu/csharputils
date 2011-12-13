@@ -15,17 +15,22 @@ namespace CSharpUtils.Templates
 		public Encoding Encoding;
 		public ITemplateProvider TemplateProvider;
 		public Dictionary<String, Type> CachedTemplatesByFile = new Dictionary<string, Type>();
+		protected bool OutputGeneratedCode;
 
-		public TemplateFactory(ITemplateProvider TemplateProvider = null, Encoding Encoding = null)
+		public TemplateFactory(ITemplateProvider TemplateProvider = null, Encoding Encoding = null, bool OutputGeneratedCode = false)
 		{
 			this.Encoding = Encoding;
 			this.TemplateProvider = TemplateProvider;
+			this.OutputGeneratedCode = OutputGeneratedCode;
 		}
 
 		protected Type GetTemplateCodeTypeByString(String TemplateString)
 		{
-			//return new TemplateCodeGen(TemplateString, this).GetTemplateCodeType();
-			return new TemplateCodeGenRoslyn(TemplateString, this).GetTemplateCodeType();
+			var TemplateCodeGen = new TemplateCodeGen(TemplateString, this);
+			TemplateCodeGen.OutputGeneratedCode = OutputGeneratedCode;
+
+			return TemplateCodeGen.GetTemplateCodeType();
+			//return new TemplateCodeGenRoslyn(TemplateString, this).GetTemplateCodeType();
 		}
 
 		protected Type GetTemplateCodeTypeByFile(String Name)

@@ -236,7 +236,7 @@ namespace CSharpUtils.Templates.ParserNodes
 		override public void WriteTo(ParserNodeContext Context)
 		{
 			//Context.Write("Context.Output.Write(Context.AutoFilter({0}));", StringUtils.EscapeString(Text));
-			Context.Write("Context.Output.Write({0});", StringUtils.EscapeString(Text));
+			Context.Write("{0}({1});", Context._GetContextWriteMethod(), StringUtils.EscapeString(Text));
 			Context.WriteLine("");
 		}
 
@@ -275,7 +275,7 @@ namespace CSharpUtils.Templates.ParserNodes
 	{
 		override public void WriteTo(ParserNodeContext Context)
 		{
-			Context.Write("Context.OutputWriteAutoFiltered(");
+			Context.Write(Context._GetContextWriteAutoFilteredMethod() + "(");
 			Parent.WriteTo(Context);
 			Context.Write(");");
 			Context.WriteLine("");

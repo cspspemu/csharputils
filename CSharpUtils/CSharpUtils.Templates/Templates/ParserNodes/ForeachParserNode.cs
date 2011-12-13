@@ -35,7 +35,7 @@ namespace CSharpUtils.Templates.ParserNodes
 					LoopIterator.WriteTo(Context);
 				});
 				Context.Write(", ");
-				Context.WriteLine("new EmptyDelegate(delegate() {");
+				Context.WriteLine("new EmptyDelegate(async delegate() {");
 				Context.Indent(delegate()
 				{
 					BodyBlock.WriteTo(Context);
@@ -44,7 +44,7 @@ namespace CSharpUtils.Templates.ParserNodes
 				if (!(ElseBlock is DummyParserNode))
 				{
 					Context.Write(", ");
-					Context.WriteLine("new EmptyDelegate(delegate() {");
+					Context.WriteLine("new EmptyDelegate(async delegate() {");
 					ElseBlock.WriteTo(Context);
 					Context.Write("})");
 				}

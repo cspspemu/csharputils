@@ -6,13 +6,14 @@ using System.IO;
 using System.Dynamic;
 using System.Reflection;
 using CSharpUtils.Templates.TemplateProvider;
+using System.Threading.Tasks;
 
 namespace CSharpUtils.Templates.Runtime
 {
-	public class TemplateCode
+	abstract public class TemplateCode
 	{
 		TemplateFactory TemplateFactory;
-		public delegate void RenderDelegate(TemplateContext Context);
+		public delegate Task RenderDelegate(TemplateContext Context);
 		Dictionary<String, RenderDelegate> Blocks = new Dictionary<string, RenderDelegate>();
 		TemplateCode ChildTemplate;
 		TemplateCode ParentTemplate;
@@ -23,7 +24,7 @@ namespace CSharpUtils.Templates.Runtime
 			this.Init();
 		}
 
-		virtual public void Init()
+		public void Init()
 		{
 			this.SetBlocks(this.Blocks);
 		}
@@ -37,24 +38,40 @@ namespace CSharpUtils.Templates.Runtime
 			Blocks[BlockName] = Callback;
 		}
 
-		virtual protected void LocalRender(TemplateContext Context)
+		abstract protected Task LocalRenderAsync(TemplateContext Context);
+
+		/*
+		async virtual protected Task LocalRenderAsync(TemplateContext Context)
 		{
 		}
+		*/
 
-		public void Render(TemplateContext Context)
+		/*
+		async public Task RenderAsync(TemplateContext Context)
+		{
+		}
+		*/
+
+		async public Task RenderAsync(TemplateContext Context)
 		{
 			Context.RenderingTemplate = this;
 
+			Exception ProducedException = null;
 			try
 			{
-				this.LocalRender(Context);
+				await this.LocalRenderAsync(Context);
 			}
 			catch (FinalizeRenderException)
 			{
 			}
 			catch (Exception Exception)
 			{
-				Context.Output.WriteLine(Exception);
+				ProducedException = Exception;
+			}
+			if (ProducedException != null)
+			{
+				await Context.Output.WriteLineAsync(ProducedException.ToString());
+				//throw (ProducedException);
 			}
 		}
 
@@ -62,7 +79,7 @@ namespace CSharpUtils.Templates.Runtime
 		{
 			if (Scope == null) Scope = new TemplateScope();
 			var StringWriter = new StringWriter();
-			Render(new TemplateContext(StringWriter, Scope, TemplateFactory));
+			RenderAsync(new TemplateContext(StringWriter, Scope, TemplateFactory)).Wait();
 			return StringWriter.ToString();
 		}
 
@@ -70,14 +87,14 @@ namespace CSharpUtils.Templates.Runtime
 		{
 			this.ParentTemplate = Context.TemplateFactory.GetTemplateCodeByFile(ParentTemplateFileName);
 			this.ParentTemplate.ChildTemplate = this;
-			this.ParentTemplate.LocalRender(Context);
+			this.ParentTemplate.LocalRenderAsync(Context);
 
 			throw (new FinalizeRenderException());
 		}
 
-		protected void CallBlock(String BlockName, TemplateContext Context)
+		async protected Task CallBlock(String BlockName, TemplateContext Context)
 		{
-			Context.RenderingTemplate.GetFirstAscendingBlock(BlockName)(Context);
+			await Context.RenderingTemplate.GetFirstAscendingBlock(BlockName)(Context);
 		}
 
 		protected RenderDelegate GetFirstAscendingBlock(String BlockName)
