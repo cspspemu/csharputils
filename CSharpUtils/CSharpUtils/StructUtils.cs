@@ -87,5 +87,28 @@ namespace CSharpUtils
 
 			return rawData;
 		}
+
+        public static byte[] StructArrayToBytes<T>(T[] dataArray) where T : struct
+        {
+            int ElementSize = Marshal.SizeOf(dataArray[0]);
+            byte[] rawData = new byte[ElementSize * dataArray.Length];
+            GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);
+            try
+            {
+                for (int n = 0; n < dataArray.Length; n++)
+                {
+                    IntPtr rawDataPtr = handle.AddrOfPinnedObject() + ElementSize * n;
+                    Marshal.StructureToPtr(dataArray[n], rawDataPtr, false);
+                }
+            }
+            finally
+            {
+                handle.Free();
+            }
+
+            //RespectEndianness(typeof(T), rawData);
+
+            return rawData;
+        }
 	}
 }
