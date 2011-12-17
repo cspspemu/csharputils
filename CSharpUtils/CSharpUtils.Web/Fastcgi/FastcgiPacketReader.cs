@@ -23,17 +23,24 @@ namespace CSharpUtils.Fastcgi
             this.Debug = Debug;
 		}
 
+		/// <summary>
+		/// Read a 7-bit or 31-bit value.
+		/// </summary>
+		/// <param name="Stream"></param>
+		/// <returns></returns>
 		static public int ReadVariableInt(Stream Stream)
 		{
+			// FastCGI transmits a name-value pair as the length of the name, followed by the length of the value, followed by the name, followed by the value.
+			// Lengths of 127 bytes and less can be encoded in one byte, while longer lengths are always encoded in four bytes:
 			int Byte = Stream.ReadByte();
 			if (Byte < 0) throw (new Exception("Can't ready more bytes"));
 			if ((Byte & 0x80) != 0)
 			{
 				return (
-					(Byte & 0xFF    ) >> 24 |
-					Stream.ReadByte() >> 16 |
-					Stream.ReadByte() >>  8 |
-					Stream.ReadByte() >>  0
+					(Byte & 0x7F    ) << 24 |
+					Stream.ReadByte() << 16 |
+					Stream.ReadByte() <<  8 |
+					Stream.ReadByte() <<  0
 				);
 			}
 			else
