@@ -10,12 +10,13 @@ namespace CSharpUtils.Extensions
 {
 	static public class StructExtensions
 	{
-		static public string ToStringDefault<T>(this T Struct) //where T : struct
+		static public string ToStringDefault<T>(this T Struct, bool SimplifyBool = false) //where T : struct
 		{
 			var Ret = "";
 			Ret += typeof(T).Name;
 			Ret += "(";
 			var MemberCount = 0;
+			bool AddedItem = false;
 
 			//FieldInfo fi;
 			//PropertyInfo pi;
@@ -37,21 +38,36 @@ namespace CSharpUtils.Extensions
 
 				if (ValueSet)
 				{
-					if (MemberCount > 0)
+					if (AddedItem)
 					{
 						Ret += ",";
+						AddedItem = false;
 					}
-					Ret += MemberInfo.Name;
-					Ret += "=";
-					if (Value.GetType() == typeof(uint))
+
+					if (SimplifyBool && (Value.GetType() == typeof(bool)))
 					{
-						Ret += String.Format("0x{0:X}", Value);
+						if (((bool)Value) == true)
+						{
+							Ret += MemberInfo.Name;
+							MemberCount++;
+							AddedItem = true;
+						}
 					}
 					else
 					{
-						Ret += Value;
+						Ret += MemberInfo.Name;
+						Ret += "=";
+						if (Value.GetType() == typeof(uint))
+						{
+							Ret += String.Format("0x{0:X}", Value);
+						}
+						else
+						{
+							Ret += Value;
+						}
+						MemberCount++;
+						AddedItem = true;
 					}
-					MemberCount++;
 				}
 			}
 			Ret += ")";

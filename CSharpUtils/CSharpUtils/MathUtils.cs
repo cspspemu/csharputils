@@ -45,6 +45,19 @@ namespace CSharpUtils
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		static public ulong ByteSwap(ulong Value)
+		{
+			return (
+				((ulong)ByteSwap((uint)(Value >> 0)) << 32) |
+				((ulong)ByteSwap((uint)(Value >> 32)) << 0)
+			);
+		}
+
+		/// <summary>
 		/// Returns the upper minimum value that will be divisible by AlignValue.
 		/// </summary>
 		/// <example>

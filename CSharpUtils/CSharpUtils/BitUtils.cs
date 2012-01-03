@@ -30,6 +30,11 @@ namespace CSharpUtils
 			return (uint)((InitialValue >> Offset) & CreateMask(Count));
 		}
 
+		static public bool ExtractBool(uint InitialValue, int Offset)
+		{
+			return Extract(InitialValue, Offset, 1) != 0;
+		}
+
 		static public int ExtractSigned(uint InitialValue, int Offset, int Count)
 		{
 			uint SignBit = (uint)(1 << (Offset + (Count - 1)));

@@ -163,7 +163,7 @@ namespace CSharpUtils.Extensions
 			return Return;
 		}
 
-		static public String ReadStringz(this Stream Stream, int ToRead = -1, Encoding Encoding = null)
+		static public String ReadStringz(this Stream Stream, int ToRead = -1, Encoding Encoding = null, bool AllowEndOfStream = true)
 		{
 			if (Encoding == null) Encoding = Encoding.ASCII;
 			if (ToRead == -1)
@@ -173,7 +173,11 @@ namespace CSharpUtils.Extensions
 				{
 					int Readed = Stream.ReadByte();
 					//if (Readed < 0) break;
-					if (Readed < 0) throw(new EndOfStreamException("ReadStringz reached the end of the stream without finding a \\0 character at Position=" + Stream.Position + "."));
+					if (Readed < 0)
+					{
+						if (AllowEndOfStream) break;
+						throw (new EndOfStreamException("ReadStringz reached the end of the stream without finding a \\0 character at Position=" + Stream.Position + "."));
+					}
 					if (Readed == 0) break;
 					Temp.WriteByte((byte)Readed);
 				}

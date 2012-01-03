@@ -2,11 +2,11 @@
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CSharpUtils.Web._45.Fastcgi;
 using System.Threading.Tasks;
 using CSharpUtils.Net;
 using System.Net.Sockets;
 using System.Threading;
+using CSharpUtils.Web._45.Fastcgi;
 
 namespace CSharpUtils._45.Tests
 {
@@ -30,10 +30,11 @@ namespace CSharpUtils._45.Tests
 			var Client = new TcpClient();
 			await Client.ConnectAsync("127.0.0.1", ServerPort);
 			var ClientStream = Client.GetStream();
+			
 			await new FastcgiPacket()
 			{
 				Version = 1,
-				Type = Fastcgi.PacketType.FCGI_BEGIN_REQUEST,
+				Type = CSharpUtils.Web._45.Fastcgi.Fastcgi.PacketType.FCGI_BEGIN_REQUEST,
 				RequestId = 1,
 				Content = new ArraySegment<byte>(new byte[] { 0, 0, 0 }),
 			}.WriteToAsync(ClientStream);
@@ -41,7 +42,7 @@ namespace CSharpUtils._45.Tests
 			await new FastcgiPacket()
 			{
 				Version = 1,
-				Type = Fastcgi.PacketType.FCGI_PARAMS,
+				Type = CSharpUtils.Web._45.Fastcgi.Fastcgi.PacketType.FCGI_PARAMS,
 				RequestId = 1,
 				//Content = new ArraySegment<byte>(new byte[] { 0, 0 }),
 				Content = new ArraySegment<byte>(new byte[] { }),
@@ -50,7 +51,7 @@ namespace CSharpUtils._45.Tests
 			await new FastcgiPacket()
 			{
 				Version = 1,
-				Type = Fastcgi.PacketType.FCGI_STDIN,
+				Type = CSharpUtils.Web._45.Fastcgi.Fastcgi.PacketType.FCGI_STDIN,
 				RequestId = 1,
 				//Content = new ArraySegment<byte>(new byte[] { 0, 0 }),
 				Content = new ArraySegment<byte>(new byte[] { }),

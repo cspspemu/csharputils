@@ -30,6 +30,22 @@ namespace CSharpUtils.Streams
 		/// </summary>
 		protected long ThisLength;
 
+		public long SliceLow
+		{
+			get
+			{
+				return ThisStart;
+			}
+		}
+
+		public long SliceHigh
+		{
+			get
+			{
+				return ThisStart + ThisLength;
+			}
+		}
+
 		/// <summary>
 		/// Creates a SliceStream specifying a start offset and a length.
 		/// </summary>

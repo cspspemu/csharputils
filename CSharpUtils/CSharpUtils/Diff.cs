@@ -106,7 +106,7 @@ namespace CSharpUtils
 
 		public override string ToString()
 		{
-			return String.Format("{0:4}: {1}{2} {3}", LineNumber + 1, (char)Action, (char)Action, Line);
+			return String.Format("{0,4:0}: {1}{2} {3}", (LineNumber + 1), (char)Action, (char)Action, Line);
 		}
 	}
 
