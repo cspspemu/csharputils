@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace CSharpUtils.Endian
@@ -29,6 +30,46 @@ namespace CSharpUtils.Endian
 		public static implicit operator ulong_be(ulong that)
 		{
 			return new ulong_be()
+			{
+				NativeValue = that,
+			};
+		}
+
+		public override string ToString()
+		{
+			return NativeValue.ToString();
+		}
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 2)]
+	public struct uint48_be
+	{
+		private ushort _InternalValueHigh;
+		private uint _InternalValueLow;
+
+		public ulong NativeValue
+		{
+			set
+			{
+				var Value = MathUtils.ByteSwap(value);
+				_InternalValueLow = (uint)(Value >> 0);
+				_InternalValueHigh = (ushort)(Value >> 32);
+			}
+			get
+			{
+				var Value = ((ulong)_InternalValueLow << 32) | ((ulong)_InternalValueHigh << 16);
+				return MathUtils.ByteSwap(Value);
+			}
+		}
+
+		public static implicit operator ulong(uint48_be that)
+		{
+			return that.NativeValue;
+		}
+
+		public static implicit operator uint48_be(ulong that)
+		{
+			return new uint48_be()
 			{
 				NativeValue = that,
 			};
