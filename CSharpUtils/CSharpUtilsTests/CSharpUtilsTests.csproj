@@ -64,6 +64,7 @@
     <Compile Include="Fastcgi\FastcgiPacketReaderTest.cs" />
     <Compile Include="Getopt\GetoptTest.cs" />
     <Compile Include="Factory\MockeableFactoryTest.cs" />
+    <Compile Include="Streams\StreamBitReaderTest.cs" />
     <Compile Include="Threading\GreenThreadTest.cs" />
     <Compile Include="Scgi\ScgiServerTest.cs" />
     <Compile Include="SerializationExtensionsTest.cs" />

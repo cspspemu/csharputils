@@ -102,6 +102,7 @@
     <Compile Include="Streams\ProxyStream.cs" />
     <Compile Include="Streams\SliceStream.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Streams\StreamBitReader.cs" />
     <Compile Include="Streams\StreamChunker.cs" />
     <Compile Include="Streams\StreamChunker2.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
