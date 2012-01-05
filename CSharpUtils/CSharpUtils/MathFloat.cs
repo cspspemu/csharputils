@@ -133,6 +133,16 @@ namespace CSharpUtils
 			return (float)Math.Sin(Angle);
 		}
 
+		static public float CosV1(float AngleV1)
+		{
+			return Cos((float)(AngleV1 * Math.PI * 0.5f));
+		}
+
+		static public float SinV1(float AngleV1)
+		{
+			return Sin((float)(AngleV1 * Math.PI * 0.5f));
+		}
+
 		static public float Clamp(float Value, float Min, float Max)
 		{
 			if (Value < Min) Value = Min;
