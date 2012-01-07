@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSharpUtils
 {
-	public class BitUtils
+	static public class BitUtils
 	{
 		static public uint CreateMask(int Size)
 		{
@@ -46,13 +46,13 @@ namespace CSharpUtils
 			return _Value;
 		}
 
-		public static float ExtractUnsignedScaled(uint Value, int Offset, int Count, float Scale = 1.0f)
+		static public float ExtractUnsignedScaled(uint Value, int Offset, int Count, float Scale = 1.0f)
 		{
 			return ((float)Extract(Value, Offset, Count) / (float)CreateMask(Count)) * Scale;
 			throw new NotImplementedException();
 		}
 
-		public static byte[] XorBytes(params byte[][] Arrays)
+		static public byte[] XorBytes(params byte[][] Arrays)
 		{
 			int Length = Arrays[0].Length;
 			foreach (var Array in Arrays) if (Array.Length != Length) throw(new InvalidOperationException("Arrays sizes must match"));

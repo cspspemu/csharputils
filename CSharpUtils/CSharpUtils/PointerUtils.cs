@@ -42,10 +42,38 @@ namespace CSharpUtils
 			}
 		}
 
+		[DllImport("kernel32.dll")]
+		static extern void RtlMoveMemory(byte* Destination, byte* Source, int Size);
+
 		public static void Memcpy(byte* Destination, byte* Source, int Size)
 		{
 			//Marshal.Copy(new IntPtr(Source), new IntPtr(Destination), 0, Size);
+#if true
+			switch (Environment.OSVersion.Platform)
+			{
+				case PlatformID.Win32NT:
+				case PlatformID.Win32Windows:
+				case PlatformID.WinCE:
+				case PlatformID.Win32S:
+					RtlMoveMemory(Destination, Source, Size);
+					break;
+				case PlatformID.Unix:
+					while (Size-- > 0) *Destination++ = *Source++;
+					break;
+			}
+			
+			//while (Size-- > 0) *Destination++ = *Source++;
+			/*
+			byte* DestinationEnd = Destination + Size;
+			while (Destination < DestinationEnd)
+			{
+				*Destination++ = *Source++;
+			}
+			*/
+#else
+			//Marshal.Copy(new IntPtr(Source), new IntPtr(Destination), 0, Size);
 			for (int n = 0; n < Size; n++) Destination[n] = Source[n];
+#endif
 		}
 
 		public static unsafe byte[] PointerToByteArray(byte* Pointer, int Size)
