@@ -150,9 +150,45 @@ namespace CSharpUtils
 			return Value;
 		}
 
+		static public int ClampInt(int Value, int Min, int Max)
+		{
+			if (Value < Min) Value = Min;
+			else if (Value > Max) Value = Max;
+			return Value;
+		}
+		
+
 		static public float Sqrt(float Value)
 		{
 			return (float)Math.Sqrt((double)Value);
+		}
+
+		/// <summary>
+		/// Math.scalb (12.0, 3) = 96.0
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <param name="Count"></param>
+		/// <returns></returns>
+		static public float Scalb(float Value, int Count)
+		{
+			return (float)(Value * Math.Pow(2.0f, Count));
+		}
+
+		static public float Sign(float Value)
+		{
+			if (Value > 0) return +1.0f;
+			if (Value < 0) return -1.0f;
+			return 0.0f;
+		}
+
+		static public float Min(float Left, float Right)
+		{
+			return Math.Min(Left, Right);
+		}
+
+		static public float Max(float Left, float Right)
+		{
+			return Math.Max(Left, Right);
 		}
 	}
 }

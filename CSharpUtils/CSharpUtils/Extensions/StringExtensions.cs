@@ -102,7 +102,24 @@ namespace CSharpUtils.Extensions
 								case 's': arg = ((arg = String(arg)) && match[7] ? arg.substring(0, match[7]) : arg); goto EndParamLabel;
 								case 'u': arg = Math.abs(arg); goto EndParamLabel;
 								*/
-								case 'b': Result = Convert.ToString(Convert.ToInt32(Param), 2); break;
+								case 'b':
+									try
+									{
+										Result = Convert.ToString(Convert.ToInt32(Param), 2);
+									}
+									catch (Exception Exception)
+									{
+										try
+										{
+											Result = Convert.ToString(Convert.ToInt64(Param), 2);
+										}
+										catch (Exception Exception2)
+										{
+											Console.Error.WriteLine(Exception2);
+											Result = "-1";
+										}
+									}
+									break;
 								case 'X':
 								case 'x':
 									if (Param.GetType() == typeof(long) || Param.GetType() == typeof(ulong))
@@ -111,7 +128,22 @@ namespace CSharpUtils.Extensions
 									}
 									else
 									{
-										Result = Convert.ToString(Convert.ToInt32(Param), 16);
+										try
+										{
+											Result = Convert.ToString(Convert.ToInt32(Param), 16);
+										}
+										catch (Exception Exception)
+										{
+											try
+											{
+												Result = Convert.ToString(GetLong(Param), 16);
+											}
+											catch (Exception Exception2)
+											{
+												Console.Error.WriteLine(Exception2);
+												Result = "-1";
+											}
+										}
 									}
 									if (C == 'X')
 									{
