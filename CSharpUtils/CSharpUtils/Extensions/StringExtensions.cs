@@ -65,6 +65,27 @@ namespace CSharpUtils.Extensions
 			return Convert.ToUInt64(Value);
 		}
 
+		static public long ConvertToLong(object Value)
+		{
+			if (Value.GetType() == typeof(int)) return (long)(uint)Convert.ToInt32(Value);
+			if (Value.GetType() == typeof(uint)) return (long)(uint)Convert.ToUInt32(Value);
+			try
+			{
+				return Convert.ToInt64(Value);
+			}
+			catch
+			{
+				try
+				{
+					return (long)Convert.ToUInt64(Value);
+				}
+				catch
+				{
+					return -1;
+				}
+			}
+		}
+
 		static public String Sprintf(this String This, params Object[] _Params)
 		{
 			String Ret = "";
@@ -86,6 +107,9 @@ namespace CSharpUtils.Extensions
 						int Pad = 0;
 						var Param = Params.Dequeue();
 						var Result = "";
+						//long IntegerParam = ConvertToLong(Param);
+						//if (Pad <= 8) IntegerParam = (long)(uint)IntegerParam;
+						//if (Pad <= 4) IntegerParam = (long)(ushort)IntegerParam;
 						for (; n < This.Length; n++)
 						{
 							C = This[n];
@@ -102,49 +126,18 @@ namespace CSharpUtils.Extensions
 								case 's': arg = ((arg = String(arg)) && match[7] ? arg.substring(0, match[7]) : arg); goto EndParamLabel;
 								case 'u': arg = Math.abs(arg); goto EndParamLabel;
 								*/
+								case 's':
+									Result = Convert.ToString(Param);
+									break;
 								case 'b':
-									try
-									{
-										Result = Convert.ToString(Convert.ToInt32(Param), 2);
-									}
-									catch (Exception Exception)
-									{
-										try
-										{
-											Result = Convert.ToString(Convert.ToInt64(Param), 2);
-										}
-										catch (Exception Exception2)
-										{
-											Console.Error.WriteLine(Exception2);
-											Result = "-1";
-										}
-									}
+									Result = Convert.ToString(ConvertToLong(Param), 2);
+									break;
+								case 'd':
+									Result = Convert.ToString(ConvertToLong(Param), 10);
 									break;
 								case 'X':
 								case 'x':
-									if (Param.GetType() == typeof(long) || Param.GetType() == typeof(ulong))
-									{
-										Result = Convert.ToString(GetLong(Param), 16);
-									}
-									else
-									{
-										try
-										{
-											Result = Convert.ToString(Convert.ToInt32(Param), 16);
-										}
-										catch (Exception Exception)
-										{
-											try
-											{
-												Result = Convert.ToString(GetLong(Param), 16);
-											}
-											catch (Exception Exception2)
-											{
-												Console.Error.WriteLine(Exception2);
-												Result = "-1";
-											}
-										}
-									}
+									Result = Convert.ToString(ConvertToLong(Param), 16);
 									if (C == 'X')
 									{
 										Result = Result.ToUpper();
@@ -168,6 +161,7 @@ namespace CSharpUtils.Extensions
 							}
 							if (Result.Length > 0) break;
 						}
+
 						if (PadDir > 0)
 						{
 							Result = Result.PadLeft(Pad, PadChar);

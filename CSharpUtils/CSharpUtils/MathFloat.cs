@@ -190,5 +190,15 @@ namespace CSharpUtils
 		{
 			return Math.Max(Left, Right);
 		}
+
+		static public bool IsNan(float Value)
+		{
+			return float.IsNaN(Value);
+		}
+
+		static public bool IsInfinity(float Value)
+		{
+			return float.IsInfinity(Value);
+		}
 	}
 }
