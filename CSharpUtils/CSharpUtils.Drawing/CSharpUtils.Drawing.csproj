@@ -45,9 +45,22 @@
   <ItemGroup>
     <Compile Include="BitmapChannel.cs" />
     <Compile Include="BitmapUtils.cs" />
+    <Compile Include="ColorFormat.cs" />
+    <Compile Include="ColorFormats.cs" />
     <Compile Include="ColorUtils.cs" />
     <Compile Include="Extensions\BitmapExtension.cs" />
+    <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSharpUtils.Ext\CSharpUtils.Ext.csproj">
+      <Project>{C017FBBE-EF10-4030-A69E-204E766C8F9D}</Project>
+      <Name>CSharpUtils.Ext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
+      <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
+      <Name>CSharpUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
