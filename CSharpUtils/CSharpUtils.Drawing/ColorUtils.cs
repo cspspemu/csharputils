@@ -82,5 +82,30 @@ namespace CSharpUtils
 			}
 			return Average(Colors);
 		}
+
+		public static Color Encode(ColorFormat ColorFormat, uint Value)
+		{
+			return Color.FromArgb(
+				(int)(BitUtils.ExtractScaled(Value, ColorFormat.AlphaOffset, ColorFormat.AlphaSize, 255)),
+				(int)(BitUtils.ExtractScaled(Value, ColorFormat.RedOffset, ColorFormat.RedSize, 255)),
+				(int)(BitUtils.ExtractScaled(Value, ColorFormat.GreenOffset, ColorFormat.GreenSize, 255)),
+				(int)(BitUtils.ExtractScaled(Value, ColorFormat.BlueOffset, ColorFormat.BlueSize, 255))
+			);
+		}
+
+		public static int MixComponent(int Color1, int Color2, int WeightSum, int Weight1, int Weight2)
+		{
+			return (Color1 * Weight1 + Color2 * Weight2) / WeightSum;
+		}
+
+		public static Color Mix(Color Color1, Color Color2, int WeightSum, int Weight1, int Weight2)
+		{
+			return Color.FromArgb(
+				MixComponent(Color1.A, Color2.A, WeightSum, Weight1, Weight2),
+				MixComponent(Color1.R, Color2.R, WeightSum, Weight1, Weight2),
+				MixComponent(Color1.G, Color2.G, WeightSum, Weight1, Weight2),
+				MixComponent(Color1.B, Color2.B, WeightSum, Weight1, Weight2)
+			);
+		}
 	}
 }

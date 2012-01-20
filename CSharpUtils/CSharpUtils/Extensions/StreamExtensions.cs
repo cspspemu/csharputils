@@ -334,6 +334,15 @@ namespace CSharpUtils.Extensions
 			return Stream;
 		}
 
+		public static Stream WriteStructVector<T>(this Stream Stream, T[] Structs) where T : struct
+		{
+			foreach (var Struct in Structs)
+			{
+				Stream.WriteStruct(Struct);
+			}
+			return Stream;
+		}
+
 		public static Stream Align(this Stream Stream, int Align)
 		{
 			Stream.Position = MathUtils.Align(Stream.Position, Align);

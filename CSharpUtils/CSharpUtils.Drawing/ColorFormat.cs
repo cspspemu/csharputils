@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CSharpUtils.Drawing
+namespace CSharpUtils
 {
 	public struct ColorFormat
 	{

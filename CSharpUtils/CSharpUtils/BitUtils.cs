@@ -27,7 +27,14 @@ namespace CSharpUtils
 
 		static public uint Extract(uint InitialValue, int Offset, int Count)
 		{
+			if (Count == 0) return 0;
 			return (uint)((InitialValue >> Offset) & CreateMask(Count));
+		}
+
+		static public uint ExtractScaled(uint InitialValue, int Offset, int Count, int Scale)
+		{
+			if (Count == 0) return 0;
+			return (uint)((Extract(InitialValue, Offset, Count) * Scale) / CreateMask(Count));
 		}
 
 		static public bool ExtractBool(uint InitialValue, int Offset)

@@ -149,6 +149,9 @@ namespace CSharpUtils.Endian
 		{
 			return NativeValue.ToString();
 		}
+
+		public byte Low { get { return (byte)(NativeValue >> 0); } }
+		public byte High { get { return (byte)(NativeValue >> 8); } }
 	}
 
 	public struct uint_le
