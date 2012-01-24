@@ -10,7 +10,7 @@ namespace CSharpUtils.Extensions
 	{
 		static public ushort Decode565(this Color Color)
 		{
-			return (ushort)Color.Decode(ColorFormats.RGB_565);
+			return (ushort)Color.Decode(ColorFormats.RGBA_5650);
 		}
 
 		static public uint Decode(this Color Color, ColorFormat Format)

@@ -38,5 +38,22 @@ namespace CSharpUtils
 				AlphaSize = value[3];
 			}
 		}
+
+		public uint Encode(byte R, byte G, byte B, byte A)
+		{
+			uint Result = 0;
+			Result |= ((uint)((R * BitUtils.CreateMask(RedSize)) / 255)) << RedOffset;
+			Result |= ((uint)((G * BitUtils.CreateMask(GreenSize)) / 255)) << GreenOffset;
+			Result |= ((uint)((B * BitUtils.CreateMask(BlueSize)) / 255)) << BlueOffset;
+			Result |= ((uint)((A * BitUtils.CreateMask(AlphaSize)) / 255)) << AlphaOffset;
+			return Result;
+		}
+
+		/*
+		static public void Decode(uint Data, out byte R, out byte G, out byte B, out byte A)
+		{
+
+		}
+		*/
 	}
 }

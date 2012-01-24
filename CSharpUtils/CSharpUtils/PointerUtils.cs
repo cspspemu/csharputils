@@ -8,6 +8,11 @@ namespace CSharpUtils
 {
 	unsafe public class PointerUtils
 	{
+		static public String PtrToStringUtf8(byte* Pointer)
+		{
+			return PtrToString(Pointer, Encoding.UTF8);
+		}
+
 		static public String PtrToString(byte* Pointer, Encoding Encoding)
 		{
 			if (Pointer == null) return null;

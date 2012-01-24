@@ -36,6 +36,11 @@ namespace CSharpUtils.Extensions
 
 		static public TStream PreservePositionAndLock<TStream>(this TStream Stream, Action<Stream> Callback) where TStream : Stream
 		{
+			if (!Stream.CanSeek)
+			{
+				throw(new NotImplementedException("Stream can't seek"));
+			}
+
 			lock (Stream)
 			{
 				var OldPosition = Stream.Position;
@@ -100,6 +105,7 @@ namespace CSharpUtils.Extensions
 
 			if (FromStart)
 			{
+				if (!Stream.CanSeek) throw(new NotImplementedException("Can't use 'FromStream' on Stream that can't seek"));
 				Stream.PreservePositionAndLock(() =>
 				{
 					Stream.Position = 0;
@@ -124,6 +130,7 @@ namespace CSharpUtils.Extensions
 
 		static public byte[] ReadBytes(this Stream Stream, int ToRead)
 		{
+			if (ToRead == 0) return new byte[0];
 			var Buffer = new byte[ToRead];
 			int Readed = 0;
 			while (Readed < ToRead)
@@ -150,6 +157,7 @@ namespace CSharpUtils.Extensions
 
 		static public String ReadString(this Stream Stream, int ToRead, Encoding Encoding = null)
 		{
+			if (Encoding == null) Encoding = Encoding.UTF8;
 			return Stream.ReadBytes(ToRead).GetString(Encoding);
 		}
 
@@ -290,6 +298,12 @@ namespace CSharpUtils.Extensions
 				Value = Stream.ReadStructVector<TType>(Count, EntrySize);
 			});
 			return Value;
+		}
+
+		public static TType[] ReadStructVector<TType>(this Stream Stream, ref TType[] Vector, uint Count, int EntrySize = -1) where TType : struct
+		{
+			Vector = Stream.ReadStructVector<TType>(Count, EntrySize);
+			return Vector;
 		}
 
 		public static TType[] ReadStructVector<TType>(this Stream Stream, uint Count, int EntrySize = -1) where TType : struct
@@ -511,6 +525,14 @@ namespace CSharpUtils.Extensions
 		static public ConcatStream Concat(this Stream BaseStream, Stream NextStream)
 		{
 			return new ConcatStream(BaseStream, NextStream);
+		}
+
+		unsafe static public int ReadToPointer(this Stream Stream, byte* Pointer, int Count)
+		{
+			var Data = new byte[Count];
+			int Result = Stream.Read(Data, 0, Count);
+			Marshal.Copy(Data, 0, new IntPtr(Pointer), Count);
+			return Result;
 		}
 	}
 }
