@@ -49,11 +49,9 @@ namespace CSharpUtils
 			return Result;
 		}
 
-		/*
-		static public void Decode(uint Data, out byte R, out byte G, out byte B, out byte A)
+		public void Decode(uint Data, out byte R, out byte G, out byte B, out byte A)
 		{
-
+			throw(new NotImplementedException());
 		}
-		*/
 	}
 }

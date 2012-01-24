@@ -140,6 +140,7 @@ namespace CSharpUtils
 
 		static public float SinV1(float AngleV1)
 		{
+			//Console.Error.WriteLine("aaaaaaaaaaaaaa");
 			return Sin((float)(AngleV1 * Math.PI * 0.5f));
 		}
 
@@ -199,6 +200,31 @@ namespace CSharpUtils
 		static public bool IsInfinity(float Value)
 		{
 			return float.IsInfinity(Value);
+		}
+
+		public static float RSqrt(float Value)
+		{
+			return 1.0f / Sqrt(Value);
+		}
+
+		public static float Asin(float Value)
+		{
+			return (float)Math.Asin((double)Value);
+		}
+
+		public static float AsinV1(float Value)
+		{
+			return Asin(Value) / (float)(Math.PI * 0.5f);
+		}
+
+		public static float Vsat0(float Value)
+		{
+			return MathFloat.Clamp(Value, 0.0f, 1.0f);
+		}
+
+		public static float Vsat1(float Value)
+		{
+			return MathFloat.Clamp(Value, -1.0f, 1.0f);
 		}
 	}
 }
