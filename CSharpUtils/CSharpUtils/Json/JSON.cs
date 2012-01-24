@@ -14,9 +14,9 @@ namespace CSharpUtils.Json
 			return Parse(Format);
 		}
 
-		static public string Encode(object ObjectToEncode)
+		static public string Encode(object ObjectToEncode, bool SingleQuotes = false)
 		{
-			return Stringify(ObjectToEncode);
+			return Stringify(ObjectToEncode, SingleQuotes);
 		}
 
 		static public object Parse(string Format)
@@ -24,7 +24,7 @@ namespace CSharpUtils.Json
 			throw (new NotImplementedException());
 		}
 
-		static public string Stringify(object ObjectToEncode) {
+		static public string Stringify(object ObjectToEncode, bool SingleQuotes = false) {
 			if (ObjectToEncode == null)
 			{
 				return "null";
@@ -32,7 +32,8 @@ namespace CSharpUtils.Json
 
 			if (ObjectToEncode is string)
 			{
-				return '"' + Escape(ObjectToEncode as string) + '"';
+				var Quote = SingleQuotes ? '\'' : '"';
+				return Quote + Escape(ObjectToEncode as string) + Quote;
 			}
 
 			if (ObjectToEncode is bool)
@@ -47,7 +48,7 @@ namespace CSharpUtils.Json
 				{
 					var Value = Dict[Key];
 					if (Str.Length > 0) Str += ",";
-					Str += Stringify(Key.ToString()) + ":" + Stringify(Value);
+					Str += Stringify(Key.ToString(), SingleQuotes) + ":" + Stringify(Value, SingleQuotes);
 
 				}
 				return "{" + Str + "}";
@@ -60,7 +61,7 @@ namespace CSharpUtils.Json
 				foreach (var Item in List)
 				{
 					if (Str.Length > 0) Str += ",";
-					Str += Stringify(Item);
+					Str += Stringify(Item, SingleQuotes);
 				}
 				return "[" + Str + "]";
 			}
@@ -80,7 +81,7 @@ namespace CSharpUtils.Json
 			else
 			{
 				//throw (new NotImplementedException("Don't know how to encode '" + ObjectToEncode + "'."));
-				return Stringify(ObjectToEncode.ToString());
+				return Stringify(ObjectToEncode.ToString(), SingleQuotes);
 			}
 		}
 

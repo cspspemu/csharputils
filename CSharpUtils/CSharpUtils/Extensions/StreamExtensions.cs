@@ -383,6 +383,10 @@ namespace CSharpUtils.Extensions
 			{
 				FromStream.CopyTo(ToStream, BufferSize);
 			}
+			else
+			{
+				FromStream.CopyTo(ToStream);
+			}
 		}
 #endif
 

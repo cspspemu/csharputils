@@ -36,10 +36,14 @@ namespace CSharpUtils
 
 		static public void Memset(byte* Pointer, byte Value, int Count)
 		{
+#if true
+			while (Count-- > 0) *Pointer++ = Value;
+#else
 			for (int n = 0; n < Count; n++)
 			{
 				Pointer[n] = Value;
 			}
+#endif
 		}
 
 		[DllImport("kernel32.dll")]

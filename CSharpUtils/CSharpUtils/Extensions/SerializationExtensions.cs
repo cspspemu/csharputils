@@ -9,9 +9,9 @@ namespace CSharpUtils.Extensions
 {
 	static public class SerializationExtensions
 	{
-		static public String ToJson<T>(this T Object)
+		static public String ToJson<T>(this T Object, bool SingleQuotes = false)
 		{
-			return Json.JSON.Encode(Object);
+			return Json.JSON.Encode(Object, SingleQuotes);
 		}
 
 		static public String ToXmlString<T>(this T Struct)

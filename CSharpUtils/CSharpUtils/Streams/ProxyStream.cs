@@ -60,5 +60,10 @@ namespace CSharpUtils.Streams
         {
             ParentStream.Write(buffer, offset, count);
         }
+
+		public override void Close()
+		{
+			base.Close();
+		}
     }
 }
