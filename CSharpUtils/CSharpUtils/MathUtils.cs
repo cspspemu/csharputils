@@ -84,6 +84,11 @@ namespace CSharpUtils
 			return Value;
 		}
 
+		public static uint NextAligned2(uint Value, uint Alignment)
+		{
+			return (Value + Alignment) & ~Alignment;
+		}
+
 		public static uint NextAligned(uint Value, int Alignment)
 		{
 			return (uint)NextAligned((long)Value, (long)Alignment);
@@ -91,9 +96,12 @@ namespace CSharpUtils
 
 		public static long NextAligned(long Value, long Alignment)
 		{
-			if ((Value % Alignment) != 0)
+			if (Alignment != 0)
 			{
-				Value += (long)(Alignment - (Value % Alignment));
+				if ((Value % Alignment) != 0)
+				{
+					Value += (long)(Alignment - (Value % Alignment));
+				}
 			}
 			return Value;
 		}
@@ -103,6 +111,20 @@ namespace CSharpUtils
 			int NextPowerOfTwoValue = 1;
 			while (NextPowerOfTwoValue < BaseValue) NextPowerOfTwoValue <<= 1;
 			return NextPowerOfTwoValue;
+		}
+
+		static public int Max(params int[] Items)
+		{
+			var MaxValue = Items[0];
+			foreach (var Item in Items) if (MaxValue < Item) MaxValue = Item;
+			return MaxValue;
+		}
+
+		static public uint Max(params uint[] Items)
+		{
+			var MaxValue = Items[0];
+			foreach (var Item in Items) if (MaxValue < Item) MaxValue = Item;
+			return MaxValue;
 		}
 	}
 }

@@ -23,6 +23,18 @@ namespace CSharpUtils.Extensions
 			return Return;
 		}
 
+		static public T[] SliceWithBounds<T>(this T[] This, int Low, int High)
+		{
+			if (High < 0)
+			{
+				return This.Slice(Low, This.Length + High - Low);
+			}
+			else
+			{
+				return This.Slice(Low, High - Low);
+			}
+		}
+
 		static public T[] Slice<T>(this T[] This, int Start, int Length)
 		{
 			if (Start < 0) Start = This.Length - Start;

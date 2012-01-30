@@ -8,19 +8,14 @@ namespace CSharpUtils.Extensions
 {
 	static public class ColorExtensions
 	{
-		static public ushort Decode565(this Color Color)
+		static public ushort Encode565(this Color Color)
 		{
-			return (ushort)Color.Decode(ColorFormats.RGBA_5650);
+			return (ushort)Color.Encode(ColorFormats.RGBA_5650);
 		}
 
-		static public uint Decode(this Color Color, ColorFormat Format)
+		static public uint Encode(this Color Color, ColorFormat Format)
 		{
-			uint Result = 0;
-			Result |= ((uint)((Color.R * BitUtils.CreateMask(Format.RedSize)) / 255)) << Format.RedOffset;
-			Result |= ((uint)((Color.G * BitUtils.CreateMask(Format.GreenSize)) / 255)) << Format.GreenOffset;
-			Result |= ((uint)((Color.B * BitUtils.CreateMask(Format.BlueSize)) / 255)) << Format.BlueOffset;
-			Result |= ((uint)((Color.A * BitUtils.CreateMask(Format.AlphaSize)) / 255)) << Format.AlphaOffset;
-			return Result;
+			return Format.Encode(Color.R, Color.G, Color.B, Color.A);
 		}
 	}
 }

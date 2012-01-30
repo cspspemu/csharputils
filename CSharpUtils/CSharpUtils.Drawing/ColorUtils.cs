@@ -86,10 +86,10 @@ namespace CSharpUtils
 		public static Color Encode(ColorFormat ColorFormat, uint Value)
 		{
 			return Color.FromArgb(
-				(int)(BitUtils.ExtractScaled(Value, ColorFormat.AlphaOffset, ColorFormat.AlphaSize, 255)),
-				(int)(BitUtils.ExtractScaled(Value, ColorFormat.RedOffset, ColorFormat.RedSize, 255)),
-				(int)(BitUtils.ExtractScaled(Value, ColorFormat.GreenOffset, ColorFormat.GreenSize, 255)),
-				(int)(BitUtils.ExtractScaled(Value, ColorFormat.BlueOffset, ColorFormat.BlueSize, 255))
+				(int)(BitUtils.ExtractScaled(Value, ColorFormat.Alpha.Offset, ColorFormat.Alpha.Size, 255)),
+				(int)(BitUtils.ExtractScaled(Value, ColorFormat.Red.Offset, ColorFormat.Red.Size, 255)),
+				(int)(BitUtils.ExtractScaled(Value, ColorFormat.Green.Offset, ColorFormat.Green.Size, 255)),
+				(int)(BitUtils.ExtractScaled(Value, ColorFormat.Blue.Offset, ColorFormat.Blue.Size, 255))
 			);
 		}
 
