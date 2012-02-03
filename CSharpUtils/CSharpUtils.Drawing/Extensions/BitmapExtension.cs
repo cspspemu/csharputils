@@ -138,5 +138,12 @@ namespace CSharpUtils.Extensions
 		{
 			return new Rectangle(0, 0, Bitmap.Width, Bitmap.Height);
 		}
+
+		static public Bitmap ConverToFormat(this Bitmap OldBitmap, PixelFormat NewPixelFormat)
+		{
+			var NewBitmap = new Bitmap(OldBitmap.Width, OldBitmap.Height, NewPixelFormat);
+			Graphics.FromImage(NewBitmap).DrawImage(OldBitmap, Point.Empty);
+			return NewBitmap;
+		}
 	}
 }
