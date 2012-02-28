@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using CSharpUtils.Streams;
+using System.Diagnostics;
 
 namespace CSharpUtils.Extensions
 {
@@ -96,7 +97,15 @@ namespace CSharpUtils.Extensions
 		static public String ReadAllContentsAsString(this Stream Stream, Encoding Encoding = null, bool FromStart = true)
 		{
 			if (Encoding == null) Encoding = Encoding.UTF8;
-			return Encoding.GetString(Stream.ReadAll(FromStart));
+			var Data = Stream.ReadAll(FromStart);
+			if (Encoding == Encoding.UTF8)
+			{
+				if (Data.Length >= 3 && Data[0] == 0xEF && Data[1] == 0xBB && Data[2] == 0xBF)
+				{
+					Data = Data.Skip(3).ToArray();
+				}
+			}
+			return Encoding.GetString(Data);
 		}
 
 		static public byte[] ReadAll(this Stream Stream, bool FromStart = true)
