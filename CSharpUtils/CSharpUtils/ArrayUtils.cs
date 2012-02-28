@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using CSharpUtils.Extensions;
 
 namespace CSharpUtils
 {
@@ -65,6 +66,31 @@ namespace CSharpUtils
 			}
 
 			return output;
+		}
+
+		public static void HexDump(byte[] Data, int MaxSize = -1)
+		{
+			if (MaxSize == -1) MaxSize = Data.Length;
+			int Offset = 0;
+
+			Console.WriteLine("");
+			while (Offset < MaxSize)
+			{
+				int RowCount = Math.Min(MaxSize - Offset, 16);
+
+				for (int n = 0; n < RowCount; n++)
+				{
+					Console.Write("%02X ".Sprintf(Data[Offset + n]));
+				}
+				for (int n = 0; n < RowCount; n++)
+				{
+					char c = ((char)Data[Offset + n]);
+					Console.Write("{0}", char.IsControl(c) ? '?' : c);
+				}
+	
+				Console.WriteLine("");
+				Offset += RowCount;
+			}
 		}
 	}
 }

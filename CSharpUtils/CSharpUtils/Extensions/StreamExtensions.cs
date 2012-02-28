@@ -289,6 +289,23 @@ namespace CSharpUtils.Extensions
 			return StructUtils.BytesToStruct<T>(Buffer);
 		}
 
+		public static T ReadStructPartially<T>(this Stream Stream) where T : struct
+		{
+			var Size = Marshal.SizeOf(typeof(T));
+			var BufferPartial = Stream.ReadBytes(Math.Min((int)Stream.Available(), Size));
+			byte[] Buffer;
+			if (BufferPartial.Length < Size)
+			{
+				Buffer = new byte[Size];
+				BufferPartial.CopyTo(Buffer, 0);
+			}
+			else
+			{
+				Buffer = BufferPartial;
+			}
+			return StructUtils.BytesToStruct<T>(Buffer);
+		}
+
 		public static TType[] ReadStructVectorAt<TType>(this Stream Stream, long Offset, uint Count, int EntrySize = -1) where TType : struct
 		{
 			TType[] Value = null;

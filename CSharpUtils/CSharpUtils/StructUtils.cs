@@ -69,6 +69,23 @@ namespace CSharpUtils
 			return result;
 		}
 
+		unsafe public static T[] BytesToStructArray<T>(byte[] RawData) where T : struct
+		{
+			int ElementSize = Marshal.SizeOf(typeof(T));
+			T[] Array = new T[RawData.Length / ElementSize];
+			var Type = typeof(T);
+			fixed (byte* RawDataPointer = &RawData[0])
+			{
+				for (int n = 0; n < Array.Length; n++)
+				{
+					Marshal.PtrToStructure(new IntPtr(RawDataPointer + n * ElementSize), Type);
+				}
+			}
+			return Array;
+			//T[] Array = 
+			//Marshal.PtrToStructure(
+		}
+
 		public static byte[] StructToBytes<T>(T data) where T : struct
 		{
 			byte[] rawData = new byte[Marshal.SizeOf(data)];
@@ -88,27 +105,27 @@ namespace CSharpUtils
 			return rawData;
 		}
 
-        public static byte[] StructArrayToBytes<T>(T[] dataArray) where T : struct
-        {
-            int ElementSize = Marshal.SizeOf(dataArray[0]);
-            byte[] rawData = new byte[ElementSize * dataArray.Length];
-            GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);
-            try
-            {
-                for (int n = 0; n < dataArray.Length; n++)
-                {
-                    IntPtr rawDataPtr = handle.AddrOfPinnedObject() + ElementSize * n;
-                    Marshal.StructureToPtr(dataArray[n], rawDataPtr, false);
-                }
-            }
-            finally
-            {
-                handle.Free();
-            }
+		public static byte[] StructArrayToBytes<T>(T[] dataArray) where T : struct
+		{
+			int ElementSize = Marshal.SizeOf(dataArray[0]);
+			byte[] rawData = new byte[ElementSize * dataArray.Length];
+			GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);
+			try
+			{
+				for (int n = 0; n < dataArray.Length; n++)
+				{
+					IntPtr rawDataPtr = handle.AddrOfPinnedObject() + ElementSize * n;
+					Marshal.StructureToPtr(dataArray[n], rawDataPtr, false);
+				}
+			}
+			finally
+			{
+				handle.Free();
+			}
 
-            //RespectEndianness(typeof(T), rawData);
+			//RespectEndianness(typeof(T), rawData);
 
-            return rawData;
-        }
+			return rawData;
+		}
 	}
 }
