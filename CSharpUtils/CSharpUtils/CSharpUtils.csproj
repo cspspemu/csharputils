@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AnonymousComparer.cs" />
     <Compile Include="ArrayEqualityComparer.cs" />
+    <Compile Include="Arrays\ArrayWrapper.cs" />
     <Compile Include="AsyncTask.cs" />
     <Compile Include="BitUtils.cs" />
     <Compile Include="ConsoleUtils.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="MathUtils.cs" />
     <Compile Include="Streams\FilterStream.cs" />
+    <Compile Include="Arrays\IArray.cs" />
     <Compile Include="Streams\ProxyStream.cs" />
     <Compile Include="Streams\SliceStream.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
@@ -109,6 +111,8 @@
     <Compile Include="Streams\StreamChunker.cs" />
     <Compile Include="Streams\StreamChunker2.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Streams\StreamStructArrayWrapper.cs" />
+    <Compile Include="Streams\StreamStructCachedArrayWrapper.cs" />
     <Compile Include="StructUtils.cs" />
     <Compile Include="Threading\CustomThreadPool.cs" />
     <Compile Include="Threading\GreenThread.cs" />

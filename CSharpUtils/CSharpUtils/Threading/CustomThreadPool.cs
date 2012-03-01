@@ -21,8 +21,9 @@ namespace CSharpUtils.Threading
 				this.Running = true;
 				this.LoopIterCount = 0;
 				this.MoreTasksEvent = new AutoResetEvent(false);
-				this.Thread = new Thread(ThreadBody);
 				this.Tasks = new Queue<Action>();
+				this.Thread = new Thread(ThreadBody);
+				this.Thread.IsBackground = true;
 				this.Thread.Start();
 			}
 

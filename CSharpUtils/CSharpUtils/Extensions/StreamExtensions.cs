@@ -553,6 +553,16 @@ namespace CSharpUtils.Extensions
 			return new ConcatStream(BaseStream, NextStream);
 		}
 
+		static public StreamStructArrayWrapper<TType> ConvertToStreamStructArrayWrapper<TType>(this Stream BaseStream) where TType : struct
+		{
+			return new StreamStructArrayWrapper<TType>(BaseStream);
+		}
+
+		static public StreamStructCachedArrayWrapper<TType> ConvertToStreamStructCachedArrayWrapper<TType>(this Stream BaseStream, int BufferCount) where TType : struct
+		{
+			return new StreamStructCachedArrayWrapper<TType>(BufferCount, BaseStream);
+		}
+
 		unsafe static public int ReadToPointer(this Stream Stream, byte* Pointer, int Count)
 		{
 			var Data = new byte[Count];

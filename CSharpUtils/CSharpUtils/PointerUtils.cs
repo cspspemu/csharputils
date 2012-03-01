@@ -117,7 +117,20 @@ namespace CSharpUtils
 			{
 				GetArrayPointer(OutputArray, (OutputPointer) =>
 				{
-					Memcpy((byte*)InputPointer.ToPointer(), (byte*)OutputPointer.ToPointer(), OutputArray.Length);
+					Memcpy((byte*)OutputPointer.ToPointer(), (byte*)InputPointer.ToPointer(), OutputArray.Length);
+				});
+			});
+			return OutputArray;
+		}
+
+		public static unsafe TType[] ByteArrayToArray<TType>(byte[] InputArray)
+		{
+			var OutputArray = new TType[InputArray.Length / Marshal.SizeOf(typeof(TType))];
+			GetArrayPointer(InputArray, (InputPointer) =>
+			{
+				GetArrayPointer(OutputArray, (OutputPointer) =>
+				{
+					Memcpy((byte*)OutputPointer.ToPointer(), (byte*)InputPointer.ToPointer(), InputArray.Length);
 				});
 			});
 			return OutputArray;
