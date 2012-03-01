@@ -94,5 +94,45 @@ namespace CSharpUtils
 			}
 			return Data;
 		}
+
+		public static unsafe void GetArrayPointer<TType>(TType[] Array, Action<IntPtr> Action)
+		{
+			GCHandle DataGc = GCHandle.Alloc(Array, GCHandleType.Pinned);
+
+			var DataPointer = DataGc.AddrOfPinnedObject();
+			try
+			{
+				Action(DataPointer);
+			}
+			finally
+			{
+				DataGc.Free();
+			}
+		}
+
+		public static unsafe byte[] ArrayToByteArray<TType>(TType[] InputArray)
+		{
+			var OutputArray = new byte[InputArray.Length * Marshal.SizeOf(typeof(TType))];
+			GetArrayPointer(InputArray, (InputPointer) =>
+			{
+				GetArrayPointer(OutputArray, (OutputPointer) =>
+				{
+					Memcpy((byte*)InputPointer.ToPointer(), (byte*)OutputPointer.ToPointer(), OutputArray.Length);
+				});
+			});
+			return OutputArray;
+		}
+
+		public static unsafe TType[] PointerToArray<TType>(void* Pointer, int ArrayLength)
+		{
+			var Array = new TType[ArrayLength];
+
+			GetArrayPointer(Array, (DataPointer) =>
+			{
+				Memcpy((byte*)DataPointer.ToPointer(), (byte*)Pointer, ArrayLength * Marshal.SizeOf(typeof(TType)));
+			});
+
+			return Array;
+		}
 	}
 }
