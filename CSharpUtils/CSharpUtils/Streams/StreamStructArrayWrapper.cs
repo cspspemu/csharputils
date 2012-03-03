@@ -10,7 +10,7 @@ using CSharpUtils.Arrays;
 
 namespace CSharpUtils.Streams
 {
-	public class StreamStructArrayWrapper<TType> : IEnumerable<TType>, IArray<TType> where TType : struct
+	public class StreamStructArrayWrapper<TType> : IArray<TType> where TType : struct
 	{
 		Stream Stream;
 		static Type StructType = typeof(TType);

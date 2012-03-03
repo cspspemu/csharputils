@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSharpUtils.Arrays
 {
-	public interface IArray<TType>
+	public interface IArray<TType> : IEnumerable<TType>
 	{
 		TType this[int Index] { get; set; }
 		int Length { get; }

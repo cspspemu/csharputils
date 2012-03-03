@@ -12,7 +12,7 @@ using CSharpUtils.Threading;
 
 namespace CSharpUtils.Streams
 {
-	public class StreamStructCachedArrayWrapper<TType> : IEnumerable<TType>, IArray<TType> where TType : struct
+	public class StreamStructCachedArrayWrapper<TType> : IArray<TType> where TType : struct
 	{
 		List<TType> CachedValues = new List<TType>();
 		int NumberOfItemsToBuffer;

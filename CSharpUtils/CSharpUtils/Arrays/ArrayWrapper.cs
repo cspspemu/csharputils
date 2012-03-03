@@ -51,5 +51,15 @@ namespace CSharpUtils.Arrays
 		{
 			return Array;
 		}
+
+		public IEnumerator<TType> GetEnumerator()
+		{
+			for (int n = 0; n < Length; n++) yield return this[n];
+		}
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			for (int n = 0; n < Length; n++) yield return this[n];
+		}
 	}
 }
