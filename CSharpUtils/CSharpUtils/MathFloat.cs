@@ -22,6 +22,16 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
+		public static int Cast(float Value)
+		{
+			return (int)Value;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
 		public static int Floor(float Value)
 		{
 			return (int)Math.Floor((double)Value);
