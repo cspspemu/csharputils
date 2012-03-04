@@ -226,5 +226,15 @@ namespace CSharpUtils
 		{
 			return MathFloat.Clamp(Value, -1.0f, 1.0f);
 		}
+
+		public static float Log2(float Value)
+		{
+			return (float)(Math.Log(Value) / Math.Log(2.0f));
+		}
+
+		public static float Exp2(float Value)
+		{
+			return (float)Math.Pow(2.0, Value);
+		}
 	}
 }
