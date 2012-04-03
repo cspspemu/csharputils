@@ -147,5 +147,10 @@ namespace CSharpUtils
 
 			return Array;
 		}
+
+		public static unsafe void ByteArrayToPointer(byte[] Array, byte* Output)
+		{
+			Marshal.Copy(Array, 0, new IntPtr(Output), Array.Length);
+		}
 	}
 }

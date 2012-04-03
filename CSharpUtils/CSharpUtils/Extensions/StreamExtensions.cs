@@ -108,25 +108,32 @@ namespace CSharpUtils.Extensions
 			return Encoding.GetString(Data);
 		}
 
-		static public byte[] ReadAll(this Stream Stream, bool FromStart = true)
+		static public byte[] ReadAll(this Stream Stream, bool FromStart = true, bool Dispose = false)
 		{
-			var MemoryStream = new MemoryStream();
-
-			if (FromStart)
+			try
 			{
-				if (!Stream.CanSeek) throw(new NotImplementedException("Can't use 'FromStream' on Stream that can't seek"));
-				Stream.PreservePositionAndLock(() =>
+				var MemoryStream = new MemoryStream();
+
+				if (FromStart && Stream.CanSeek)
 				{
-					Stream.Position = 0;
+					//if (!Stream.CanSeek) throw (new NotImplementedException("Can't use 'FromStream' on Stream that can't seek"));
+					Stream.PreservePositionAndLock(() =>
+					{
+						Stream.Position = 0;
+						Stream.CopyTo(MemoryStream);
+					});
+				}
+				else
+				{
 					Stream.CopyTo(MemoryStream);
-				});
-			}
-			else
-			{
-				Stream.CopyTo(MemoryStream);
-			}
+				}
 
-			return MemoryStream.ToArray();
+				return MemoryStream.ToArray();
+			}
+			finally
+			{
+				if (Dispose) Stream.Dispose();
+			}
 		}
 
 		static public Stream ReadStream(this Stream Stream, long ToRead = -1)

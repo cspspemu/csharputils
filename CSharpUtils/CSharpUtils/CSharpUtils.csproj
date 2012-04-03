@@ -114,6 +114,7 @@
     <Compile Include="Streams\StreamStructArrayWrapper.cs" />
     <Compile Include="Streams\StreamStructCachedArrayWrapper.cs" />
     <Compile Include="StructUtils.cs" />
+    <Compile Include="Threading\Coroutines.cs" />
     <Compile Include="Threading\CustomThreadPool.cs" />
     <Compile Include="Threading\GreenThread.cs" />
     <Compile Include="Threading\GreenThreadException.cs" />
