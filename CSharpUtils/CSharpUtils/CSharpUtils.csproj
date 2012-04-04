@@ -73,6 +73,7 @@
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\ReaderWriterLockExtensions.cs" />
     <Compile Include="Extensions\SerializationExtensions.cs" />
+    <Compile Include="Extensions\TextReaderExtensions.cs" />
     <Compile Include="Extensions\StructExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />

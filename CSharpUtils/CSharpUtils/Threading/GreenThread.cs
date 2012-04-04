@@ -278,10 +278,12 @@ namespace CSharpUtils.Threading
 				catch (StopException)
 				{
 				}
+#if !DO_NOT_PROPAGATE_EXCEPTIONS
 				catch (Exception Exception)
 				{
 					RethrowException = Exception;
 				}
+#endif
 				finally
 				{
 					Running = false;
