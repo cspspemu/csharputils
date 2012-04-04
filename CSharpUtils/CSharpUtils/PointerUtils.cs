@@ -39,6 +39,12 @@ namespace CSharpUtils
 			*Pointer++ = 0;
 		}
 
+		static public void Memset(byte[] Array, byte Value, int Count)
+		{
+			int n = 0;
+			while (Count-- > 0) Array[n++] = Value;
+		}
+
 		static public void Memset(byte* Pointer, byte Value, int Count)
 		{
 #if true
