@@ -8,6 +8,15 @@ namespace CSharpUtils
 {
 	public class ConsoleUtils
 	{
+		static public void SaveRestoreConsoleColor(ConsoleColor Color, Action Action)
+		{
+			SaveRestoreConsoleState(() =>
+			{
+				Console.ForegroundColor = Color;
+				Action();
+			});
+		}
+
 		static public void SaveRestoreConsoleState(Action Action)
 		{
 			lock (Console.Out)
