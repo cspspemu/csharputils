@@ -158,5 +158,15 @@ namespace CSharpUtils
 		{
 			Marshal.Copy(Array, 0, new IntPtr(Output), Array.Length);
 		}
+
+		public static string FixedByteGet(int Size, byte* Ptr)
+		{
+			return PtrToStringUtf8(Ptr);
+		}
+
+		public static void FixedByteSet(int Size, byte* Ptr, string Value)
+		{
+			StoreStringOnPtr(Value, Encoding.UTF8, Ptr, Size);
+		}
 	}
 }
