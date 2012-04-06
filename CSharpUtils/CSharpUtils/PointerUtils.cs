@@ -168,5 +168,15 @@ namespace CSharpUtils
 		{
 			StoreStringOnPtr(Value, Encoding.UTF8, Ptr, Size);
 		}
+
+		public static unsafe int Memcmp(byte* Left, byte* Right, int Count)
+		{
+			for (int n = 0; n < Count; n++)
+			{
+				var Dif = (int)Left[n] - (int)Right[n];
+				if (Dif != 0) return Dif;
+			}
+			return 0;
+		}
 	}
 }

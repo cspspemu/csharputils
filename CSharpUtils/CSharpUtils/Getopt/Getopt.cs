@@ -84,6 +84,18 @@ namespace CSharpUtils.Getopt
 			}
 		}
 
+		static public TType CheckArgument<TType>(string Name, Func<TType> Action)
+		{
+			try
+			{
+				return Action();
+			}
+			catch (Exception)
+			{
+				throw(new Exception(String.Format("Argument {0} requires a {1}", Name, typeof(TType))));
+			}
+		}
+
 		public void AddRule<T>(string[] Names, Action<T> Action)
 		{
 			Action<string, string> FormalAction;
@@ -91,15 +103,29 @@ namespace CSharpUtils.Getopt
 
 			if (Type == typeof(bool))
 			{
-				FormalAction = (Current, Arg) => { (Action as Action<Boolean>)(true); };
+				FormalAction = (Current, Arg) => {
+					(Action as Action<Boolean>)(true);
+				};
 			} else if (Type == typeof(int)) {
-				FormalAction = (Current, Arg) => { (Action as Action<int>)(int.Parse(Arg != null ? Arg : DequeueNext())); };
+				FormalAction = (Current, Arg) => {
+					var Argument = CheckArgument(Current, () => int.Parse(Arg != null ? Arg : DequeueNext()));
+					(Action as Action<int>)(Argument);
+				};
 			} else if (Type == typeof(float)) {
-				FormalAction = (Current, Arg) => { (Action as Action<float>)(float.Parse(Arg != null ? Arg : DequeueNext())); };
+				FormalAction = (Current, Arg) => {
+					var Argument = CheckArgument(Current, () => float.Parse(Arg != null ? Arg : DequeueNext()));
+					(Action as Action<float>)(Argument);
+				};
 			} else if (Type == typeof(double)) {
-				FormalAction = (Current, Arg) => { (Action as Action<double>)(double.Parse(Arg != null ? Arg : DequeueNext())); };
+				FormalAction = (Current, Arg) => {
+					var Argument = CheckArgument(Current, () => double.Parse(Arg != null ? Arg : DequeueNext()));
+					(Action as Action<double>)(Argument);
+				};
 			} else if (Type == typeof(string)) {
-				FormalAction = (Current, Arg) => { (Action as Action<string>)(Arg != null ? Arg : DequeueNext()); };
+				FormalAction = (Current, Arg) => {
+					var Argument = CheckArgument(Current, () => Arg != null ? Arg : DequeueNext());
+					(Action as Action<string>)(Argument);
+				};
 			} else {
 				throw (new Exception("Unknown Type : " + typeof(T).Name));
 			}
