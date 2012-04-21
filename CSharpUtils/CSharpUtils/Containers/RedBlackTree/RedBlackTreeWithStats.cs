@@ -5,7 +5,6 @@ using System.Text;
 using CountType = System.Int32;
 using System.Linq.Expressions;
 using System.Threading;
-using CSharpUtils.Extensions;
 
 namespace CSharpUtils.Containers.RedBlackTree
 {

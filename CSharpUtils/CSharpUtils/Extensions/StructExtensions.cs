@@ -6,72 +6,69 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Reflection;
 
-namespace CSharpUtils.Extensions
+static public class StructExtensions
 {
-	static public class StructExtensions
+	static public string ToStringDefault<T>(this T Struct, bool SimplifyBool = false) //where T : struct
 	{
-		static public string ToStringDefault<T>(this T Struct, bool SimplifyBool = false) //where T : struct
+		var Ret = "";
+		Ret += typeof(T).Name;
+		Ret += "(";
+		var MemberCount = 0;
+		bool AddedItem = false;
+
+		//FieldInfo fi;
+		//PropertyInfo pi;
+		foreach (var MemberInfo in typeof(T).GetMembers())
 		{
-			var Ret = "";
-			Ret += typeof(T).Name;
-			Ret += "(";
-			var MemberCount = 0;
-			bool AddedItem = false;
+			bool ValueSet = false;
+			object Value = null;
 
-			//FieldInfo fi;
-			//PropertyInfo pi;
-			foreach (var MemberInfo in typeof(T).GetMembers())
+			if (MemberInfo is FieldInfo)
 			{
-				bool ValueSet = false;
-				object Value = null;
+				ValueSet = true;
+				Value = (MemberInfo as FieldInfo).GetValue(Struct);
+			}
+			else if (MemberInfo is PropertyInfo)
+			{
+				ValueSet = true;
+				Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
+			}
 
-				if (MemberInfo is FieldInfo)
+			if (ValueSet)
+			{
+				if (AddedItem)
 				{
-					ValueSet = true;
-					Value = (MemberInfo as FieldInfo).GetValue(Struct);
+					Ret += ",";
+					AddedItem = false;
 				}
-				else if (MemberInfo is PropertyInfo)
-				{
-					ValueSet = true;
-					Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
-				}
 
-				if (ValueSet)
+				if (SimplifyBool && (Value.GetType() == typeof(bool)))
 				{
-					if (AddedItem)
-					{
-						Ret += ",";
-						AddedItem = false;
-					}
-
-					if (SimplifyBool && (Value.GetType() == typeof(bool)))
-					{
-						if (((bool)Value) == true)
-						{
-							Ret += MemberInfo.Name;
-							MemberCount++;
-							AddedItem = true;
-						}
-					}
-					else
+					if (((bool)Value) == true)
 					{
 						Ret += MemberInfo.Name;
-						Ret += "=";
-						if (Value.GetType() == typeof(uint))
-						{
-							Ret += String.Format("0x{0:X}", Value);
-						}
-						else
-						{
-							Ret += Value;
-						}
 						MemberCount++;
 						AddedItem = true;
 					}
 				}
+				else
+				{
+					Ret += MemberInfo.Name;
+					Ret += "=";
+					if (Value.GetType() == typeof(uint))
+					{
+						Ret += String.Format("0x{0:X}", Value);
+					}
+					else
+					{
+						Ret += Value;
+					}
+					MemberCount++;
+					AddedItem = true;
+				}
 			}
-			Ret += ")";
-			return Ret;
 		}
+		Ret += ")";
+		return Ret;
 	}
 }

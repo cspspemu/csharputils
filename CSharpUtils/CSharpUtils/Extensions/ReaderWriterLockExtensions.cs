@@ -4,60 +4,57 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace CSharpUtils.Extensions
+static public class ReaderWriterLockExtensions
 {
-	static public class ReaderWriterLockExtensions
+	static public void ReaderLock(this ReaderWriterLock This, Action Callback)
 	{
-		static public void ReaderLock(this ReaderWriterLock This, Action Callback)
+		This.AcquireReaderLock(int.MaxValue);
+		try
 		{
-			This.AcquireReaderLock(int.MaxValue);
-			try
-			{
-				Callback();
-			}
-			finally
-			{
-				This.ReleaseReaderLock();
-			}
+			Callback();
 		}
-
-		static public void WriterLock(this ReaderWriterLock This, Action Callback)
+		finally
 		{
-			This.AcquireWriterLock(int.MaxValue);
-			try
-			{
-				Callback();
-			}
-			finally
-			{
-				This.ReleaseWriterLock();
-			}
+			This.ReleaseReaderLock();
 		}
+	}
 
-		static public T ReaderLock<T>(this ReaderWriterLock This, Func<T> Callback)
+	static public void WriterLock(this ReaderWriterLock This, Action Callback)
+	{
+		This.AcquireWriterLock(int.MaxValue);
+		try
 		{
-			This.AcquireReaderLock(int.MaxValue);
-			try
-			{
-				return Callback();
-			}
-			finally
-			{
-				This.ReleaseReaderLock();
-			}
+			Callback();
 		}
-
-		static public T WriterLock<T>(this ReaderWriterLock This, Func<T> Callback)
+		finally
 		{
-			This.AcquireWriterLock(int.MaxValue);
-			try
-			{
-				return Callback();
-			}
-			finally
-			{
-				This.ReleaseWriterLock();
-			}
+			This.ReleaseWriterLock();
+		}
+	}
+
+	static public T ReaderLock<T>(this ReaderWriterLock This, Func<T> Callback)
+	{
+		This.AcquireReaderLock(int.MaxValue);
+		try
+		{
+			return Callback();
+		}
+		finally
+		{
+			This.ReleaseReaderLock();
+		}
+	}
+
+	static public T WriterLock<T>(this ReaderWriterLock This, Func<T> Callback)
+	{
+		This.AcquireWriterLock(int.MaxValue);
+		try
+		{
+			return Callback();
+		}
+		finally
+		{
+			This.ReleaseWriterLock();
 		}
 	}
 }
