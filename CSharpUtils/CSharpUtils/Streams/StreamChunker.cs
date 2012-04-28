@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CSharpUtils;
-using CSharpUtils.Extensions;
 
 namespace CSharpUtils.Streams
 {

@@ -5,7 +5,6 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using CSharpUtils;
-using CSharpUtils.Extensions;
 using CSharpUtils.Arrays;
 
 namespace CSharpUtils.Streams

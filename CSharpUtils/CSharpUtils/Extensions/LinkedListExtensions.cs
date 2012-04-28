@@ -3,32 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CSharpUtils.Extensions
+static public class LinkedListExtensions
 {
-	static public class LinkedListExtensions
+	static public T RemoveFirstAndGet<T>(this LinkedList<T> List)
 	{
-		static public T RemoveFirstAndGet<T>(this LinkedList<T> List)
+		try
 		{
-			try
-			{
-				return List.First.Value;
-			}
-			finally
-			{
-				List.RemoveFirst();
-			}
+			return List.First.Value;
 		}
-
-		static public T RemoveLastAndGet<T>(this LinkedList<T> List)
+		finally
 		{
-			try
-			{
-				return List.Last.Value;
-			}
-			finally
-			{
-				List.RemoveLast();
-			}
+			List.RemoveFirst();
+		}
+	}
+
+	static public T RemoveLastAndGet<T>(this LinkedList<T> List)
+	{
+		try
+		{
+			return List.Last.Value;
+		}
+		finally
+		{
+			List.RemoveLast();
 		}
 	}
 }
