@@ -9,6 +9,14 @@ namespace CSharpUtils
 	{
 		Dictionary<DateTime, double> Samples = new Dictionary<DateTime, double>();
 
+		static public TimeSpan Measure(Action Action)
+		{
+			var Start = DateTime.UtcNow;
+			Action();
+			var End = DateTime.UtcNow;
+			return End - Start;
+		}
+
 		public void AddAt(DateTime DateTime, double Sample)
 		{
 			Samples[DateTime] = Sample;
