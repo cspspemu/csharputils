@@ -84,6 +84,13 @@ namespace CSharpUtils.Getopt
 			}
 		}
 
+		public void AddRule(Action<string> Action)
+		{
+			Action<string, string> FormalAction;
+			FormalAction = (Current, Arg) => { Action(Current); };
+			this.Actions.Add("", FormalAction);
+		}
+
 		static public TType CheckArgument<TType>(string Name, Func<TType> Action)
 		{
 			try
@@ -92,7 +99,7 @@ namespace CSharpUtils.Getopt
 			}
 			catch (Exception)
 			{
-				throw(new Exception(String.Format("Argument {0} requires a {1}", Name, typeof(TType))));
+				throw (new Exception(String.Format("Argument {0} requires a {1}", Name, typeof(TType))));
 			}
 		}
 
@@ -103,30 +110,45 @@ namespace CSharpUtils.Getopt
 
 			if (Type == typeof(bool))
 			{
-				FormalAction = (Current, Arg) => {
+				FormalAction = (Current, Arg) =>
+				{
 					(Action as Action<Boolean>)(true);
 				};
-			} else if (Type == typeof(int)) {
-				FormalAction = (Current, Arg) => {
+			}
+			else if (Type == typeof(int))
+			{
+				FormalAction = (Current, Arg) =>
+				{
 					var Argument = CheckArgument(Current, () => int.Parse(Arg != null ? Arg : DequeueNext()));
 					(Action as Action<int>)(Argument);
 				};
-			} else if (Type == typeof(float)) {
-				FormalAction = (Current, Arg) => {
+			}
+			else if (Type == typeof(float))
+			{
+				FormalAction = (Current, Arg) =>
+				{
 					var Argument = CheckArgument(Current, () => float.Parse(Arg != null ? Arg : DequeueNext()));
 					(Action as Action<float>)(Argument);
 				};
-			} else if (Type == typeof(double)) {
-				FormalAction = (Current, Arg) => {
+			}
+			else if (Type == typeof(double))
+			{
+				FormalAction = (Current, Arg) =>
+				{
 					var Argument = CheckArgument(Current, () => double.Parse(Arg != null ? Arg : DequeueNext()));
 					(Action as Action<double>)(Argument);
 				};
-			} else if (Type == typeof(string)) {
-				FormalAction = (Current, Arg) => {
+			}
+			else if (Type == typeof(string))
+			{
+				FormalAction = (Current, Arg) =>
+				{
 					var Argument = CheckArgument(Current, () => Arg != null ? Arg : DequeueNext());
 					(Action as Action<string>)(Argument);
 				};
-			} else {
+			}
+			else
+			{
 				throw (new Exception("Unknown Type : " + typeof(T).Name));
 			}
 			foreach (var Name in Names)
@@ -150,13 +172,21 @@ namespace CSharpUtils.Getopt
 					Current = CurrentRaw.Substring(0, EqualsOffset);
 					Arg = CurrentRaw.Substring(EqualsOffset + 1);
 				}
-				if (this.Actions.ContainsKey(Current))
+
+				if (Current.Length > 0 && Current[0] == '/')
 				{
-					this.Actions[Current](Current, Arg);
+					if (this.Actions.ContainsKey(Current))
+					{
+						this.Actions[Current](Current, Arg);
+					}
+					else
+					{
+						throw (new Exception("Unknown parameter '" + Current + "'"));
+					}
 				}
 				else
 				{
-					throw(new Exception("Unknown parameter '" + Current + "'"));
+					this.Actions[""](Current, Arg);
 				}
 			}
 		}
