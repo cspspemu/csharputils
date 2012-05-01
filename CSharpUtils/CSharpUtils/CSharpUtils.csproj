@@ -102,6 +102,7 @@
     <Compile Include="MathFloat.cs" />
     <Compile Include="Misc\Acme1\Acme1File.cs" />
     <Compile Include="PointerUtils.cs" />
+    <Compile Include="ProcessUtils.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

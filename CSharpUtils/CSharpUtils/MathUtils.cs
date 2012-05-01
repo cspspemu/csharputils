@@ -75,6 +75,18 @@ namespace CSharpUtils
 			return Value;
 		}
 
+		public static long RequiredBlocks(long Size, long BlockSize)
+		{
+			if ((Size % BlockSize) != 0)
+			{
+				return (Size / BlockSize) + 1;
+			}
+			else
+			{
+				return Size / BlockSize;
+			}
+		}
+
 		public static uint PrevAligned(uint Value, int Alignment)
 		{
 			if ((Value % Alignment) != 0)

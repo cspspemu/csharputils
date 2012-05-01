@@ -423,7 +423,7 @@ static public class StreamExtensions
 #else
 	public static void CopyToFast(this Stream FromStream, Stream ToStream)
 	{
-		/// TODO: Create a buffer and reuse it once for each thread.
+		/// ::TODO: Create a buffer and reuse it once for each thread.
 		var BufferSize = Math.Min((int)FromStream.Length, 2 * 1024 * 1024);
 		if (BufferSize > 0)
 		{

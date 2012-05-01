@@ -47,6 +47,7 @@ namespace CSharpUtils
 
 		static public void Memset(byte* Pointer, byte Value, int Count)
 		{
+			if (Pointer == null) throw(new ArgumentNullException("Memset pointer is null"));
 #if true
 			while (Count-- > 0) *Pointer++ = Value;
 #else

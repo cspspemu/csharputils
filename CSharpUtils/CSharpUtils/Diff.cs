@@ -322,7 +322,7 @@ namespace CSharpUtils
 		  s = s.Trim();
 
 		if (ignoreSpace) {
-		  s = Regex.Replace(s, "\\s+", " ");            // TODO: optimization: faster blank removal.
+		  s = Regex.Replace(s, "\\s+", " ");          
 		}
 
 		if (ignoreCase)

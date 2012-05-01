@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace CSharpUtils
 {
@@ -41,18 +42,35 @@ namespace CSharpUtils
 			}
 		}
 
-		public event Action<string, Level, string> OnGlobalLog;
+		static public event Action<string, Level, string, StackFrame> OnGlobalLog;
 
-		public event Action<Level, string> OnLog;
+		public event Action<Level, string, StackFrame> OnLog;
 
 		private Logger Log(Level Level, object Format, params object[] Params)
 		{
-			if (Enabled)
+			if (Enabled || OnGlobalLog != null)
 			{
-				if (OnLog != null) OnLog(Level, String.Format(Format.ToString(), Params));
-			}
+				StackTrace stackTrace = new StackTrace();
+				StackFrame StackFrame = null;
+				foreach (var Frame in stackTrace.GetFrames())
+				{
+					if (Frame.GetMethod().DeclaringType != typeof(Logger))
+					{
+						StackFrame = Frame;
+						break;
+					}
+				}
 
-			if (OnGlobalLog != null) OnGlobalLog(Name, Level, String.Format(Format.ToString(), Params));
+				if (Enabled)
+				{
+					if (OnLog != null) OnLog(Level, String.Format(Format.ToString(), Params), StackFrame);
+				}
+
+				if (OnGlobalLog != null)
+				{
+					OnGlobalLog(Name, Level, String.Format(Format.ToString(), Params), StackFrame);
+				}
+			}
 
 			return this;
 		}
