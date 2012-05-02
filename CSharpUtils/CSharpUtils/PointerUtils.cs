@@ -21,6 +21,13 @@ namespace CSharpUtils
 			return Encoding.GetString(Bytes.ToArray());
 		}
 
+		static public ushort PtrToShort_BE(void* ptr)
+		{
+			var bytes = (byte*)ptr;
+			//return (ushort)((bytes[1] << 8) | (bytes[0] << 8));
+			return (ushort)((bytes[0] << 8) | (bytes[1] << 0));
+		}
+
 		static public String PtrToString(byte* Pointer, int Length, Encoding Encoding)
 		{
 			if (Pointer == null) return null;
