@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CSharpUtils.Templates;
 using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Web._45.Fastcgi;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 using CSharpUtils.Threading;
 using CSharpUtils._45.Redis;
 
@@ -30,9 +30,9 @@ namespace CSharpUtils._45.Sandbox
 				//TemplateProvider.Add("Test.html", "{% block Body %}Ex{% endblock %}");
 			}
 
-			public override async Task HandleRequestAsync(FastcgiRequestAsync Request)
+            public override async Task HandleRequestAsync(FastcgiRequestAsync Request, FastcgiResponseAsync Response)
 			{
-				var StreamWriter = new StreamWriter(Request.Stdout);
+                var StreamWriter = new StreamWriter(Response.StdoutStream);
 				StreamWriter.AutoFlush = true;
 				//StreamWriter.Write("Hello World!");
 

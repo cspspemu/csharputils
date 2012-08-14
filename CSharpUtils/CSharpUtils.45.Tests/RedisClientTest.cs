@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
 using System.IO;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtils._45.Tests
 {
