@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Net.Sockets;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtils.Fastcgi
 {

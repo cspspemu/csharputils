@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using CSharpUtils.Forms;
 using CSharpUtils.Streams;
-using CSharpUtils.Extensions;
 using System.Threading;
 
 namespace CSharpUtils.VirtualFileSystem.Utils

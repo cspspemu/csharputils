@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtils._45.MysqlAsync
 {

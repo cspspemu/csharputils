@@ -10,8 +10,10 @@ using CSharpUtils.Templates.Utils;
 using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
+#if ENABLE_ROSLYN
 using Roslyn.Compilers.CSharp;
 using Roslyn.Compilers;
+#endif
 
 namespace CSharpUtils.Templates
 {

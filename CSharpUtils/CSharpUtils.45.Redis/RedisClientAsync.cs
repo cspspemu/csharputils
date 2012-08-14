@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using CSharpUtils.Web._45.Streams;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtils._45.Redis
 {

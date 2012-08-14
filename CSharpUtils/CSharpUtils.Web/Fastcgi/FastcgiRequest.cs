@@ -7,7 +7,7 @@ using System.IO.Pipes;
 using System.Threading;
 using CSharpUtils.Streams;
 using CSharpUtils.Http;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtils.Fastcgi
 {

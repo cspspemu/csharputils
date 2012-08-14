@@ -7,7 +7,7 @@ using System.Net;
 using System.Threading;
 using System.IO;
 using CSharpUtils.Streams;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 using System.Diagnostics;
 
 namespace CSharpUtils.Http.Server

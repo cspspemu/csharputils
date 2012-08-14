@@ -5,7 +5,7 @@ using System.Text;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 using System.IO;
 using CSharpUtils.Http;
 

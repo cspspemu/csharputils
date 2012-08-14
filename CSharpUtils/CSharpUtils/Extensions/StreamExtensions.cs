@@ -157,6 +157,23 @@ static public class StreamExtensions
 		return Buffer;
 	}
 
+    static public byte[] ReadBytesUpTo(this Stream Stream, int ToReadAsMax)
+    {
+        if (ToReadAsMax == 0) return new byte[0];
+        var Buffer = new byte[ToReadAsMax];
+        int Readed = 0;
+        while (Readed < ToReadAsMax)
+        {
+            int ReadedNow = Stream.Read(Buffer, Readed, ToReadAsMax - Readed);
+            if (ReadedNow <= 0)
+            {
+                break;
+            }
+            Readed += ReadedNow;
+        }
+        return Buffer.Slice(0, Readed);
+    }
+
 	static public Stream WriteBytes(this Stream Stream, byte[] Bytes)
 	{
 		Stream.Write(Bytes, 0, Bytes.Length);

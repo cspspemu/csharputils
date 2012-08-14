@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using CSharpUtils.Http;
 using System.Diagnostics;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtils.Fastcgi.Http
 {

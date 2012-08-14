@@ -32,7 +32,7 @@ namespace CSharpUtilsDokanMount
 				mainProcess.DrawTree(null);
 				//f1._ExecuteProcess();
 				//Console.WriteLine("RemoveOld[1/2]");
-				ProcessBase._removeOld();
+                ProcessBase._RemoveOld();
 				//Console.WriteLine("RemoveOld[2/2]");
 				Output.AddLast("]");
 			}

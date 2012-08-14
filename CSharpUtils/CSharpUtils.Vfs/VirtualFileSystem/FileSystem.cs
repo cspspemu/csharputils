@@ -5,7 +5,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtils.VirtualFileSystem
 {
