@@ -26,6 +26,11 @@ namespace CSharpUtils
 		{
 		}
 
+		static public Logger CreateAnonymousLogger()
+		{
+			return new Logger();
+		}
+
 		static public Logger GetLogger(string Name)
 		{
 			lock (Loggers)
