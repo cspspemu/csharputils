@@ -55,8 +55,8 @@ namespace CSharpUtils.Streams
 
 		private List<StreamEntry> _StreamEntries;
 		private long _Position;
-		private Stream _CurrentStream;
-		private long _CurrentStreamPosition;
+		private Stream _CurrentStream = null;
+		private long _CurrentStreamPosition = 0;
 
 		/// <summary>
 		/// 
@@ -75,6 +75,9 @@ namespace CSharpUtils.Streams
 		public MapStream()
 		{
 			_StreamEntries = new List<StreamEntry>();
+			_CurrentStream = null;
+			_CurrentStreamPosition = 0;
+
 		}
 
 		/// <summary>
@@ -282,6 +285,8 @@ namespace CSharpUtils.Streams
 		/// <returns></returns>
 		public override int Read(byte[] Buffer, int Offset, int Count)
 		{
+			if (Count == 0) return 0;
+
 			if (_CurrentStream == null) throw (new InvalidOperationException(String.Format("Invalid/Unmapped MapStream position {0}", Position)));
 
 			var AvailableCount = (int)GetAvailableBytesOnCurrentStream();
