@@ -3,17 +3,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>
+    </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0F59FC59-890A-4180-A918-E2FC31419098}</ProjectGuid>
+    <ProjectGuid>{73509EA4-FE36-4168-B56A-FE42C1BDDCB7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSharpUtils.Vfs.Net</RootNamespace>
-    <AssemblyName>CSharpUtils.Vfs.Net</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>CSharpUtils._45.Tests</RootNamespace>
+    <AssemblyName>CSharpUtils.45.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\11.0\UITestExtensionPackages</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\CSharpUtils.Vfs.Net.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\CSharpUtils.45.Tests.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,38 +35,43 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="VirtualFileSystem\Ftp\FtpFileSystem.cs" />
-    <Compile Include="VirtualFileSystem\Ftp\FtpFileSystemEntry.cs" />
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VirtualFileSystem\RemoteFileSystem.cs" />
-    <Compile Include="VirtualFileSystem\RemoteFileSystemFileStream.cs" />
-    <Compile Include="VirtualFileSystem\Ssh\SftpFileSystem.cs" />
+    <Compile Include="Fastcgi\FastcgiServerAsyncTest.cs" />
+    <Compile Include="RedisClientTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CSharpUtils.45.Redis\CSharpUtils.45.RedisAsync.csproj">
+      <Project>{fd75ff71-53ee-439d-a0ca-2787dac59a09}</Project>
+      <Name>CSharpUtils.45.RedisAsync</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSharpUtils.45.WebAsync\CSharpUtils.45.WebAsync.csproj">
+      <Project>{c1e966e7-eac4-4962-9354-4f5382c2c176}</Project>
+      <Name>CSharpUtils.45.WebAsync</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils.Net\CSharpUtils.Net.csproj">
-      <Project>{27186199-B389-422A-B11F-91A18954D617}</Project>
+      <Project>{27186199-b389-422a-b11f-91a18954d617}</Project>
       <Name>CSharpUtils.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CSharpUtils.Vfs\CSharpUtils.Vfs.csproj">
-      <Project>{49F6B357-35AE-498A-9E5A-67AA62A327C6}</Project>
-      <Name>CSharpUtils.Vfs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
-      <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
+      <Project>{746fadf2-d613-4ffd-8551-2181adae3cd1}</Project>
       <Name>CSharpUtils</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
