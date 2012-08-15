@@ -38,11 +38,17 @@ namespace CSharpUtilsTests.Streams
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void TestReadUnmapped1()
 		{
-			var MapStream = new MapStream();
-			MapStream.Read(new byte[1], 0, 1);
+			try
+			{
+				var MapStream = new MapStream();
+				MapStream.Read(new byte[1], 0, 1);
+				Assert.Fail();
+			}
+			catch (InvalidOperationException)
+			{
+			}
 		}
 	}
 }

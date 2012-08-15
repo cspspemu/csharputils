@@ -14,6 +14,7 @@ namespace CSharpUtils.Streams
 			Stream.PreservePositionAndLock(() =>
 			{
 				Serializer(Stream);
+				Stream.Flush();
 			});
 			return Stream;
 		}

@@ -282,8 +282,9 @@ namespace CSharpUtils.Streams
 		/// <param name="Buffer"></param>
 		/// <param name="Offset"></param>
 		/// <param name="Count"></param>
+		/// <param name="Method"></param>
 		/// <returns></returns>
-		public override int Read(byte[] Buffer, int Offset, int Count)
+		private int _Transfer(byte[] Buffer, int Offset, int Count, Func<byte[], int, int, int> Method)
 		{
 			if (Count == 0) return 0;
 
@@ -294,7 +295,7 @@ namespace CSharpUtils.Streams
 			if (Count > AvailableCount)
 			{
 				// Read from current Stream.
-				var Readed1 = Read(Buffer, Offset, AvailableCount);
+				var Readed1 = _Transfer(Buffer, Offset, AvailableCount, Method);
 
 				if (Readed1 == 0)
 				{
@@ -303,14 +304,14 @@ namespace CSharpUtils.Streams
 				else
 				{
 					// Try to read from the next Stream.
-					var Readed2 = Read(Buffer, Offset + AvailableCount, Count - AvailableCount);
+					var Readed2 = _Transfer(Buffer, Offset + AvailableCount, Count - AvailableCount, Method);
 
 					return Readed1 + Readed2;
 				}
 			}
 			else
 			{
-				var ActualReaded = _CurrentStream.Read(Buffer, Offset, Count);
+				var ActualReaded = Method(Buffer, Offset, Count);
 				Position += ActualReaded;
 
 				return ActualReaded;
@@ -323,9 +324,28 @@ namespace CSharpUtils.Streams
 		/// <param name="Buffer"></param>
 		/// <param name="Offset"></param>
 		/// <param name="Count"></param>
+		/// <returns></returns>
+		public override int Read(byte[] Buffer, int Offset, int Count)
+		{
+			return _Transfer(Buffer, Offset, Count, (_Buffer, _Offset, _Count) =>
+			{
+				return _CurrentStream.Read(_Buffer, _Offset, _Count);
+			});
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Buffer"></param>
+		/// <param name="Offset"></param>
+		/// <param name="Count"></param>
 		public override void Write(byte[] Buffer, int Offset, int Count)
 		{
-			throw new NotImplementedException();
+			_Transfer(Buffer, Offset, Count, (_Buffer, _Offset, _Count) =>
+			{
+				_CurrentStream.Write(_Buffer, _Offset, _Count);
+				return _Count;
+			});
 		}
 
 		/// <summary>
