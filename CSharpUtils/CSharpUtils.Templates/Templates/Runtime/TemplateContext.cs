@@ -64,6 +64,7 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 
+#if NET_4_5
 		async public Task OutputWriteAutoFilteredAsync(dynamic Value)
 		{
 			if (Value != null)
@@ -71,6 +72,15 @@ namespace CSharpUtils.Templates.Runtime
 				await Output.WriteAsync("" + AutoFilter(Value));
 			}
 		}
+#else
+		public void OutputWriteAutoFiltered(dynamic Value)
+		{
+			if (Value != null)
+			{
+				Output.Write("" + AutoFilter(Value));
+			}
+		}
+#endif
 
 		public void NewScope(Action Action)
 		{

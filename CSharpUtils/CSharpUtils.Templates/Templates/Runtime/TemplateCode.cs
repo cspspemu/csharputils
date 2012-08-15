@@ -38,8 +38,6 @@ namespace CSharpUtils.Templates.Runtime
 			Blocks[BlockName] = Callback;
 		}
 
-		abstract protected Task LocalRenderAsync(TemplateContext Context);
-
 		/*
 		async virtual protected Task LocalRenderAsync(TemplateContext Context)
 		{
@@ -51,6 +49,9 @@ namespace CSharpUtils.Templates.Runtime
 		{
 		}
 		*/
+
+#if NET_4_5
+		abstract protected Task LocalRenderAsync(TemplateContext Context);
 
 		async public Task RenderAsync(TemplateContext Context)
 		{
@@ -74,12 +75,42 @@ namespace CSharpUtils.Templates.Runtime
 				//throw (ProducedException);
 			}
 		}
+#else
+		abstract protected void LocalRender(TemplateContext Context);
+
+		public void Render(TemplateContext Context)
+		{
+			Context.RenderingTemplate = this;
+
+			Exception ProducedException = null;
+			try
+			{
+				this.LocalRender(Context);
+			}
+			catch (FinalizeRenderException)
+			{
+			}
+			catch (Exception Exception)
+			{
+				ProducedException = Exception;
+			}
+			if (ProducedException != null)
+			{
+				Context.Output.WriteLine(ProducedException.ToString());
+				//throw (ProducedException);
+			}
+		}
+#endif
 
 		public String RenderToString(TemplateScope Scope = null)
 		{
 			if (Scope == null) Scope = new TemplateScope();
 			var StringWriter = new StringWriter();
+#if NET_4_5
 			RenderAsync(new TemplateContext(StringWriter, Scope, TemplateFactory)).Wait();
+#else
+			Render(new TemplateContext(StringWriter, Scope, TemplateFactory));
+#endif
 			return StringWriter.ToString();
 		}
 
@@ -87,15 +118,26 @@ namespace CSharpUtils.Templates.Runtime
 		{
 			this.ParentTemplate = Context.TemplateFactory.GetTemplateCodeByFile(ParentTemplateFileName);
 			this.ParentTemplate.ChildTemplate = this;
+#if NET_4_5
 			this.ParentTemplate.LocalRenderAsync(Context);
+#else
+			this.ParentTemplate.LocalRender(Context);
+#endif
 
 			throw (new FinalizeRenderException());
 		}
 
-		async protected Task CallBlock(String BlockName, TemplateContext Context)
+#if NET_4_5
+		async protected Task CallBlockAsync(String BlockName, TemplateContext Context)
 		{
 			await Context.RenderingTemplate.GetFirstAscendingBlock(BlockName)(Context);
 		}
+#else
+		protected void CallBlock(String BlockName, TemplateContext Context)
+		{
+			Context.RenderingTemplate.GetFirstAscendingBlock(BlockName)(Context);
+		}
+#endif
 
 		protected RenderDelegate GetFirstAscendingBlock(String BlockName)
 		{
