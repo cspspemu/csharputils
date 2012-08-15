@@ -11,6 +11,22 @@ namespace CSharpUtilsTests.Extensions
 	public class StreamExtensionsExtTest
 	{
 		[TestMethod]
+		public void TestJoinWithThresold()
+		{
+			var Spaces = new SpaceAssigner1D.Space[]
+			{
+				new SpaceAssigner1D.Space(0, 4),
+				new SpaceAssigner1D.Space(6, 9),
+				new SpaceAssigner1D.Space(11, 16),
+				new SpaceAssigner1D.Space(60, 80),
+				new SpaceAssigner1D.Space(84, 99),
+			};
+
+			var JoinedSpaces = Spaces.JoinWithThresold(Thresold: 4);
+			Assert.AreEqual("Space(Min=0, Max=16),Space(Min=60, Max=99)", JoinedSpaces.ToStringArray());
+		}
+
+		[TestMethod]
 		public void TestConvertSpacesToMapStream()
 		{
 			var Stream = new MemoryStream(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });

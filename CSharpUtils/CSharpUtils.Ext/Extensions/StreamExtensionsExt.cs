@@ -24,7 +24,9 @@ static public class StreamExtensionsExt
 			var PrevSpace = NewSpaces.Pop();
 			var CurrentSpace = Spaces[n];
 
-			if (PrevSpace.Max - CurrentSpace.Min <= Thresold)
+			//Console.WriteLine("{0} - {1}", PrevSpace, CurrentSpace);
+
+			if (CurrentSpace.Min - PrevSpace.Max <= Thresold)
 			{
 				NewSpaces.Push(new SpaceAssigner1D.Space(PrevSpace.Min, CurrentSpace.Max));
 			}
@@ -34,7 +36,8 @@ static public class StreamExtensionsExt
 				NewSpaces.Push(CurrentSpace);
 			}
 		}
-		return NewSpaces.ToArray();
+
+		return NewSpaces.Reverse().ToArray();
 	}
 
 	/// <summary>

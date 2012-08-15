@@ -441,7 +441,7 @@ static public class StreamExtensions
 	public static void CopyToFast(this Stream FromStream, Stream ToStream)
 	{
 		/// ::TODO: Create a buffer and reuse it once for each thread.
-		var BufferSize = Math.Min((int)FromStream.Length, 2 * 1024 * 1024);
+		var BufferSize = (int)Math.Min((long)FromStream.Length, (long)(2 * 1024 * 1024));
 		if (BufferSize > 0)
 		{
 			FromStream.CopyTo(ToStream, BufferSize);
@@ -546,7 +546,7 @@ static public class StreamExtensions
 		{
 			c = Stream.ReadByte();
 			if (c == -1) throw (new Exception("Incomplete VariableUintBit8Extends"));
-			v |= (uint)(((uint)c & 0x7F) << shift);
+			v |= (ulong)(((ulong)c & 0x7F) << shift);
 			shift += 7;
 		} while ((c & 0x80) != 0);
 		return v;
