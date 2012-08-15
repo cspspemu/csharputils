@@ -501,6 +501,18 @@ static public class StreamExtensions
 		return Stream;
 	}
 
+	static public Stream WriteVariableUlongBit8Extends(this Stream Stream, ulong Value)
+	{
+		do
+		{
+			byte Byte = (byte)(Value & 0x7F);
+			Value >>= 7;
+			if (Value != 0) Byte |= 0x80;
+			Stream.WriteByte(Byte);
+		} while (Value != 0);
+		return Stream;
+	}
+
 	static public Stream WriteVariableUintBit8ExtendsArray(this Stream Stream, params uint[] Values)
 	{
 		foreach (var Value in Values)
@@ -514,6 +526,21 @@ static public class StreamExtensions
 	{
 		int c;
 		uint v = 0;
+		int shift = 0;
+		do
+		{
+			c = Stream.ReadByte();
+			if (c == -1) throw (new Exception("Incomplete VariableUintBit8Extends"));
+			v |= (uint)(((uint)c & 0x7F) << shift);
+			shift += 7;
+		} while ((c & 0x80) != 0);
+		return v;
+	}
+
+	static public ulong ReadVariableUlongBit8Extends(this Stream Stream)
+	{
+		int c;
+		ulong v = 0;
 		int shift = 0;
 		do
 		{

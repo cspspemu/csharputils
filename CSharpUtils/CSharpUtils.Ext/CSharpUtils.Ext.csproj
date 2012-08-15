@@ -59,7 +59,9 @@
     <Compile Include="Compression\Lz\LzBuffer.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
     <Compile Include="Extensions\LinqExExtensionsExt.cs" />
+    <Compile Include="Extensions\StreamExtensionsExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Streams\SerializerUtils.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1D.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocatorStream.cs" />
