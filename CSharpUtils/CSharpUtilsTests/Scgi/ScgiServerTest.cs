@@ -4,7 +4,7 @@ using System;
 using CSharpUtils.Net;
 using System.Threading;
 using System.Net.Sockets;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 using System.IO;
 using CSharpUtils.Http;
 using System.Collections.Generic;

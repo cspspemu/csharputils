@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 using System.Text;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 using CSharpUtils.Compression;
 
 namespace CSharpUtilsTest

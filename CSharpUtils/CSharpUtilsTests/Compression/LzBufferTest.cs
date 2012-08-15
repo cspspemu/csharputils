@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Text;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 using CSharpUtils.Compression;
 using System.Collections.Generic;
 

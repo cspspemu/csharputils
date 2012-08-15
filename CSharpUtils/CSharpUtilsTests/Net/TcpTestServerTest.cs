@@ -1,7 +1,7 @@
 ﻿using CSharpUtils.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtilsTests
 {

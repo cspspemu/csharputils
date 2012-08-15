@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 using System.Threading;
 using CSharpUtils.Threading;
 

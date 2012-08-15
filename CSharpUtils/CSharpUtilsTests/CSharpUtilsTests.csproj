@@ -68,6 +68,7 @@
     <Compile Include="Factory\MockeableFactoryTest.cs" />
     <Compile Include="Streams\StreamBitReaderTest.cs" />
     <Compile Include="Streams\MapStreamTest.cs" />
+    <Compile Include="Streams\ProxyStreamReadWriteAnalyzerTest.cs" />
     <Compile Include="Streams\ZeroStreamTest.cs" />
     <Compile Include="Threading\GreenThreadTest.cs" />
     <Compile Include="Scgi\ScgiServerTest.cs" />

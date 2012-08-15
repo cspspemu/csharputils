@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
 using System.Linq;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtilsTests
 {

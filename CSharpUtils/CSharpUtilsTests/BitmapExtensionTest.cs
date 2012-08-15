@@ -1,4 +1,4 @@
-﻿using CSharpUtils.Extensions;
+﻿using CSharpUtils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Drawing;

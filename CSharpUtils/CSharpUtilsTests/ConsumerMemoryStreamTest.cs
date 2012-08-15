@@ -2,7 +2,7 @@
 using System;
 using CSharpUtils;
 using CSharpUtils.Streams;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtilsTests
 {

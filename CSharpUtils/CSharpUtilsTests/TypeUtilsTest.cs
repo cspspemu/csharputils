@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using CSharpUtils.Extensions;
+using CSharpUtils;
 
 namespace CSharpUtilsTests
 {

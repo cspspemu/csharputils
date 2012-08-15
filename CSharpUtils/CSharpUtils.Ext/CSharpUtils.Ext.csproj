@@ -64,6 +64,7 @@
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocatorStream.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
+    <Compile Include="Streams\ProxyStreamReadWriteAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
