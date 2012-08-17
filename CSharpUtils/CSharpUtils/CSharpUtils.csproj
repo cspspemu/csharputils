@@ -88,6 +88,7 @@
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\LinkedListExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\ICustomAttributeProviderExtensions.cs" />
     <Compile Include="Extensions\ReaderWriterLockExtensions.cs" />
     <Compile Include="Extensions\SerializationExtensions.cs" />
     <Compile Include="Extensions\TextReaderExtensions.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Factory\Factory.cs" />
     <Compile Include="Factory\MockeableFactory.cs" />
+    <Compile Include="Getopt\GetoptCommandLineProgram.cs" />
     <Compile Include="Getopt\Getopt.cs" />
     <Compile Include="Json\IJsonSerializable.cs" />
     <Compile Include="Json\JSON.cs" />
