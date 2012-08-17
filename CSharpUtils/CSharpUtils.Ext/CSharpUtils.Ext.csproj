@@ -65,6 +65,7 @@
     <Compile Include="Compression\Huffman.cs" />
     <Compile Include="Compression\Lz\LzBuffer.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
+    <Compile Include="Crc32.cs" />
     <Compile Include="Extensions\LinqExExtensionsExt.cs" />
     <Compile Include="Extensions\StreamExtensionsExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocator.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner1DUniqueAllocatorStream.cs" />
     <Compile Include="SpaceAssigner\SpaceAssigner2D.cs" />
+    <Compile Include="Streams\PointerStream.cs" />
     <Compile Include="Streams\ProxyStreamReadWriteAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
