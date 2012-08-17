@@ -39,7 +39,7 @@ End of the file.
 
 ")), TestEncoding);
 			Assert.AreEqual(
-				"Text\nWith Line",
+				"Text\r\nWith Line",
 				Acme1File[0].Text
 			);
 			Assert.AreEqual(

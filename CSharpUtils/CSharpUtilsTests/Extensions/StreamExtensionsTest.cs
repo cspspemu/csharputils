@@ -31,7 +31,7 @@ namespace CSharpUtilsTests.Extensions
 			BinaryWriter.Write((byte)0);
 			MemoryStream.Position = 0;
 			var Test = MemoryStream.ReadManagedStruct<Test>();
-			Assert.AreEqual(0x12345678, Test.Uint);
+			Assert.AreEqual(0x12345678U, Test.Uint);
 			Assert.AreEqual("Hello", Test.String);
 		}
 	}

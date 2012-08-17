@@ -15,7 +15,7 @@ namespace CSharpUtilsTests
 			var StreamBitReader = new StreamBitReader(Stream);
 			//Assert.AreEqual((uint)0, (uint)StreamBitReader.ReadBits(8));
 			Assert.AreEqual((uint)0x000001BA, (uint)StreamBitReader.ReadBits(32));
-			Assert.AreEqual((uint)1, (uint)StreamBitReader.ReadBits(2));
+			Assert.AreEqual((uint)0, (uint)StreamBitReader.ReadBits(2));
 		}
 	}
 }
