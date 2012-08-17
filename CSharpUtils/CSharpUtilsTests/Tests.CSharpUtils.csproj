@@ -67,6 +67,7 @@
     <Compile Include="Extensions\StreamExtensionsTest.cs" />
     <Compile Include="Getopt\GetoptTest.cs" />
     <Compile Include="Factory\MockeableFactoryTest.cs" />
+    <Compile Include="PointerUtilsTest.cs" />
     <Compile Include="Streams\StreamBitReaderTest.cs" />
     <Compile Include="Streams\MapStreamTest.cs" />
     <Compile Include="Streams\ZeroStreamTest.cs" />
