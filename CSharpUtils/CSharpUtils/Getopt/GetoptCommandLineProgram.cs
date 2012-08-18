@@ -125,7 +125,7 @@ namespace CSharpUtils.Getopt
 		/// <summary>
 		/// 
 		/// </summary>
-		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 		protected class ExampleAttribute : Attribute
 		{
 			/// <summary>
