@@ -1,10 +1,6 @@
 ﻿//#define DEBUG_ANALYZER
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using CSharpUtils.SpaceAssigner;
 
 namespace CSharpUtils.Streams

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tamir.SharpSsh.jsch;
 using System.Windows.Forms;
-using CSharpUtils.VirtualFileSystem.Local;
-using System.Threading;
+using Tamir.SharpSsh.jsch;
 
 namespace CSharpUtils.VirtualFileSystem.Ssh
 {
@@ -26,7 +22,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 		{
 		}
 
-		override public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000)
+		public override void Connect(string Host, int Port, string Username, string Password, int timeout = 10000)
 		{
 			this.Host = Host;
 			this.Port = Port;
@@ -70,13 +66,13 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			}
 		}
 
-		override public RemoteFileSystem EnsureConnect()
+		public override RemoteFileSystem EnsureConnect()
 		{
 			var csftp = this.csftp;
 			return this;
 		}
 
-		override protected String RealPath(String Path)
+		protected override String RealPath(String Path)
 		{
 			return RootPath + "/" + Path;
 		}
@@ -101,7 +97,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			}
 		}
 
-		override protected FileSystemEntry ImplGetFileInfo(String Path)
+		protected override FileSystemEntry ImplGetFileInfo(String Path)
 		{
 			var FileSystemEntry = new FileSystemEntry(this, Path);
 			var stat = csftp.lstat(RealPath(Path));
@@ -112,7 +108,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			return FileSystemEntry;
 		}
 
-		override protected IEnumerable<FileSystemEntry> ImplFindFiles(String Path)
+		protected override IEnumerable<FileSystemEntry> ImplFindFiles(String Path)
 		{
 			foreach (var i in csftp.ListEntries(RealPath(Path)))
 			{
@@ -145,7 +141,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			}
 		}
 
-		override public String DownloadFile(String RemoteFile, String LocalFile = null)
+		public override String DownloadFile(String RemoteFile, String LocalFile = null)
 		{
 			try
 			{
@@ -159,7 +155,7 @@ namespace CSharpUtils.VirtualFileSystem.Ssh
 			}
 		}
 
-		override public void UploadFile(String RemoteFile, String LocalFile)
+		public override void UploadFile(String RemoteFile, String LocalFile)
 		{
 			try
 			{

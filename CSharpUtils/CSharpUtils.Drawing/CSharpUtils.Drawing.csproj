@@ -57,11 +57,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapChannel.cs" />
@@ -80,10 +75,6 @@
     <Compile Include="RGBA.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpUtils.Ext\CSharpUtils.Ext.csproj">
-      <Project>{C017FBBE-EF10-4030-A69E-204E766C8F9D}</Project>
-      <Name>CSharpUtils.Ext</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
       <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
       <Name>CSharpUtils</Name>

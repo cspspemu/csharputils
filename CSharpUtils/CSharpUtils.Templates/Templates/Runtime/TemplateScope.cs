@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Templates.Runtime
 {
-	sealed public class TemplateScope
+	public sealed class TemplateScope
 	{
 		public TemplateScope ParentScope;
 		public Dictionary<String, dynamic> Items;

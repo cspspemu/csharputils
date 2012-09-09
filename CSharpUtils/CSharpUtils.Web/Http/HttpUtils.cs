@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Http
 {
 	public class HttpUtils
 	{
-		static public Dictionary<String, String> ParseUrlEncoded(String Url)
+		public static Dictionary<String, String> ParseUrlEncoded(String Url)
 		{
 			var Params = new Dictionary<String, String>();
 			if (Url.Length > 0)
@@ -29,7 +27,7 @@ namespace CSharpUtils.Http
 			return Params;
 		}
 
-		static public String DecodeURIComponent(String Input)
+		public static String DecodeURIComponent(String Input)
 		{
 			String Output = "";
 			for (int n = 0; n < Input.Length; n++)

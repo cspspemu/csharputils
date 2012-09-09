@@ -1,4 +1,3 @@
-using System;
 using IO = System.IO;
 
 namespace Tamir.Streams

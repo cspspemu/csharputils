@@ -1,7 +1,6 @@
-﻿using CSharpUtils.Json;
+﻿using System.Collections.Generic;
+using CSharpUtils.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 
 namespace CSharpUtilsTests
 {

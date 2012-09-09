@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CSharpUtils;
 
 namespace CSharpUtils.Templates.Runtime
 {
@@ -11,7 +8,7 @@ namespace CSharpUtils.Templates.Runtime
 	/// </summary>
 	public class DynamicUtils
 	{
-		static public bool ConvertToBool(dynamic Value)
+		public static bool ConvertToBool(dynamic Value)
 		{
 			try
 			{
@@ -32,7 +29,7 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 
-		static public dynamic Access(dynamic _Value, dynamic _Key)
+		public static dynamic Access(dynamic _Value, dynamic _Key)
 		{
 			try
 			{
@@ -76,53 +73,53 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 
-		static public dynamic BinaryOperation_Add(dynamic Left, dynamic Right)
+		public static dynamic BinaryOperation_Add(dynamic Left, dynamic Right)
 		{
 			if (Left == null && Right == null) return null;
 			return Left + Right;
 		}
 
-		static public dynamic BinaryOperation_Sub(dynamic Left, dynamic Right)
+		public static dynamic BinaryOperation_Sub(dynamic Left, dynamic Right)
 		{
 			return Left - Right;
 		}
 
-		static public dynamic BinaryOperation_Mul(dynamic Left, dynamic Right)
+		public static dynamic BinaryOperation_Mul(dynamic Left, dynamic Right)
 		{
 			return Left * Right;
 		}
 
-		static public dynamic BinaryOperation_Div(dynamic Left, dynamic Right)
+		public static dynamic BinaryOperation_Div(dynamic Left, dynamic Right)
 		{
 			return Left / Right;
 		}
 
-		static public int BinaryOperation_DivInt(dynamic Left, dynamic Right)
+		public static int BinaryOperation_DivInt(dynamic Left, dynamic Right)
 		{
 			return (int)(Left / Right);
 		}
 
-		static public dynamic BinaryOperation_Mod(dynamic Left, dynamic Right)
+		public static dynamic BinaryOperation_Mod(dynamic Left, dynamic Right)
 		{
 			return Left % Right;
 		}
 
-		static public bool BinaryOperation_AndBool(dynamic Left, dynamic Right)
+		public static bool BinaryOperation_AndBool(dynamic Left, dynamic Right)
 		{
 			return ConvertToBool(Left) && ConvertToBool(Right);
 		}
 
-		static public bool BinaryOperation_OrBool(dynamic Left, dynamic Right)
+		public static bool BinaryOperation_OrBool(dynamic Left, dynamic Right)
 		{
 			return ConvertToBool(Left) || ConvertToBool(Right);
 		}
 
-		static public double BinaryOperation_Pow(dynamic Left, dynamic Right)
+		public static double BinaryOperation_Pow(dynamic Left, dynamic Right)
 		{
 			return Math.Pow(Left, Right);
 		}
 
-		static public dynamic BinaryOperation_Range(dynamic Start, dynamic End)
+		public static dynamic BinaryOperation_Range(dynamic Start, dynamic End)
 		{
 			var List = new List<dynamic>();
 			for (dynamic N = Start; N <= End; N++)
@@ -133,7 +130,7 @@ namespace CSharpUtils.Templates.Runtime
 		}
 
 
-		static public String GetOpName(string Operation)
+		public static String GetOpName(string Operation)
 		{
 			switch (Operation)
 			{
@@ -151,7 +148,7 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 
-		static public int CountArray(dynamic Value)
+		public static int CountArray(dynamic Value)
 		{
 			if (Value == null) return 0;
 			if (Value is String) return 0;
@@ -181,7 +178,7 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 
-		static public dynamic ConvertToIEnumerable(dynamic List)
+		public static dynamic ConvertToIEnumerable(dynamic List)
 		{
 			if (List != null)
 			{
@@ -213,13 +210,13 @@ namespace CSharpUtils.Templates.Runtime
 			return new object[] { };
 		}
 
-		static public String ConvertToString(dynamic Value)
+		public static String ConvertToString(dynamic Value)
 		{
 			return String.Format("{0}", Value);
 		}
 
 		//internal static dynamic Call(Delegate Delegate, params dynamic[] Params)
-		static public dynamic Call(Type Type, string Method, params dynamic[] Params)
+		public static dynamic Call(Type Type, string Method, params dynamic[] Params)
 		{
 			/*
 			var ConvertedParams = new List<Object>();

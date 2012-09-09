@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Timers;
 
 namespace CSharpUtils
 {
-	static public class TimeSpanUtils
+	public static class TimeSpanUtils
 	{
-		static public TimeSpan FromMicroseconds(long Microseconds)
+		public static TimeSpan FromMicroseconds(long Microseconds)
 		{
 			return TimeSpan.FromMilliseconds((double)Microseconds / (double)1000.0);
 		}
@@ -17,7 +14,7 @@ namespace CSharpUtils
 		/// 
 		/// </summary>
 		/// <param name="Action"></param>
-		static public void InfiniteLoopDetector(Action Action)
+		public static void InfiniteLoopDetector(Action Action)
 		{
 			using (var Timer = new Timer(4.0 * 1000))
 			{

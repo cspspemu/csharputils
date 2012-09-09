@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using CSharpUtils.Http;
 using System.Diagnostics;
-using CSharpUtils;
+using System.IO;
+using System.Text;
+using CSharpUtils.Http;
 
 namespace CSharpUtils.Fastcgi.Http
 {
-	abstract public class FastcgiHttpServer : FastcgiServer
+	public abstract class FastcgiHttpServer : FastcgiServer
 	{
-		sealed override protected void HandleFascgiRequest(FastcgiRequest FastcgiRequest)
+		sealed protected override void HandleFascgiRequest(FastcgiRequest FastcgiRequest)
 		{
 			FastcgiRequest.StdinStream.SetPosition(0);
 			Dictionary<string, string> Post = new Dictionary<string, string>();
@@ -102,6 +100,6 @@ namespace CSharpUtils.Fastcgi.Http
 			}
 		}
 
-		abstract protected void HandleHttpRequest(HttpRequest HttpRequest);
+		protected abstract void HandleHttpRequest(HttpRequest HttpRequest);
 	}
 }

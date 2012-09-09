@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils
 {
@@ -173,7 +170,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public void ModifiedTimeRange(DateTime Time, PrecisionType Precision, out DateTime ModifiedTimeStart, out DateTime ModifiedTimeEnd)
+		public static void ModifiedTimeRange(DateTime Time, PrecisionType Precision, out DateTime ModifiedTimeStart, out DateTime ModifiedTimeEnd)
 		{
 			switch (Precision)
 			{

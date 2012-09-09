@@ -80,8 +80,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
-using CSharpUtils.Streams;
-using CSharpUtils;
 
 namespace CSharpUtils.Net
 {

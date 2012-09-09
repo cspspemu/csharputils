@@ -1,9 +1,6 @@
-﻿using CSharpUtils.Containers.RedBlackTree;
+﻿using System.Linq;
+using CSharpUtils.Containers.RedBlackTree;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections;
-using System.Linq;
-using CSharpUtils;
 
 namespace CSharpUtilsTests
 {

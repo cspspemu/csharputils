@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CSharpUtils.Arrays;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
+using CSharpUtils.Arrays;
 using CSharpUtils.Threading;
 
 namespace CSharpUtils.Streams

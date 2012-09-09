@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.Streams
 {
 	public class StreamChunker2
 	{
-		static protected int FindSequence(byte[] Array, byte[] SequenceToFind, int Start = 0, int EndIndex = int.MaxValue)
+		protected static int FindSequence(byte[] Array, byte[] SequenceToFind, int Start = 0, int EndIndex = int.MaxValue)
 		{
 			int ArrayUpTo = Math.Min(EndIndex, Array.Length) - SequenceToFind.Length;
 			int SequenceToFindLength = SequenceToFind.Length;
@@ -31,7 +29,7 @@ namespace CSharpUtils.Streams
 			return -1;
 		}
 
-		static public List<byte[]> SplitInChunks(Stream InputStream, byte[] Separator)
+		public static List<byte[]> SplitInChunks(Stream InputStream, byte[] Separator)
 		{
 			var List = new List<byte[]>();
 			Split(InputStream, Separator, delegate(byte[] Chunk)
@@ -41,7 +39,7 @@ namespace CSharpUtils.Streams
 			return List;
 		}
 
-		static public void Split(Stream InputStream, byte[] Separator, Action<byte[]> ChunkHandler) {
+		public static void Split(Stream InputStream, byte[] Separator, Action<byte[]> ChunkHandler) {
 			byte[] Buffer = new byte[4096];
 
 			byte[] TempDoubleBuffer = new byte[Separator.Length * 2];

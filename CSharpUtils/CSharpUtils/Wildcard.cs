@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 /**
@@ -32,7 +29,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="pattern">The wildcard pattern to match.</param>
 		/// <param name="options">A combination of one or more
-		/// <see cref="System.Text.RegexOptions"/>.</param>
+		/// <see cref="RegexOptions"/>.</param>
 		public Wildcard(string pattern, RegexOptions options)
 			: base(WildcardToRegex(pattern), options)
 		{
@@ -48,7 +45,7 @@ namespace CSharpUtils
 			return "^" + Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".") + "$";
 		}
 
-		static public implicit operator Wildcard(String Input)
+		public static implicit operator Wildcard(String Input)
 		{
 			return new Wildcard(Input);
 		}

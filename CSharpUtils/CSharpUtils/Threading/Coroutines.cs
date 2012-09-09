@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace CSharpUtils.Threading
@@ -32,7 +30,7 @@ namespace CSharpUtils.Threading
 		}
 	}
 
-	sealed public class Coroutine : IDisposable
+	public sealed class Coroutine : IDisposable
 	{
 		internal CoroutinePool Pool;
 		internal AutoResetEvent CoroutineContinueEvent = new AutoResetEvent(false);

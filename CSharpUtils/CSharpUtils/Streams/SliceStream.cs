@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.Streams
@@ -54,7 +51,7 @@ namespace CSharpUtils.Streams
 		/// <param name="ThisLength">Length of the Slice</param>
 		/// <param name="CanWrite">Determines if the Stream will be writtable.</param>
 		/// <returns>A SliceStream</returns>
-		static public SliceStream CreateWithLength(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
+		public static SliceStream CreateWithLength(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
 		{
 			return new SliceStream(BaseStream, ThisStart, ThisLength, CanWrite);
 		}
@@ -67,7 +64,7 @@ namespace CSharpUtils.Streams
 		/// <param name="ThisLength">Length of the Slice</param>
 		/// <param name="CanWrite">Determines if the Stream will be writtable.</param>
 		/// <returns>A SliceStream</returns>
-		static public SliceStream CreateWithBounds(Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
+		public static SliceStream CreateWithBounds(Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
 		{
 			return new SliceStream(BaseStream, LowerBound, UpperBound - LowerBound, CanWrite);
 		}

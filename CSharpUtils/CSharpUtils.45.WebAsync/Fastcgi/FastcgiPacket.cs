@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CSharpUtils.Web._45.Fastcgi
@@ -13,10 +10,10 @@ namespace CSharpUtils.Web._45.Fastcgi
 		public Fastcgi.PacketType Type;
 		public ushort RequestId;
 		public ArraySegment<byte> Content;
-		static protected byte[] PaddingWrite = new byte[8];
-		static protected byte[] PaddingRead = new byte[8];
+		protected static byte[] PaddingWrite = new byte[8];
+		protected static byte[] PaddingRead = new byte[8];
 
-		async public Task<FastcgiPacket> WriteToAsync(Stream ClientStream)
+		public async Task<FastcgiPacket> WriteToAsync(Stream ClientStream)
 		{
 			if (Content.Count > ushort.MaxValue) throw(new InvalidDataException("Data too long"));
 			var ContentLength = (ushort)Content.Count;
@@ -46,7 +43,7 @@ namespace CSharpUtils.Web._45.Fastcgi
 			return this;
 		}
 
-		async public Task<FastcgiPacket> ReadFromAsync(Stream ClientStream)
+		public async Task<FastcgiPacket> ReadFromAsync(Stream ClientStream)
 		{
 			var Header = new byte[8];
 			await ClientStream.ReadAsync(Header, 0, Header.Length);
@@ -68,7 +65,7 @@ namespace CSharpUtils.Web._45.Fastcgi
 			return this;
 		}
 
-		async static public Task WriteMemoryStreamToAsync(ushort RequestId, Fastcgi.PacketType PacketType, MemoryStream From, Stream ClientStream)
+		public async static Task WriteMemoryStreamToAsync(ushort RequestId, Fastcgi.PacketType PacketType, MemoryStream From, Stream ClientStream)
 		{
 			var Buffer = From.GetBuffer();
 			var BufferRealLength = (int)From.Length;

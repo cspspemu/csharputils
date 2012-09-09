@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-static public class ListExtensions
+public static class ListExtensions
 {
-	static public int BoundIndex<T>(this List<T> SortedAndNonRepeatedItems, T Item, int LowerIndex, int HigherIndex) where T : IComparable
+	public static int BoundIndex<T>(this List<T> SortedAndNonRepeatedItems, T Item, int LowerIndex, int HigherIndex) where T : IComparable
 	{
 		//Console.WriteLine("[{0}, {1}]", LowerIndex, HigherIndex);
 		int Index = LowerIndex;
@@ -43,12 +41,12 @@ static public class ListExtensions
 		return Index;
 	}
 
-	static public int BoundIndex<T>(this List<T> SortedAndNonRepeatedItems, T Item) where T : IComparable
+	public static int BoundIndex<T>(this List<T> SortedAndNonRepeatedItems, T Item) where T : IComparable
 	{
 		return SortedAndNonRepeatedItems.BoundIndex(Item, 0, SortedAndNonRepeatedItems.Count - 1);
 	}
 
-	static public IEnumerable<T> LowerBound<T>(this List<T> SortedAndNonRepeatedItems, T Item, bool Including = true) where T : IComparable
+	public static IEnumerable<T> LowerBound<T>(this List<T> SortedAndNonRepeatedItems, T Item, bool Including = true) where T : IComparable
 	{
 		int Index = Math.Min(SortedAndNonRepeatedItems.BoundIndex(Item) + 1, SortedAndNonRepeatedItems.Count - 1);
 		int CompareValue = Including ? 1 : 0;
@@ -62,7 +60,7 @@ static public class ListExtensions
 		}
 	}
 
-	static public IEnumerable<T> UpperBound<T>(this List<T> SortedAndNonRepeatedItems, T Item, bool Including = true) where T : IComparable
+	public static IEnumerable<T> UpperBound<T>(this List<T> SortedAndNonRepeatedItems, T Item, bool Including = true) where T : IComparable
 	{
 		int Index = Math.Max(SortedAndNonRepeatedItems.BoundIndex(Item) - 1, 0);
 		int CompareValue = Including ? -1 : 0;

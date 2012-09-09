@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace CSharpUtils.Templates.Tokenizers
@@ -10,14 +8,14 @@ namespace CSharpUtils.Templates.Tokenizers
 	{
 		static Regex StartTagRegex = new Regex(@"\{[\{%#]", RegexOptions.Compiled);
 
-		static public List<TemplateToken> Tokenize(TokenizerStringReader StringReader)
+		public static List<TemplateToken> Tokenize(TokenizerStringReader StringReader)
 		{
 			List<TemplateToken> Tokens = new List<TemplateToken>();
 			Tokenize(Tokens, StringReader);
 			return Tokens;
 		}
 
-		static public List<TemplateToken> Tokenize(List<TemplateToken> Tokens, TokenizerStringReader StringReader)
+		public static List<TemplateToken> Tokenize(List<TemplateToken> Tokens, TokenizerStringReader StringReader)
 		{
 			while (true)
 			{

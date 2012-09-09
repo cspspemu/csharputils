@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
@@ -48,7 +45,7 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 
 
-			static protected DateTimeRange Normalize(DateTimeRange value)
+			protected static DateTimeRange Normalize(DateTimeRange value)
 			{
 				var MinDateTime = new DateTime(1970, 1, 1, 0, 0, 0);
 				if (value < MinDateTime)
@@ -68,6 +65,7 @@ namespace CSharpUtils.VirtualFileSystem
 					_CreationTime = Normalize(value);
 				}
 			}
+			
 			public DateTimeRange LastAccessTime {
 				get
 				{
@@ -78,6 +76,7 @@ namespace CSharpUtils.VirtualFileSystem
 					_LastAccessTime = Normalize(value);
 				}
 			}
+
 			public DateTimeRange LastWriteTime
 			{
 				get
@@ -115,7 +114,7 @@ namespace CSharpUtils.VirtualFileSystem
 			this.Path = Path;
 		}
 
-		virtual public Stream Open(FileMode FileMode)
+		public virtual Stream Open(FileMode FileMode)
 		{
 			return FileSystem.OpenFile(Path, FileMode);
 		}

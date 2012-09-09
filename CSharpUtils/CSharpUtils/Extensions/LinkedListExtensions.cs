@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-static public class LinkedListExtensions
+public static class LinkedListExtensions
 {
-	static public int GetCountLock<T>(this LinkedList<T> List)
+	public static int GetCountLock<T>(this LinkedList<T> List)
 	{
 		lock (List) return List.Count;
 	}
 
-	static public T RemoveFirstAndGet<T>(this LinkedList<T> List)
+	public static T RemoveFirstAndGet<T>(this LinkedList<T> List)
 	{
 		lock (List)
 		{
@@ -25,7 +22,7 @@ static public class LinkedListExtensions
 		}
 	}
 
-	static public T RemoveLastAndGet<T>(this LinkedList<T> List)
+	public static T RemoveLastAndGet<T>(this LinkedList<T> List)
 	{
 		lock (List)
 		{

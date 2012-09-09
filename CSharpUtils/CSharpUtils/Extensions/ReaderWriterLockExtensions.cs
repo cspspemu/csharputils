@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
-static public class ReaderWriterLockExtensions
+public static class ReaderWriterLockExtensions
 {
-	static public void ReaderLock(this ReaderWriterLock This, Action Callback)
+	public static void ReaderLock(this ReaderWriterLock This, Action Callback)
 	{
 		This.AcquireReaderLock(int.MaxValue);
 		try
@@ -19,7 +16,7 @@ static public class ReaderWriterLockExtensions
 		}
 	}
 
-	static public void WriterLock(this ReaderWriterLock This, Action Callback)
+	public static void WriterLock(this ReaderWriterLock This, Action Callback)
 	{
 		This.AcquireWriterLock(int.MaxValue);
 		try
@@ -32,7 +29,7 @@ static public class ReaderWriterLockExtensions
 		}
 	}
 
-	static public T ReaderLock<T>(this ReaderWriterLock This, Func<T> Callback)
+	public static T ReaderLock<T>(this ReaderWriterLock This, Func<T> Callback)
 	{
 		This.AcquireReaderLock(int.MaxValue);
 		try
@@ -45,7 +42,7 @@ static public class ReaderWriterLockExtensions
 		}
 	}
 
-	static public T WriterLock<T>(this ReaderWriterLock This, Func<T> Callback)
+	public static T WriterLock<T>(this ReaderWriterLock This, Func<T> Callback)
 	{
 		This.AcquireWriterLock(int.MaxValue);
 		try

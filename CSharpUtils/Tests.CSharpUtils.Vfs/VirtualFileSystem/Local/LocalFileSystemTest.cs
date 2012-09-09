@@ -1,9 +1,8 @@
-﻿using CSharpUtils.VirtualFileSystem.Local;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
 using CSharpUtils.VirtualFileSystem;
-using System.Linq;
+using CSharpUtils.VirtualFileSystem.Local;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {

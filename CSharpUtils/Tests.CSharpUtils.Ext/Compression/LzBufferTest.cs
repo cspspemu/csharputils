@@ -1,17 +1,14 @@
-﻿using CSharpUtils.Compression.Lz;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System.Collections.Generic;
 using System.Text;
-using CSharpUtils;
-using CSharpUtils.Compression;
-using System.Collections.Generic;
+using CSharpUtils.Compression.Lz;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests.Compression
 {
-	[TestClass()]
+	[TestClass]
 	public class LzBufferTest
 	{
-		[TestMethod()]
+		[TestMethod]
 		public void FindMaxSequenceTest()
 		{
 			LzBuffer LzBuffer = new LzBuffer(3);
@@ -33,7 +30,7 @@ namespace CSharpUtilsTests.Compression
 			Assert.AreEqual("LzBuffer.FindSequenceResult(Offset=7, Size=5)", Result.ToString());
 		}
 
-		[TestMethod()]
+		[TestMethod]
 		public void HandleWithOverlappingTest()
 		{
 			var Data = Encoding.UTF8.GetBytes("abccccccabc");
@@ -56,7 +53,7 @@ namespace CSharpUtilsTests.Compression
 			);
 		}
 
-		[TestMethod()]
+		[TestMethod]
 		public void HandleWithoutOverlappingTest()
 		{
 			var Data = Encoding.UTF8.GetBytes("abccccccccccccccccccccccabc");

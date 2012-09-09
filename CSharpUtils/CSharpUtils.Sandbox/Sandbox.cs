@@ -8,7 +8,7 @@ namespace CSharpUtils.Sandbox
 {
 	public class Sandbox
 	{
-		static public void Main(string[] Arguments)
+		public static void Main(string[] Arguments)
 		{
 		}
 	}

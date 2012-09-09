@@ -38,11 +38,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -52,14 +47,6 @@
     <ProjectReference Include="..\CSharpUtils.Templates\CSharpUtils.Templates.csproj">
       <Project>{2B30F5D1-64B6-4464-8034-69BD8FE36560}</Project>
       <Name>CSharpUtils.Templates</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CSharpUtils.Vfs\CSharpUtils.Vfs.csproj">
-      <Project>{49F6B357-35AE-498A-9E5A-67AA62A327C6}</Project>
-      <Name>CSharpUtils.Vfs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
-      <Project>{746FADF2-D613-4FFD-8551-2181ADAE3CD1}</Project>
-      <Name>CSharpUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

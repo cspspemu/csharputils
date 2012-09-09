@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing.Imaging;
 using System.Drawing;
-using CSharpUtils;
 
 namespace CSharpUtils
 {
 	public class BitmapUtils
 	{
-		static public BitmapChannel[] RGB
+		public static BitmapChannel[] RGB
 		{
 			get
 			{
@@ -22,7 +18,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public ColorPalette GetColorPalette(int nColors)
+		public static ColorPalette GetColorPalette(int nColors)
 		{
 			// Assume monochrome image.
 			PixelFormat bitscolordepth = PixelFormat.Format1bppIndexed;
@@ -48,17 +44,17 @@ namespace CSharpUtils
 			FromDataToBitmap = 1,
 		}
 
-		unsafe static public void TransferChannelsDataLinear(Bitmap Bitmap, byte[] NewData, Direction Direction, params BitmapChannel[] Channels)
+		public static void TransferChannelsDataLinear(Bitmap Bitmap, byte[] NewData, Direction Direction, params BitmapChannel[] Channels)
 		{
 			TransferChannelsDataLinear(Bitmap.GetFullRectangle(), Bitmap, NewData, Direction, Channels);
 		}
 
-		unsafe static public void TransferChannelsDataLinear(Bitmap Bitmap, byte* NewDataPtr, Direction Direction, params BitmapChannel[] Channels)
+		public unsafe static void TransferChannelsDataLinear(Bitmap Bitmap, byte* NewDataPtr, Direction Direction, params BitmapChannel[] Channels)
 		{
 			TransferChannelsDataLinear(Bitmap.GetFullRectangle(), Bitmap, NewDataPtr, Direction, Channels);
 		}
 
-		unsafe static public void TransferChannelsDataLinear(Rectangle Rectangle, Bitmap Bitmap, byte[] NewData, Direction Direction, params BitmapChannel[] Channels)
+		public unsafe static void TransferChannelsDataLinear(Rectangle Rectangle, Bitmap Bitmap, byte[] NewData, Direction Direction, params BitmapChannel[] Channels)
 		{
 			fixed (byte* NewDataPtr = &NewData[0])
 			{
@@ -66,7 +62,7 @@ namespace CSharpUtils
 			}
 		}
 
-		unsafe static public void TransferChannelsDataLinear(Rectangle Rectangle, Bitmap Bitmap, byte* NewDataPtr, Direction Direction, params BitmapChannel[] Channels)
+		public unsafe static void TransferChannelsDataLinear(Rectangle Rectangle, Bitmap Bitmap, byte* NewDataPtr, Direction Direction, params BitmapChannel[] Channels)
 		{
 			int WidthHeight = Bitmap.Width * Bitmap.Height;
 			var FullRectangle = Bitmap.GetFullRectangle();

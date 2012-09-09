@@ -1,20 +1,17 @@
-﻿using CSharpUtils.Templates;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using CSharpUtils;
-using System.Linq;
-using CSharpUtils.Templates.Tokenizers;
-using CSharpUtils.Templates.TemplateProvider;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using CSharpUtils.Templates;
 using CSharpUtils.Templates.Runtime;
+using CSharpUtils.Templates.TemplateProvider;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests.Templates
 {
 	[TestClass]
 	public class TemplateTest
 	{
-		static protected TemplateCode CompileTemplateCodeByString(String Code) {
+		protected static TemplateCode CompileTemplateCodeByString(String Code) {
 			var TemplateCodeGen = new TemplateCodeGen(Code);
 			TemplateCodeGen.OutputGeneratedCode = true;
 			return TemplateCodeGen.GetTemplateCode();
@@ -88,7 +85,7 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		class Post
+		sealed class Post
 		{
 			public String Text;
 		}

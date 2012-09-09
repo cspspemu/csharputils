@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-static public class LinqExExtensionsExt
+public static class LinqExExtensionsExt
 {
 	/// <summary>
 	/// http://msdn.microsoft.com/en-us/magazine/cc163329.aspx
@@ -16,7 +15,6 @@ static public class LinqExExtensionsExt
 	{
 		Items.ForAll(action);
 	}
-
 
 	public static int LocateWhereMinIndex<T>(this IEnumerable<T> Items, Func<T, bool> where, Func<T, dynamic> compareValue)
 	{

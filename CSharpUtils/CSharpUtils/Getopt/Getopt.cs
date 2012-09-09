@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Getopt
 {
-	sealed public class Getopt
+	public sealed class Getopt
 	{
 		/// <summary>
 		/// 
@@ -71,7 +70,7 @@ namespace CSharpUtils.Getopt
 		/// </summary>
 		/// <param name="Name"></param>
 		/// <param name="Value"></param>
-		unsafe public void AddRule(string Name, ref bool Value)
+		public unsafe void AddRule(string Name, ref bool Value)
 		{
 			fixed (bool* ptr = &Value)
 			{
@@ -88,7 +87,7 @@ namespace CSharpUtils.Getopt
 		/// </summary>
 		/// <param name="Name"></param>
 		/// <param name="Value"></param>
-		unsafe public void AddRule(string Name, ref int Value)
+		public unsafe void AddRule(string Name, ref int Value)
 		{
 			fixed (int* ptr = &Value)
 			{
@@ -155,7 +154,7 @@ namespace CSharpUtils.Getopt
 		/// <param name="Name"></param>
 		/// <param name="Action"></param>
 		/// <returns></returns>
-		static public TType CheckArgument<TType>(string Name, Func<TType> Action)
+		public static TType CheckArgument<TType>(string Name, Func<TType> Action)
 		{
 			try
 			{

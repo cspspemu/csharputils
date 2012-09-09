@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem.Local
@@ -10,7 +8,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 	{
 		protected String RootPath;
 
-		override protected bool CaseInsensitiveFileSystem { get { return true; } }
+		protected override bool CaseInsensitiveFileSystem { get { return true; } }
 
 		public LocalFileSystem(String RootPath, bool CreatePath = false)
 		{
@@ -30,7 +28,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return CombinePath(RootPath, Path).Replace('/', '\\');
 		}
 
-		override protected FileSystemEntry ImplGetFileInfo(String Path)
+		protected override FileSystemEntry ImplGetFileInfo(String Path)
 		{
 			String CachedRealPath = RealPath(Path);
 			FileSystemInfo FileSystemInfo;
@@ -43,7 +41,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return new LocalFileSystemEntry(this, Path, FileSystemInfo);
 		}
 
-		override protected IEnumerable<FileSystemEntry> ImplFindFiles(String Path)
+		protected override IEnumerable<FileSystemEntry> ImplFindFiles(String Path)
 		{
 			String CachedRealPath = RealPath(Path);
 
@@ -73,18 +71,18 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			}
 		}
 
-		override protected void ImplCreateDirectory(String Path, int Mode = 0777)
+		protected override void ImplCreateDirectory(String Path, int Mode = 0777)
 		{
 			Directory.CreateDirectory(RealPath(Path));
 		}
 
-		override protected void ImplDeleteFile(string Path)
+		protected override void ImplDeleteFile(string Path)
 		{
 			File.Delete(RealPath(Path));
 		}
 
 
-		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
+		protected override FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
 		{
 			//var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.Read, FileShare.ReadWrite);
 			var Stream = File.Open(RealPath(FileName), FileMode);

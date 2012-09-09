@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CSharpUtils;
 
 namespace CSharpUtils.Templates.Utils
 {
-	static public class StringUtils
+	public static class StringUtils
 	{
-		static public String EscapeString(String Value)
+		public static String EscapeString(String Value)
 		{
 			String EscapedString = "";
 
@@ -32,7 +28,7 @@ namespace CSharpUtils.Templates.Utils
 			return '"' + EscapedString + '"';
 		}
 
-		static public String UnescapeString(String Value)
+		public static String UnescapeString(String Value)
 		{
 			if (Value.Length < 2) throw(new Exception("Invalid String [1]"));
 			if (Value[0] != '\'' && Value[0] != '"') throw (new Exception("Invalid String [2]"));

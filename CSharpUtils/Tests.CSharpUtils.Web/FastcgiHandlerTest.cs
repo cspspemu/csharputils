@@ -1,17 +1,15 @@
-﻿using CSharpUtils.Fastcgi;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
-using System.Net.Sockets;
-using CSharpUtils;
+using CSharpUtils.Fastcgi;
 using CSharpUtils.Streams;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
 	[TestClass]
 	public class FastcgiHandlerTest
 	{
-		private void WriteBeginRequest(Stream Stream)
+		private static void WriteBeginRequest(Stream Stream)
 		{
 			Stream.WriteBytes(new byte[]
 			{

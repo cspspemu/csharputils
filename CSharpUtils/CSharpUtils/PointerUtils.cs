@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace CSharpUtils
 {
-	unsafe public class PointerUtils
+	public unsafe class PointerUtils
 	{
-		static public String PtrToStringUtf8(byte* Pointer)
+		public static String PtrToStringUtf8(byte* Pointer)
 		{
 			return PtrToString(Pointer, Encoding.UTF8);
 		}
 
-		static public String PtrToString(byte* Pointer, Encoding Encoding)
+		public static String PtrToString(byte* Pointer, Encoding Encoding)
 		{
 			if (Pointer == null) return null;
 			List<byte> Bytes = new List<byte>();
@@ -21,14 +20,14 @@ namespace CSharpUtils
 			return Encoding.GetString(Bytes.ToArray());
 		}
 
-		static public ushort PtrToShort_BE(void* ptr)
+		public static ushort PtrToShort_BE(void* ptr)
 		{
 			var bytes = (byte*)ptr;
 			//return (ushort)((bytes[1] << 8) | (bytes[0] << 8));
 			return (ushort)((bytes[0] << 8) | (bytes[1] << 0));
 		}
 
-		static public String PtrToString(byte* Pointer, int Length, Encoding Encoding)
+		public static String PtrToString(byte* Pointer, int Length, Encoding Encoding)
 		{
 			if (Pointer == null) return null;
 			List<byte> Bytes = new List<byte>();
@@ -40,7 +39,7 @@ namespace CSharpUtils
 			return Encoding.GetString(Bytes.ToArray());
 		}
 
-		static public void StoreStringOnPtr(string String, Encoding Encoding, byte* Pointer, int PointerMaxLength = 0x10000)
+		public static void StoreStringOnPtr(string String, Encoding Encoding, byte* Pointer, int PointerMaxLength = 0x10000)
 		{
 			var Bytes = Encoding.GetBytes(String);
 			foreach (var Byte in Bytes)
@@ -50,7 +49,7 @@ namespace CSharpUtils
 			*Pointer++ = 0;
 		}
 
-		static public void Memset(byte[] Array, byte Value, int Count)
+		public static void Memset(byte[] Array, byte Value, int Count)
 		{
 			fixed (byte* ArrayPointer = Array)
 			{
@@ -65,7 +64,7 @@ namespace CSharpUtils
 			Is64 = Environment.Is64BitProcess;
 		}
 
-		static public void Memset(byte* Pointer, byte Value, int Count)
+		public static void Memset(byte* Pointer, byte Value, int Count)
 		{
 			if (Pointer == null) throw(new ArgumentNullException("Memset pointer is null"));
 
@@ -108,7 +107,7 @@ namespace CSharpUtils
 		}
 
 #if false
-		static public void MemsetSlow(byte[] Array, byte Value, int Count)
+		public static void MemsetSlow(byte[] Array, byte Value, int Count)
 		{
 			fixed (byte* ArrayPointer = Array)
 			{
@@ -116,7 +115,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public void MemsetSlow(byte* Pointer, byte Value, int Count)
+		public static void MemsetSlow(byte* Pointer, byte Value, int Count)
 		{
 			if (Pointer == null) throw (new ArgumentNullException("Memset pointer is null"));
 

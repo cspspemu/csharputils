@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace CSharpUtils.Forms
@@ -12,9 +10,9 @@ namespace CSharpUtils.Forms
 		public Queue<TaskDelegate> Tasks = new Queue<TaskDelegate>();
 		public delegate void TaskDelegate();
 
-		static protected Dictionary<String, TimerTaskQueue> NamedInstances = new Dictionary<string, TimerTaskQueue>();
+		protected static Dictionary<String, TimerTaskQueue> NamedInstances = new Dictionary<string, TimerTaskQueue>();
 
-		static public TimerTaskQueue GetNamedInstance(String Name, int Interval)
+		public static TimerTaskQueue GetNamedInstance(String Name, int Interval)
 		{
 			if (!NamedInstances.ContainsKey(Name))
 			{

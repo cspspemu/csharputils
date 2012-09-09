@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Dokan;
-using CSharpUtils.VirtualFileSystem.Local;
 using System.Threading;
 using CSharpUtils.VirtualFileSystem;
+using CSharpUtils.VirtualFileSystem.Local;
 using CSharpUtils.VirtualFileSystem.Ssh;
 using CSharpUtils.VirtualFileSystem.Ftp;
+using Dokan;
 
 namespace CSharpUtilsDokanMount
 {

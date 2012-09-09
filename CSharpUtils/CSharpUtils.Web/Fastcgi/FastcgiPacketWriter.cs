@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Net.Sockets;
-using CSharpUtils;
+using System.Text;
 
 namespace CSharpUtils.Fastcgi
 {
@@ -26,7 +22,7 @@ namespace CSharpUtils.Fastcgi
 		{
 		}
 
-		static public void WriteVariableInt(Stream Stream, int Value)
+		public static void WriteVariableInt(Stream Stream, int Value)
 		{
 			throw (new NotImplementedException());
 		}

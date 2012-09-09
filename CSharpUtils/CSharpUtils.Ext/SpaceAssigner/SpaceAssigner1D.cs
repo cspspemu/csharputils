@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Diagnostics;
 
 namespace CSharpUtils.SpaceAssigner
@@ -13,8 +12,8 @@ namespace CSharpUtils.SpaceAssigner
 		// Immutable.
 		public class Space : IComparable, IComparable<Space>, IEqualityComparer<Space>, IEquatable<Space>
 		{
-			readonly public long Min;
-			readonly public long Max;
+			public readonly long Min;
+			public readonly long Max;
 
 			public long Length
 			{

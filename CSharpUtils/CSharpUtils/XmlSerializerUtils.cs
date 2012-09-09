@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace CSharpUtils
 {
-	static public class XmlSerializerUtils
+	public static class XmlSerializerUtils
 	{
-		static public TType FromFile<TType>(String FileName)
+		public static TType FromFile<TType>(String FileName)
 		{
 			var XmlSerializer = new XmlSerializer(typeof(TType));
 
@@ -19,7 +16,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public void ToFile<TType>(String FileName, TType Object)
+		public static void ToFile<TType>(String FileName, TType Object)
 		{
 			var XmlSerializer = new XmlSerializer(typeof(TType));
 

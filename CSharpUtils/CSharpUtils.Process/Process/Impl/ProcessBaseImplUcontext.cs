@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace CSharpUtils.Process.Impl
 {
@@ -17,7 +13,7 @@ namespace CSharpUtils.Process.Impl
 	///		<li>http://en.wikipedia.org/wiki/Setcontext</li>
 	///	</ul>
 	/// </see>
-	unsafe public class ProcessBaseImplUcontext
+	public unsafe class ProcessBaseImplUcontext
 	{
 		struct ucontext_t {
 			fixed int ContextSize[100];

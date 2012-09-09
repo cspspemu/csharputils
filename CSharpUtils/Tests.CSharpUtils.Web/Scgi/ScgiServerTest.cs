@@ -1,13 +1,11 @@
-﻿using CSharpUtils.Scgi;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using CSharpUtils.Net;
-using System.Threading;
-using System.Net.Sockets;
-using CSharpUtils;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
+using System.Threading;
 using CSharpUtils.Http;
-using System.Collections.Generic;
+using CSharpUtils.Net;
+using CSharpUtils.Scgi;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
@@ -35,10 +33,7 @@ namespace CSharpUtilsTests
 			int BindPort = NetworkUtilities.GetAvailableTcpPort();
 			var ScgiServer = new TestScgiServer(BindIp, BindPort);
 			ScgiServer.Listen();
-			new Thread(() =>
-			{
-				ScgiServer.AcceptLoop();
-			}).Start();
+			new Thread(ScgiServer.AcceptLoop).Start();
 
 			var TcpClient = new TcpClient(BindIp, BindPort);
 			var TcpClientStream = TcpClient.GetStream();

@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
 using System.IO;
+using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 
-static public class LinqXmlExExtensions
+public static class LinqXmlExExtensions
 {
-	static public String ToStringFull(this XDocument That)
+	public static String ToStringFull(this XDocument That)
 	{
 		return That.ToStringFull(Encoding.UTF8);
 	}
 
-	static public String ToStringFull(this XDocument That, Encoding Encoding)
+	public static String ToStringFull(this XDocument That, Encoding Encoding)
 	{
 		var VersionXmlStream = new MemoryStream();
 		var VersionXmlWriter = XmlWriter.Create(VersionXmlStream, new XmlWriterSettings()

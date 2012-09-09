@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Templates.Runtime.Filters
 {
@@ -9,7 +6,7 @@ namespace CSharpUtils.Templates.Runtime.Filters
 	{
 		protected Object Object;
 
-		static public RawWrapper Get(Object Object)
+		public static RawWrapper Get(Object Object)
 		{
 			if (Object is RawWrapper)
 			{

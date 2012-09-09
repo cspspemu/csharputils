@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CSharpUtils;
 using System.IO;
 
 namespace CSharpUtils.Compression.Lz
@@ -26,12 +23,12 @@ namespace CSharpUtils.Compression.Lz
 			this.Position = 0;
 		}
 
-		static public void Handle(Stream Input, int MinSearchSize, int MaxSearchSize, int MaxDistance, bool AllowOverlapping, Action<int, int, int> Callback)
+		public static void Handle(Stream Input, int MinSearchSize, int MaxSearchSize, int MaxDistance, bool AllowOverlapping, Action<int, int, int> Callback)
 		{
 			throw(new NotImplementedException());
 		}
 
-		static public void Handle(byte[] Input, int MinSearchSize, int MaxSearchSize, int MaxDistance, bool AllowOverlapping, Action<int, int, int> Callback)
+		public static void Handle(byte[] Input, int MinSearchSize, int MaxSearchSize, int MaxDistance, bool AllowOverlapping, Action<int, int, int> Callback)
 		{
 			var LzBuffer = new LzBuffer(MinSearchSize);
 			LzBuffer.AddBytes(Input);

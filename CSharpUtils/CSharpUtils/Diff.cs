@@ -3,7 +3,6 @@ namespace CSharpUtils
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Text;
 	using System.Text.RegularExpressions;
 
   /// <summary>
@@ -143,7 +142,7 @@ namespace CSharpUtils
 	  return (DiffText(TextA, TextB, false, false, false));
 	} // DiffText
 
-	static public ProcessedResult DiffTextProcessed(string[] listA, string[] listB) {
+	public static ProcessedResult DiffTextProcessed(string[] listA, string[] listB) {
 		var result = new ProcessedResult();
 		
 		var diff = new Diff();

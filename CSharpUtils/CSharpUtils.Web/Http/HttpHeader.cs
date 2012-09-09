@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace CSharpUtils.Http
 {
 	public class HttpHeader
 	{
-		readonly public String NormalizedName;
-		readonly public String Name;
-		readonly public String Value;
+		public readonly String NormalizedName;
+		public readonly String Name;
+		public readonly String Value;
 
 		public HttpHeader(String Name, String Value)
 		{
@@ -19,7 +17,7 @@ namespace CSharpUtils.Http
 			this.NormalizedName = GetNormalizedName(Name);
 		}
 
-		static public String GetNormalizedName(String Name)
+		public static String GetNormalizedName(String Name)
 		{
 			return Name.Trim().ToLower();
 		}

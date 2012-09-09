@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace CSharpUtils
 {
 	public class StackTraceUtils
 	{
-		static public void PreserveStackTrace(Exception e)
+		public static void PreserveStackTrace(Exception e)
 		{
 			var ctx = new StreamingContext(StreamingContextStates.CrossAppDomain);
 			var mgr = new ObjectManager(null, ctx);

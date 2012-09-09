@@ -1,12 +1,10 @@
-﻿using CSharpUtils;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestClass()]
+	[TestClass]
 	public class ReaderWriterLockExtensionsTest
 	{
 		[TestMethod]

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CSharpUtils.Process;
 
 namespace CSharpUtilsDokanMount
@@ -84,7 +82,7 @@ namespace CSharpUtilsDokanMount
 			}
 		}
 
-		override protected void DrawItem(object _Context)
+		protected override void DrawItem(object _Context)
 		{
 			if (Drawed != null) Drawed(this, new DrawedEventArgs(n));
 			//Console.WriteLine(n);
@@ -94,7 +92,7 @@ namespace CSharpUtilsDokanMount
 
 	class MyProcess1 : MyProcess
 	{
-		override protected void Main()
+		protected override void Main()
 		{
 			increment();
 			decrement();
@@ -103,7 +101,7 @@ namespace CSharpUtilsDokanMount
 
 	class MyProcess2 : MyProcess
 	{
-		override protected void Main()
+		protected override void Main()
 		{
 			decrement();
 			increment();

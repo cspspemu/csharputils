@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using CSharpUtils.Getopt;
 
 namespace CSharpUtils.Getopt
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	abstract public class GetoptCommandLineProgram
+	public abstract class GetoptCommandLineProgram
 	{
 		/// <summary>
 		/// 
@@ -169,7 +167,7 @@ namespace CSharpUtils.Getopt
 		[Command("-?", "-h", "--help", "/?", "/h")]
 		[CommandDefaultAttribute]
 		[Description("Shows this help")]
-		virtual protected void ShowHelp()
+		protected virtual void ShowHelp()
 		{
 			var CurrentAssembly = Assembly.GetEntryAssembly();
 			var VersionInfo = FileVersionInfo.GetVersionInfo(CurrentAssembly.Location);

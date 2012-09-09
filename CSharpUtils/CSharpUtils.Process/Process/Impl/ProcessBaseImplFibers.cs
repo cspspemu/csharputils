@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace CSharpUtils.Process.Impl
@@ -9,19 +6,19 @@ namespace CSharpUtils.Process.Impl
 	public class ProcessBaseImplFibers : IProcessBaseImpl
 	{
 		[DllImport("kernel32.dll")]
-		extern static private IntPtr ConvertThreadToFiber(int fiberData);
+		private static extern IntPtr ConvertThreadToFiber(int fiberData);
 
 		[DllImport("kernel32.dll")]
-		extern static private IntPtr CreateFiber(int size, System.Delegate function, int handle);
+		private static extern IntPtr CreateFiber(int size, System.Delegate function, int handle);
 
 		[DllImport("kernel32.dll")]
-		extern static private IntPtr SwitchToFiber(IntPtr fiberAddress);
+		private static extern IntPtr SwitchToFiber(IntPtr fiberAddress);
 
 		[DllImport("kernel32.dll")]
-		extern static private void DeleteFiber(IntPtr fiberAddress);
+		private static extern void DeleteFiber(IntPtr fiberAddress);
 
 		[DllImport("kernel32.dll")]
-		extern static private int GetLastError();
+		private static extern int GetLastError();
 
 		private static IntPtr mainFiberHandle = IntPtr.Zero;
 		private IntPtr fiberHandle;

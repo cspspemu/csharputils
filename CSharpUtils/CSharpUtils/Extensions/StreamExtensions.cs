@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using CSharpUtils.Streams;
-using System.Diagnostics;
+using System.Text;
 using CSharpUtils;
+using CSharpUtils.Streams;
 
-static public class StreamExtensions
+public static class StreamExtensions
 {
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="Stream"></param>
 	/// <returns></returns>
-	static public bool Eof(this Stream Stream)
+	public static bool Eof(this Stream Stream)
 	{
 		return Stream.Available() <= 0;
 	}
@@ -30,7 +27,7 @@ static public class StreamExtensions
 	/// <param name="Position"></param>
 	/// <param name="Callback"></param>
 	/// <returns></returns>
-	static public TStream PreservePositionAndLock<TStream>(this TStream Stream, long Position, Action Callback) where TStream : Stream
+	public static TStream PreservePositionAndLock<TStream>(this TStream Stream, long Position, Action Callback) where TStream : Stream
 	{
 		return Stream.PreservePositionAndLock(() =>
 		{
@@ -46,7 +43,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Callback"></param>
 	/// <returns></returns>
-	static public TStream PreservePositionAndLock<TStream>(this TStream Stream, Action Callback) where TStream : Stream
+	public static TStream PreservePositionAndLock<TStream>(this TStream Stream, Action Callback) where TStream : Stream
 	{
 		return Stream.PreservePositionAndLock((_Stream) =>
 		{
@@ -61,7 +58,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Callback"></param>
 	/// <returns></returns>
-	static public TStream PreservePositionAndLock<TStream>(this TStream Stream, Action<Stream> Callback) where TStream : Stream
+	public static TStream PreservePositionAndLock<TStream>(this TStream Stream, Action<Stream> Callback) where TStream : Stream
 	{
 		if (!Stream.CanSeek)
 		{
@@ -84,7 +81,7 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="Stream"></param>
 	/// <returns></returns>
-	static public long Available(this Stream Stream)
+	public static long Available(this Stream Stream)
 	{
 		return Stream.Length - Stream.Position;
 	}
@@ -96,7 +93,7 @@ static public class StreamExtensions
 	/// <param name="Start"></param>
 	/// <param name="Length"></param>
 	/// <returns></returns>
-	static public byte[] ReadChunk(this Stream Stream, int Start, int Length)
+	public static byte[] ReadChunk(this Stream Stream, int Start, int Length)
 	{
 		byte[] Chunk = new byte[Length];
 		Stream.PreservePositionAndLock(() =>
@@ -114,7 +111,7 @@ static public class StreamExtensions
 	/// <param name="ExpectedByte"></param>
 	/// <param name="IncludeExpectedByte"></param>
 	/// <returns></returns>
-	static public byte[] ReadUntil(this Stream Stream, byte ExpectedByte, bool IncludeExpectedByte = false)
+	public static byte[] ReadUntil(this Stream Stream, byte ExpectedByte, bool IncludeExpectedByte = false)
 	{
 		bool Found = false;
 		var Buffer = new MemoryStream();
@@ -142,7 +139,7 @@ static public class StreamExtensions
 	/// <param name="Encoding"></param>
 	/// <param name="IncludeExpectedByte"></param>
 	/// <returns></returns>
-	static public String ReadUntilString(this Stream Stream, byte ExpectedByte, Encoding Encoding, bool IncludeExpectedByte = false)
+	public static String ReadUntilString(this Stream Stream, byte ExpectedByte, Encoding Encoding, bool IncludeExpectedByte = false)
 	{
 		return Encoding.GetString(Stream.ReadUntil(ExpectedByte, IncludeExpectedByte));
 	}
@@ -154,7 +151,7 @@ static public class StreamExtensions
 	/// <param name="Encoding"></param>
 	/// <param name="FromStart"></param>
 	/// <returns></returns>
-	static public String ReadAllContentsAsString(this Stream Stream, Encoding Encoding = null, bool FromStart = true)
+	public static String ReadAllContentsAsString(this Stream Stream, Encoding Encoding = null, bool FromStart = true)
 	{
 		if (Encoding == null) Encoding = Encoding.UTF8;
 		var Data = Stream.ReadAll(FromStart);
@@ -175,7 +172,7 @@ static public class StreamExtensions
 	/// <param name="FromStart"></param>
 	/// <param name="Dispose"></param>
 	/// <returns></returns>
-	static public byte[] ReadAll(this Stream Stream, bool FromStart = true, bool Dispose = false)
+	public static byte[] ReadAll(this Stream Stream, bool FromStart = true, bool Dispose = false)
 	{
 		try
 		{
@@ -209,7 +206,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="ToRead"></param>
 	/// <returns></returns>
-	static public Stream ReadStream(this Stream Stream, long ToRead = -1)
+	public static Stream ReadStream(this Stream Stream, long ToRead = -1)
 	{
 		if (ToRead == -1) ToRead = Stream.Available();
 		var ReadedStream = SliceStream.CreateWithLength(Stream, Stream.Position, ToRead);
@@ -223,7 +220,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="ToRead"></param>
 	/// <returns></returns>
-	static public byte[] ReadBytes(this Stream Stream, int ToRead)
+	public static byte[] ReadBytes(this Stream Stream, int ToRead)
 	{
 		if (ToRead == 0) return new byte[0];
 		var Buffer = new byte[ToRead];
@@ -243,7 +240,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="ToReadAsMax"></param>
 	/// <returns></returns>
-    static public byte[] ReadBytesUpTo(this Stream Stream, int ToReadAsMax)
+    public static byte[] ReadBytesUpTo(this Stream Stream, int ToReadAsMax)
     {
         if (ToReadAsMax == 0) return new byte[0];
         var Buffer = new byte[ToReadAsMax];
@@ -266,7 +263,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Bytes"></param>
 	/// <returns></returns>
-	static public Stream WriteBytes(this Stream Stream, byte[] Bytes)
+	public static Stream WriteBytes(this Stream Stream, byte[] Bytes)
 	{
 		Stream.Write(Bytes, 0, Bytes.Length);
 		return Stream;
@@ -279,7 +276,7 @@ static public class StreamExtensions
 	/// <param name="Byte"></param>
 	/// <param name="RepeatCount"></param>
 	/// <returns></returns>
-	static public Stream WriteBytes(this Stream Stream, byte Byte, int RepeatCount)
+	public static Stream WriteBytes(this Stream Stream, byte Byte, int RepeatCount)
 	{
 		var Bytes = Byte.Repeat(RepeatCount);
 		Stream.Write(Bytes, 0, Bytes.Length);
@@ -293,7 +290,7 @@ static public class StreamExtensions
 	/// <param name="ToRead"></param>
 	/// <param name="Encoding"></param>
 	/// <returns></returns>
-	static public String ReadString(this Stream Stream, int ToRead, Encoding Encoding = null)
+	public static String ReadString(this Stream Stream, int ToRead, Encoding Encoding = null)
 	{
 		if (Encoding == null) Encoding = Encoding.UTF8;
 		return Stream.ReadBytes(ToRead).GetString(Encoding);
@@ -306,7 +303,7 @@ static public class StreamExtensions
 	/// <param name="Offset"></param>
 	/// <param name="Encoding"></param>
 	/// <returns></returns>
-	static public String ReadStringzAt(this Stream Stream, long Offset, Encoding Encoding = null)
+	public static String ReadStringzAt(this Stream Stream, long Offset, Encoding Encoding = null)
 	{
 		String Return = null;
 		Stream.PreservePositionAndLock(Offset, () =>
@@ -324,7 +321,7 @@ static public class StreamExtensions
 	/// <param name="Encoding"></param>
 	/// <param name="AllowEndOfStream"></param>
 	/// <returns></returns>
-	static public String ReadStringz(this Stream Stream, int ToRead = -1, Encoding Encoding = null, bool AllowEndOfStream = true)
+	public static String ReadStringz(this Stream Stream, int ToRead = -1, Encoding Encoding = null, bool AllowEndOfStream = true)
 	{
 		if (Encoding == null) Encoding = Encoding.ASCII;
 		if (ToRead == -1)
@@ -358,7 +355,7 @@ static public class StreamExtensions
 	/// <param name="Value2"></param>
 	/// <param name="Encoding"></param>
 	/// <returns></returns>
-	static public Stream WriteStringzPair(this Stream Stream, String Value1, String Value2, Encoding Encoding = null)
+	public static Stream WriteStringzPair(this Stream Stream, String Value1, String Value2, Encoding Encoding = null)
 	{
 		Stream.WriteStringz(Value1, -1, Encoding);
 		Stream.WriteStringz(Value2, -1, Encoding);
@@ -372,7 +369,7 @@ static public class StreamExtensions
 	/// <param name="Value"></param>
 	/// <param name="Encoding"></param>
 	/// <returns></returns>
-	static public Stream WriteString(this Stream Stream, String Value, Encoding Encoding = null)
+	public static Stream WriteString(this Stream Stream, String Value, Encoding Encoding = null)
 	{
 		if (Encoding == null) Encoding = Encoding.ASCII;
 		Stream.WriteBytes(Encoding.GetBytes(Value));
@@ -387,7 +384,7 @@ static public class StreamExtensions
 	/// <param name="ToWrite"></param>
 	/// <param name="Encoding"></param>
 	/// <returns></returns>
-	static public Stream WriteStringz(this Stream Stream, String Value, int ToWrite = -1, Encoding Encoding = null)
+	public static Stream WriteStringz(this Stream Stream, String Value, int ToWrite = -1, Encoding Encoding = null)
 	{
 		if (Encoding == null) Encoding = Encoding.ASCII;
 		if (ToWrite == -1)
@@ -411,7 +408,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Count"></param>
 	/// <returns></returns>
-	static public Stream WriteZeroBytes(this Stream Stream, int Count)
+	public static Stream WriteZeroBytes(this Stream Stream, int Count)
 	{
 		if (Count < 0)
 		{
@@ -432,7 +429,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Align"></param>
 	/// <returns></returns>
-	static public Stream WriteZeroToAlign(this Stream Stream, int Align)
+	public static Stream WriteZeroToAlign(this Stream Stream, int Align)
 	{
 		Stream.WriteZeroBytes((int)(MathUtils.Align(Stream.Position, Align) - Stream.Position));
 		return Stream;
@@ -444,7 +441,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Offset"></param>
 	/// <returns></returns>
-	static public Stream WriteZeroToOffset(this Stream Stream, long Offset)
+	public static Stream WriteZeroToOffset(this Stream Stream, long Offset)
 	{
 		Stream.WriteZeroBytes((int)(Offset - Stream.Position));
 		return Stream;
@@ -737,7 +734,7 @@ static public class StreamExtensions
 	/// <param name="Byte"></param>
 	/// <param name="Count"></param>
 	/// <returns></returns>
-	unsafe public static Stream WriteByteRepeated(this Stream Stream, byte Byte, int Count = 1)
+	public unsafe static Stream WriteByteRepeated(this Stream Stream, byte Byte, int Count = 1)
 	{
 		if (Count > 0)
 		{
@@ -759,7 +756,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Value"></param>
 	/// <returns></returns>
-	static public Stream WriteVariableUintBit8Extends(this Stream Stream, uint Value)
+	public static Stream WriteVariableUintBit8Extends(this Stream Stream, uint Value)
 	{
 		do
 		{
@@ -777,7 +774,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Value"></param>
 	/// <returns></returns>
-	static public Stream WriteVariableUlongBit8Extends(this Stream Stream, ulong Value)
+	public static Stream WriteVariableUlongBit8Extends(this Stream Stream, ulong Value)
 	{
 		do
 		{
@@ -795,7 +792,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Values"></param>
 	/// <returns></returns>
-	static public Stream WriteVariableUintBit8ExtendsArray(this Stream Stream, params uint[] Values)
+	public static Stream WriteVariableUintBit8ExtendsArray(this Stream Stream, params uint[] Values)
 	{
 		foreach (var Value in Values)
 		{
@@ -809,7 +806,7 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="Stream"></param>
 	/// <returns></returns>
-	static public uint ReadVariableUintBit8Extends(this Stream Stream)
+	public static uint ReadVariableUintBit8Extends(this Stream Stream)
 	{
 		int c;
 		uint v = 0;
@@ -829,7 +826,7 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="Stream"></param>
 	/// <returns></returns>
-	static public ulong ReadVariableUlongBit8Extends(this Stream Stream)
+	public static ulong ReadVariableUlongBit8Extends(this Stream Stream)
 	{
 		int c;
 		ulong v = 0;
@@ -850,7 +847,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Count"></param>
 	/// <returns></returns>
-	static public uint[] ReadVariableUintBit8ExtendsArray(this Stream Stream, int Count)
+	public static uint[] ReadVariableUintBit8ExtendsArray(this Stream Stream, int Count)
 	{
 		uint[] Array = new uint[Count];
 		for (int n = 0; n < Count; n++) Array[n] = Stream.ReadVariableUintBit8Extends();
@@ -862,7 +859,7 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="Stream"></param>
 	/// <returns></returns>
-	static public IEnumerable<byte> AsByteEnumerable(this Stream Stream)
+	public static IEnumerable<byte> AsByteEnumerable(this Stream Stream)
 	{
 		lock (Stream)
 		{
@@ -891,7 +888,7 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="BaseStream"></param>
 	/// <returns></returns>
-	static public SliceStream Slice(this Stream BaseStream)
+	public static SliceStream Slice(this Stream BaseStream)
 	{
 		return SliceStream.CreateWithLength(BaseStream);
 	}
@@ -904,7 +901,7 @@ static public class StreamExtensions
 	/// <param name="ThisLength"></param>
 	/// <param name="CanWrite"></param>
 	/// <returns></returns>
-	static public SliceStream SliceWithLength(this Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
+	public static SliceStream SliceWithLength(this Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
 	{
 		return SliceStream.CreateWithLength(BaseStream, ThisStart, ThisLength, CanWrite);
 	}
@@ -917,7 +914,7 @@ static public class StreamExtensions
 	/// <param name="UpperBound"></param>
 	/// <param name="CanWrite"></param>
 	/// <returns></returns>
-	static public SliceStream SliceWithBounds(this Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
+	public static SliceStream SliceWithBounds(this Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
 	{
 		return SliceStream.CreateWithBounds(BaseStream, LowerBound, UpperBound, CanWrite);
 	}
@@ -928,7 +925,7 @@ static public class StreamExtensions
 	/// <param name="BaseStream"></param>
 	/// <param name="NextStream"></param>
 	/// <returns></returns>
-	static public ConcatStream Concat(this Stream BaseStream, Stream NextStream)
+	public static ConcatStream Concat(this Stream BaseStream, Stream NextStream)
 	{
 		return new ConcatStream(BaseStream, NextStream);
 	}
@@ -939,7 +936,7 @@ static public class StreamExtensions
 	/// <typeparam name="TType"></typeparam>
 	/// <param name="BaseStream"></param>
 	/// <returns></returns>
-	static public StreamStructArrayWrapper<TType> ConvertToStreamStructArrayWrapper<TType>(this Stream BaseStream) where TType : struct
+	public static StreamStructArrayWrapper<TType> ConvertToStreamStructArrayWrapper<TType>(this Stream BaseStream) where TType : struct
 	{
 		return new StreamStructArrayWrapper<TType>(BaseStream);
 	}
@@ -951,7 +948,7 @@ static public class StreamExtensions
 	/// <param name="BaseStream"></param>
 	/// <param name="BufferCount"></param>
 	/// <returns></returns>
-	static public StreamStructCachedArrayWrapper<TType> ConvertToStreamStructCachedArrayWrapper<TType>(this Stream BaseStream, int BufferCount) where TType : struct
+	public static StreamStructCachedArrayWrapper<TType> ConvertToStreamStructCachedArrayWrapper<TType>(this Stream BaseStream, int BufferCount) where TType : struct
 	{
 		return new StreamStructCachedArrayWrapper<TType>(BufferCount, BaseStream);
 	}
@@ -963,7 +960,7 @@ static public class StreamExtensions
 	/// <param name="Pointer"></param>
 	/// <param name="Count"></param>
 	/// <returns></returns>
-	unsafe static public int ReadToPointer(this Stream Stream, byte* Pointer, int Count)
+	public unsafe static int ReadToPointer(this Stream Stream, byte* Pointer, int Count)
 	{
 		var Data = new byte[Count];
 		int Result = Stream.Read(Data, 0, Count);

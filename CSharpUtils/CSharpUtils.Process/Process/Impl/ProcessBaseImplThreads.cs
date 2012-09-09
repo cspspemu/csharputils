@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace CSharpUtils.Process.Impl
 {
 	public class ProcessBaseImplThreads : IProcessBaseImpl
 	{
-		static public Semaphore SemaphoreGlobal;
-		static public Thread MainThread;
+		public static Semaphore SemaphoreGlobal;
+		public static Thread MainThread;
 		Semaphore Semaphore;
 		Thread CurrentThread;
 		/*Object Parent;
@@ -25,7 +22,7 @@ namespace CSharpUtils.Process.Impl
 			Remove();
 		}
 
-		static public void Shutdown()
+		public static void Shutdown()
 		{
 
 		}

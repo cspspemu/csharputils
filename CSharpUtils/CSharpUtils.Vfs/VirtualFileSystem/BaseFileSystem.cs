@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.VirtualFileSystem
 {
-	abstract public partial class FileSystem : IDisposable
+	public abstract partial class FileSystem : IDisposable
 	{
 		public struct MountStruct
 		{
@@ -16,23 +14,23 @@ namespace CSharpUtils.VirtualFileSystem
 		internal SortedDictionary<String, MountStruct> MountedFileSystems = new SortedDictionary<string, MountStruct>();
 
 		String CurrentWorkingPath = "";
-		virtual protected bool CaseInsensitiveFileSystem { get { return false; } }
+		protected virtual bool CaseInsensitiveFileSystem { get { return false; } }
 
 		~FileSystem()
 		{
 			Shutdown();
 		}
 
-		virtual public void Shutdown()
+		public virtual void Shutdown()
 		{
 		}
 
-		static public String CombinePath(String BasePath, String PathToCombine)
+		public static String CombinePath(String BasePath, String PathToCombine)
 		{
 			return BasePath.TrimEnd('/') + "/" + PathToCombine.TrimStart('/');
 		}
 
-		static public String AbsoluteNormalizePath(String Path, String CurrentWorkingPath = "")
+		public static String AbsoluteNormalizePath(String Path, String CurrentWorkingPath = "")
 		{
 			var Components = new LinkedList<String>();
 
@@ -71,7 +69,7 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 		}
 
-		virtual protected void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
+		protected virtual void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
 		{
 			// Normalize Components
 			Path = AbsoluteNormalizePath(Path, CurrentWorkingPath);

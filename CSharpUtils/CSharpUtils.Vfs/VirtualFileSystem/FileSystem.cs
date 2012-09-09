@@ -1,55 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using CSharpUtils;
 
 namespace CSharpUtils.VirtualFileSystem
 {
 	// http://msdn.microsoft.com/en-us/library/system.io.isolatedstorage.isolatedstoragefile.aspx
 	// http://vfs.codeplex.com/
-	abstract public partial class FileSystem : IDisposable
+	public abstract partial class FileSystem : IDisposable
 	{
 		//public FileSystemFileStream CreateFile(String FileName, uint DesiredAccess, uint ShareMode, uint CreationDisposition, uint FlagsAndAttributes) {
 
 		// http://docs.python.org/whatsnew/2.6.html#pep-343-the-with-statement
 		// http://msdn.microsoft.com/en-us/library/yh598w02(v=VS.100).aspx
-		abstract protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode);
+		protected abstract FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode);
 		public FileSystemFileStream OpenFile(String FileName, FileMode FileMode)
 		{
 			FileSystem NewFileSystem; String NewFileName; Access(FileName, out NewFileSystem, out NewFileName);
 			return NewFileSystem.ImplOpenFile(NewFileName, FileMode);
 		}
 
-		abstract protected void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
+		protected abstract void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
 		public void WriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
 		{
 			ImplWriteFile(FileStream, Buffer, Offset, Count);
 		}
 
-		abstract protected int ImplReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
+		protected abstract int ImplReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
 		public int ReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
 		{
 			return ImplReadFile(FileStream, Buffer, Offset, Count);
 		}
 
-		abstract protected void ImplCloseFile(FileSystemFileStream FileStream);
+		protected abstract void ImplCloseFile(FileSystemFileStream FileStream);
 		public void CloseFile(FileSystemFileStream FileStream)
 		{
 			ImplCloseFile(FileStream);
 		}
 
-		abstract protected void ImplSetFileTime(String Path, FileSystemEntry.FileTime FileTime);
+		protected abstract void ImplSetFileTime(String Path, FileSystemEntry.FileTime FileTime);
 		public void SetFileTime(String Path, FileSystemEntry.FileTime FileTime)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
 			NewFileSystem.ImplSetFileTime(NewPath, FileTime);
 		}
 
-		abstract protected FileSystemEntry ImplGetFileInfo(String Path);
+		protected abstract FileSystemEntry ImplGetFileInfo(String Path);
 		public FileSystemEntry GetFileInfo(String Path)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
@@ -61,21 +58,21 @@ namespace CSharpUtils.VirtualFileSystem
 			return this.GetFileInfo(Path).Time;
 		}
 
-		abstract protected void ImplDeleteFile(String Path);
+		protected abstract void ImplDeleteFile(String Path);
 		public void DeleteFile(String Path)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
 			NewFileSystem.ImplDeleteFile(NewPath);
 		}
 
-		abstract protected void ImplDeleteDirectory(String Path);
+		protected abstract void ImplDeleteDirectory(String Path);
 		public void DeleteDirectory(String Path)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
 			NewFileSystem.ImplDeleteDirectory(NewPath);
 		}
 
-		abstract protected void ImplCreateDirectory(String Path, int Mode = 0777);
+		protected abstract void ImplCreateDirectory(String Path, int Mode = 0777);
 		public void CreateDirectory(String Path, int Mode = 0777, bool ThrowErrorIfNotExists = true)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
@@ -95,7 +92,7 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 		}
 
-		abstract protected void ImplMoveFile(String ExistingFileName, String NewFileName, bool ReplaceExisiting);
+		protected abstract void ImplMoveFile(String ExistingFileName, String NewFileName, bool ReplaceExisiting);
 		public void MoveFile(String ExistingFileName, String NewFileName, bool ReplaceExisiting)
 		{
 			FileSystem NewFileSystem1; String NewPath1;
@@ -126,12 +123,12 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 		}
 
-		virtual protected FileSystemEntry FilterFileSystemEntry(FileSystemEntry FileSystemEntry)
+		protected virtual FileSystemEntry FilterFileSystemEntry(FileSystemEntry FileSystemEntry)
 		{
 			return FileSystemEntry;
 		}
 
-		abstract protected IEnumerable<FileSystemEntry> ImplFindFiles(String Path);
+		protected abstract IEnumerable<FileSystemEntry> ImplFindFiles(String Path);
 		public IEnumerable<FileSystemEntry> FindFiles(String Path)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);

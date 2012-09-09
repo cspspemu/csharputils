@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using CSharpUtils;
 
 namespace CSharpUtils.Web._45.Fastcgi
 {
@@ -43,7 +40,7 @@ namespace CSharpUtils.Web._45.Fastcgi
 			this.FastcgiResponseAsync.StderrWriter.AutoFlush = true;
 		}
 
-		static protected int ReadVariable(Stream Stream)
+		protected static int ReadVariable(Stream Stream)
 		{
 			int Value = 0;
 			byte Data;
@@ -56,7 +53,7 @@ namespace CSharpUtils.Web._45.Fastcgi
 			return Value;
 		}
 
-		async public Task HandlePacket(TcpClient Client, FastcgiPacket Packet)
+		public async Task HandlePacket(TcpClient Client, FastcgiPacket Packet)
 		{
 			if (FastcgiServerClientHandlerAsync.FastcgiServerAsync.Debug)
 			{

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Linq.Expressions;
 using CSharpUtils;
 
-static public class LinqExExtensions
+public static class LinqExExtensions
 {
-	static public bool ContainsSubset<TSource>(this IEnumerable<TSource> Superset, IEnumerable<TSource> Subset)
+	public static bool ContainsSubset<TSource>(this IEnumerable<TSource> Superset, IEnumerable<TSource> Subset)
 	{
 		return !Subset.Except(Superset).Any();
 	}
@@ -21,14 +19,14 @@ static public class LinqExExtensions
 	/// <param name="ListItems"></param>
 	/// <param name="KeySelector"></param>
 	/// <returns></returns>
-	static public Dictionary<TKey, TValue> CreateDictionary<TValue, TKey>(this IEnumerable<TValue> ListItems, Func<TValue, TKey> KeySelector)
+	public static Dictionary<TKey, TValue> CreateDictionary<TValue, TKey>(this IEnumerable<TValue> ListItems, Func<TValue, TKey> KeySelector)
 	{
 		var Dictionary = new Dictionary<TKey, TValue>();
 		foreach (var Item in ListItems) Dictionary.Add(KeySelector(Item), Item);
 		return Dictionary;
 	}
 
-	static public IEnumerable<TSource> OrderByNatural<TSource, TString>(this IEnumerable<TSource> Items, Func<TSource, TString> selector)
+	public static IEnumerable<TSource> OrderByNatural<TSource, TString>(this IEnumerable<TSource> Items, Func<TSource, TString> selector)
 	{
 		Func<string, object> convert = str =>
 		{
@@ -48,27 +46,27 @@ static public class LinqExExtensions
 		);
 	}
 
-	static public IEnumerable<TSource> OrderByNatural<TSource>(this IEnumerable<TSource> Items)
+	public static IEnumerable<TSource> OrderByNatural<TSource>(this IEnumerable<TSource> Items)
 	{
 		return Items.OrderByNatural(Value => Value);
 	}
 
-	static public IEnumerable<TSource> DistinctByKey<TSource, TResult>(this IEnumerable<TSource> Items, Func<TSource, TResult> Selector)
+	public static IEnumerable<TSource> DistinctByKey<TSource, TResult>(this IEnumerable<TSource> Items, Func<TSource, TResult> Selector)
 	{
 		return Items.Distinct(new LinqEqualityComparer<TSource, TResult>(Selector));
 	}
 
-	static public String ToHexString(this IEnumerable<byte> Bytes)
+	public static String ToHexString(this IEnumerable<byte> Bytes)
 	{
 		return String.Join("", Bytes.Select(Byte => Byte.ToString("x2")));
 	}
 
-	static public String Implode<TSource>(this IEnumerable<TSource> Items, String Separator)
+	public static String Implode<TSource>(this IEnumerable<TSource> Items, String Separator)
 	{
 		return String.Join(Separator, Items.Select(Item => Item.ToString()));
 	}
 
-	static public String ToStringArray<TSource>(this IEnumerable<TSource> Items, String Separator = ",")
+	public static String ToStringArray<TSource>(this IEnumerable<TSource> Items, String Separator = ",")
 	{
 		return Items.Implode(Separator);
 	}

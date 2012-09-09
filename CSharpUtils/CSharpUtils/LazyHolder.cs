@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils
 {
@@ -40,7 +37,7 @@ namespace CSharpUtils
 			this.Getter = Getter;
 		}
 
-		static public LazyHolder<T> Create(Func<T> Getter)
+		public static LazyHolder<T> Create(Func<T> Getter)
 		{
 			return new LazyHolder<T>(Getter);
 		}
