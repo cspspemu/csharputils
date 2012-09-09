@@ -12,7 +12,7 @@ namespace CSharpUtilsTests
 	[TestClass]
 	public class ScgiServerTest
 	{
-		class TestScgiServer : ScgiServer
+		sealed class TestScgiServer : ScgiServer
 		{
 			public AutoResetEvent HandleRequestEvent = new AutoResetEvent(false);
 

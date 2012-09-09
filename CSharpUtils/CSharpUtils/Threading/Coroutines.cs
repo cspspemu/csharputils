@@ -63,7 +63,7 @@ namespace CSharpUtils.Threading
 			Pool.CallerContinueEvent.WaitOne();
 		}
 
-		private class InterruptException : Exception
+		private sealed class InterruptException : Exception
 		{
 		}
 

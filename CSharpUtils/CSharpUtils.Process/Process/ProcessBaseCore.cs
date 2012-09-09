@@ -78,7 +78,7 @@ namespace CSharpUtils.Process
 			Console.WriteLine("~ProcessBaseCore");
 		}
 
-		class ChangeExecutionMethodException : Exception
+		sealed class ChangeExecutionMethodException : Exception
 		{
 			internal Action method;
 

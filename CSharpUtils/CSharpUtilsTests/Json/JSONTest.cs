@@ -7,7 +7,7 @@ namespace CSharpUtilsTests
 	[TestClass]
 	public class JSONTest
 	{
-		class TestJsonSerializable : IJsonSerializable
+		sealed class TestJsonSerializable : IJsonSerializable
 		{
 			public string ToJson()
 			{

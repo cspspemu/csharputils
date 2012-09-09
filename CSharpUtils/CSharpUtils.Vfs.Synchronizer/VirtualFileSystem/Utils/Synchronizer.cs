@@ -111,7 +111,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			if (OnStep != null) OnStep(Step, Details);
 		}
 
-		private double GetStep(double StepFrom, double StepTo, int subStep, int subSteps)
+		private static double GetStep(double StepFrom, double StepTo, int subStep, int subSteps)
 		{
 			Debug.Assert(StepTo >= StepFrom);
 			Debug.Assert(subSteps >= subStep);
@@ -374,10 +374,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				this.SynchronizeFolder();
 			};
 
-			ProgressForm.Cancel = delegate()
-			{
-				this.Cancel();
-			};
+			ProgressForm.Cancel = this.Cancel;
 
 			if (Start != null)
 			{

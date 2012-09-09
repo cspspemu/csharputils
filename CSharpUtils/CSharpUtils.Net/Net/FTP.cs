@@ -1152,7 +1152,7 @@ namespace CSharpUtils.Net
 		/// <summary>
 		/// Open an upload with resume support
 		/// </summary>
-		/// <param name="filename">Local file to upload (Can include path to file)</param>
+		/// <param name="_file">Local file to upload (Can include path to file)</param>
 		/// <param name="remote_filename">Filename to store file as on ftp server</param>
 		/// <param name="resume">Attempt resume if exists</param>
 		public void OpenUpload(Stream _file, string remote_filename, bool resume = false)

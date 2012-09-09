@@ -66,8 +66,8 @@ public static class StringExtensions
 
 	public static long ConvertToLong(object Value)
 	{
-		if (Value.GetType() == typeof(int)) return (long)(uint)Convert.ToInt32(Value);
-		if (Value.GetType() == typeof(uint)) return (long)(uint)Convert.ToUInt32(Value);
+		if (Value is int) return (long)(uint)Convert.ToInt32(Value);
+		if (Value is uint) return (long)(uint)Convert.ToUInt32(Value);
 		try
 		{
 			return Convert.ToInt64(Value);
