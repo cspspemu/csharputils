@@ -258,6 +258,10 @@ namespace CSharpUtils.Getopt
 						{
 							ParametersData.Add((string)ParameterData);
 						}
+						else if (Parameter.ParameterType == typeof(int))
+						{
+							ParametersData.Add(int.Parse(ParameterData));
+						}
 						else
 						{
 							throw(new NotImplementedException("Not supported parameter type " + Parameter.ParameterType));
