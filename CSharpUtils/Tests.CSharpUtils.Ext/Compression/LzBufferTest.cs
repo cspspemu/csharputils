@@ -5,6 +5,7 @@ using System.Text;
 using CSharpUtils;
 using CSharpUtils.Compression;
 using System.Collections.Generic;
+using CSharpUtils.Ext.Compression.Lz;
 
 namespace CSharpUtilsTests.Compression
 {
@@ -38,17 +39,16 @@ namespace CSharpUtilsTests.Compression
 		{
 			var Data = Encoding.UTF8.GetBytes("abccccccabc");
 			var Results = new List<string>();
-			LzBuffer.Handle(Data, 2, 15 + 2, ushort.MaxValue, true, (int Position, int FoundOffset, int FoundSize) =>
-			{
-				if (FoundSize == 0)
+			Matcher.HandleLz(Data, 0, 2, 15 + 2, ushort.MaxValue, true,
+				(int Position, byte Byte) =>
 				{
-					Results.Add("PUT(" + Data[Position] + ")");
-				}
-				else
+					Results.Add("PUT(" + Byte + ")");
+				},
+				(int Position, int FoundOffset, int FoundSize) =>
 				{
 					Results.Add("REPEAT(" + FoundOffset + "," + FoundSize + ")");
 				}
-			});
+			);
 
 			Assert.AreEqual(
 				"PUT(97),PUT(98),PUT(99),REPEAT(-1,5),REPEAT(-8,3)",
@@ -61,17 +61,16 @@ namespace CSharpUtilsTests.Compression
 		{
 			var Data = Encoding.UTF8.GetBytes("abccccccccccccccccccccccabc");
 			var Results = new List<string>();
-			LzBuffer.Handle(Data, 3, 9, ushort.MaxValue, false, (int Position, int FoundOffset, int FoundSize) =>
-			{
-				if (FoundSize == 0)
+			Matcher.HandleLz(Data, 0, 3, 9, ushort.MaxValue, false,
+				(int Position, byte Byte) =>
 				{
-					Results.Add("PUT(" + Data[Position] + ")");
-				}
-				else
+					Results.Add("PUT(" + Byte + ")");
+				},
+				(int Position, int FoundOffset, int FoundSize) =>
 				{
 					Results.Add("REPEAT(" + FoundOffset + "," + FoundSize + ")");
 				}
-			});
+			);
 
 			Assert.AreEqual(
 				"PUT(97),PUT(98),PUT(99),PUT(99),PUT(99),REPEAT(-3,3),REPEAT(-6,6),REPEAT(-9,9),PUT(99),REPEAT(-24,3)",

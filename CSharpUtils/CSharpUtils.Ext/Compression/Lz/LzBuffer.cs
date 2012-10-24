@@ -31,26 +31,6 @@ namespace CSharpUtils.Compression.Lz
 			throw(new NotImplementedException());
 		}
 
-		static public void Handle(byte[] Input, int MinSearchSize, int MaxSearchSize, int MaxDistance, bool AllowOverlapping, Action<int, int, int> Callback)
-		{
-			var LzBuffer = new LzBuffer(MinSearchSize);
-			LzBuffer.AddBytes(Input);
-			for (int n = 0; n < Input.Length;)
-			{
-				var Result = LzBuffer.FindMaxSequence(n, n, MaxDistance, MinSearchSize, MaxSearchSize, AllowOverlapping);
-				if (Result.Found)
-				{
-					Callback(n, Result.Offset - n, Result.Size);
-					n += Result.Size;
-				}
-				else
-				{
-					Callback(n, 0, 0);
-					n++;
-				}
-			}
-		}
-
 		public void AddBytes(byte[] Bytes)
 		{
 			/*

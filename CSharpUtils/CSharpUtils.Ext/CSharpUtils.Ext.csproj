@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="Compression\Huffman.cs" />
     <Compile Include="Compression\Lz\LzBuffer.cs" />
+    <Compile Include="Compression\Lz\Matcher.cs" />
+    <Compile Include="Compression\Lz\RleMatcher.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />
     <Compile Include="Crc32.cs" />
     <Compile Include="Extensions\LinqExExtensionsExt.cs" />
