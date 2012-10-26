@@ -162,6 +162,18 @@ namespace CSharpUtils
 		public static int FindLargestMatch(byte* Haystack, byte* Needle, int MaxLength)
 		{
 			int Match = 0;
+
+			if (Is64)
+			{
+				while ((MaxLength >= 8) && (*(ulong*)Haystack == *(ulong*)Needle))
+				{
+					Match += 8;
+					Haystack += 8;
+					Needle += 8;
+					MaxLength -= 8;
+				}
+			}
+
 			while ((MaxLength >= 4) && (*(uint*)Haystack == *(uint*)Needle))
 			{
 				Match += 4;
@@ -169,6 +181,7 @@ namespace CSharpUtils
 				Needle += 4;
 				MaxLength -= 4;
 			}
+
 			while ((MaxLength >= 1) && (*(byte*)Haystack == *(byte*)Needle))
 			{
 				Match += 1;
@@ -176,6 +189,47 @@ namespace CSharpUtils
 				Needle += 1;
 				MaxLength -= 1;
 			}
+
+			return Match;
+		}
+
+		public static int FindLargestMatchByte(byte* Haystack, byte Value1, int MaxLength)
+		{
+			int Match = 0;
+
+			if (MaxLength >= 4)
+			{
+				var Value2 = (ushort)(((ushort)Value1 << 0) | ((ushort)Value1 << 8));
+				var Value4 = (uint)(((uint)Value2 << 0) | ((uint)Value2 << 16));
+
+
+				if ((MaxLength >= 8) && Is64)
+				{
+					var Value8 = (ulong)(((ulong)Value4 << 0) | ((ulong)Value4 << 32));
+
+					while ((MaxLength >= 8) && (*(ulong*)Haystack == Value8))
+					{
+						Match += 8;
+						Haystack += 8;
+						MaxLength -= 8;
+					}
+				}
+
+				while ((MaxLength >= 4) && (*(uint*)Haystack == Value4))
+				{
+					Match += 4;
+					Haystack += 4;
+					MaxLength -= 4;
+				}
+			}
+
+			while ((MaxLength >= 1) && (*(byte*)Haystack == Value1))
+			{
+				Match += 1;
+				Haystack += 1;
+				MaxLength -= 1;
+			}
+
 			return Match;
 		}
 
@@ -307,6 +361,13 @@ namespace CSharpUtils
 			return Marshal.SizeOf(typeof(T));
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		/// <param name="Count"></param>
+		/// <returns></returns>
 		public static unsafe int Memcmp(byte* Left, byte* Right, int Count)
 		{
 			for (int n = 0; n < Count; n++)
@@ -315,6 +376,31 @@ namespace CSharpUtils
 				if (Dif != 0) return Dif;
 			}
 			return 0;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Ptr"></param>
+		/// <param name="Len"></param>
+		/// <returns></returns>
+		public static unsafe int FastHash(byte* Ptr, int Len)
+		{
+			switch (Len)
+			{
+				case 0: return 0;
+				case 1: return (Ptr[0] << 0);
+				case 2: return (Ptr[0] << 0) | (Ptr[1] << 8);
+				case 3: return (Ptr[0] << 0) | (Ptr[1] << 8) | (Ptr[2] << 16);
+				default:
+					int Hash = Len;
+					for (int n = 0; n < Len; n++)
+					{
+						Hash ^= n << 28;
+						Hash += *Ptr++;
+					}
+					return Hash;
+			}
 		}
 	}
 }

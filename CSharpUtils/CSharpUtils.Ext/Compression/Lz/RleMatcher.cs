@@ -46,12 +46,12 @@ namespace CSharpUtils.Ext.Compression.Lz
 			{
 				Byte = Data[_Offset];
 				Length = 0;
+
 				fixed (byte* Start = &Data[_Offset])
 				fixed (byte* End = &Data[Data.Length - 1])
 				{
-					byte* Ptr = Start;
-					while ((Ptr <= End) && (*Ptr == Byte)) Ptr++;
-					Length = (int)(Ptr - Start);
+					int MaxLen = (int)(End - Start);
+					Length = PointerUtils.FindLargestMatchByte(Start, Start[0], MaxLen);
 				}
 			}
 			else

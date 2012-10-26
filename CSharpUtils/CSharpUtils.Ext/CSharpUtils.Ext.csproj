@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compression\Huffman.cs" />
-    <Compile Include="Compression\Lz\LzBuffer.cs" />
+    <Compile Include="Compression\Lz\LzMatcher.cs" />
     <Compile Include="Compression\Lz\Matcher.cs" />
     <Compile Include="Compression\Lz\RleMatcher.cs" />
     <Compile Include="Compression\Zip\ZipArchive.cs" />

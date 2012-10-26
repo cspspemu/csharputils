@@ -15,23 +15,16 @@ namespace CSharpUtilsTests.Compression
 		[TestMethod()]
 		public void FindMaxSequenceTest()
 		{
-			LzBuffer LzBuffer = new LzBuffer(3);
-			LzBuffer.AddBytes(new byte[] {
+			var data = new byte[] {
 				0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
 				7, 8, 9, 10, 12, 13,
 				7, 8, 9, 10, 11, 16
-			});
+			};
+			var LzMatcher = new LzMatcher(data, data.Length - 6, 0x1000, 3, 16, true);
 
-			var Result = LzBuffer.FindMaxSequence(
-				LzBuffer.Size - 6,
-				LzBuffer.Size - 6,
-				0x1000,
-				3,
-				16,
-				true
-			);
+			var Result = LzMatcher.FindMaxSequence();
 
-			Assert.AreEqual("LzBuffer.FindSequenceResult(Offset=7, Size=5)", Result.ToString());
+			Assert.AreEqual("LzMatcher.FindSequenceResult(Offset=7, Size=5)", Result.ToString());
 		}
 
 		[TestMethod()]
