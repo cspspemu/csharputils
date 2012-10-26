@@ -9,17 +9,17 @@ namespace CSharpUtils.Ext.Compression.Lz
 {
 	public class Matcher
 	{
-		static public void HandleLz(byte[] Input, int StartPosition, int MinSearchSize, int MaxSearchSize, int MaxDistance, bool AllowOverlapping, Action<int, byte> ByteCallback, Action<int, int, int> LzCallback)
+		static public void HandleLz(byte[] Input, int StartPosition, int MinLzLength, int MaxLzLength, int MaxLzDistance, bool AllowOverlapping, Action<int, byte> ByteCallback, Action<int, int, int> LzCallback)
 		{
-			HandleLzRle(Input, StartPosition, MinSearchSize, MaxSearchSize, MaxDistance, 0, 0, AllowOverlapping, ByteCallback, LzCallback, null);
+			HandleLzRle(Input, StartPosition, MinLzLength, MaxLzLength, MaxLzDistance, 0, 0, AllowOverlapping, ByteCallback, LzCallback, null);
 		}
 
-		static public void HandleLzRle(byte[] Input, int StartPosition, int MinSearchSize, int MaxSearchSize, int MaxDistance, int MinRle, int MaxRle, bool AllowOverlapping, Action<int, byte> ByteCallback, Action<int, int, int> LzCallback, Action<int, byte, int> RleCallback)
+		static public void HandleLzRle(byte[] Input, int StartPosition, int MinLzLength, int MaxLzLength, int MaxLzDistance, int MinRleLength, int MaxRleLength, bool AllowOverlapping, Action<int, byte> ByteCallback, Action<int, int, int> LzCallback, Action<int, byte, int> RleCallback)
 		{
-			var LzBuffer = new LzBuffer(MinSearchSize);
+			var LzBuffer = new LzBuffer(MinLzLength);
 			LzBuffer.AddBytes(Input);
 			RleMatcher RleMatcher = null;
-			bool UseRle = (RleCallback != null);
+			bool UseRle = (RleCallback != null) && (MaxRleLength > 0);
 
 			if (UseRle)
 			{
@@ -29,15 +29,16 @@ namespace CSharpUtils.Ext.Compression.Lz
 
 			for (int n = StartPosition; n < Input.Length; )
 			{
-				var Result = LzBuffer.FindMaxSequence(n, n, MaxDistance, MinSearchSize, MaxSearchSize, AllowOverlapping);
+				//Console.WriteLine("{0}", n);
+				var Result = LzBuffer.FindMaxSequence(n, n, MaxLzDistance, MinLzLength, MaxLzLength, AllowOverlapping);
 				
 				int RleLength = -1;
 
 				if (UseRle)
 				{
 					RleLength = RleMatcher.Length;
-					if (RleLength < MinRle) RleLength = 0;
-					if (RleLength > MaxRle) RleLength = MaxRle;
+					if (RleLength < MinRleLength) RleLength = 0;
+					if (RleLength > MaxRleLength) RleLength = MaxRleLength;
 				}
 
 				if (Result.Found && (!UseRle || (Result.Size > RleLength)))
@@ -45,14 +46,16 @@ namespace CSharpUtils.Ext.Compression.Lz
 					//Console.WriteLine("RLE: {0}", RleLength);
 					LzCallback(n, Result.Offset - n, Result.Size);
 					n += Result.Size;
+					//Console.WriteLine(Result.Size);
 					if (UseRle) RleMatcher.Skip(Result.Size);
 					continue;
 				}
 
-				if (UseRle && (RleLength >= MinRle))
+				if (UseRle && (RleLength >= MinRleLength))
 				{
 					RleCallback(n, Input[n], RleLength);
 					n += RleLength;
+					//Console.WriteLine(RleLength);
 					RleMatcher.Skip(RleLength);
 					continue;
 				}

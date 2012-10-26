@@ -70,7 +70,7 @@ namespace CSharpUtils
 			if (Pointer == null) throw(new ArgumentNullException("Memset pointer is null"));
 
 #if true
-			if (Count >= 32)
+			if (Count >= 16)
 			{
 				var Value2 = (ushort)(((ushort)Value << 8) | ((ushort)Value << 0));
 				var Value4 = (uint)(((uint)Value2 << 16) | ((uint)Value2 << 0));
@@ -159,10 +159,31 @@ namespace CSharpUtils
 			}
 		}
 
+		public static int FindLargestMatch(byte* Haystack, byte* Needle, int MaxLength)
+		{
+			int Match = 0;
+			while ((MaxLength >= 4) && (*(uint*)Haystack == *(uint*)Needle))
+			{
+				Match += 4;
+				Haystack += 4;
+				Needle += 4;
+				MaxLength -= 4;
+			}
+			while ((MaxLength >= 1) && (*(byte*)Haystack == *(byte*)Needle))
+			{
+				Match += 1;
+				Haystack += 1;
+				Needle += 1;
+				MaxLength -= 1;
+			}
+			return Match;
+		}
+
 		public static void Memcpy(byte* Destination, byte* Source, int Size)
 		{
+			long Distance = (long)Math.Abs(Destination - Source);
 #if true
-			if (Is64)
+			if (Is64 && (Distance >= 8))
 			{
 				while (Size >= sizeof(ulong))
 				{
@@ -172,14 +193,24 @@ namespace CSharpUtils
 					Size -= sizeof(ulong);
 				}
 			}
-			else
+			else if (Distance >= 4)
 			{
 				while (Size >= sizeof(uint))
 				{
-					*(ulong*)Destination = *(ulong*)Source;
+					*(uint*)Destination = *(uint*)Source;
 					Destination += sizeof(uint);
 					Source += sizeof(uint);
 					Size -= sizeof(uint);
+				}
+			}
+			else if (Distance >= 2)
+			{
+				while (Size >= sizeof(ushort))
+				{
+					*(ushort*)Destination = *(ushort*)Source;
+					Destination += sizeof(ushort);
+					Source += sizeof(ushort);
+					Size -= sizeof(ushort);
 				}
 			}
 #endif

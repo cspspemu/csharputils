@@ -7,10 +7,32 @@ static public class ArrayExtensions
 {
 	static public T[] Concat<T>(this T[] Left, T[] Right)
 	{
+		if (typeof(T) == typeof(byte[]))
+		{
+			return (T[])(object)ConcatBytes((byte[])(object)Left, (byte[])(object)Right);
+		}
+
 		var Return = new T[Left.Length + Right.Length];
 		Left.CopyTo(Return, 0);
 		Right.CopyTo(Return, Left.Length);
 		return Return;
+	}
+
+	static public byte[] ConcatBytes(params byte[][] Arrays)
+	{
+		var Return = new byte[Arrays.Sum(Item => Item.Length)];
+		var Offset = 0;
+		foreach (var Array in Arrays)
+		{
+			Buffer.BlockCopy(Array, 0, Return, Offset, Array.Length);
+			Offset += Array.Length;
+		}
+		return Return;
+	}
+
+	static public byte[] ConcatBytes(this byte[] First, params byte[][] Others)
+	{
+		return ConcatBytes(new[] { First }.Union(Others).ToArray());
 	}
 
 	static public T[] Concat<T>(this T[] Left, T[] Right, int RightOffset, int RightLength)
