@@ -730,6 +730,12 @@ static public class StreamExtensions
 		return Stream;
 	}
 
+	unsafe public static Stream FillStreamWithByte(this Stream Stream, byte Byte)
+	{
+		Stream.WriteByteRepeated(Byte, (int)(Stream.Length - Stream.Position));
+		return Stream;
+	}
+
 	/// <summary>
 	/// 
 	/// </summary>

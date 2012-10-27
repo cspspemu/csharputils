@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -139,6 +140,20 @@ namespace CSharpUtils.VirtualFileSystem
 			get
 			{
 				return "BaseFileSystem";
+			}
+		}
+
+		public void Copy(string SrcFile, string DstFile, bool Override = false)
+		{
+			if (!Override && Exists(DstFile))
+			{
+				throw(new System.IO.IOException("File already exists"));
+			}
+
+			using (var Src = OpenFile(SrcFile, FileMode.Open))
+			using (var Dst = OpenFile(DstFile, FileMode.Truncate))
+			{
+				Src.CopyTo(Dst, (int)Math.Min(Src.Length, 2 * 1024 * 1024));
 			}
 		}
 	}

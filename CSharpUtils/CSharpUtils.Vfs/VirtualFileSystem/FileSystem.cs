@@ -36,6 +36,38 @@ namespace CSharpUtils.VirtualFileSystem
 			return ImplReadFile(FileStream, Buffer, Offset, Count);
 		}
 
+		public bool Exists(string FileName)
+		{
+			try
+			{
+				var Info = GetFileInfo(FileName);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public void WriteAllBytes(string FileName, byte[] Buffer)
+		{
+			using (var File = OpenFile(FileName, FileMode.Truncate))
+			{
+				File.Write(Buffer, 0, Buffer.Length);
+			}
+		}
+
+		public byte[] ReadAllBytes(string FileName)
+		{
+			using (var File = OpenFile(FileName, FileMode.Open))
+			{
+				var Bytes = new byte[File.Length];
+				File.Read(Bytes, 0, Bytes.Length);
+				return Bytes;
+			}
+
+		}
+
 		abstract protected void ImplCloseFile(FileSystemFileStream FileStream);
 		public void CloseFile(FileSystemFileStream FileStream)
 		{

@@ -87,7 +87,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
 		{
 			//var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.Read, FileShare.ReadWrite);
-			var Stream = File.Open(RealPath(FileName), FileMode);
+			var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.ReadWrite, FileShare.ReadWrite);
 			return new FileSystemFileStreamStream(this, Stream);
 		}
 
