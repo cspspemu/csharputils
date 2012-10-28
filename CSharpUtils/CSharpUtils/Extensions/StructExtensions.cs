@@ -59,6 +59,10 @@ static public class StructExtensions
 					{
 						Ret += String.Format("0x{0:X}", Value);
 					}
+					else if (Value.GetType().IsArray)
+					{
+						Ret += "[" + String.Join(",", Value.ToStringDefault(SimplifyBool)) + "]";
+					}
 					else
 					{
 						Ret += Value;

@@ -346,7 +346,10 @@ static public class StreamExtensions
 		}
 		else
 		{
-			return Encoding.GetString(Stream.ReadBytes(ToRead)).TrimEnd('\0');
+			var Str = Encoding.GetString(Stream.ReadBytes(ToRead));
+			var ZeroIndex = Str.IndexOf('\0');
+			if (ZeroIndex == -1) ZeroIndex = Str.Length;
+			return Str.Substring(0, ZeroIndex);
 		}
 	}
 

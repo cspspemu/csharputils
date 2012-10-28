@@ -24,6 +24,17 @@ namespace CSharpUtils.VirtualFileSystem
 			return NewFileSystem.ImplOpenFile(NewFileName, FileMode);
 		}
 
+		public FileSystemFileStream OpenFileRW(String FileName)
+		{
+			return OpenFile(FileName, FileMode.Open);
+		}
+
+		public FileSystemFileStream OpenFileRead(String FileName)
+		{
+			return OpenFile(FileName, FileMode.Open);
+		}
+
+#if false
 		abstract protected void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count);
 		public void WriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
 		{
@@ -35,6 +46,13 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			return ImplReadFile(FileStream, Buffer, Offset, Count);
 		}
+
+		abstract protected void ImplCloseFile(FileSystemFileStream FileStream);
+		public void CloseFile(FileSystemFileStream FileStream)
+		{
+			ImplCloseFile(FileStream);
+		}
+#endif
 
 		public bool Exists(string FileName)
 		{
@@ -66,12 +84,6 @@ namespace CSharpUtils.VirtualFileSystem
 				return Bytes;
 			}
 
-		}
-
-		abstract protected void ImplCloseFile(FileSystemFileStream FileStream);
-		public void CloseFile(FileSystemFileStream FileStream)
-		{
-			ImplCloseFile(FileStream);
 		}
 
 		abstract protected void ImplSetFileTime(String Path, FileSystemEntry.FileTime FileTime);

@@ -61,6 +61,7 @@ namespace CSharpUtils.VirtualFileSystem
 			return this.ParentFileSystem.OpenFile(FileName, FileMode);
 		}
 
+#if false
 		protected override void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
 		{
 			//this.ParentFileSystem.ImplWriteFile(FileStream, Buffer, Offset, Count);
@@ -78,6 +79,7 @@ namespace CSharpUtils.VirtualFileSystem
 			//this.ParentFileSystem.ImplCloseFile(FileStream);
 			this.ParentFileSystem.CloseFile(FileStream);
 		}
+#endif
 
 		protected override void ImplCreateDirectory(string Path, int Mode = 0777)
 		{

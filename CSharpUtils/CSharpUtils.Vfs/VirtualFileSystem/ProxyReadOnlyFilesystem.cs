@@ -32,10 +32,5 @@ namespace CSharpUtils.VirtualFileSystem
 		{
 			throw (new NotImplementedException());
 		}
-
-		sealed protected override void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			throw (new NotImplementedException());
-		}
 	}
 }

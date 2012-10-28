@@ -86,40 +86,6 @@ namespace CSharpUtils.VirtualFileSystem.Zip
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="FileStream"></param>
-		/// <param name="Buffer"></param>
-		/// <param name="Offset"></param>
-		/// <param name="Count"></param>
-		protected override void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="FileStream"></param>
-		/// <param name="Buffer"></param>
-		/// <param name="Offset"></param>
-		/// <param name="Count"></param>
-		/// <returns></returns>
-		protected override int ImplReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="FileStream"></param>
-		protected override void ImplCloseFile(FileSystemFileStream FileStream)
-		{
-			//throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <param name="Path"></param>
 		/// <param name="FileTime"></param>
 		protected override void ImplSetFileTime(string Path, FileSystemEntry.FileTime FileTime)

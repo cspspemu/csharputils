@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CSharpUtils.Streams
 {
-	public class ProxyStream : Stream
+	public class ProxyStream : Stream, IDisposable
 	{
 		protected Stream ParentStream;
 

@@ -45,21 +45,6 @@ namespace CSharpUtils.VirtualFileSystem
 			throw new NotImplementedException();
 		}
 
-		protected override void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			throw new NotImplementedException();
-		}
-
-		protected override int ImplReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			throw new NotImplementedException();
-		}
-
-		protected override void ImplCloseFile(FileSystemFileStream FileStream)
-		{
-			//throw new NotImplementedException();
-		}
-
 		protected override void ImplCreateDirectory(string Path, int Mode = 0777)
 		{
 			throw new NotImplementedException();

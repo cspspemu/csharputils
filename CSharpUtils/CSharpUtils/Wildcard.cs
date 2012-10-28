@@ -17,6 +17,8 @@ namespace CSharpUtils
 	/// </summary>
 	public class Wildcard : Regex
 	{
+		string wildcardPattern;
+
 		/// <summary>
 		/// Initializes a wildcard with the given search pattern.
 		/// </summary>
@@ -25,6 +27,7 @@ namespace CSharpUtils
 		public Wildcard(string pattern)
 			: base(WildcardToRegex(pattern))
 		{
+			this.wildcardPattern = pattern;
 		}
 
 		/// <summary>
@@ -36,6 +39,7 @@ namespace CSharpUtils
 		public Wildcard(string pattern, RegexOptions options)
 			: base(WildcardToRegex(pattern), options)
 		{
+			this.wildcardPattern = pattern;
 		}
 
 		/// <summary>
@@ -51,6 +55,11 @@ namespace CSharpUtils
 		static public implicit operator Wildcard(String Input)
 		{
 			return new Wildcard(Input);
+		}
+
+		static public implicit operator String(Wildcard Input)
+		{
+			return Input.wildcardPattern;
 		}
 	}
 }
