@@ -6,6 +6,7 @@ using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
 using CSharpUtils;
+using System.Diagnostics;
 
 namespace CSharpUtils.VirtualFileSystem
 {
@@ -18,17 +19,21 @@ namespace CSharpUtils.VirtualFileSystem
 		// http://docs.python.org/whatsnew/2.6.html#pep-343-the-with-statement
 		// http://msdn.microsoft.com/en-us/library/yh598w02(v=VS.100).aspx
 		abstract protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode);
+		
+		[DebuggerHidden]
 		public FileSystemFileStream OpenFile(String FileName, FileMode FileMode)
 		{
 			FileSystem NewFileSystem; String NewFileName; Access(FileName, out NewFileSystem, out NewFileName);
 			return NewFileSystem.ImplOpenFile(NewFileName, FileMode);
 		}
 
+		[DebuggerHidden]
 		public FileSystemFileStream OpenFileRW(String FileName)
 		{
 			return OpenFile(FileName, FileMode.Open);
 		}
 
+		[DebuggerHidden]
 		public FileSystemFileStream OpenFileRead(String FileName)
 		{
 			return OpenFile(FileName, FileMode.Open);

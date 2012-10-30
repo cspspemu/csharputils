@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace CSharpUtils.VirtualFileSystem.Local
 {
@@ -10,8 +11,10 @@ namespace CSharpUtils.VirtualFileSystem.Local
 	{
 		protected String RootPath;
 
+		[DebuggerHidden]
 		override protected bool CaseInsensitiveFileSystem { get { return true; } }
 
+		[DebuggerHidden]
 		public LocalFileSystem(String RootPath, bool CreatePath = false)
 		{
 			if (CreatePath && !Directory.Exists(RootPath))
@@ -21,6 +24,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			this.RootPath = AbsoluteNormalizePath(RootPath);
 		}
 
+		[DebuggerHidden]
 		protected String RealPath(String Path)
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Unix)
@@ -30,6 +34,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return CombinePath(RootPath, Path).Replace('/', '\\');
 		}
 
+		[DebuggerHidden]
 		override protected FileSystemEntry ImplGetFileInfo(String Path)
 		{
 			String CachedRealPath = RealPath(Path);
@@ -43,6 +48,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return new LocalFileSystemEntry(this, Path, FileSystemInfo);
 		}
 
+		[DebuggerHidden]
 		override protected IEnumerable<FileSystemEntry> ImplFindFiles(String Path)
 		{
 			String CachedRealPath = RealPath(Path);
@@ -73,17 +79,19 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			}
 		}
 
+		[DebuggerHidden]
 		override protected void ImplCreateDirectory(String Path, int Mode = 0777)
 		{
 			Directory.CreateDirectory(RealPath(Path));
 		}
 
+		[DebuggerHidden]
 		override protected void ImplDeleteFile(string Path)
 		{
 			File.Delete(RealPath(Path));
 		}
 
-
+		[DebuggerHidden]
 		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
 		{
 			//var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.Read, FileShare.ReadWrite);
@@ -91,24 +99,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return new FileSystemFileStreamStream(this, Stream);
 		}
 
-		/*
-		protected override int ImplReadFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			return ((FileSystemFileStreamStream)FileStream).Stream.Read(Buffer, Offset, Count);
-		}
-
-		protected override void ImplWriteFile(FileSystemFileStream FileStream, byte[] Buffer, int Offset, int Count)
-		{
-			((FileSystemFileStreamStream)FileStream).Stream.Write(Buffer, Offset, Count);
-		}
-		*/
-		/*
-		protected override void ImplCloseFile(FileSystemFileStream FileStream)
-		{
-			base.ImplCloseFile(FileStream);
-		}
-		 * */
-
+		[DebuggerHidden]
 		public override String Title
 		{
 			get

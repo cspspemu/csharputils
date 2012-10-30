@@ -31,6 +31,9 @@ namespace CSharpUtils.Streams
 		/// </summary>
 		protected long ThisLength;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		[DebuggerHidden]
 		public long SliceLow
 		{
@@ -40,6 +43,9 @@ namespace CSharpUtils.Streams
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		[DebuggerHidden]
 		public long SliceHigh
 		{
