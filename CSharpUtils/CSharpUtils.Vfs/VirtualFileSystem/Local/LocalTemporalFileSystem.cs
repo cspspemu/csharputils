@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem.Local
@@ -17,7 +14,7 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			Directory.Delete(this.RootPath, true);
 		}
 
-		static public String GetTempPath()
+		public static String GetTempPath()
 		{
 			String DirectoryPath = Path.GetTempPath() + @"\" + System.Guid.NewGuid() + "_" + System.Guid.NewGuid();
 			Directory.CreateDirectory(DirectoryPath);

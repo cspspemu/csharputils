@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Diagnostics;
 
@@ -37,7 +34,7 @@ namespace CSharpUtils
 			Thread.Yield();
 		}
 
-		static public implicit operator T(AsyncTask<T> That)
+		public static implicit operator T(AsyncTask<T> That)
 		{
 			return That.Result;
 		}

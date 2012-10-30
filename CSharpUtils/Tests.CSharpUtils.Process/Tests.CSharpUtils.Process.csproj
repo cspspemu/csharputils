@@ -61,10 +61,6 @@
       <Project>{2eb03513-114c-4c63-a874-fe5744076335}</Project>
       <Name>CSharpUtils.Process</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
-      <Project>{746fadf2-d613-4ffd-8551-2181adae3cd1}</Project>
-      <Name>CSharpUtils</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

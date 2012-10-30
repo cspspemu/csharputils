@@ -1,16 +1,13 @@
-﻿using CSharpUtils._45.Redis;
+﻿using System.Threading.Tasks;
+using CSharpUtils._45.Redis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Threading.Tasks;
-using System.IO;
-using CSharpUtils;
 
 namespace CSharpUtils._45.Tests
 {
-	[TestClass()]
+	[TestClass]
 	public class RedisClientTest
 	{
-		async public Task _CommandTestAsync()
+		public async Task _CommandTestAsync()
 		{
 			var RedisClient = new RedisClientAsync();
 			/*
@@ -20,7 +17,7 @@ namespace CSharpUtils._45.Tests
 			*/
 		}
 
-		[TestMethod()]
+		[TestMethod]
 		public void CommandTest()
 		{
 			var Task = _CommandTestAsync();

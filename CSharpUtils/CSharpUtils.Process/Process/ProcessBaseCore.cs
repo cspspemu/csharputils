@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using CSharpUtils.Process.Impl;
 using System.Diagnostics;
+using CSharpUtils.Process.Impl;
 
 namespace CSharpUtils.Process
 {
-	abstract public class ProcessBaseCore
+	public abstract class ProcessBaseCore
 	{
 		IProcessBaseImpl Impl;
 		private bool Removed;
@@ -82,7 +78,7 @@ namespace CSharpUtils.Process
 			Console.WriteLine("~ProcessBaseCore");
 		}
 
-		class ChangeExecutionMethodException : Exception
+		sealed class ChangeExecutionMethodException : Exception
 		{
 			internal Action method;
 
@@ -107,7 +103,7 @@ namespace CSharpUtils.Process
 			}
 		}
 
-		virtual protected void _Remove()
+		protected virtual void _Remove()
 		{
 			if (!Removed)
 			{
@@ -157,6 +153,6 @@ namespace CSharpUtils.Process
 			}
 		}
 
-		abstract protected void Main();
+		protected abstract void Main();
 	}
 }

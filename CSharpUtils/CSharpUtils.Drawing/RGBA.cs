@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Drawing
 {
@@ -47,7 +44,7 @@ namespace CSharpUtils.Drawing
 			this.B = B;
 		}
 
-		static public RGBA32 operator +(RGBA32 Accum, ARGB_Rev In)
+		public static RGBA32 operator +(RGBA32 Accum, ARGB_Rev In)
 		{
 			return new RGBA32()
 			{
@@ -58,7 +55,7 @@ namespace CSharpUtils.Drawing
 			};
 		}
 
-		static public RGBA32 operator *(RGBA32 Accum, int Value)
+		public static RGBA32 operator *(RGBA32 Accum, int Value)
 		{
 			return new RGBA32()
 			{
@@ -69,7 +66,7 @@ namespace CSharpUtils.Drawing
 			};
 		}
 
-		static public RGBA32 operator /(RGBA32 Accum, int Value)
+		public static RGBA32 operator /(RGBA32 Accum, int Value)
 		{
 			if (Value == 0)
 			{
@@ -125,7 +122,7 @@ namespace CSharpUtils.Drawing
 			this.B = B;
 		}
 
-		static public int DistanceRGB(ARGB_Rev Color1, ARGB_Rev Color2)
+		public static int DistanceRGB(ARGB_Rev Color1, ARGB_Rev Color2)
 		{
 			var R = Math.Abs(Color1.R - Color2.R);
 			var G = Math.Abs(Color1.G - Color2.G);

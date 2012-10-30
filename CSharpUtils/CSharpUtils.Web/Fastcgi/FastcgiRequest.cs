@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.IO;
-using System.IO.Pipes;
-using System.Threading;
-using CSharpUtils.Streams;
-using CSharpUtils.Http;
-using CSharpUtils;
 
 namespace CSharpUtils.Fastcgi
 {

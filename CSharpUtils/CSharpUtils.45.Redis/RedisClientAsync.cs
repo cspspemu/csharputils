@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using CSharpUtils.Web._45.Streams;
-using CSharpUtils;
 
 namespace CSharpUtils._45.Redis
 {
@@ -36,7 +33,7 @@ namespace CSharpUtils._45.Redis
 			this.Encoding = Encoding;
 		}
 
-		async public Task Connect(string Host, ushort Port)
+		public async Task Connect(string Host, ushort Port)
 		{
 			TcpClient = new TcpClient();
 			await TcpClient.ConnectAsync(Host, Port);
@@ -77,7 +74,7 @@ namespace CSharpUtils._45.Redis
 			}
 		}
 
-		async public Task<object> Command(params string[] Arguments)
+		public async Task<object> Command(params string[] Arguments)
 		{
 			var MemoryStream = new MemoryStream();
 

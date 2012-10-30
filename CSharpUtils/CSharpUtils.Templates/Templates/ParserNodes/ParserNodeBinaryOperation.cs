@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CSharpUtils.Templates.Runtime;
 
 namespace CSharpUtils.Templates.ParserNodes
@@ -26,7 +23,7 @@ namespace CSharpUtils.Templates.ParserNodes
 			RightNode.Dump(Level + 1, "Right");
 		}
 
-		override public ParserNode Optimize(ParserNodeContext Context)
+		public override ParserNode Optimize(ParserNodeContext Context)
 		{
 			var LeftNodeOptimized = LeftNode.Optimize(Context);
 			var RightNodeOptimized = RightNode.Optimize(Context);
@@ -46,7 +43,7 @@ namespace CSharpUtils.Templates.ParserNodes
 			return this;
 		}
 
-		override public void WriteTo(ParserNodeContext Context)
+		public override void WriteTo(ParserNodeContext Context)
 		{
 			Context.Write("DynamicUtils.BinaryOperation_" + DynamicUtils.GetOpName(Operator) + "(");
 			LeftNode.WriteTo(Context);

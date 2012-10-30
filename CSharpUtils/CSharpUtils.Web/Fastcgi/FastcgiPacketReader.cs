@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Net.Sockets;
 
 namespace CSharpUtils.Fastcgi
 {
@@ -14,7 +10,7 @@ namespace CSharpUtils.Fastcgi
         public bool Debug = false;
         public IFastcgiPipe FastcgiPipe;
 		public event FastcgiPacketHandleDelegate HandlePacket;
-        static public byte[] Padding = new byte[8];
+        public static byte[] Padding = new byte[8];
         public byte[] Header = new byte[8];
 
         public FastcgiPacketReader(IFastcgiPipe FastcgiPipe, bool Debug = false)
@@ -28,7 +24,7 @@ namespace CSharpUtils.Fastcgi
 		/// </summary>
 		/// <param name="Stream"></param>
 		/// <returns></returns>
-		static public int ReadVariableInt(Stream Stream)
+		public static int ReadVariableInt(Stream Stream)
 		{
 			// FastCGI transmits a name-value pair as the length of the name, followed by the length of the value, followed by the name, followed by the value.
 			// Lengths of 127 bytes and less can be encoded in one byte, while longer lengths are always encoded in four bytes:

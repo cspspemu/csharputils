@@ -1,8 +1,7 @@
-﻿using CSharpUtils.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Net;
+using CSharpUtils.Net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {

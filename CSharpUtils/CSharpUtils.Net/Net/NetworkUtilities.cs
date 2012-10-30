@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Net;
@@ -11,13 +9,13 @@ namespace CSharpUtils.Net
 	public class NetworkUtilities
 	{
 		/*
-		static public int GetAvailablePort()
+		public static int GetAvailablePort()
 		{
 			throw(new NotImplementedException());
 		}
 		*/
 
-		static public ushort GetAvailableTcpPort(ushort StartingPort = 10101)
+		public static ushort GetAvailableTcpPort(ushort StartingPort = 10101)
 		{
 			var IsPortBusy = new Dictionary<ushort, bool>();
 

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
-using CSharpUtils;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
@@ -98,7 +95,7 @@ namespace CSharpUtils._45.MongoAsync
 			TcpClient.Connect(Host, Port);
 		}
 
-		async protected Task<byte[]> ReadPacketAsync(Stream Stream)
+		protected async Task<byte[]> ReadPacketAsync(Stream Stream)
 		{
 			var PacketSizeData = new byte[4];
 			var PacketSizeDataReaded = await Stream.ReadAsync(PacketSizeData, 0, 4);
@@ -114,7 +111,7 @@ namespace CSharpUtils._45.MongoAsync
 			return PacketData;
 		}
 
-		async protected Task<IEnumerable<BsonDocument>> ReadReplyFromMemory(MemoryStream PacketStream)
+		protected async Task<IEnumerable<BsonDocument>> ReadReplyFromMemory(MemoryStream PacketStream)
 		{
 			var PacketStreamReader = new BinaryReader(PacketStream);
 
@@ -136,7 +133,7 @@ namespace CSharpUtils._45.MongoAsync
 		}
 
 
-		async public Task<IEnumerable<BsonDocument>> SendCommand()
+		public async Task<IEnumerable<BsonDocument>> SendCommand()
 		{
 			var NetworkStream = TcpClient.GetStream();
 

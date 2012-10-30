@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using CSharpUtils;
 
 namespace CSharpUtils._45.MysqlAsync
 {
@@ -21,12 +18,12 @@ namespace CSharpUtils._45.MysqlAsync
 			this.TcpClient = new TcpClient();
 		}
 
-		static protected byte[] Sha1(byte[] Data)
+		protected static byte[] Sha1(byte[] Data)
 		{
 			return SHA1.Create().ComputeHash(Data);
 		}
 
-		async public Task ConnectAsync(int Port = 3306, string Host = "127.0.0.1", string User = "root", string Password = "")
+		public async Task ConnectAsync(int Port = 3306, string Host = "127.0.0.1", string User = "root", string Password = "")
 		{
 			await this.TcpClient.ConnectAsync(Host, Port);
 			this.TcpClientStream = this.TcpClient.GetStream();
@@ -67,7 +64,7 @@ namespace CSharpUtils._45.MysqlAsync
 		  //CLIENT_MULTI_RESULTS    = 131072,  /* Enable/disable multi-results */
 		}
 
-		async public Task HandlePacketAsync()
+		public async Task HandlePacketAsync()
 		{
 			var PacketHeader = new byte[4];
 			await this.TcpClientStream.ReadAsync(PacketHeader, 0, 4);

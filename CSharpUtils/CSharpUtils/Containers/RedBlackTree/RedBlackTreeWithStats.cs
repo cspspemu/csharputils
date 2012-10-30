@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CountType = System.Int32;
-using System.Linq.Expressions;
 using System.Threading;
 
 namespace CSharpUtils.Containers.RedBlackTree
@@ -69,12 +66,12 @@ namespace CSharpUtils.Containers.RedBlackTree
 			BaseRootNode = Allocate();
 		}
 
-		private Node Allocate()
+		private static Node Allocate()
 		{
 			return new Node();
 		}
 
-		private Node Allocate(TElement n)
+		private static Node Allocate(TElement n)
 		{
 			Node node = new Node();
 			node.Value = n;
@@ -282,14 +279,13 @@ namespace CSharpUtils.Containers.RedBlackTree
 		}
 
 		#region Methods to insert elements
-		private CountType Insert(TElement stuff)
+		private void Insert(TElement stuff)
 		{
 			ConcurrentAcquireWriterLock();
 			try
 			{
 				bool added;
 				NonConcurrentAdd(stuff, out added);
-				return added ? 1 : 0;
 			}
 			finally
 			{
@@ -467,7 +463,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 			return count - 1;
 		}
 	
-		public CountType GetNodePosition(Node Node) {
+		public CountType GetNodePosition(Node Node)
+		{
 			return CountLesserThanNode(Node);
 		}
 
@@ -506,8 +503,10 @@ namespace CSharpUtils.Containers.RedBlackTree
 			}
 		}
 	
-		public Range All {
-			get {
+		public Range All
+		{
+			get
+			{
 				ConcurrentAcquireReaderLock();
 				try
 				{
@@ -526,7 +525,8 @@ namespace CSharpUtils.Containers.RedBlackTree
 			}
 		}
 	
-		CountType DebugValidateStatsNodeSubtree() {
+		CountType DebugValidateStatsNodeSubtree()
+		{
 			return RealRootNode.DebugValidateStatsNodeSubtree();
 		}
 

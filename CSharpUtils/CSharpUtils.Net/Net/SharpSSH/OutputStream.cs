@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace Tamir.Streams
@@ -74,9 +73,11 @@ namespace Tamir.Streams
 			{				
 			}
 		}
+		
 		public override void SetLength(long value)
 		{			
 		}
+
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			return 0;

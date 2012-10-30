@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
-using System.IO;
 using System.Reflection;
 
-static public class StructExtensions
+public static class StructExtensions
 {
-	static public string ToStringDefault<T>(this T Struct, bool SimplifyBool = false) //where T : struct
+	public static string ToStringDefault<T>(this T Struct, bool SimplifyBool = false) //where T : struct
 	{
 		var Ret = "";
 		Ret += typeof(T).Name;
@@ -42,7 +37,7 @@ static public class StructExtensions
 					AddedItem = false;
 				}
 
-				if (SimplifyBool && (Value.GetType() == typeof(bool)))
+				if (SimplifyBool && (Value is bool))
 				{
 					if (((bool)Value) == true)
 					{
@@ -55,7 +50,7 @@ static public class StructExtensions
 				{
 					Ret += MemberInfo.Name;
 					Ret += "=";
-					if (Value.GetType() == typeof(uint))
+					if (Value is uint)
 					{
 						Ret += String.Format("0x{0:X}", Value);
 					}

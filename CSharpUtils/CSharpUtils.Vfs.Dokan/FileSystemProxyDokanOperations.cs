@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Dokan;
-using System.IO;
 using System.Diagnostics;
-using System.Threading;
+using System.IO;
+using Dokan;
 
 namespace CSharpUtils.VirtualFileSystem
 {
@@ -18,7 +15,7 @@ namespace CSharpUtils.VirtualFileSystem
 			this.FileSystem = FileSystem;
 		}
 
-		void NotImplemented(string extra = "<unknown>", object info = null)
+		static void NotImplemented(string extra = "<unknown>", object info = null)
 		{
 			StackTrace stackTrace = new StackTrace();           // get call stack
 			StackFrame[] stackFrames = stackTrace.GetFrames();  // get method calls (frames)
@@ -123,7 +120,7 @@ namespace CSharpUtils.VirtualFileSystem
 			return -1;
 		}
 
-		void FillFileInformationFromFileSystemEntry(FileInformation FileInformation, FileSystemEntry FileSystemEntry)
+		static void FillFileInformationFromFileSystemEntry(FileInformation FileInformation, FileSystemEntry FileSystemEntry)
 		{
 			FileInformation.Attributes = System.IO.FileAttributes.Normal;
 			if (FileSystemEntry.Type.HasFlag(FileSystemEntry.EntryType.Directory))

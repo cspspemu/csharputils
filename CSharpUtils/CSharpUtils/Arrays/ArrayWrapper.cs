@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace CSharpUtils.Arrays
 {
@@ -31,12 +28,12 @@ namespace CSharpUtils.Arrays
 			}
 		}
 
-		static public implicit operator TType[](ArrayWrapper<TType> ArrayWrapper)
+		public static implicit operator TType[](ArrayWrapper<TType> ArrayWrapper)
 		{
 			return ArrayWrapper.Array; 
 		}
 
-		static public implicit operator ArrayWrapper<TType>(TType[] Array)
+		public static implicit operator ArrayWrapper<TType>(TType[] Array)
 		{
 			return new ArrayWrapper<TType>(Array);
 		}

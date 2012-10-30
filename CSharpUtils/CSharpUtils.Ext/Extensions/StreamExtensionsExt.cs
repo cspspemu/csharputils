@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using CSharpUtils.SpaceAssigner;
 using CSharpUtils.Streams;
 
-static public class StreamExtensionsExt
+public static class StreamExtensionsExt
 {
 	/// <summary>
 	/// 
@@ -15,7 +13,7 @@ static public class StreamExtensionsExt
 	/// <param name="Spaces"></param>
 	/// <param name="Thresold"></param>
 	/// <returns></returns>
-	static public SpaceAssigner1D.Space[] JoinWithThresold(this SpaceAssigner1D.Space[] Spaces, int Thresold = 32)
+	public static SpaceAssigner1D.Space[] JoinWithThresold(this SpaceAssigner1D.Space[] Spaces, int Thresold = 32)
 	{
 		var NewSpaces = new Stack<SpaceAssigner1D.Space>();
 		NewSpaces.Push(Spaces[0]);
@@ -46,7 +44,7 @@ static public class StreamExtensionsExt
 	/// <param name="Stream"></param>
 	/// <param name="Spaces"></param>
 	/// <returns></returns>
-	static public MapStream ConvertSpacesToMapStream(this Stream Stream, SpaceAssigner1D.Space[] Spaces)
+	public static MapStream ConvertSpacesToMapStream(this Stream Stream, SpaceAssigner1D.Space[] Spaces)
 	{
 		var MapStream = new MapStream();
 

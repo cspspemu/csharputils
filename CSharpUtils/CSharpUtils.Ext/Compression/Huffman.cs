@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CSharpUtils;
 using System.IO;
+using System.Linq;
 
 namespace CSharpUtils.Compression
 {
@@ -33,7 +30,7 @@ namespace CSharpUtils.Compression
 			}
 		}
 
-		static public Node[] BuildTable(uint[] UsageTable)
+		public static Node[] BuildTable(uint[] UsageTable)
 		{
 			Node[] Nodes = new Node[UsageTable.Length * 2 - 1];
 			int NodesCount = BuildTable(UsageTable, Nodes);
@@ -42,7 +39,7 @@ namespace CSharpUtils.Compression
 			return NodesSliced;
 		}
 
-		static public int BuildTable(uint[] UsageTable, Node[] EncodingTable)
+		public static int BuildTable(uint[] UsageTable, Node[] EncodingTable)
 		{
 			uint SumOfInputTable = 0;
 
@@ -149,7 +146,7 @@ namespace CSharpUtils.Compression
 			SetEncodingRecursive(Node.RightChild, EncodeBitsCount + 1, (EncodeBitsValue << 1) | 1);
 		}
 
-		static public uint[] CalculateUsageTable(byte[] Data)
+		public static uint[] CalculateUsageTable(byte[] Data)
 		{
 			var UsageTable = new uint[256];
 			foreach (var Value in Data) {
@@ -158,7 +155,7 @@ namespace CSharpUtils.Compression
 			return UsageTable;
 		}
 
-		static public Stream Compress(Stream Input, Node[] EncodingTable)
+		public static Stream Compress(Stream Input, Node[] EncodingTable)
 		{
 			Stream Output = new MemoryStream();
 			Compress(Input, Output, EncodingTable);
@@ -166,7 +163,7 @@ namespace CSharpUtils.Compression
 			return Output;
 		}
 
-		static public void Compress(Stream Input, Stream Output, Node[] EncodingTable)
+		public static void Compress(Stream Input, Stream Output, Node[] EncodingTable)
 		{
 			byte CurrentByte = 0;
 			byte Mask = 0x80;
@@ -209,14 +206,14 @@ namespace CSharpUtils.Compression
 		}
 
 
-		static public Stream Uncompress(Stream Input, uint OutputLength, Node[] EncodingTable)
+		public static Stream Uncompress(Stream Input, uint OutputLength, Node[] EncodingTable)
 		{
 			Stream Output = new MemoryStream();
 			Uncompress(Input, Output, OutputLength, EncodingTable);
 			return Output;
 		}
 
-		static public void Uncompress(Stream Input, Stream Output, uint OutputLength, Node[] EncodingTable)
+		public static void Uncompress(Stream Input, Stream Output, uint OutputLength, Node[] EncodingTable)
 		{
 			byte Mask = 0;
 			byte CurrentByte = 0;

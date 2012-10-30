@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
 using CSharpUtils.Http;
-using System.IO;
 
 namespace CSharpUtils.Fastcgi.Http
 {

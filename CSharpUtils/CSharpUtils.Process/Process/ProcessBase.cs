@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections;
-using System.Threading;
-using System.Runtime.InteropServices;
 
 namespace CSharpUtils.Process
 {
-	abstract public class ProcessBase : ProcessBaseCore
+	public abstract class ProcessBase : ProcessBaseCore
 	{
-		static protected ProcessBase CurrentExecutingProcess = null;
+		protected static ProcessBase CurrentExecutingProcess = null;
 
 		public int Priority = 0;
 		public float X = 0, Y = 0, Z = 0;
@@ -21,9 +16,9 @@ namespace CSharpUtils.Process
 		protected ProcessBase _Parent = null;
 		protected LinkedList<ProcessBase> Childs;
 
-		static private LinkedList<ProcessBase> _AllProcesses = new LinkedList<ProcessBase>();
+		private static LinkedList<ProcessBase> _AllProcesses = new LinkedList<ProcessBase>();
 
-		static public LinkedList<ProcessBase> AllProcesses
+		public static LinkedList<ProcessBase> AllProcesses
 		{
 			get
 			{
@@ -31,7 +26,7 @@ namespace CSharpUtils.Process
 			}
 		}
 
-		static public void _RemoveOld()
+		public static void _RemoveOld()
 		{
 			foreach (var Process in AllProcesses)
 			{
@@ -74,7 +69,7 @@ namespace CSharpUtils.Process
 		}
 		*/
 
-		virtual public void DrawTree(object _Context, int Level = 0)
+		public virtual void DrawTree(object _Context, int Level = 0)
 		{
 			foreach (var Item in Childs.Concat(new ProcessBase[] { this }).OrderBy(process => process.Z))
 			{
@@ -93,7 +88,7 @@ namespace CSharpUtils.Process
 			//this.DrawTreeAfter(_Context);
 		}
 
-		virtual protected void DrawItem(object _Context)
+		protected virtual void DrawItem(object _Context)
 		{
 			//Console.WriteLine(this);
 		}
@@ -132,7 +127,7 @@ namespace CSharpUtils.Process
 			_Remove();
 		}
 
-		override protected void _Remove()
+		protected override void _Remove()
 		{
 			Parent = null;
 			_AllProcesses.Remove(this);

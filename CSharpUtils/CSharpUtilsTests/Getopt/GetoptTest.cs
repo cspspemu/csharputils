@@ -1,8 +1,6 @@
-﻿using CSharpUtils.Getopt;
+﻿using System.Collections.Generic;
+using CSharpUtils.Getopt;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using CSharpUtils;
 
 namespace CSharpUtilsTests
 {

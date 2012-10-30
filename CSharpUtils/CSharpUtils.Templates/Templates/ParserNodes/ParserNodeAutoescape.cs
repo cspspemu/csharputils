@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CSharpUtils.Templates.ParserNodes;
+﻿using CSharpUtils.Templates.ParserNodes;
 
 namespace CSharpUtils.Templates.Templates.ParserNodes
 {

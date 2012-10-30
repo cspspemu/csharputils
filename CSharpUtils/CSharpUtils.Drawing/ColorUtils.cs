@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using CSharpUtils.Drawing;
 
 namespace CSharpUtils
 {
 	public class ColorUtils
 	{
 		[Obsolete("Use RGBA32 + operator")]
-		static public void InternalAdd(ref int R, ref int G, ref int B, ref int A, params Color[] Colors)
+		public static void InternalAdd(ref int R, ref int G, ref int B, ref int A, params Color[] Colors)
 		{
 			foreach (var Color in Colors)
 			{
@@ -21,7 +17,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public Color Average(params Color[] Colors)
+		public static Color Average(params Color[] Colors)
 		{
 			int R = 0, G = 0, B = 0, A = 0;
 			int L = Colors.Length;
@@ -35,7 +31,7 @@ namespace CSharpUtils
 			);
 		}
 
-		static public Color Average(Color Color1, Color Color2)
+		public static Color Average(Color Color1, Color Color2)
 		{
 			return Color.FromArgb(
 				(byte)((Color1.A + Color2.A) / 2),
@@ -45,14 +41,14 @@ namespace CSharpUtils
 			);
 		}
 
-		static public Color Add(params Color[] Colors)
+		public static Color Add(params Color[] Colors)
 		{
 			int R = 0, G = 0, B = 0, A = 0;
 			InternalAdd(ref R, ref G, ref B, ref A, Colors);
 			return Color.FromArgb((byte)A, (byte)R, (byte)G, (byte)B);
 		}
 
-		static public Color Add(Color Color1, Color Color2)
+		public static Color Add(Color Color1, Color Color2)
 		{
 			return Color.FromArgb(
 				(byte)((Color1.A + Color2.A)),
@@ -62,7 +58,7 @@ namespace CSharpUtils
 			);
 		}
 
-		static public Color Substract(Color ColorLeft, Color ColorRight)
+		public static Color Substract(Color ColorLeft, Color ColorRight)
 		{
 			return Color.FromArgb(
 				(byte)(ColorLeft.A - ColorRight.A),
@@ -72,7 +68,7 @@ namespace CSharpUtils
 			);
 		}
 
-		static public Color Average(Bitmap Bitmap)
+		public static Color Average(Bitmap Bitmap)
 		{
 			Color[] Colors = new Color[Bitmap.Width * Bitmap.Height];
 			for (int y = 0, n = 0; y < Bitmap.Height; y++)

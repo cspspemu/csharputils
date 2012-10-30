@@ -196,8 +196,8 @@ namespace Org.Mentalis.Security.Certificates {
 		/// <param name="array">The one-dimensional Array that is the destination of the elements copied from DistinguishedNameList. The Array must have zero-based indexing.</param>
 		/// <param name="index">The zero-based index in <paramref name="array"/> at which copying begins.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="array"/> is a null reference (<b>Nothing</b> in Visual Basic).</exception>
-		/// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than zero.</exception>
-		/// <exception cref="ArgumentException"><paramref name="array"/> is multidimensional -or- <paramref name="arrayIndex"/> is equal to or greater than the length of <paramref name="array"/> -or- the number of elements in the source DistinguishedNameList is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination array.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is less than zero.</exception>
+		/// <exception cref="ArgumentException"><paramref name="array"/> is multidimensional -or- <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/> -or- the number of elements in the source DistinguishedNameList is greater than the available space from <paramref name="index"/> to the end of the destination array.</exception>
 		/// <exception cref="InvalidCastException">The type of the source DistinguishedNameList cannot be cast automatically to the type of the destination array.</exception>
 		public void CopyTo(Array array, int index) {
 			m_List.CopyTo(array, index);

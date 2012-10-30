@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 using CSharpUtils;
 
-static public class BitmapExtension
+public static class BitmapExtension
 {
-	unsafe static public void SetPalette(this Bitmap Bitmap, IEnumerable<Color> Colors)
+	public static void SetPalette(this Bitmap Bitmap, IEnumerable<Color> Colors)
 	{
 		ColorPalette Palette = BitmapUtils.GetColorPalette(Colors.Count());
 
@@ -21,49 +20,49 @@ static public class BitmapExtension
 		Bitmap.Palette = Palette;
 	}
 
-	unsafe static public byte[] GetIndexedDataLinear(this Bitmap Bitmap)
+	public static byte[] GetIndexedDataLinear(this Bitmap Bitmap)
 	{
 		return Bitmap.GetChannelsDataLinear(BitmapChannel.Indexed);
 	}
 
-	unsafe static public byte[] GetIndexedDataLinear(this Bitmap Bitmap, Rectangle Rectangle)
+	public static byte[] GetIndexedDataLinear(this Bitmap Bitmap, Rectangle Rectangle)
 	{
 		return Bitmap.GetChannelsDataLinear(Rectangle, BitmapChannel.Indexed);
 	}
 
-	unsafe static public void SetIndexedDataLinear(this Bitmap Bitmap, byte[] NewData)
+	public static void SetIndexedDataLinear(this Bitmap Bitmap, byte[] NewData)
 	{
 		Bitmap.SetChannelsDataLinear(NewData, BitmapChannel.Indexed);
 	}
 
-	unsafe static public void SetIndexedDataLinear(this Bitmap Bitmap, Rectangle Rectangle, byte[] NewData)
+	public static void SetIndexedDataLinear(this Bitmap Bitmap, Rectangle Rectangle, byte[] NewData)
 	{
 		Bitmap.SetChannelsDataLinear(NewData, Rectangle, BitmapChannel.Indexed);
 	}
 
-	unsafe static public byte[] GetChannelsDataLinear(this Bitmap Bitmap, params BitmapChannel[] Channels)
+	public static byte[] GetChannelsDataLinear(this Bitmap Bitmap, params BitmapChannel[] Channels)
 	{
 		return Bitmap.GetChannelsDataLinear(Bitmap.GetFullRectangle(), Channels);
 	}
 
-	unsafe static public byte[] GetChannelsDataLinear(this Bitmap Bitmap, Rectangle Rectangle, params BitmapChannel[] Channels)
+	public static byte[] GetChannelsDataLinear(this Bitmap Bitmap, Rectangle Rectangle, params BitmapChannel[] Channels)
 	{
 		var NewData = new byte[Rectangle.Width * Rectangle.Height * Channels.Length];
 		BitmapUtils.TransferChannelsDataLinear(Rectangle, Bitmap, NewData, BitmapUtils.Direction.FromBitmapToData, Channels);
 		return NewData;
 	}
 
-	unsafe static public void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, params BitmapChannel[] Channels)
+	public static void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, params BitmapChannel[] Channels)
 	{
 		Bitmap.SetChannelsDataLinear(NewData, Bitmap.GetFullRectangle(), Channels);
 	}
 
-	unsafe static public void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, Rectangle Rectangle, params BitmapChannel[] Channels)
+	public static void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, Rectangle Rectangle, params BitmapChannel[] Channels)
 	{
 		BitmapUtils.TransferChannelsDataLinear(Rectangle, Bitmap, NewData, BitmapUtils.Direction.FromDataToBitmap, Channels);
 	}
 
-	unsafe static public byte[] GetChannelsDataInterleaved(this Bitmap Bitmap, params BitmapChannel[] Channels)
+	public unsafe static byte[] GetChannelsDataInterleaved(this Bitmap Bitmap, params BitmapChannel[] Channels)
 	{
 		int NChannels = Channels.Length;
 		int PixelCount = Bitmap.Width * Bitmap.Height;
@@ -90,7 +89,7 @@ static public class BitmapExtension
 		return Buffer;
 	}
 
-	static public void LockBitsUnlock(this Bitmap Bitmap, Rectangle Rectangle, PixelFormat PixelFormat, Action<BitmapData> Callback)
+	public static void LockBitsUnlock(this Bitmap Bitmap, Rectangle Rectangle, PixelFormat PixelFormat, Action<BitmapData> Callback)
 	{
 		var BitmapData = Bitmap.LockBits(Rectangle, ImageLockMode.ReadWrite, PixelFormat);
 
@@ -104,12 +103,12 @@ static public class BitmapExtension
 		}
 	}
 
-	static public void LockBitsUnlock(this Bitmap Bitmap, PixelFormat PixelFormat, Action<BitmapData> Callback)
+	public static void LockBitsUnlock(this Bitmap Bitmap, PixelFormat PixelFormat, Action<BitmapData> Callback)
 	{
 		Bitmap.LockBitsUnlock(new Rectangle(0, 0, Bitmap.Width, Bitmap.Height), PixelFormat, Callback);
 	}
 
-	static public void ForEach(this Bitmap Bitmap, Action<Color, int, int> Delegate)
+	public static void ForEach(this Bitmap Bitmap, Action<Color, int, int> Delegate)
 	{
 		int Width = Bitmap.Width, Height = Bitmap.Height;
 		for (int y = 0; y < Height; y++)
@@ -121,7 +120,7 @@ static public class BitmapExtension
 		}
 	}
 
-	static public IEnumerable<Color> Colors(this Bitmap Bitmap)
+	public static IEnumerable<Color> Colors(this Bitmap Bitmap)
 	{
 		int Width = Bitmap.Width, Height = Bitmap.Height;
 		for (int y = 0; y < Height; y++)
@@ -133,12 +132,12 @@ static public class BitmapExtension
 		}
 	}
 
-	static public Rectangle GetFullRectangle(this Bitmap Bitmap)
+	public static Rectangle GetFullRectangle(this Bitmap Bitmap)
 	{
 		return new Rectangle(0, 0, Bitmap.Width, Bitmap.Height);
 	}
 
-	static public Bitmap ConverToFormat(this Bitmap OldBitmap, PixelFormat NewPixelFormat)
+	public static Bitmap ConverToFormat(this Bitmap OldBitmap, PixelFormat NewPixelFormat)
 	{
 		var NewBitmap = new Bitmap(OldBitmap.Width, OldBitmap.Height, NewPixelFormat);
 		Graphics.FromImage(NewBitmap).DrawImage(OldBitmap, Point.Empty);

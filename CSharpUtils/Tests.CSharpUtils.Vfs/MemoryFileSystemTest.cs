@@ -1,12 +1,8 @@
-﻿using CSharpUtils.VirtualFileSystem.Memory;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Linq;
-using CSharpUtils;
-using CSharpUtils.Streams;
-using CSharpUtils;
+using CSharpUtils.VirtualFileSystem.Memory;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {

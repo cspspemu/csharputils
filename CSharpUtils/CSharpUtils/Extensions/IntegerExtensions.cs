@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-static public class IntegerExtensions
+﻿public static class IntegerExtensions
 {
 	public static byte RotateLeft(this byte value, int count)
 	{

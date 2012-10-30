@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CSharpUtils.Templates;
 using CSharpUtils.Templates.TemplateProvider;
-using Microsoft.CSharp;
-using System.CodeDom.Compiler;
-using System.Reflection;
-using System.IO;
-using CSharpUtils;
-using CSharpUtils.VirtualFileSystem;
-using CSharpUtils.VirtualFileSystem.Local;
 
 namespace CSharpUtilsTemplateTest
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static void Main()
 		{
 			//TemplateProvider TemplateProvider = new TemplateProviderVirtualFileSystem(new LocalFileSystem(FileUtils.GetExecutableDirectoryPath(), false));
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();

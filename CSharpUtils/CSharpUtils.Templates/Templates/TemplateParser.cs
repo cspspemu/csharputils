@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.IO;
 using CSharpUtils.Templates.Tokenizers;
-using Microsoft.CSharp;
-using System.Reflection;
-using System.CodeDom.Compiler;
-using CSharpUtils.Templates.Runtime;
 using CSharpUtils.Templates.ParserNodes;
-using CSharpUtils.Templates.TemplateProvider;
-using CSharpUtils.Templates.Utils;
 using CSharpUtils.Templates.Templates.ParserNodes;
 
 namespace CSharpUtils.Templates

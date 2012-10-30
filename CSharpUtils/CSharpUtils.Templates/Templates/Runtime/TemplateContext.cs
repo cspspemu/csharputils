@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using CSharpUtils.Templates.TemplateProvider;
+using System.Reflection;
 using CSharpUtils.Html;
 using CSharpUtils.Templates.Runtime.Filters;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace CSharpUtils.Templates.Runtime
 {
-	sealed public class TemplateContext
+	public sealed class TemplateContext
 	{
 		public TemplateCode RenderingTemplate;
 		public TemplateFactory TemplateFactory;
@@ -65,7 +61,7 @@ namespace CSharpUtils.Templates.Runtime
 		}
 
 #if NET_4_5
-		async public Task OutputWriteAutoFilteredAsync(dynamic Value)
+		public async Task OutputWriteAutoFilteredAsync(dynamic Value)
 		{
 			if (Value != null)
 			{

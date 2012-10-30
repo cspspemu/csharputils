@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Streams
 {
-	static public class SerializerUtils
+	public static class SerializerUtils
 	{
-		static public MemoryStream SerializeToMemoryStream(Action<Stream> Serializer)
+		public static MemoryStream SerializeToMemoryStream(Action<Stream> Serializer)
 		{
 			var Stream = new MemoryStream();
 			Stream.PreservePositionAndLock(() =>

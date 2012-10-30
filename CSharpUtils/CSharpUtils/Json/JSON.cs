@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
 using System.Globalization;
 
@@ -9,22 +6,23 @@ namespace CSharpUtils.Json
 {
 	public class JSON
 	{
-		static public object Decode(string Format)
+		public static object Decode(string Format)
 		{
 			return Parse(Format);
 		}
 
-		static public string Encode(object ObjectToEncode, bool SingleQuotes = false)
+		public static string Encode(object ObjectToEncode, bool SingleQuotes = false)
 		{
 			return Stringify(ObjectToEncode, SingleQuotes);
 		}
 
-		static public object Parse(string Format)
+		public static object Parse(string Format)
 		{
 			throw (new NotImplementedException());
 		}
 
-		static public string Stringify(object ObjectToEncode, bool SingleQuotes = false) {
+		public static string Stringify(object ObjectToEncode, bool SingleQuotes = false)
+		{
 			if (ObjectToEncode == null)
 			{
 				return "null";
@@ -85,7 +83,7 @@ namespace CSharpUtils.Json
 			}
 		}
 
-		static protected string Escape(string StringToEscape)
+		protected static string Escape(string StringToEscape)
 		{
 			var Ret = "";
 			foreach (var C in StringToEscape)

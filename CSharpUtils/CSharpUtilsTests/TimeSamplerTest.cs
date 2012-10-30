@@ -1,6 +1,6 @@
-﻿using CSharpUtils;
+﻿using System;
+using CSharpUtils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace CSharpUtilsTests
 {

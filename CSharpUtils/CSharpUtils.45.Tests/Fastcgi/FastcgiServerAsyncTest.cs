@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading.Tasks;
-using CSharpUtils.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using CSharpUtils.Net;
 using CSharpUtils.Web._45.Fastcgi;
 
 namespace CSharpUtils._45.Tests

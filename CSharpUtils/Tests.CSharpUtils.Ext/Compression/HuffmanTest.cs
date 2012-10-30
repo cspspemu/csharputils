@@ -1,8 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
-using CSharpUtils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpUtils.Compression;
 
 namespace CSharpUtilsTest

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Templates.Tokenizers
 {
@@ -17,22 +16,22 @@ namespace CSharpUtils.Templates.Tokenizers
 			'<', '>', '?'
 		};
 
-		static public bool IsDecimalDigit(char Char)
+		public static bool IsDecimalDigit(char Char)
 		{
 			return (Char >= '0') && (Char <= '9');
 		}
 
-		static public bool IsAlpha(char Char)
+		public static bool IsAlpha(char Char)
 		{
 			return (Char >= 'a' && Char <= 'z') || (Char >= 'A' && Char <= 'Z') || (Char == '_');
 		}
 
-		static public bool IsAlphaNumeric(char Char)
+		public static bool IsAlphaNumeric(char Char)
 		{
 			return IsAlpha(Char) || IsDecimalDigit(Char);
 		}
 
-		static public void Tokenize(List<TemplateToken> Tokens, TokenizerStringReader StringReader)
+		public static void Tokenize(List<TemplateToken> Tokens, TokenizerStringReader StringReader)
 		{
 			//StringReader.SkipSpaces();
 			while (StringReader.Available > 0)

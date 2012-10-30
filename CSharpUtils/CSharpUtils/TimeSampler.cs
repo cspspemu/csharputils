@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CSharpUtils
 {
@@ -9,7 +8,7 @@ namespace CSharpUtils
 	{
 		Dictionary<DateTime, double> Samples = new Dictionary<DateTime, double>();
 
-		static public TimeSpan Measure(Action Action)
+		public static TimeSpan Measure(Action Action)
 		{
 			var Start = DateTime.UtcNow;
 			Action();
@@ -85,12 +84,12 @@ namespace CSharpUtils
 			return GetIncrementPerSecond(TimeSpan, DateTime.UtcNow);
 		}
 
-		static public double Difference(double A, double B)
+		public static double Difference(double A, double B)
 		{
 			return (B - A);
 		}
 
-		static public double Interpolate(double A, double B, double Step)
+		public static double Interpolate(double A, double B, double Step)
 		{
 			return Difference(B, A) * Step + A;
 		}

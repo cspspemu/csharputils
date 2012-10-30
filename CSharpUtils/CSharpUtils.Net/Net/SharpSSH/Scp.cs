@@ -231,7 +231,7 @@ namespace Tamir.SharpSsh
 		/// </summary>
 		/// <param name="remoteFile">The remmote file name</param>
 		/// <param name="localPath">The local destination path</param>
-		/// <param name="recursive">Value indicating whether a recursive transfer should take place</param>
+		/// <param name="_recursive">Value indicating whether a recursive transfer should take place</param>
 		public void From(string remoteFile, string localPath, bool _recursive)
 		{
 			SCP_CheckConnectivity();

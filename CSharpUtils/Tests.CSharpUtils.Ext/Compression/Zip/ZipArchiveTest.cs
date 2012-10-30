@@ -1,11 +1,7 @@
-﻿using CSharpUtils.Compression.Zip;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
-using CSharpUtils;
-using CSharpUtils.Streams;
-using CSharpUtils;
+using CSharpUtils.Compression.Zip;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
