@@ -742,6 +742,7 @@ static public class StreamExtensions
 	[DebuggerHidden]
 	public static Stream CopyToFile(this Stream Stream, String FileName)
 	{
+		try { Directory.CreateDirectory(Path.GetDirectoryName(FileName)); } catch { }
 		using (var OutputFile = File.Open(FileName, FileMode.Create, FileAccess.Write))
 		{
 			Stream.CopyToFast(OutputFile);

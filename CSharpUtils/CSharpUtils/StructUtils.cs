@@ -32,6 +32,9 @@ namespace CSharpUtils
 		{
 			T result = default(T);
 
+			int ExpectedLength = Marshal.SizeOf(typeof(T));
+			if (RawData.Length < ExpectedLength) throw (new Exception(String.Format("BytesToStruct. Not enough bytes. Expected: {0} Provided: {1}", ExpectedLength, RawData.Length)));
+
 #if true
 			fixed (byte* RawDataPointer = &RawData[0])
 			{
