@@ -106,6 +106,11 @@ namespace CSharpUtils.Endian
 			};
 		}
 
+		public static implicit operator uint_be(uint_le that)
+		{
+			return (uint)that;
+		}
+
 		public override string ToString()
 		{
 			return NativeValue.ToString();
@@ -139,6 +144,11 @@ namespace CSharpUtils.Endian
 			{
 				NativeValue = that,
 			};
+		}
+
+		public static implicit operator ushort_be(ushort_le that)
+		{
+			return (ushort)that;
 		}
 
 		public override string ToString()
@@ -179,6 +189,53 @@ namespace CSharpUtils.Endian
 			{
 				NativeValue = that,
 			};
+		}
+
+		public static implicit operator uint_le(uint_be that)
+		{
+			return (uint)that;
+		}
+
+		public override string ToString()
+		{
+			return NativeValue.ToString();
+		}
+	}
+
+	public struct ushort_le
+	{
+		private ushort _InternalValue;
+
+		public ushort NativeValue
+		{
+			set
+			{
+				//_InternalValue = MathUtils.ByteSwap(value);
+				_InternalValue = value;
+			}
+			get
+			{
+				//return MathUtils.ByteSwap(_InternalValue);
+				return _InternalValue;
+			}
+		}
+
+		public static implicit operator uint(ushort_le that)
+		{
+			return that.NativeValue;
+		}
+
+		public static implicit operator ushort_le(ushort that)
+		{
+			return new ushort_le()
+			{
+				NativeValue = that,
+			};
+		}
+
+		public static implicit operator ushort_le(ushort_be that)
+		{
+			return (ushort)that;
 		}
 
 		public override string ToString()
