@@ -348,7 +348,7 @@ static public class StreamExtensions
 		if (ToRead == -1)
 		{
 			var Temp = new MemoryStream();
-			while (true)
+			while (!Stream.Eof())
 			{
 				int Readed = Stream.ReadByte();
 				//if (Readed < 0) break;
@@ -592,12 +592,19 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Count"></param>
 	/// <param name="EntrySize"></param>
+	/// <param name="AllowReadLess"></param>
 	/// <returns></returns>
 	[DebuggerHidden]
-	public static TType[] ReadStructVector<TType>(this Stream Stream, uint Count, int EntrySize = -1) where TType : struct
+	public static TType[] ReadStructVector<TType>(this Stream Stream, uint Count, int EntrySize = -1, bool AllowReadLess = false) where TType : struct
 	{
 		var ItemSize = Marshal.SizeOf(typeof(TType));
 		var SkipSize = (EntrySize == -1) ? (0) : (EntrySize - ItemSize);
+
+		var MaxCount = (uint)(Stream.Length / (ItemSize + SkipSize));
+		if (AllowReadLess)
+		{
+			Count = Math.Min(MaxCount, Count);
+		}
 
 		if (SkipSize < 0)
 		{

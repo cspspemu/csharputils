@@ -62,6 +62,17 @@ namespace CSharpUtils
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		unsafe public static float ByteSwap(float Value)
+		{
+			var ValueSW = ByteSwap(*(uint*)&Value);
+			return *(float*)&ValueSW;
+		}
+
+		/// <summary>
 		/// Returns the upper minimum value that will be divisible by AlignValue.
 		/// </summary>
 		/// <example>

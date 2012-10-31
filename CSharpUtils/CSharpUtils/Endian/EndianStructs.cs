@@ -243,4 +243,39 @@ namespace CSharpUtils.Endian
 			return NativeValue.ToString();
 		}
 	}
+
+	public struct float_be
+	{
+		private float _InternalValue;
+
+		public float NativeValue
+		{
+			set
+			{
+				_InternalValue = MathUtils.ByteSwap(value);
+			}
+			get
+			{
+				return MathUtils.ByteSwap(_InternalValue);
+			}
+		}
+
+		public static implicit operator float(float_be that)
+		{
+			return that.NativeValue;
+		}
+
+		public static implicit operator float_be(float that)
+		{
+			return new float_be()
+			{
+				NativeValue = that,
+			};
+		}
+
+		public override string ToString()
+		{
+			return NativeValue.ToString();
+		}
+	}
 }
