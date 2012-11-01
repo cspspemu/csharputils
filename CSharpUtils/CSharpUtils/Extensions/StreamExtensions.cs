@@ -801,10 +801,7 @@ static public class StreamExtensions
 		if (Count > 0)
 		{
 			var Bytes = new byte[Count];
-			fixed (byte* BytesPtr = &Bytes[0])
-			{
-				PointerUtils.Memset(BytesPtr, Byte, Count);
-			}
+			PointerUtils.Memset(Bytes, Byte, Count);
 
 			Stream.WriteBytes(Bytes);
 		}

@@ -95,7 +95,7 @@ namespace CSharpUtils.Streams
 		/// <returns>A SliceStream</returns>
 		[DebuggerHidden]
 		protected SliceStream(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
-			: base(BaseStream)
+			: base(BaseStream, CloseParent: false)
 		{
 			if (!BaseStream.CanSeek) throw(new NotImplementedException("ParentStream must be seekable"));
 
@@ -217,8 +217,8 @@ namespace CSharpUtils.Streams
 				ParentStream.Position = ThisStart + Position;
 				if (Position + count > Length)
 				{
+					//count = (int)(Length - Position);
 					throw (new IOException(String.Format("Can't write outside the SliceStream. Trying to Write {0} bytes but only {1} available.", count, (Length - Position))));
-					count = (int)(Length - Position);
 				}
 				try
 				{

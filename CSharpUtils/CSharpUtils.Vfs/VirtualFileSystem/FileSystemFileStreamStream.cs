@@ -86,8 +86,8 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public override void Close()
 		{
+			this.Stream.Close();
 			base.Close();
-			Stream.Close();
 		}
 	}
 }

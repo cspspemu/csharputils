@@ -3,13 +3,15 @@ using System.IO;
 
 namespace CSharpUtils.Streams
 {
-	public class ProxyStream : Stream, IDisposable
+	public class ProxyStream : Stream
 	{
 		protected Stream ParentStream;
+		protected bool CloseParent;
 
-		public ProxyStream(Stream BaseStream)
+		public ProxyStream(Stream BaseStream, bool CloseParent = false)
 		{
 			this.ParentStream = BaseStream;
+			this.CloseParent = CloseParent;
 		}
 
 		public override bool CanRead { get { return ParentStream.CanRead; } }
@@ -60,7 +62,15 @@ namespace CSharpUtils.Streams
 
 		public override void Close()
 		{
+			if (CloseParent) ParentStream.Close();
 			base.Close();
 		}
+
+		/*
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
+		}
+		*/
 	}
 }
