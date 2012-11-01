@@ -725,18 +725,36 @@ static public class StreamExtensions
 	/// <param name="FromStream"></param>
 	/// <param name="ToStream"></param>
 	[DebuggerHidden]
-	public static void CopyToFast(this Stream FromStream, Stream ToStream)
+	public static void CopyToFast(this Stream FromStream, Stream ToStream, Action<long, long> ActionReport = null)
+	{
+		var BufferSize = (int)Math.Min((long)FromStream.Length, (long)(2 * 1024 * 1024));
+		var Buffer = new byte[BufferSize];
+		CopyToFast(FromStream, ToStream, Buffer, ActionReport);
+		Buffer = null;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="FromStream"></param>
+	/// <param name="ToStream"></param>
+	[DebuggerHidden]
+	public static void CopyToFast(this Stream FromStream, Stream ToStream, byte[] Buffer, Action<long, long> ActionReport = null)
 	{
 		/// ::TODO: Create a buffer and reuse it once for each thread.
-		var BufferSize = (int)Math.Min((long)FromStream.Length, (long)(2 * 1024 * 1024));
-		if (BufferSize > 0)
+		if (ActionReport == null) ActionReport = (Current, Max) => { };
+		long TotalBytes = FromStream.Length - FromStream.Position;
+		long CurrentBytes = 0;
+		ActionReport(CurrentBytes, TotalBytes);
+		while (true)
 		{
-			FromStream.CopyTo(ToStream, BufferSize);
+			int Readed = FromStream.Read(Buffer, 0, Buffer.Length);
+			if (Readed <= 0) break;
+			ToStream.Write(Buffer, 0, Readed);
+			CurrentBytes += Readed;
+			ActionReport(CurrentBytes, TotalBytes);
 		}
-		else
-		{
-			FromStream.CopyTo(ToStream);
-		}
+		Buffer = null;
 	}
 #endif
 

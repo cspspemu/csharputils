@@ -332,6 +332,57 @@ namespace CSharpUtils.VirtualFileSystem
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="SourceFileSystem"></param>
+		/// <param name="SourcePath"></param>
+		/// <param name="DestFileSystem"></param>
+		/// <param name="DestPath"></param>
+		/// <param name="ActionValidate"></param>
+		/// <param name="ActionProgress"></param>
+		static public void CopyTree(FileSystem SourceFileSystem, String SourcePath, FileSystem DestFileSystem, String DestPath, Func<FileSystemEntry, bool> ActionValidate = null, Action<FileSystemEntry, long, long> ActionProgress = null, byte[] Buffer = null)
+		{
+			if (ActionValidate == null) ActionValidate = ((Entry) => true);
+			if (ActionProgress == null) ActionProgress = (Entry, Current, Max) => { };
+			//if (Buffer == null) Buffer = new byte[16 * 1024 * 1024];
+			if (Buffer == null) Buffer = new byte[2 * 1024 * 1024];
+
+			foreach (var SourceEntry in SourceFileSystem.FindFiles(SourcePath))
+			{
+				var SourceFullPath = SourcePath + "/" + SourceEntry.Name;
+				var DestFullPath = DestPath + "/" + SourceEntry.Name;
+
+				if (!ActionValidate(SourceEntry)) continue;
+
+				if (SourceEntry.Type == FileSystemEntry.EntryType.Directory)
+				{
+					DestFileSystem.CreateDirectory(DestFullPath, 0777, false);
+					CopyTree(SourceFileSystem, SourceFullPath, DestFileSystem, DestFullPath, ActionValidate, ActionProgress, Buffer);
+				}
+				else
+				{
+					//
+					if (
+						!DestFileSystem.Exists(DestFullPath) ||
+						(SourceFileSystem.GetFileInfo(SourceFullPath).Size != DestFileSystem.GetFileInfo(DestFullPath).Size)
+					)
+					{
+						using (var SourceStream = SourceFileSystem.OpenFileRead(SourceFullPath))
+						using (var DestStream = DestFileSystem.OpenFile(DestFullPath, FileMode.Create))
+						{
+							SourceStream.CopyToFast(DestStream, Buffer, (Current, Max) =>
+							{
+								ActionProgress(SourceEntry, Current, Max);
+							});
+						}
+					}
+				}
+			}
+
+			Buffer = null;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="Path"></param>
 		/// <param name="Regex"></param>
 		/// <returns></returns>

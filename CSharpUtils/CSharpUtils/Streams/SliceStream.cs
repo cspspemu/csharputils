@@ -101,13 +101,11 @@ namespace CSharpUtils.Streams
 
 			this.ThisPosition = 0;
 			this.ThisStart = ThisStart;
-			if (ThisLength == -1)
+			this.ThisLength = (ThisLength == -1) ? (BaseStream.Length - ThisStart) : ThisLength;
+
+			if ((SliceHigh < SliceLow) || (SliceLow < 0) || (SliceLow > BaseStream.Length) || (SliceHigh < 0) || (SliceHigh > BaseStream.Length))
 			{
-				this.ThisLength = BaseStream.Length - ThisStart;
-			}
-			else
-			{
-				this.ThisLength = ThisLength;
+				throw (new InvalidOperationException(String.Format("Trying to SliceStream Parent({0}) Slice({1}-{2})", BaseStream.Length, ThisStart, ThisLength)));
 			}
 		}
 
