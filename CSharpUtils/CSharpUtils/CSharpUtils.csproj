@@ -72,6 +72,7 @@
     <Compile Include="Arrays\ArrayWrapper.cs" />
     <Compile Include="AsyncTask.cs" />
     <Compile Include="BitUtils.cs" />
+    <Compile Include="BitWriter2.cs" />
     <Compile Include="ConsoleUtils.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStats.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsNode.cs" />

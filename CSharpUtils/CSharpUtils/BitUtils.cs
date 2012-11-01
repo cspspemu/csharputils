@@ -122,6 +122,11 @@ namespace CSharpUtils
 			return ((float)Extract(Value, Offset, Count) / (float)CreateMask(Count)) * Scale;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Arrays"></param>
+		/// <returns></returns>
 		public static byte[] XorBytes(params byte[][] Arrays)
 		{
 			int Length = Arrays[0].Length;

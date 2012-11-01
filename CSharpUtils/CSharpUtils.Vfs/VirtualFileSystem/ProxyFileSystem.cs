@@ -92,5 +92,10 @@ namespace CSharpUtils.VirtualFileSystem
 				return this.ParentFileSystem.Title;
 			}
 		}
+
+		protected override void ImplCreateSymLink(string Pointer, string Pointee)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

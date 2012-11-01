@@ -55,5 +55,10 @@ namespace CSharpUtils.VirtualFileSystem
 				return this.ToString();
 			}
 		}
+
+		protected override void ImplCreateSymLink(string Pointer, string Pointee)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

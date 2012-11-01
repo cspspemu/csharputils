@@ -3,9 +3,64 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CSharpUtils;
+using System.Text.RegularExpressions;
 
 public static class StringExtensions
 {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="String"></param>
+	/// <param name="RegexString"></param>
+	/// <param name="ActionMatch"></param>
+	/// <returns></returns>
+	public static String RegexReplace(this String String, string RegexString, Func<GroupCollection, string> ActionMatch)
+	{
+		var Regex = new Regex(RegexString, RegexOptions.None);
+		return Regex.Replace(String, (Match) =>
+		{
+			return ActionMatch(Match.Groups);
+		});
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="String"></param>
+	/// <param name="RegexString"></param>
+	/// <returns></returns>
+	public static bool RegexIsMatch(this String String, string RegexString)
+	{
+		var Regex = new Regex(RegexString, RegexOptions.None);
+		return Regex.IsMatch(String);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="String"></param>
+	/// <param name="RegexString"></param>
+	/// <returns></returns>
+	public static MatchCollection RegexMatchAll(this String String, string RegexString)
+	{
+		var Regex = new Regex(RegexString, RegexOptions.None);
+		return Regex.Matches(String);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="String"></param>
+	/// <param name="RegexString"></param>
+	/// <returns></returns>
+	public static GroupCollection RegexMatch(this String String, string RegexString)
+	{
+		var Regex = new Regex(RegexString, RegexOptions.None);
+		var Match = Regex.Match(String);
+		if (Match == Match.Empty) return null;
+		return Match.Groups;
+	}
+
 	public static String Substr(this String String, int StartIndex)
 	{
 		if (StartIndex < 0) StartIndex = String.Length + StartIndex;

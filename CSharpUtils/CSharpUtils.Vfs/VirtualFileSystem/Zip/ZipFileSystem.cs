@@ -214,5 +214,10 @@ namespace CSharpUtils.VirtualFileSystem.Zip
 				}
 			}
 		}
+
+		protected override void ImplCreateSymLink(string Pointer, string Pointee)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
