@@ -43,6 +43,17 @@ namespace CSharpUtils.VirtualFileSystem
 		/// <param name="FileName"></param>
 		/// <returns></returns>
 		[DebuggerHidden]
+		public FileSystemFileStream OpenFileCreate(String FileName)
+		{
+			return OpenFile(FileName, FileMode.Create);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="FileName"></param>
+		/// <returns></returns>
+		[DebuggerHidden]
 		public FileSystemFileStream OpenFileRW(String FileName)
 		{
 			return OpenFile(FileName, FileMode.Open);
