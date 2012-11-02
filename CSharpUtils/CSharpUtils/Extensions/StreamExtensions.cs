@@ -338,6 +338,56 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="Stream"></param>
 	/// <param name="ToRead"></param>
+	/// <param name="AlignTo4"></param>
+	/// <returns></returns>
+	static public int CountStringzBytes(this Stream Stream, int ToRead = -1, bool AlignTo4 = false, int AlignPosition = 0, bool KeepStreamPosition = true)
+	{
+		if (AlignTo4 == true) throw(new NotImplementedException());
+		if (KeepStreamPosition) Stream = Stream.SliceWithLength(Stream.Position);
+		if (Stream.Eof()) return 0;
+		bool ContinueReading = false;
+
+		if (ToRead == -1)
+		{
+			ToRead = 0x100;
+			ContinueReading = true;
+		}
+
+		var StartPosition = Stream.Position;
+		var Bytes = Stream.ReadBytesUpTo(ToRead);
+		int ZeroIndex = Array.IndexOf(Bytes, (byte)0x00);
+		if (ZeroIndex == -1)
+		{
+			if (ContinueReading)
+			{
+				return Bytes.Length + CountStringzBytes(Stream, ToRead, AlignTo4, KeepStreamPosition: false);
+			}
+			else
+			{
+				return Bytes.Length;
+			}
+		}
+		else
+		{
+			if (AlignTo4)
+			{
+				var Bytes2 = Stream.SliceWithLength(StartPosition + ZeroIndex, 5).ReadBytesUpTo(5);
+				int n = 0;
+				for (; n < Bytes2.Length; n++) if (Bytes2[n] != 0) break;
+				return (ZeroIndex + n);
+			}
+			else
+			{
+				return (ZeroIndex + 1);
+			}
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Stream"></param>
+	/// <param name="ToRead"></param>
 	/// <param name="Encoding"></param>
 	/// <param name="AllowEndOfStream"></param>
 	/// <returns></returns>
@@ -814,7 +864,7 @@ static public class StreamExtensions
 	/// <param name="Count"></param>
 	/// <returns></returns>
 	[DebuggerHidden]
-	unsafe public static Stream WriteByteRepeated(this Stream Stream, byte Byte, int Count = 1)
+	unsafe public static Stream WriteByteRepeated(this Stream Stream, byte Byte, int Count)
 	{
 		if (Count > 0)
 		{
@@ -825,6 +875,18 @@ static public class StreamExtensions
 		}
 
 		return Stream;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Stream"></param>
+	/// <param name="Byte"></param>
+	/// <param name="PositionStop"></param>
+	/// <returns></returns>
+	unsafe public static Stream WriteByteRepeatedTo(this Stream Stream, byte Byte, long PositionStop)
+	{
+		return WriteByteRepeated(Stream, Byte, (int)(PositionStop - Stream.Length));
 	}
 
 	/// <summary>

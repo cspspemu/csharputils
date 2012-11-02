@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -74,6 +75,26 @@ namespace CSharpUtilsTests.Extensions
 				Data.ToHexString(),
 				MemoryStream.ToArray().ToHexString()
 			);
+		}
+
+		[TestMethod]
+		public void CountStringzBytesTest()
+		{
+			var Stream1 = new MemoryStream(new [] { 'H', 'e', 'l', 'l', 'o', (char)0, 'W', 'o', 'r', 'l', 'd' }.Select(Item => (byte)Item).ToArray());
+			var Stream2 = new MemoryStream(new [] { 'H', 'e', 'l', 'l', 'o', (char)0, (char)0, 'W', 'o', 'r', 'l', 'd' }.Select(Item => (byte)Item).ToArray());
+			var Stream3 = new MemoryStream(new [] { 'H', 'e', 'l', 'l', 'o', (char)0, (char)0, (char)0, 'W', 'o', 'r', 'l', 'd' }.Select(Item => (byte)Item).ToArray());
+			var Stream4 = new MemoryStream(new [] { 'H', 'e', 'l', 'l', 'o', (char)0, (char)0, (char)0, (char)0, 'W', 'o', 'r', 'l', 'd' }.Select(Item => (byte)Item).ToArray());
+			Assert.AreEqual(6, Stream1.CountStringzBytes());
+			Assert.AreEqual(6, Stream2.CountStringzBytes());
+			Assert.AreEqual(6, Stream3.CountStringzBytes());
+			Assert.AreEqual(6, Stream4.CountStringzBytes());
+		
+			Assert.AreEqual(6, Stream1.CountStringzBytes(AlignTo4: true));
+			Assert.AreEqual(7, Stream2.CountStringzBytes(AlignTo4: true));
+			Assert.AreEqual(8, Stream3.CountStringzBytes(AlignTo4: true));
+
+			// FIXME! Use Virtual Position to know when it is aligned.
+			Assert.AreEqual(8, Stream4.CountStringzBytes(AlignTo4: true));
 		}
 	}
 }

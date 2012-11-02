@@ -100,6 +100,8 @@ public static class StringExtensions
 		{
 			switch (C)
 			{
+				case '\"': That += @"\"""; break;
+				case '\'': That += @"\'"; break;
 				case '\n': That += @"\n"; break;
 				case '\r': That += @"\r"; break;
 				case '\t': That += @"\t"; break;

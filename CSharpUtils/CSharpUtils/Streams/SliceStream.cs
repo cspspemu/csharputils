@@ -94,7 +94,7 @@ namespace CSharpUtils.Streams
 		/// <param name="CanWrite">Determines if the Stream will be writtable.</param>
 		/// <returns>A SliceStream</returns>
 		[DebuggerHidden]
-		protected SliceStream(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
+		protected SliceStream(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null, bool AllowSliceOutsideHigh = true)
 			: base(BaseStream, CloseParent: false)
 		{
 			if (!BaseStream.CanSeek) throw(new NotImplementedException("ParentStream must be seekable"));
@@ -103,9 +103,21 @@ namespace CSharpUtils.Streams
 			this.ThisStart = ThisStart;
 			this.ThisLength = (ThisLength == -1) ? (BaseStream.Length - ThisStart) : ThisLength;
 
-			if ((SliceHigh < SliceLow) || (SliceLow < 0) || (SliceLow > BaseStream.Length) || (SliceHigh < 0) || (SliceHigh > BaseStream.Length))
+			bool ErrorCreating = false;
+
+			if ((SliceHigh < SliceLow) || (SliceLow < 0) || (SliceHigh < 0))
 			{
-				throw (new InvalidOperationException(String.Format("Trying to SliceStream Parent({0}) Slice({1}-{2})", BaseStream.Length, ThisStart, ThisLength)));
+				ErrorCreating = true;
+			}
+
+			if (!AllowSliceOutsideHigh && ((SliceLow > BaseStream.Length) || (SliceHigh > BaseStream.Length)))
+			{
+				ErrorCreating = true;
+			}
+
+			if (ErrorCreating)
+			{
+				throw (new InvalidOperationException(String.Format("Trying to SliceStream Parent(Length={0}) Slice({1}-{2})", BaseStream.Length, ThisStart, ThisLength)));
 			}
 		}
 

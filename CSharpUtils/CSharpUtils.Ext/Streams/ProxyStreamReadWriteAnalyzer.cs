@@ -89,7 +89,7 @@ namespace CSharpUtils.Streams
             }
             finally
             {
-                _ReadUsage.AddAvailable(Start, Position);
+                _ReadUsage.AddAvailableWithBounds(Start, Position);
             }
         }
 
@@ -112,7 +112,7 @@ namespace CSharpUtils.Streams
             }
             finally
             {
-                _WriteUsage.AddAvailable(Start, Position);
+                _WriteUsage.AddAvailableWithBounds(Start, Position);
             }
         }
     }

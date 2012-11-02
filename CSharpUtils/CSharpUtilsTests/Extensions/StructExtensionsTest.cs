@@ -27,5 +27,23 @@ namespace CSharpUtilsTests
 				}.ToStringDefault()
 			);
 		}
+
+		[TestMethod]
+		public void ToStringDefaultTestArray()
+		{
+			Assert.AreEqual(
+				"[1, 2, 3, 4]",
+				new int[] { 1, 2, 3, 4 }.ToStringDefault()
+			);
+		}
+
+		[TestMethod]
+		public void ToStringDefaultTestString()
+		{
+			Assert.AreEqual(
+				"\"Hello \\\"\\' World\"",
+				"Hello \"' World".ToStringDefault()
+			);
+		}
 	}
 }

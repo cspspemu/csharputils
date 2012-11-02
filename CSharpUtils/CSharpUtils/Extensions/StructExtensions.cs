@@ -1,19 +1,48 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 public static class StructExtensions
 {
-	public static string ToStringDefault<T>(this T Struct, bool SimplifyBool = false) //where T : struct
+	public static string ToStringDefault<T>(this T Struct, bool SimplifyBool = false, Type StructType = null) //where T : struct
 	{
+		if (StructType == null) StructType = typeof(T);
+
 		var Ret = "";
-		Ret += typeof(T).Name;
+
+		if (StructType.IsArray)
+		{
+			var ElementType = StructType.GetElementType();
+			foreach (var Item in Struct as Array)
+			{
+				if (Ret.Length > 0) Ret += ", ";
+				Ret += Item.ToStringDefault(SimplifyBool, ElementType);
+			}
+			return "[" + Ret + "]";
+		}
+		else if (StructType == typeof(string))
+		{
+			return "\"" + (Struct as String).EscapeString() + "\"";
+		}
+		else if (StructType.IsPrimitive)
+		{
+			if (StructType == typeof(uint))
+			{
+				return String.Format("0x{0:X}", Struct);
+			}
+
+			return Struct.ToString();
+		}
+
+		Ret += StructType.Name;
 		Ret += "(";
 		var MemberCount = 0;
 		bool AddedItem = false;
 
 		//FieldInfo fi;
 		//PropertyInfo pi;
-		foreach (var MemberInfo in typeof(T).GetMembers())
+		foreach (var MemberInfo in StructType.GetMembers())
 		{
 			bool ValueSet = false;
 			object Value = null;
@@ -50,17 +79,14 @@ public static class StructExtensions
 				{
 					Ret += MemberInfo.Name;
 					Ret += "=";
+
 					if (Value is uint)
 					{
 						Ret += String.Format("0x{0:X}", Value);
 					}
-					else if (Value.GetType().IsArray)
-					{
-						Ret += "[" + String.Join(",", Value.ToStringDefault(SimplifyBool)) + "]";
-					}
 					else
 					{
-						Ret += Value;
+						Ret += Value.ToStringDefault(SimplifyBool, Value.GetType());
 					}
 					MemberCount++;
 					AddedItem = true;

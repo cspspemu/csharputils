@@ -14,6 +14,14 @@ namespace CSharpUtils.SpaceAssigner
 			OnAllocate += SpaceAssigner1DUniqueAllocatorStream_OnAllocate;
 		}
 
+		public void FillSpacesWithZeroes()
+		{
+			foreach (var Space in SpaceAssigner.GetAvailableSpaces())
+			{
+				Stream.SliceWithBounds(Space.Min, Space.Max).FillStreamWithByte(0x00);
+			}
+		}
+
 		void SpaceAssigner1DUniqueAllocatorStream_OnAllocate(byte[] Bytes, SpaceAssigner1D.Space Space)
 		{
 			SliceStream.CreateWithBounds(this.Stream, Space.Min, Space.Max).WriteBytes(Bytes);
