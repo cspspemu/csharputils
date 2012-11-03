@@ -47,15 +47,23 @@ public static class StructExtensions
 			bool ValueSet = false;
 			object Value = null;
 
-			if (MemberInfo is FieldInfo)
+			try
 			{
-				ValueSet = true;
-				Value = (MemberInfo as FieldInfo).GetValue(Struct);
+				if (MemberInfo is FieldInfo)
+				{
+					ValueSet = true;
+					Value = (MemberInfo as FieldInfo).GetValue(Struct);
+				}
+				else if (MemberInfo is PropertyInfo)
+				{
+					ValueSet = true;
+					Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
+				}
 			}
-			else if (MemberInfo is PropertyInfo)
+			catch
 			{
-				ValueSet = true;
-				Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
+				ValueSet = false;
+				Value = null;
 			}
 
 			if (ValueSet)

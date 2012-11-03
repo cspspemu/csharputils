@@ -79,19 +79,16 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			}
 		}
 
-		[DebuggerHidden]
 		override protected void ImplCreateDirectory(String Path, int Mode = 0777)
 		{
 			Directory.CreateDirectory(RealPath(Path));
 		}
 
-		[DebuggerHidden]
 		override protected void ImplDeleteFile(string Path)
 		{
 			File.Delete(RealPath(Path));
 		}
 
-		[DebuggerHidden]
 		override protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode)
 		{
 			//var Stream = File.Open(RealPath(FileName), FileMode, FileAccess.Read, FileShare.ReadWrite);
@@ -99,7 +96,18 @@ namespace CSharpUtils.VirtualFileSystem.Local
 			return new FileSystemFileStreamStream(this, Stream);
 		}
 
-		[DebuggerHidden]
+		protected override void ImplMoveFile(string ExistingFileName, string NewFileName, bool ReplaceExisiting)
+		{
+			var RealExistingFileName = RealPath(ExistingFileName);
+			var RealNewFileName = RealPath(NewFileName);
+
+			if (ReplaceExisiting && File.Exists(RealNewFileName))
+			{
+				File.Delete(RealNewFileName);
+			}
+			File.Move(RealExistingFileName, RealNewFileName);
+		}
+
 		public override String Title
 		{
 			get

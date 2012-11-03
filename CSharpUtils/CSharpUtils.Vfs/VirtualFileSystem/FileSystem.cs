@@ -23,14 +23,69 @@ namespace CSharpUtils.VirtualFileSystem
 		/// <see cref="http://docs.python.org/whatsnew/2.6.html#pep-343-the-with-statement"/>
 		/// <see cref="http://msdn.microsoft.com/en-us/library/yh598w02(v=VS.100).aspx"/>
 		abstract protected FileSystemFileStream ImplOpenFile(String FileName, FileMode FileMode);
-		
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="FileName"></param>
+		/// <param name="FileMode"></param>
+		/// <param name="Action"></param>
+		public void OpenFileScope(String FileName, FileMode FileMode, Action<Stream> Action)
+		{
+			using (var Stream = OpenFile(FileName, FileMode))
+			{
+				Action(Stream);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="FileName"></param>
+		/// <param name="FileMode"></param>
+		/// <param name="Action"></param>
+		public void OpenFileReadScope(String FileName, Action<Stream> Action)
+		{
+			using (var Stream = OpenFileRead(FileName))
+			{
+				Action(Stream);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="FileName"></param>
+		/// <param name="FileMode"></param>
+		/// <param name="Action"></param>
+		public void OpenFileRWScope(String FileName, Action<Stream> Action)
+		{
+			using (var Stream = OpenFileRW(FileName))
+			{
+				Action(Stream);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="FileName"></param>
+		/// <param name="FileMode"></param>
+		/// <param name="Action"></param>
+		public void OpenFileCreateScope(String FileName, Action<Stream> Action)
+		{
+			using (var Stream = OpenFileCreate(FileName))
+			{
+				Action(Stream);
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="FileName"></param>
 		/// <param name="FileMode"></param>
 		/// <returns></returns>
-		[DebuggerHidden]
 		public FileSystemFileStream OpenFile(String FileName, FileMode FileMode)
 		{
 			FileSystem NewFileSystem; String NewFileName; Access(FileName, out NewFileSystem, out NewFileName);
@@ -42,7 +97,6 @@ namespace CSharpUtils.VirtualFileSystem
 		/// </summary>
 		/// <param name="FileName"></param>
 		/// <returns></returns>
-		[DebuggerHidden]
 		public FileSystemFileStream OpenFileCreate(String FileName)
 		{
 			return OpenFile(FileName, FileMode.Create);
@@ -53,7 +107,6 @@ namespace CSharpUtils.VirtualFileSystem
 		/// </summary>
 		/// <param name="FileName"></param>
 		/// <returns></returns>
-		[DebuggerHidden]
 		public FileSystemFileStream OpenFileRW(String FileName)
 		{
 			return OpenFile(FileName, FileMode.Open);
@@ -64,7 +117,6 @@ namespace CSharpUtils.VirtualFileSystem
 		/// </summary>
 		/// <param name="FileName"></param>
 		/// <returns></returns>
-		[DebuggerHidden]
 		public FileSystemFileStream OpenFileRead(String FileName)
 		{
 			return OpenFile(FileName, FileMode.Open);
@@ -93,7 +145,6 @@ namespace CSharpUtils.VirtualFileSystem
 		/// </summary>
 		/// <param name="FileName"></param>
 		/// <param name="Buffer"></param>
-		[DebuggerHidden]
 		public void WriteAllBytes(string FileName, byte[] Buffer)
 		{
 			using (var File = OpenFile(FileName, FileMode.Create))
@@ -107,7 +158,6 @@ namespace CSharpUtils.VirtualFileSystem
 		/// </summary>
 		/// <param name="FileName"></param>
 		/// <returns></returns>
-		[DebuggerHidden]
 		public byte[] ReadAllBytes(string FileName)
 		{
 			using (var File = OpenFile(FileName, FileMode.Open))
@@ -131,7 +181,6 @@ namespace CSharpUtils.VirtualFileSystem
 		/// </summary>
 		/// <param name="Path"></param>
 		/// <param name="FileTime"></param>
-		[DebuggerHidden]
 		public void SetFileTime(String Path, FileSystemEntry.FileTime FileTime)
 		{
 			FileSystem NewFileSystem; String NewPath; Access(Path, out NewFileSystem, out NewPath);
@@ -347,6 +396,25 @@ namespace CSharpUtils.VirtualFileSystem
 		/// <param name="SourcePath"></param>
 		/// <param name="DestFileSystem"></param>
 		/// <param name="DestPath"></param>
+		static public void CopyFile(FileSystem SourceFileSystem, String SourcePath, FileSystem DestFileSystem, String DestPath)
+		{
+			DestFileSystem.OpenFileCreateScope(DestPath, (OutStream) =>
+			{
+				SourceFileSystem.OpenFileReadScope(SourcePath, (InStream) =>
+				{
+					InStream.CopyToFast(OutStream);
+				});
+			});
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="SourceFileSystem"></param>
+		/// <param name="SourcePath"></param>
+		/// <param name="DestFileSystem"></param>
+		/// <param name="DestPath"></param>
 		/// <param name="ActionValidate"></param>
 		/// <param name="ActionProgress"></param>
 		static public void CopyTree(FileSystem SourceFileSystem, String SourcePath, FileSystem DestFileSystem, String DestPath, Func<FileSystemEntry, bool> ActionValidate = null, Action<FileSystemEntry, long, long> ActionProgress = null, byte[] Buffer = null)
@@ -389,6 +457,16 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 
 			Buffer = null;
+		}
+
+		public void ReplaceFileWithStream(String Path, Stream NewStream)
+		{
+			this.OpenFileRWScope(Path, (OldStream) =>
+			{
+				OldStream.WriteStream(NewStream);
+				OldStream.WriteByteRepeatedTo(0x00, OldStream.Length);
+			});
+			
 		}
 
 		/// <summary>

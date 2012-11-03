@@ -791,9 +791,10 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="ToStream"></param>
 	/// <param name="FromStream"></param>
-	public static void WriteStream(this Stream ToStream, Stream FromStream)
+	public static Stream WriteStream(this Stream ToStream, Stream FromStream)
 	{
 		FromStream.CopyToFast(ToStream);
+		return ToStream;
 	}
 
 	/// <summary>
