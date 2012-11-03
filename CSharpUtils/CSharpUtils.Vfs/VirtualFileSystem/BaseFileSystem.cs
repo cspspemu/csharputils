@@ -143,9 +143,9 @@ namespace CSharpUtils.VirtualFileSystem
 			}
 		}
 
-		public void Copy(string SrcFile, string DstFile, bool Override = false)
+		public void Copy(string SrcFile, string DstFile, bool Overwrite = false)
 		{
-			if (!Override && Exists(DstFile))
+			if (!Overwrite && Exists(DstFile))
 			{
 				throw(new System.IO.IOException("File already exists"));
 			}
