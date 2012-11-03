@@ -111,10 +111,18 @@ namespace CSharpUtils
 			return Value;
 		}
 
+		/*
+		// NOT WORKING!
 		public static uint NextAligned2(uint Value, uint Alignment)
 		{
 			return (Value + Alignment) & ~Alignment;
 		}
+
+		public static long NextAligned2(long Value, long Alignment)
+		{
+			return (Value + Alignment) & ~Alignment;
+		}
+		*/
 
 		public static uint NextAligned(uint Value, int Alignment)
 		{
