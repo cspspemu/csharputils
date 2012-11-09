@@ -791,9 +791,9 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="ToStream"></param>
 	/// <param name="FromStream"></param>
-	public static Stream WriteStream(this Stream ToStream, Stream FromStream)
+	public static Stream WriteStream(this Stream ToStream, Stream FromStream, Action<long, long> ActionReport = null)
 	{
-		FromStream.CopyToFast(ToStream);
+        FromStream.CopyToFast(ToStream, ActionReport);
 		return ToStream;
 	}
 
@@ -826,16 +826,29 @@ static public class StreamExtensions
 	/// </summary>
 	/// <param name="Stream"></param>
 	/// <param name="Byte"></param>
-	/// <param name="Count"></param>
+	/// <param name="TotalCount"></param>
 	/// <returns></returns>
-	unsafe public static Stream WriteByteRepeated(this Stream Stream, byte Byte, int Count)
+    unsafe public static Stream WriteByteRepeated(this Stream Stream, byte Byte, long TotalCount, Action<long, long> Progress = null)
 	{
-		if (Count > 0)
+		if (TotalCount > 0)
 		{
-			var Bytes = new byte[Count];
-			PointerUtils.Memset(Bytes, Byte, Count);
+            long MaxBuffer = 2 * 1024 * 1024;
+            var Bytes = new byte[Math.Min(MaxBuffer, TotalCount)];
+            PointerUtils.Memset(Bytes, Byte, Bytes.Length);
+            long Left = TotalCount;
+            long Current = 0;
+            if (Progress == null) Progress = (_Current, _Max) => { };
 
-			Stream.WriteBytes(Bytes);
+            Progress(0, TotalCount);
+
+            while (Left > 0)
+            {
+                var ToWrite = Math.Min(Bytes.Length, Left);
+                Stream.Write(Bytes, 0, (int)ToWrite);
+                Left -= ToWrite;
+                Current += ToWrite;
+                Progress(Current, TotalCount);
+            }
 		}
 
 		return Stream;
@@ -848,9 +861,9 @@ static public class StreamExtensions
 	/// <param name="Byte"></param>
 	/// <param name="PositionStop"></param>
 	/// <returns></returns>
-	unsafe public static Stream WriteByteRepeatedTo(this Stream Stream, byte Byte, long PositionStop)
+	unsafe public static Stream WriteByteRepeatedTo(this Stream Stream, byte Byte, long PositionStop, Action<long, long> Progress = null)
 	{
-		return WriteByteRepeated(Stream, Byte, (int)(PositionStop - Stream.Position));
+        return WriteByteRepeated(Stream, Byte, (int)(PositionStop - Stream.Position), Progress);
 	}
 
 	/// <summary>

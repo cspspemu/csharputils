@@ -459,12 +459,21 @@ namespace CSharpUtils.VirtualFileSystem
 			Buffer = null;
 		}
 
-		public void ReplaceFileWithStream(String Path, Stream NewStream)
+		public void ReplaceFileWithStream(String Path, Stream NewStream, Action<long, long> Progress = null)
 		{
+            if (Progress == null) Progress = (_Current, _Total) => { };
+
 			this.OpenFileRWScope(Path, (OldStream) =>
 			{
-				OldStream.WriteStream(NewStream);
-				OldStream.WriteByteRepeatedTo(0x00, OldStream.Length);
+                OldStream.WriteStream(NewStream, (Current, Total) =>
+                {
+                    Progress(Current, OldStream.Length);
+                });
+                long Waypoint = OldStream.Position;
+                OldStream.WriteByteRepeatedTo(0x00, OldStream.Length, (Current, Total) =>
+                {
+                    Progress(Waypoint + Current, OldStream.Length);
+                });
 			});
 			
 		}
