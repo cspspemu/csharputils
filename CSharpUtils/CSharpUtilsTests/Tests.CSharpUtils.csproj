@@ -84,6 +84,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StructUtilsTest.cs" />
     <Compile Include="MathUtilsTest.cs" />
+    <Compile Include="HashingTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
