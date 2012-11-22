@@ -58,7 +58,7 @@ namespace CSharpUtils
 			}
 		}
 
-		private static bool Is64;
+		public static bool Is64;
 
 		static PointerUtils()
 		{

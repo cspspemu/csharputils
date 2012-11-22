@@ -60,6 +60,19 @@ namespace CSharpUtilsTests.Extensions
 		}
 
 		[TestMethod]
+		public void ReadStructVectorEmptyTest()
+		{
+			var Data = new byte[] {
+				0x01, 0x00, 0x02, 0x00, 0x03, 0x00,
+				0x01, 0x01, 0x02, 0x01, 0x03, 0x01,
+				0x01, 0x02, 0x02, 0x02, 0x03, 0x02,
+			};
+			var TestShorts = (new MemoryStream(Data)).ReadStructVector<TestShorts>(0);
+			Assert.AreEqual(0, TestShorts.Length);
+		}
+
+
+		[TestMethod]
 		public void WriteStructVectorTest()
 		{
 			var Data = new byte[] {
