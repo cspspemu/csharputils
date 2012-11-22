@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CSharpUtils
 {
@@ -10,7 +8,7 @@ namespace CSharpUtils
 		public String ThisField;
 		public String ConfigurationField;
 
-		static public Object ObjectFieldGet(Object Object, String FieldName)
+		public static Object ObjectFieldGet(Object Object, String FieldName)
 		{
 			//Console.WriteLine("(" + Object.GetType() + ").(" + FieldName + ")");
 			try
@@ -28,7 +26,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public Object ConvertTo(Object Object, Type ToType)
+		public static Object ConvertTo(Object Object, Type ToType)
 		{
 			if (ToType.IsEnum)
 			{
@@ -37,7 +35,7 @@ namespace CSharpUtils
 			return Convert.ChangeType(Object, ToType);
 		}
 
-		static public void ObjectFieldSet(Object Object, String FieldName, Object Value)
+		public static void ObjectFieldSet(Object Object, String FieldName, Object Value)
 		{
 			//Console.WriteLine("(" + Object + ").(" + FieldName + ")=" + Value);
 			try
@@ -64,7 +62,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public void ObjectToConfiguration(Object Source, Object Configuration)
+		public static void ObjectToConfiguration(Object Source, Object Configuration)
 		{
 			foreach (var SourceMember in Source.GetType().GetFields())
 			{
@@ -82,7 +80,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public void ConfigurationToObject(Object Configuration, Object Destination)
+		public static void ConfigurationToObject(Object Configuration, Object Destination)
 		{
 			foreach (var DestinationMember in Destination.GetType().GetFields())
 			{

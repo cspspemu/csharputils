@@ -3,17 +3,72 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CSharpUtils;
+using System.Text.RegularExpressions;
 
-static public class StringExtensions
+public static class StringExtensions
 {
-	static public String Substr(this String String, int StartIndex)
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="String"></param>
+	/// <param name="RegexString"></param>
+	/// <param name="ActionMatch"></param>
+	/// <returns></returns>
+	public static String RegexReplace(this String String, string RegexString, Func<GroupCollection, string> ActionMatch)
+	{
+		var Regex = new Regex(RegexString, RegexOptions.None);
+		return Regex.Replace(String, (Match) =>
+		{
+			return ActionMatch(Match.Groups);
+		});
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="String"></param>
+	/// <param name="RegexString"></param>
+	/// <returns></returns>
+	public static bool RegexIsMatch(this String String, string RegexString)
+	{
+		var Regex = new Regex(RegexString, RegexOptions.None);
+		return Regex.IsMatch(String);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="String"></param>
+	/// <param name="RegexString"></param>
+	/// <returns></returns>
+	public static MatchCollection RegexMatchAll(this String String, string RegexString)
+	{
+		var Regex = new Regex(RegexString, RegexOptions.None);
+		return Regex.Matches(String);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="String"></param>
+	/// <param name="RegexString"></param>
+	/// <returns></returns>
+	public static GroupCollection RegexMatch(this String String, string RegexString)
+	{
+		var Regex = new Regex(RegexString, RegexOptions.None);
+		var Match = Regex.Match(String);
+		if (Match == Match.Empty) return null;
+		return Match.Groups;
+	}
+
+	public static String Substr(this String String, int StartIndex)
 	{
 		if (StartIndex < 0) StartIndex = String.Length + StartIndex;
 		StartIndex = MathUtils.Clamp(StartIndex, 0, String.Length);
 		return String.Substring(StartIndex);
 	}
 
-	static public String Substr(this String String, int StartIndex, int Length)
+	public static String Substr(this String String, int StartIndex, int Length)
 	{
 		if (StartIndex < 0) StartIndex = String.Length + StartIndex;
 		StartIndex = MathUtils.Clamp(StartIndex, 0, String.Length);
@@ -23,28 +78,30 @@ static public class StringExtensions
 		return String.Substring(StartIndex, Length);
 	}
 
-	static public byte[] GetStringzBytes(this String String, Encoding Encoding)
+	public static byte[] GetStringzBytes(this String String, Encoding Encoding)
 	{
 		return String.GetBytes(Encoding).Concat(new byte[] { 0 }).ToArray();
 	}
 
-	static public byte[] GetBytes(this String This)
+	public static byte[] GetBytes(this String This)
 	{
 		return This.GetBytes(Encoding.UTF8);
 	}
 
-	static public byte[] GetBytes(this String This, Encoding Encoding)
+	public static byte[] GetBytes(this String This, Encoding Encoding)
 	{
 		return Encoding.GetBytes(This);
 	}
 
-	static public String EscapeString(this String This)
+	public static String EscapeString(this String This)
 	{
 		var That = "";
 		foreach (var C in This)
 		{
 			switch (C)
 			{
+				case '\"': That += @"\"""; break;
+				case '\'': That += @"\'"; break;
 				case '\n': That += @"\n"; break;
 				case '\r': That += @"\r"; break;
 				case '\t': That += @"\t"; break;
@@ -54,20 +111,20 @@ static public class StringExtensions
 		return That;
 	}
 
-	static public long GetLong(object Value)
+	public static long GetLong(object Value)
 	{
 		return Convert.ToInt64(Value);
 	}
 
-	static public ulong GetUnsignedLong(object Value)
+	public static ulong GetUnsignedLong(object Value)
 	{
 		return Convert.ToUInt64(Value);
 	}
 
-	static public long ConvertToLong(object Value)
+	public static long ConvertToLong(object Value)
 	{
-		if (Value.GetType() == typeof(int)) return (long)(uint)Convert.ToInt32(Value);
-		if (Value.GetType() == typeof(uint)) return (long)(uint)Convert.ToUInt32(Value);
+		if (Value is int) return (long)(uint)Convert.ToInt32(Value);
+		if (Value is uint) return (long)(uint)Convert.ToUInt32(Value);
 		try
 		{
 			return Convert.ToInt64(Value);
@@ -85,7 +142,7 @@ static public class StringExtensions
 		}
 	}
 
-	static public String Sprintf(this String This, params Object[] _Params)
+	public static String Sprintf(this String This, params Object[] _Params)
 	{
 		String Ret = "";
 		var Params = new Queue<Object>(_Params);

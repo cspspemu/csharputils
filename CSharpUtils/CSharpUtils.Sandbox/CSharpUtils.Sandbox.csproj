@@ -38,28 +38,19 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sandbox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpUtils.45.MysqlAsync\CSharpUtils.45.MysqlAsync.csproj">
-      <Project>{dd49ef62-8244-4e83-82c8-b1844acf2f5f}</Project>
-      <Name>CSharpUtils.45.MysqlAsync</Name>
-    </ProjectReference>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\CSharpUtils\CSharpUtils.csproj">
       <Project>{746fadf2-d613-4ffd-8551-2181adae3cd1}</Project>
       <Name>CSharpUtils</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

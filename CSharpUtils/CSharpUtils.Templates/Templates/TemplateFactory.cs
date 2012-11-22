@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using CSharpUtils.Templates.TemplateProvider;
 using CSharpUtils.Templates.Runtime;
-using CSharpUtils.Templates.Tokenizers;
-using CSharpUtils;
-using CSharpUtils.Templates.Templates;
+using CSharpUtils.Templates.TemplateProvider;
 
 namespace CSharpUtils.Templates
 {

@@ -13,10 +13,10 @@ namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 	[TestClass]
 	public class SftpFileSystemTest
 	{
-        /// @TODO: These should be Harness tests.
+        // @TODO: These should be Harness tests.
         /*
 
-		static protected SftpFileSystem SftpFileSystem;
+		protected static SftpFileSystem SftpFileSystem;
 
 		[ClassInitialize]
 		public static void Initialize(TestContext testContext)

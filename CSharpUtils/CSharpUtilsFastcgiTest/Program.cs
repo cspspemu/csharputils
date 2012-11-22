@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CSharpUtils.Fastcgi;
-using System.IO;
-using System.Threading;
-using CSharpUtils.Templates.TemplateProvider;
-using CSharpUtils.Templates;
-using CSharpUtils.Templates.Runtime;
-using CSharpUtils.VirtualFileSystem.Local;
 using CSharpUtils;
 using CSharpUtils.Fastcgi.Http;
+using CSharpUtils.Templates;
+using CSharpUtils.Templates.Runtime;
+using CSharpUtils.Templates.TemplateProvider;
+using CSharpUtils.VirtualFileSystem.Local;
 
 namespace CSharpUtilsFastcgiTest
 {
@@ -81,7 +76,7 @@ namespace CSharpUtilsFastcgiTest
 
 	class Program
 	{
-		static void Main(string[] args)
+		static void Main()
 		{
 			var FastcgiServer = new MyFastcgiServer();
 			FastcgiServer.Listen(9001, "127.0.0.1");

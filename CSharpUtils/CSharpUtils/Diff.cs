@@ -3,7 +3,6 @@ namespace CSharpUtils
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Text;
 	using System.Text.RegularExpressions;
 
   /// <summary>
@@ -143,7 +142,7 @@ namespace CSharpUtils
 	  return (DiffText(TextA, TextB, false, false, false));
 	} // DiffText
 
-	static public ProcessedResult DiffTextProcessed(string[] listA, string[] listB) {
+	public static ProcessedResult DiffTextProcessed(string[] listA, string[] listB) {
 		var result = new ProcessedResult();
 		
 		var diff = new Diff();
@@ -296,9 +295,11 @@ namespace CSharpUtils
 	/// This function converts all textlines of the text into unique numbers for every unique textline
 	/// so further work can work only with simple numbers.
 	/// </summary>
-	/// <param name="aText">the input text</param>
+	/// <param name="Lines">the input text</param>
 	/// <param name="h">This extern initialized hashtable is used for storing all ever used textlines.</param>
 	/// <param name="trimSpace">ignore leading and trailing space characters</param>
+	/// <param name="ignoreSpace"></param>
+	/// <param name="ignoreCase"></param>
 	/// <returns>a array of integers.</returns>
 	//private static int[] DiffCodes(string aText, Hashtable h, bool trimSpace, bool ignoreSpace, bool ignoreCase) {
 	private static int[] DiffCodes(string[] Lines, Hashtable h, bool trimSpace, bool ignoreSpace, bool ignoreCase)
@@ -577,7 +578,7 @@ namespace CSharpUtils
 	/// <summary>
 	/// Initialize the Diff-Data buffer.
 	/// </summary>
-	/// <param name="data">reference to the buffer</param>
+	/// <param name="initData">reference to the buffer</param>
 	internal DiffData(int[] initData) {
 	  data = initData;
 	  Length = initData.Length;

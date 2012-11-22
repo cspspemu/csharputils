@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using CSharpUtils;
 
 namespace CSharpUtils.SpaceAssigner
 {
 	public class SpaceAssigner1DUniqueAllocator
 	{
-		SpaceAssigner1D SpaceAssigner;
-		Dictionary<byte[], SpaceAssigner1D.Space> AllocatedSpaces;
+		protected SpaceAssigner1D SpaceAssigner;
+		protected Dictionary<byte[], SpaceAssigner1D.Space> AllocatedSpaces;
 		public event Action<byte[], SpaceAssigner1D.Space> OnAllocate;
 
 		public SpaceAssigner1DUniqueAllocator(SpaceAssigner1D SpaceAssigner)

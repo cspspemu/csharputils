@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using CSharpUtils.Streams;
-using CSharpUtils;
 
 namespace CSharpUtils.SpaceAssigner
 {
@@ -17,6 +12,14 @@ namespace CSharpUtils.SpaceAssigner
 		{
 			this.Stream = Stream;
 			OnAllocate += SpaceAssigner1DUniqueAllocatorStream_OnAllocate;
+		}
+
+		public void FillSpacesWithZeroes()
+		{
+			foreach (var Space in SpaceAssigner.GetAvailableSpaces())
+			{
+				Stream.SliceWithBounds(Space.Min, Space.Max).FillStreamWithByte(0x00);
+			}
 		}
 
 		void SpaceAssigner1DUniqueAllocatorStream_OnAllocate(byte[] Bytes, SpaceAssigner1D.Space Space)

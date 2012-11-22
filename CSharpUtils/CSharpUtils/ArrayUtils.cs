@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace CSharpUtils
 {
-	static public class ArrayUtils
+	public static class ArrayUtils
 	{
-		static public IEnumerable<int> Range(int From, int To)
+		public static IEnumerable<int> Range(int From, int To)
 		{
 			for (int n = From; n < To; n++)
 			{
@@ -16,12 +14,12 @@ namespace CSharpUtils
 			}
 		}
 
-		static public IEnumerable<int> Range(int To)
+		public static IEnumerable<int> Range(int To)
 		{
 			return Range(0, To);
 		}
 
-		static public unsafe T[] CreateArray<T>(void* source, int length)
+		public static unsafe T[] CreateArray<T>(void* source, int length)
 		{
 			var type = typeof(T);
 			var sizeInBytes = Marshal.SizeOf(typeof(T));

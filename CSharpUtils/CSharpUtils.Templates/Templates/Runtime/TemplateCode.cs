@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Dynamic;
-using System.Reflection;
-using CSharpUtils.Templates.TemplateProvider;
 using System.Threading.Tasks;
 
 namespace CSharpUtils.Templates.Runtime
 {
-	abstract public class TemplateCode
+	public abstract class TemplateCode
 	{
 		TemplateFactory TemplateFactory;
 		public delegate Task RenderDelegate(TemplateContext Context);
@@ -29,7 +24,7 @@ namespace CSharpUtils.Templates.Runtime
 			this.SetBlocks(this.Blocks);
 		}
 
-		virtual public void SetBlocks(Dictionary<String, RenderDelegate> Blocks)
+		public virtual void SetBlocks(Dictionary<String, RenderDelegate> Blocks)
 		{
 		}
 
@@ -39,21 +34,21 @@ namespace CSharpUtils.Templates.Runtime
 		}
 
 		/*
-		async virtual protected Task LocalRenderAsync(TemplateContext Context)
+		async protected virtual Task LocalRenderAsync(TemplateContext Context)
 		{
 		}
 		*/
 
 		/*
-		async public Task RenderAsync(TemplateContext Context)
+		public async Task RenderAsync(TemplateContext Context)
 		{
 		}
 		*/
 
 #if NET_4_5
-		abstract protected Task LocalRenderAsync(TemplateContext Context);
+		protected abstract Task LocalRenderAsync(TemplateContext Context);
 
-		async public Task RenderAsync(TemplateContext Context)
+		public async Task RenderAsync(TemplateContext Context)
 		{
 			Context.RenderingTemplate = this;
 
@@ -76,7 +71,7 @@ namespace CSharpUtils.Templates.Runtime
 			}
 		}
 #else
-		abstract protected void LocalRender(TemplateContext Context);
+		protected abstract void LocalRender(TemplateContext Context);
 
 		public void Render(TemplateContext Context)
 		{

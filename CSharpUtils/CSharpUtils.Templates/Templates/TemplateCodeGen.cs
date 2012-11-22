@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CSharpUtils.Templates.Tokenizers;
-using CSharpUtils.Templates.Runtime;
+using System.CodeDom.Compiler;
 using System.IO;
+using System.Reflection;
 using CSharpUtils.Templates.ParserNodes;
+using CSharpUtils.Templates.Runtime;
+using CSharpUtils.Templates.Tokenizers;
 using CSharpUtils.Templates.Utils;
 using Microsoft.CSharp;
-using System.CodeDom.Compiler;
-using System.Reflection;
 #if ENABLE_ROSLYN
 using Roslyn.Compilers.CSharp;
 using Roslyn.Compilers;
@@ -64,7 +61,7 @@ namespace CSharpUtils.Templates
 					Context.WriteLine("public CompiledTemplate_TempTemplate(TemplateFactory TemplateFactory = null) : base(TemplateFactory) { }");
 					Context.WriteLine("");
 
-					Context.WriteLine("override public void SetBlocks(Dictionary<String, RenderDelegate> Blocks) {");
+					Context.WriteLine("public override void SetBlocks(Dictionary<String, RenderDelegate> Blocks) {");
 					Context.Indent(delegate()
 					{
 						foreach (var BlockPair in TemplateHandler.Blocks)
@@ -75,7 +72,7 @@ namespace CSharpUtils.Templates
 					Context.WriteLine("}");
 					Context.WriteLine("");
 
-					Context.WriteLine("async override protected Task LocalRenderAsync(TemplateContext Context) {");
+					Context.WriteLine("async protected override Task LocalRenderAsync(TemplateContext Context) {");
 					Context.Indent(delegate()
 					{
 						ParserNode.OptimizeAndWrite(Context);
@@ -85,7 +82,7 @@ namespace CSharpUtils.Templates
 					foreach (var BlockPair in TemplateHandler.Blocks)
 					{
 						Context.WriteLine("");
-						Context.WriteLine("async public Task Block_" + BlockPair.Key + "(TemplateContext Context) {");
+						Context.WriteLine("public async Task Block_" + BlockPair.Key + "(TemplateContext Context) {");
 						Context.Indent(delegate()
 						{
 							BlockPair.Value.OptimizeAndWrite(Context);
@@ -100,7 +97,7 @@ namespace CSharpUtils.Templates
 			//Context.WriteLine("}"); // namespace
 		}
 
-		virtual protected Type GetTemplateCodeTypeByCode(String Code)
+		protected virtual Type GetTemplateCodeTypeByCode(String Code)
 		{
 			CSharpCodeProvider CSharpCodeProvider = new CSharpCodeProvider();
 			//Console.WriteLine(Assembly.GetExecutingAssembly().FullName);

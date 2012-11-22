@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Diagnostics;
 
 namespace CSharpUtils
@@ -13,7 +9,7 @@ namespace CSharpUtils
     /// <summary>
     /// Helper class for writing bit values, bit blocks in LSB and MSB bits formats.
     /// </summary>
-    class BitWriter
+    public class BitWriter
     {
         uint data = 0;
         int dataLength = 0;
@@ -32,17 +28,17 @@ namespace CSharpUtils
             }
         }
 
-        internal BitWriter(Stream stream)
+		public BitWriter(Stream stream)
         {
             this.stream = stream;
         }
 
-        internal void WriteBit(bool value)
+		public void WriteBit(bool value)
         {
             WriteLSB(value ? 1 : 0, 1);
         }
 
-        internal void WriteLSB(int value, int length)
+		public void WriteLSB(int value, int length)
         {
             Debug.Assert(value < 1 << length, "value does not fit in length");
 
@@ -58,7 +54,7 @@ namespace CSharpUtils
             dataLength = currentLength;
         }
 
-        internal void WriteMSB(int value, int length)
+		public void WriteMSB(int value, int length)
         {
             Debug.Assert(value < 1 << length, "value does not fit in length");
 
@@ -72,7 +68,7 @@ namespace CSharpUtils
             WriteLSB(reversed, length);
         }
 
-        internal void Align()
+        public void Align()
         {
             if (dataLength > 0)
             {

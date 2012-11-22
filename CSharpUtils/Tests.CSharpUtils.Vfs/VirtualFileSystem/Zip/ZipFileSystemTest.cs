@@ -1,6 +1,5 @@
-﻿using System;
+﻿using CSharpUtilsTests;
 using CSharpUtils.VirtualFileSystem.Zip;
-using CSharpUtilsTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.CSharpUtils.Vfs.VirtualFileSystem.Zip

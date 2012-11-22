@@ -1,29 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace CSharpUtils.Web._45.Fastcgi
 {
-	abstract public class FastcgiServerAsync
+	public abstract class FastcgiServerAsync
 	{
 		protected TcpListener TcpListener;
 		protected CancellationToken CancellationToken;
 		public bool Debug = false;
 
-		abstract public Task HandleRequestAsync(FastcgiRequestAsync Request, FastcgiResponseAsync Response);
+		public abstract Task HandleRequestAsync(FastcgiRequestAsync Request, FastcgiResponseAsync Response);
 
 		public void ListenAsyncAndWait(ushort Port, string Address = "0.0.0.0")
 		{
 			ListenAsync(Port, Address).Wait();
 		}
 
-		async public Task ListenAsync(ushort Port, string Address = "0.0.0.0")
+		public async Task ListenAsync(ushort Port, string Address = "0.0.0.0")
 		{
 			TcpListener = new TcpListener(IPAddress.Parse(Address), Port);
 			TcpListener.Start();

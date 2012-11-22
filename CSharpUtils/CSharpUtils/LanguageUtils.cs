@@ -1,17 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace CSharpUtils
 {
 	public class LanguageUtils
 	{
-		static public void Swap<T>(ref T a, ref T b)
+		/// <summary>
+		/// Swaps the value of two references.
+		/// </summary>
+		/// <typeparam name="TType"></typeparam>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		public static void Swap<TType>(ref TType Left, ref TType Right)
 		{
-			T c = a;
-			a = b;
-			b = c;
+			TType Temp = Left;
+			Left = Right;
+			Right = Temp;
+		}
+
+		/// <summary>
+		/// Changes the value of a reference just while the execution of the LocalScope delegate.
+		/// </summary>
+		/// <typeparam name="TType"></typeparam>
+		/// <param name="Variable"></param>
+		/// <param name="LocalValue"></param>
+		/// <param name="LocalScope"></param>
+		public static void LocalSet<TType>(ref TType Variable, TType LocalValue, Action LocalScope)
+		{
+			var OldValue = Variable;
+			Variable = LocalValue;
+			try
+			{
+				LocalScope();
+			}
+			finally
+			{
+				Variable = OldValue;
+			}
 		}
 	}
 }

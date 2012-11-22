@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
 using System.Diagnostics;
-using System.Linq;
 
 namespace CSharpUtils
 {
-	sealed public class Logger
+	public sealed class Logger
 	{
 		public enum Level
 		{
@@ -28,12 +25,12 @@ namespace CSharpUtils
 		{
 		}
 
-		static public Logger CreateAnonymousLogger()
+		public static Logger CreateAnonymousLogger()
 		{
 			return new Logger();
 		}
 
-		static public Logger GetLogger(string Name)
+		public static Logger GetLogger(string Name)
 		{
 			lock (Loggers)
 			{
@@ -49,7 +46,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public event Action<string, Level, string, StackFrame> OnGlobalLog;
+		public static event Action<string, Level, string, StackFrame> OnGlobalLog;
 
 		public event Action<Level, string, StackFrame> OnLog;
 
@@ -89,7 +86,7 @@ namespace CSharpUtils
 		public Logger Error(object Format, params object[] Params) { return Log(Level.Error, Format, Params); }
 		public Logger Fatal(object Format, params object[] Params) { return Log(Level.Fatal, Format, Params); }
 
-		static public TimeSpan Measure(Action Action)
+		public static TimeSpan Measure(Action Action)
 		{
 			var Start = DateTime.UtcNow;
 			Action();

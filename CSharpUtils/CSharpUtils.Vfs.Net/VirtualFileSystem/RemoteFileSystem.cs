@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
 {
-	abstract public class RemoteFileSystem : ImplFileSystem
+	public abstract class RemoteFileSystem : ImplFileSystem
 	{
 		protected string Host;
 		protected int Port;
@@ -32,7 +29,7 @@ namespace CSharpUtils.VirtualFileSystem
 			EnsureConnect();
 		}
 
-		virtual public RemoteFileSystem EnsureConnect()
+		public virtual RemoteFileSystem EnsureConnect()
 		{
 			return this;
 		}
@@ -42,22 +39,22 @@ namespace CSharpUtils.VirtualFileSystem
 			return Path.GetTempPath() + Guid.NewGuid().ToString() + ".tmp";
 		}
 
-		virtual protected String RealPath(String Path)
+		protected virtual String RealPath(String Path)
 		{
 			return Path;
 		}
 
-		virtual public String DownloadFile(String RemoteFile, String LocalFile = null)
+		public virtual String DownloadFile(String RemoteFile, String LocalFile = null)
 		{
 			throw(new NotImplementedException());
 		}
 
-		virtual public void UploadFile(String RemoteFile, String LocalFile)
+		public virtual void UploadFile(String RemoteFile, String LocalFile)
 		{
 			throw(new NotImplementedException());
 		}
 
-		abstract public void Connect(string Host, int Port, string Username, string Password, int timeout = 10000);
+		public abstract void Connect(string Host, int Port, string Username, string Password, int timeout = 10000);
 
 		/*
 		override internal FileSystemFileStream ImplOpenFile(string FileName, System.IO.FileMode FileMode)

@@ -1,37 +1,69 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
-using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
-static public class StructExtensions
+public static class StructExtensions
 {
-	static public string ToStringDefault<T>(this T Struct, bool SimplifyBool = false) //where T : struct
+	public static string ToStringDefault<T>(this T Struct, bool SimplifyBool = false, Type StructType = null) //where T : struct
 	{
+		if (StructType == null) StructType = typeof(T);
+
 		var Ret = "";
-		Ret += typeof(T).Name;
+
+		if (StructType.IsArray)
+		{
+			var ElementType = StructType.GetElementType();
+			foreach (var Item in Struct as Array)
+			{
+				if (Ret.Length > 0) Ret += ", ";
+				Ret += Item.ToStringDefault(SimplifyBool, ElementType);
+			}
+			return "[" + Ret + "]";
+		}
+		else if (StructType == typeof(string))
+		{
+			return "\"" + (Struct as String).EscapeString() + "\"";
+		}
+		else if (StructType.IsPrimitive)
+		{
+			if (StructType == typeof(uint))
+			{
+				return String.Format("0x{0:X}", Struct);
+			}
+
+			return Struct.ToString();
+		}
+
+		Ret += StructType.Name;
 		Ret += "(";
 		var MemberCount = 0;
 		bool AddedItem = false;
 
 		//FieldInfo fi;
 		//PropertyInfo pi;
-		foreach (var MemberInfo in typeof(T).GetMembers())
+		foreach (var MemberInfo in StructType.GetMembers())
 		{
 			bool ValueSet = false;
 			object Value = null;
 
-			if (MemberInfo is FieldInfo)
+			try
 			{
-				ValueSet = true;
-				Value = (MemberInfo as FieldInfo).GetValue(Struct);
+				if (MemberInfo is FieldInfo)
+				{
+					ValueSet = true;
+					Value = (MemberInfo as FieldInfo).GetValue(Struct);
+				}
+				else if (MemberInfo is PropertyInfo)
+				{
+					ValueSet = true;
+					Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
+				}
 			}
-			else if (MemberInfo is PropertyInfo)
+			catch
 			{
-				ValueSet = true;
-				Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
+				ValueSet = false;
+				Value = null;
 			}
 
 			if (ValueSet)
@@ -42,7 +74,7 @@ static public class StructExtensions
 					AddedItem = false;
 				}
 
-				if (SimplifyBool && (Value.GetType() == typeof(bool)))
+				if (SimplifyBool && (Value is bool))
 				{
 					if (((bool)Value) == true)
 					{
@@ -55,17 +87,14 @@ static public class StructExtensions
 				{
 					Ret += MemberInfo.Name;
 					Ret += "=";
-					if (Value.GetType() == typeof(uint))
+
+					if (Value is uint)
 					{
 						Ret += String.Format("0x{0:X}", Value);
 					}
-					else if (Value.GetType().IsArray)
-					{
-						Ret += "[" + String.Join(",", Value.ToStringDefault(SimplifyBool)) + "]";
-					}
 					else
 					{
-						Ret += Value;
+						Ret += Value.ToStringDefault(SimplifyBool, Value.GetType());
 					}
 					MemberCount++;
 					AddedItem = true;

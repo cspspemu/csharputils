@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
@@ -24,7 +21,7 @@ namespace CSharpUtils.VirtualFileSystem
 
 		protected Stream _Stream;
 
-		override public Stream Stream
+		public override Stream Stream
 		{
 			get
 			{

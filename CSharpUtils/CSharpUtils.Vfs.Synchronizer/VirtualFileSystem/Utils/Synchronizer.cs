@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using CSharpUtils;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using CSharpUtils.Forms;
-using CSharpUtils.Streams;
-using System.Threading;
 
 namespace CSharpUtils.VirtualFileSystem.Utils
 {
@@ -69,7 +66,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			Canceling = true;
 		}
 
-		static public void Synchronize(FileSystem SourceFileSystem, String SourcePath, FileSystem DestinationFileSystem, String DestinationPath, SynchronizationMode _SynchronizationMode, ReferenceMode _ReferenceMode)
+		public static void Synchronize(FileSystem SourceFileSystem, String SourcePath, FileSystem DestinationFileSystem, String DestinationPath, SynchronizationMode _SynchronizationMode, ReferenceMode _ReferenceMode)
 		{
 			lock (SourceFileSystem)
 			{
@@ -114,7 +111,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 			if (OnStep != null) OnStep(Step, Details);
 		}
 
-		private double GetStep(double StepFrom, double StepTo, int subStep, int subSteps)
+		private static double GetStep(double StepFrom, double StepTo, int subStep, int subSteps)
 		{
 			Debug.Assert(StepTo >= StepFrom);
 			Debug.Assert(subSteps >= subStep);
@@ -176,12 +173,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				{
 					FileSystemEntry DestinationFile = DestinationFiles[SourceFileName];
 
-					bool AreEquals = true;
-
-					if (SourceFile.SpecialFlags.HasFlag(FileSystemEntry.SpecialFlagsTypes.SynchronizeAlways))
-					{
-						AreEquals = false;
-					}
+					bool AreEquals = !SourceFile.SpecialFlags.HasFlag(FileSystemEntry.SpecialFlagsTypes.SynchronizeAlways);
 
 					// Check old files for updated.
 					if (_SynchronizationMode.HasFlag(SynchronizationMode.UpdateOldFiles))
@@ -382,10 +374,7 @@ namespace CSharpUtils.VirtualFileSystem.Utils
 				this.SynchronizeFolder();
 			};
 
-			ProgressForm.Cancel = delegate()
-			{
-				this.Cancel();
-			};
+			ProgressForm.Cancel = this.Cancel;
 
 			if (Start != null)
 			{

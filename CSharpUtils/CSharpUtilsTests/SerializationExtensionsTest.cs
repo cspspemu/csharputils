@@ -1,7 +1,6 @@
-﻿using CSharpUtils;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
@@ -26,7 +25,7 @@ namespace CSharpUtilsTests
 			public int[] Values;
 		}
 
-		[TestMethod()]
+		[TestMethod]
 		public void ToXmlStringTest()
 		{
 			Assert.AreEqual(
@@ -48,7 +47,7 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[TestMethod()]
+		[TestMethod]
 		public void FromXmlStringTest()
 		{
 			var SampleStruct = new SampleStruct()

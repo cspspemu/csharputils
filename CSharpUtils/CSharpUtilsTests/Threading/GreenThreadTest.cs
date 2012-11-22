@@ -1,13 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using CSharpUtils;
+﻿using System.Collections.Generic;
 using System.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpUtils.Threading;
 
 namespace CSharpUtilsTests
 {
-	[TestClass()]
+	[TestClass]
 	public class GreenThreadTest
 	{
 		[TestMethod]

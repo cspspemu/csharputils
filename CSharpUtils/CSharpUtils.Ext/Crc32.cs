@@ -98,7 +98,7 @@ namespace CSharpUtils
 			return crc;
 		}
 
-		private byte[] UInt32ToBigEndianBytes(UInt32 x)
+		private static byte[] UInt32ToBigEndianBytes(UInt32 x)
 		{
 			return new byte[] {
 			(byte)((x >> 24) & 0xff),

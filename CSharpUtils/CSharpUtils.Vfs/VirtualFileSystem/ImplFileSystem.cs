@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
@@ -56,6 +54,11 @@ namespace CSharpUtils.VirtualFileSystem
 			{
 				return this.ToString();
 			}
+		}
+
+		protected override void ImplCreateSymLink(string Pointer, string Pointee)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

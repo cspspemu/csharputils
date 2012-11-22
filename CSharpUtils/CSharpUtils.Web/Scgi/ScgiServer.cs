@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net.Sockets;
-using System.Net;
-using System.Threading;
-using CSharpUtils;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using CSharpUtils.Http;
 
 namespace CSharpUtils.Scgi
@@ -67,7 +65,7 @@ namespace CSharpUtils.Scgi
 			HandleRequest(new HttpHeaderList(), Headers, ContentData);
 		}
 
-		virtual protected void HandleRequest(HttpHeaderList HttpHeaderList, Dictionary<string, string> Parameters, byte[] PostContent)
+		protected virtual void HandleRequest(HttpHeaderList HttpHeaderList, Dictionary<string, string> Parameters, byte[] PostContent)
 		{
 		}
 	}

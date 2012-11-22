@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Html
 {
 	public class HtmlUtils
 	{
-		static public String EscapeHtmlCharacters(String Input)
+		public static String EscapeHtmlCharacters(String Input)
 		{
 			String Output = "";
 			for (int n = 0; n < Input.Length; n++)

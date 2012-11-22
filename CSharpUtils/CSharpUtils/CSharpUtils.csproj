@@ -64,7 +64,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +72,7 @@
     <Compile Include="Arrays\ArrayWrapper.cs" />
     <Compile Include="AsyncTask.cs" />
     <Compile Include="BitUtils.cs" />
+    <Compile Include="BitWriter2.cs" />
     <Compile Include="ConsoleUtils.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStats.cs" />
     <Compile Include="Containers\RedBlackTree\RedBlackTreeWithStatsNode.cs" />
@@ -100,6 +100,8 @@
     <Compile Include="Factory\MockeableFactory.cs" />
     <Compile Include="Getopt\GetoptCommandLineProgram.cs" />
     <Compile Include="Getopt\Getopt.cs" />
+    <Compile Include="Hashing.cs" />
+    <Compile Include="Iterators.cs" />
     <Compile Include="Json\IJsonSerializable.cs" />
     <Compile Include="Json\JSON.cs" />
     <Compile Include="LanguageUtils.cs" />

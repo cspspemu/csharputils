@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Net;
 using System.Threading;
 
 namespace CSharpUtils.Net
@@ -19,7 +15,7 @@ namespace CSharpUtils.Net
 		public TcpClient LocalTcpClient;
 		public TcpClient RemoteTcpClient;
 
-		static public TcpTestServer Create()
+		public static TcpTestServer Create()
 		{
 			var TcpTestServer = new TcpTestServer();
 			{

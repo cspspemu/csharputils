@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils
 {
 	public class ConsoleUtils
 	{
-		static public void SaveRestoreConsoleColor(ConsoleColor Color, Action Action)
+		public static void SaveRestoreConsoleColor(ConsoleColor Color, Action Action)
 		{
 			SaveRestoreConsoleState(() =>
 			{
@@ -17,7 +14,7 @@ namespace CSharpUtils
 			});
 		}
 
-		static public void SaveRestoreConsoleState(Action Action)
+		public static void SaveRestoreConsoleState(Action Action)
 		{
 			lock (Console.Out)
 			{
@@ -35,7 +32,7 @@ namespace CSharpUtils
 			}
 		}
 
-		static public String CaptureOutput(Action Action, bool Capture = true)
+		public static String CaptureOutput(Action Action, bool Capture = true)
 		{
 			if (Capture)
 			{

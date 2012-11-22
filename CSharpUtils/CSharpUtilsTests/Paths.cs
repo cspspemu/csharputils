@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 
 namespace CSharpUtilsTests
 {
 	class Config
 	{
-		static public String RemoteIp
+		public static String RemoteIp
 		{
 			get
 			{
@@ -16,7 +12,7 @@ namespace CSharpUtilsTests
 			}
 		}
 
-		static public String ProjectPath
+		public static String ProjectPath
 		{
 			get
 			{
@@ -24,7 +20,7 @@ namespace CSharpUtilsTests
 			}
 		}
 
-		static public String ProjectTestInputPath
+		public static String ProjectTestInputPath
 		{
 			get
 			{
@@ -32,7 +28,7 @@ namespace CSharpUtilsTests
 			}
 		}
 
-		static public String ProjectTestInputMountedPath
+		public static String ProjectTestInputMountedPath
 		{
 			get
 			{
@@ -40,7 +36,7 @@ namespace CSharpUtilsTests
 			}
 		}
 
-		static public String ProjectTestOutputPath
+		public static String ProjectTestOutputPath
 		{
 			get
 			{

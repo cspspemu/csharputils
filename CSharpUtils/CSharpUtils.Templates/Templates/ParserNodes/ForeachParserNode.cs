@@ -20,7 +20,7 @@ namespace CSharpUtils.Templates.ParserNodes
 			BodyBlock.Dump(Level + 1, "BodyBlock");
 		}
 
-		override public void WriteTo(ParserNodeContext Context)
+		public override void WriteTo(ParserNodeContext Context)
 		{
 			//DynamicUtils.CountArray
 

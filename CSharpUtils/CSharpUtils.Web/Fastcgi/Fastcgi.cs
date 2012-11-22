@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-namespace CSharpUtils.Fastcgi
+﻿namespace CSharpUtils.Fastcgi
 {
 	// http://www.fastcgi.com/drupal/node/6?q=node/22#S5.3
 	public class Fastcgi

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Diagnostics;
 
 namespace CSharpUtils.Threading
 {
@@ -20,10 +16,10 @@ namespace CSharpUtils.Threading
 		protected Thread CurrentThread;
 		protected ManualResetEvent ParentEvent;
 		protected ManualResetEvent ThisEvent;
-		static protected ThreadLocal<GreenThread> ThisGreenThreadList = new ThreadLocal<GreenThread>();
-		static public int GreenThreadLastId = 0;
+		protected static ThreadLocal<GreenThread> ThisGreenThreadList = new ThreadLocal<GreenThread>();
+		public static int GreenThreadLastId = 0;
 
-		static public Thread MonitorThread;
+		public static Thread MonitorThread;
 
 		private Exception RethrowException;
 
@@ -140,7 +136,7 @@ namespace CSharpUtils.Threading
 		/// Called from the green thread.
 		/// This will return the control to the caller thread.
 		/// </summary>
-		static public void Yield()
+		public static void Yield()
 		{
 			if (ThisGreenThreadList.IsValueCreated)
 			{
@@ -167,7 +163,7 @@ namespace CSharpUtils.Threading
 			}
 		}
 
-		static public void StopAll()
+		public static void StopAll()
 		{
 			throw (new NotImplementedException());
 		}
@@ -210,10 +206,10 @@ namespace CSharpUtils.Threading
 		protected Thread CurrentThread;
 		protected Semaphore ParentSemaphore;
 		protected Semaphore ThisSemaphore;
-		static protected ThreadLocal<GreenThread> ThisGreenThreadList = new ThreadLocal<GreenThread>();
-		static public int GreenThreadLastId = 0;
+		protected static ThreadLocal<GreenThread> ThisGreenThreadList = new ThreadLocal<GreenThread>();
+		public static int GreenThreadLastId = 0;
 
-		static public Thread MonitorThread;
+		public static Thread MonitorThread;
 
 		private Exception RethrowException;
 
@@ -337,7 +333,7 @@ namespace CSharpUtils.Threading
 		/// Called from the green thread.
 		/// This will return the control to the caller thread.
 		/// </summary>
-		static public void Yield()
+		public static void Yield()
 		{
 			if (ThisGreenThreadList.IsValueCreated)
 			{
@@ -363,7 +359,7 @@ namespace CSharpUtils.Threading
 			}
 		}
 
-		static public void StopAll()
+		public static void StopAll()
 		{
 			throw(new NotImplementedException());
 		}

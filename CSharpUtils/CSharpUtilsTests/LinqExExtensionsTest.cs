@@ -1,9 +1,6 @@
-﻿using CSharpUtils;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Linq;
-using System.Collections.Generic;
-using CSharpUtils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {

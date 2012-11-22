@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils
@@ -13,7 +10,7 @@ namespace CSharpUtils
     /// Helper class for writing bit values, bit blocks in LSB and MSB bits formats.
     /// Doesn't read bytes ahead -- reads next byte if necessary.
     /// </summary>
-    class BitReader
+	public class BitReader
     {
         uint readData = 0;
         int startPosition = 0;

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace CSharpUtils.Streams
 {
-    abstract public class FilterStream : Stream
+    public abstract class FilterStream : Stream
     {
         public Stream ParentStream;
 

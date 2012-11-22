@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CSharpUtils.Templates.Runtime;
 using System.Collections;
+using System.Collections.Generic;
+using CSharpUtils.Templates.Runtime;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests.Templates
 {
@@ -71,7 +69,7 @@ namespace CSharpUtilsTests.Templates
 			}));
 		}
 
-		class Post
+		sealed class Post
 		{
 			public string Title;
 		}
@@ -99,7 +97,7 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual("Hello World", DynamicUtils.Call(typeof(String), "Format", "Hello {0}", "World"));
 		}
 
-		class ClassTestAccess
+		sealed class ClassTestAccess
 		{
 			public int SampleField = 10;
 

@@ -1,29 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils
 {
-	static public class MathUtils
+	public static class MathUtils
 	{
 		// http://www.lambda-computing.com/publications/articles/generics2/
 		// http://www.codeproject.com/KB/cs/genericoperators.aspx
-		static public T Clamp<T>(T Value, T Min, T Max) where T : IComparable
+		public static T Clamp<T>(T Value, T Min, T Max) where T : IComparable
 		{
 			if (Value.CompareTo(Min) < 0) return Min;
 			if (Value.CompareTo(Max) > 0) return Max;
 			return Value;
 		}
 
-		static public int FastClamp(int Value, int Min, int Max)
+		public static int FastClamp(int Value, int Min, int Max)
 		{
 			if (Value < Min) return Min;
 			if (Value > Max) return Max;
 			return Value;
 		}
 
-		static public void Swap<Type>(ref Type A, ref Type B)
+		public static void Swap<Type>(ref Type A, ref Type B)
 		{
 			LanguageUtils.Swap(ref A, ref B);
 		}
@@ -33,7 +30,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		static public ushort ByteSwap(ushort Value)
+		public static ushort ByteSwap(ushort Value)
 		{
 			return (ushort)((Value >> 8) | (Value << 8));
 		}
@@ -43,7 +40,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		static public uint ByteSwap(uint Value)
+		public static uint ByteSwap(uint Value)
 		{
 			return (
 				((uint)ByteSwap((ushort)(Value >> 0)) << 16) |
@@ -56,12 +53,23 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		static public ulong ByteSwap(ulong Value)
+		public static ulong ByteSwap(ulong Value)
 		{
 			return (
 				((ulong)ByteSwap((uint)(Value >> 0)) << 32) |
 				((ulong)ByteSwap((uint)(Value >> 32)) << 0)
 			);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		unsafe public static float ByteSwap(float Value)
+		{
+			var ValueSW = ByteSwap(*(uint*)&Value);
+			return *(float*)&ValueSW;
 		}
 
 		/// <summary>
@@ -103,10 +111,18 @@ namespace CSharpUtils
 			return Value;
 		}
 
+		/*
+		// NOT WORKING!
 		public static uint NextAligned2(uint Value, uint Alignment)
 		{
 			return (Value + Alignment) & ~Alignment;
 		}
+
+		public static long NextAligned2(long Value, long Alignment)
+		{
+			return (Value + Alignment) & ~Alignment;
+		}
+		*/
 
 		public static uint NextAligned(uint Value, int Alignment)
 		{
@@ -132,14 +148,14 @@ namespace CSharpUtils
 			return NextPowerOfTwoValue;
 		}
 
-		static public int Max(params int[] Items)
+		public static int Max(params int[] Items)
 		{
 			var MaxValue = Items[0];
 			foreach (var Item in Items) if (MaxValue < Item) MaxValue = Item;
 			return MaxValue;
 		}
 
-		static public uint Max(params uint[] Items)
+		public static uint Max(params uint[] Items)
 		{
 			var MaxValue = Items[0];
 			foreach (var Item in Items) if (MaxValue < Item) MaxValue = Item;

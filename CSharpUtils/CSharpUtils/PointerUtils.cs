@@ -52,7 +52,13 @@ namespace CSharpUtils
 
 		static public void Memset(byte[] Array, byte Value, int Count)
 		{
-			fixed (byte* ArrayPointer = Array)
+			Memset(Array, Value, 0, Count);
+		}
+
+		static public void Memset(byte[] Array, byte Value, int Offset, int Count)
+		{
+			if (Offset + Count > Array.Length) throw(new InvalidOperationException(String.Format("Array out of bounts")));
+			fixed (byte* ArrayPointer = &Array[Offset])
 			{
 				Memset(ArrayPointer, Value, Count);
 			}

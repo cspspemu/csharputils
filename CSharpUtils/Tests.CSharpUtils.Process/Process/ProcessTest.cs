@@ -1,8 +1,7 @@
-﻿using CSharpUtils.Process;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using CSharpUtils.Process;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
@@ -85,7 +84,7 @@ namespace CSharpUtilsTests
 			}
 		}
 
-		override protected void DrawItem(object _Context)
+		protected override void DrawItem(object _Context)
 		{
 			if (Drawed != null) Drawed(this, new DrawedEventArgs(n));
 			//Console.WriteLine(n);
@@ -95,7 +94,7 @@ namespace CSharpUtilsTests
 
 	class MyProcess1 : MyProcess
 	{
-		override protected void Main()
+		protected override void Main()
 		{
 			increment();
 			decrement();
@@ -104,7 +103,7 @@ namespace CSharpUtilsTests
 
 	class MyProcess2 : MyProcess
 	{
-		override protected void Main()
+		protected override void Main()
 		{
 			decrement();
 			increment();

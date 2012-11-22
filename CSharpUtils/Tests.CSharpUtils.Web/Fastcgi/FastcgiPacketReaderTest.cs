@@ -1,7 +1,6 @@
-﻿using CSharpUtils.Fastcgi;
+﻿using System.IO;
+using CSharpUtils.Fastcgi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
 
 namespace CSharpUtils.Tests
 {
@@ -28,6 +27,7 @@ namespace CSharpUtils.Tests
 			Stream.Position = 0;
 			Assert.AreEqual(1, FastcgiPacketReader.ReadVariableInt(Stream));
 		}
+		
 		[TestMethod]
 		public void ReadVariableIntMultipleByte2Test()
 		{

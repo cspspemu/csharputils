@@ -1,18 +1,15 @@
-﻿using CSharpUtils.Misc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Linq;
-using System.Linq.Expressions;
-using CSharpUtils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using CSharpUtils.Misc;
 
 namespace CSharpUtilsTests
 {
-	[TestClass()]
+	[TestClass]
 	public class Acme1FileTest
 	{
-		[TestMethod()]
+		[TestMethod]
 		public void LoadTest()
 		{
 			var Acme1File = new Acme1File();

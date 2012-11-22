@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils
 {
-	unsafe public class MathFloat
+	public unsafe class MathFloat
 	{
 		/// <summary>
 		/// 
@@ -133,35 +130,35 @@ namespace CSharpUtils
 			}
 		}
 
-		static public float Cos(float Angle)
+		public static float Cos(float Angle)
 		{
 			return (float)Math.Cos(Angle);
 		}
 
-		static public float Sin(float Angle)
+		public static float Sin(float Angle)
 		{
 			return (float)Math.Sin(Angle);
 		}
 
-		static public float CosV1(float AngleV1)
+		public static float CosV1(float AngleV1)
 		{
 			return Cos((float)(AngleV1 * Math.PI * 0.5f));
 		}
 
-		static public float SinV1(float AngleV1)
+		public static float SinV1(float AngleV1)
 		{
 			//Console.Error.WriteLine("aaaaaaaaaaaaaa");
 			return Sin((float)(AngleV1 * Math.PI * 0.5f));
 		}
 
-		static public float Clamp(float Value, float Min, float Max)
+		public static float Clamp(float Value, float Min, float Max)
 		{
 			if (Value < Min) Value = Min;
 			else if (Value > Max) Value = Max;
 			return Value;
 		}
 
-		static public int ClampInt(int Value, int Min, int Max)
+		public static int ClampInt(int Value, int Min, int Max)
 		{
 			if (Value < Min) Value = Min;
 			else if (Value > Max) Value = Max;
@@ -169,7 +166,7 @@ namespace CSharpUtils
 		}
 		
 
-		static public float Sqrt(float Value)
+		public static float Sqrt(float Value)
 		{
 			return (float)Math.Sqrt((double)Value);
 		}
@@ -180,34 +177,34 @@ namespace CSharpUtils
 		/// <param name="Value"></param>
 		/// <param name="Count"></param>
 		/// <returns></returns>
-		static public float Scalb(float Value, int Count)
+		public static float Scalb(float Value, int Count)
 		{
 			return (float)(Value * Math.Pow(2.0f, Count));
 		}
 
-		static public float Sign(float Value)
+		public static float Sign(float Value)
 		{
 			if (Value > 0) return +1.0f;
 			if (Value < 0) return -1.0f;
 			return 0.0f;
 		}
 
-		static public float Min(float Left, float Right)
+		public static float Min(float Left, float Right)
 		{
 			return Math.Min(Left, Right);
 		}
 
-		static public float Max(float Left, float Right)
+		public static float Max(float Left, float Right)
 		{
 			return Math.Max(Left, Right);
 		}
 
-		static public bool IsNan(float Value)
+		public static bool IsNan(float Value)
 		{
 			return float.IsNaN(Value);
 		}
 
-		static public bool IsInfinity(float Value)
+		public static bool IsInfinity(float Value)
 		{
 			return float.IsInfinity(Value);
 		}

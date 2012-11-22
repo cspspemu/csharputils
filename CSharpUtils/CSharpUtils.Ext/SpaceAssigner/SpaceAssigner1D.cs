@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Diagnostics;
 
 namespace CSharpUtils.SpaceAssigner
@@ -13,8 +12,8 @@ namespace CSharpUtils.SpaceAssigner
 		// Immutable.
 		public class Space : IComparable, IComparable<Space>, IEqualityComparer<Space>, IEquatable<Space>
 		{
-			readonly public long Min;
-			readonly public long Max;
+			public readonly long Min;
+			public readonly long Max;
 
 			public long Length
 			{
@@ -28,7 +27,8 @@ namespace CSharpUtils.SpaceAssigner
 			{
 				this.Min = Min;
 				this.Max = Max;
-				Debug.Assert(Min <= Max);
+				if (Min > Max)  throw(new Exception(String.Format("Space(Min={0}, Max={1}). Min is bigger than Max!!", Min, Max)));
+				//Debug.Assert(Min <= Max);
 			}
 
 			public bool Contains(long Value)
@@ -278,9 +278,14 @@ namespace CSharpUtils.SpaceAssigner
 			return this;
 		}
 
-		public SpaceAssigner1D AddAvailable(long Min, long Max)
+		public SpaceAssigner1D AddAvailableWithBounds(long Min, long Max)
 		{
 			return AddAvailable(new Space(Min, Max));
+		}
+
+		public SpaceAssigner1D AddAvailableWithLength(long Min, long Length)
+		{
+			return AddAvailableWithBounds(Min, Min + Length);
 		}
 
 		public SpaceAssigner1D AddAllPositiveAvailable()

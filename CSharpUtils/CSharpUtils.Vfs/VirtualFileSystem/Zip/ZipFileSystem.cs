@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO.Compression;
 using System.IO;
+using System.IO.Compression;
 
 namespace CSharpUtils.VirtualFileSystem.Zip
 {
@@ -215,6 +213,11 @@ namespace CSharpUtils.VirtualFileSystem.Zip
 					yield return _ConvertFileSystemEntry(ZipArchiveEntry);
 				}
 			}
+		}
+
+		protected override void ImplCreateSymLink(string Pointer, string Pointee)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -31,6 +31,9 @@ namespace CSharpUtils.Streams
 		/// </summary>
 		protected long ThisLength;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		[DebuggerHidden]
 		public long SliceLow
 		{
@@ -40,6 +43,9 @@ namespace CSharpUtils.Streams
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		[DebuggerHidden]
 		public long SliceHigh
 		{
@@ -88,20 +94,30 @@ namespace CSharpUtils.Streams
 		/// <param name="CanWrite">Determines if the Stream will be writtable.</param>
 		/// <returns>A SliceStream</returns>
 		[DebuggerHidden]
-		protected SliceStream(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
-			: base(BaseStream)
+		protected SliceStream(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null, bool AllowSliceOutsideHigh = true)
+			: base(BaseStream, CloseParent: false)
 		{
 			if (!BaseStream.CanSeek) throw(new NotImplementedException("ParentStream must be seekable"));
 
 			this.ThisPosition = 0;
 			this.ThisStart = ThisStart;
-			if (ThisLength == -1)
+			this.ThisLength = (ThisLength == -1) ? (BaseStream.Length - ThisStart) : ThisLength;
+
+			bool ErrorCreating = false;
+
+			if ((SliceHigh < SliceLow) || (SliceLow < 0) || (SliceHigh < 0))
 			{
-				this.ThisLength = BaseStream.Length - ThisStart;
+				ErrorCreating = true;
 			}
-			else
+
+			if (!AllowSliceOutsideHigh && ((SliceLow > BaseStream.Length) || (SliceHigh > BaseStream.Length)))
 			{
-				this.ThisLength = ThisLength;
+				ErrorCreating = true;
+			}
+
+			if (ErrorCreating)
+			{
+				throw (new InvalidOperationException(String.Format("Trying to SliceStream Parent(Length={0}) Slice({1}-{2})", BaseStream.Length, ThisStart, ThisLength)));
 			}
 		}
 
@@ -211,8 +227,8 @@ namespace CSharpUtils.Streams
 				ParentStream.Position = ThisStart + Position;
 				if (Position + count > Length)
 				{
+					//count = (int)(Length - Position);
 					throw (new IOException(String.Format("Can't write outside the SliceStream. Trying to Write {0} bytes but only {1} available.", count, (Length - Position))));
-					count = (int)(Length - Position);
 				}
 				try
 				{

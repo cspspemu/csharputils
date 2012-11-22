@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.IO;
 using System.IO.Compression;
+using System.Text;
+using System.Runtime.InteropServices;
 using CSharpUtils.Streams;
-using CSharpUtils;
 
 namespace CSharpUtils.Compression.Zip
 {

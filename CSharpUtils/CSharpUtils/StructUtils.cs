@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace CSharpUtils
@@ -16,7 +13,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="ExpectedSize"></param>
-		static public void ExpectSize<T>(int ExpectedSize)
+		public static void ExpectSize<T>(int ExpectedSize)
 		{
 			int RealSize = Marshal.SizeOf(typeof(T));
 			if (RealSize != ExpectedSize)
@@ -31,9 +28,12 @@ namespace CSharpUtils
 		/// <typeparam name="T"></typeparam>
 		/// <param name="RawData"></param>
 		/// <returns></returns>
-		unsafe public static T BytesToStruct<T>(byte[] RawData) where T : struct
+		public unsafe static T BytesToStruct<T>(byte[] RawData) where T : struct
 		{
 			T result = default(T);
+
+			int ExpectedLength = Marshal.SizeOf(typeof(T));
+			if (RawData.Length < ExpectedLength) throw (new Exception(String.Format("BytesToStruct. Not enough bytes. Expected: {0} Provided: {1}", ExpectedLength, RawData.Length)));
 
 #if true
 			fixed (byte* RawDataPointer = &RawData[0])
@@ -63,7 +63,7 @@ namespace CSharpUtils
 		/// <typeparam name="T"></typeparam>
 		/// <param name="RawData"></param>
 		/// <returns></returns>
-		unsafe public static T[] BytesToStructArray<T>(byte[] RawData) where T : struct
+		public unsafe static T[] BytesToStructArray<T>(byte[] RawData) where T : struct
 		{
 			int ElementSize = Marshal.SizeOf(typeof(T));
 			T[] Array = new T[RawData.Length / ElementSize];
@@ -86,7 +86,7 @@ namespace CSharpUtils
 		/// <typeparam name="T"></typeparam>
 		/// <param name="Data"></param>
 		/// <returns></returns>
-		unsafe public static byte[] StructToBytes<T>(T Data) where T : struct
+		public unsafe static byte[] StructToBytes<T>(T Data) where T : struct
 		{
 			byte[] RawData = new byte[Marshal.SizeOf(Data)];
 
@@ -117,7 +117,7 @@ namespace CSharpUtils
 		/// <typeparam name="T"></typeparam>
 		/// <param name="DataArray"></param>
 		/// <returns></returns>
-		unsafe public static byte[] StructArrayToBytes<T>(T[] DataArray) where T : struct
+		public unsafe static byte[] StructArrayToBytes<T>(T[] DataArray) where T : struct
 		{
 			int ElementSize = Marshal.SizeOf(DataArray[0]);
 			byte[] RawData = new byte[ElementSize * DataArray.Length];

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace CSharpUtils
 {
 	public class ProcessUtils
 	{
-		static public string ExecuteCommand(string Command, string Arguments, string WorkingDirectory = ".")
+		public static string ExecuteCommand(string Command, string Arguments, string WorkingDirectory = ".")
 		{
 			var proc = new Process();
 			proc.EnableRaisingEvents = false;

@@ -1,10 +1,6 @@
 ﻿//#define DEBUG_ANALYZER
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using CSharpUtils.SpaceAssigner;
 
 namespace CSharpUtils.Streams
@@ -93,7 +89,7 @@ namespace CSharpUtils.Streams
             }
             finally
             {
-                _ReadUsage.AddAvailable(Start, Position);
+                _ReadUsage.AddAvailableWithBounds(Start, Position);
             }
         }
 
@@ -116,7 +112,7 @@ namespace CSharpUtils.Streams
             }
             finally
             {
-                _WriteUsage.AddAvailable(Start, Position);
+                _WriteUsage.AddAvailableWithBounds(Start, Position);
             }
         }
     }

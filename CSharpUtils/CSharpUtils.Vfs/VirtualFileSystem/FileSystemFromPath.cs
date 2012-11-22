@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.VirtualFileSystem
 {
@@ -17,7 +14,7 @@ namespace CSharpUtils.VirtualFileSystem
 			this.AllowAccessingParent = AllowAccessingParent;
 		}
 
-		override protected void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
+		protected override void Access(String Path, out FileSystem NewFileSystem, out String NewPath)
 		{
 			if (!AllowAccessingParent)
 			{

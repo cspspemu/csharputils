@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CSharpUtils.Web._45.Streams
@@ -28,19 +25,19 @@ namespace CSharpUtils.Web._45.Streams
 			}
 		}
 
-		async public Task SkipBytesAsync(int NumberOfBytes)
+		public async Task SkipBytesAsync(int NumberOfBytes)
 		{
 			await EnsureDataAsync(NumberOfBytes);
 			Buffer.Consume(NumberOfBytes);
 		}
 
-		async public Task<byte[]> ReadBytesAsync(int NumberOfBytes)
+		public async Task<byte[]> ReadBytesAsync(int NumberOfBytes)
 		{
 			await EnsureDataAsync(NumberOfBytes);
 			return Buffer.Consume(NumberOfBytes);
 		}
 
-		async public Task<byte[]> ReadBytesUntilAsync(byte End)
+		public async Task<byte[]> ReadBytesUntilAsync(byte End)
 		{
 			var Bytes = new List<byte>();
 			while (true)

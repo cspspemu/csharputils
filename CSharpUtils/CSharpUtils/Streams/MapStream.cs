@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace CSharpUtils.Streams
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	sealed public partial class MapStream : Stream
+	public sealed partial class MapStream : Stream
 	{
 		/// <summary>
 		/// 
@@ -20,12 +18,12 @@ namespace CSharpUtils.Streams
 			/// <summary>
 			/// 
 			/// </summary>
-			readonly public long Position;
+			public readonly long Position;
 
 			/// <summary>
 			/// 
 			/// </summary>
-			readonly public Stream Stream;
+			public readonly Stream Stream;
 
 			/// <summary>
 			/// 
@@ -320,7 +318,7 @@ namespace CSharpUtils.Streams
 		}
 	}
 
-	sealed public partial class MapStream : Stream
+	public sealed partial class MapStream : Stream
 	{
 		/// <summary>
 		/// 
@@ -366,7 +364,7 @@ namespace CSharpUtils.Streams
 		/// </summary>
 		/// <param name="TargetStream"></param>
 		/// <returns></returns>
-		static public MapStream Unserialize(Stream TargetStream)
+		public static MapStream Unserialize(Stream TargetStream)
 		{
 			if (TargetStream.ReadString(4) != "MAPS") throw (new InvalidDataException("Not a MapStream serialized stream"));
 

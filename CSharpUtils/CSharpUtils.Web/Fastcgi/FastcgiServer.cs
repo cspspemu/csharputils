@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Net.Sockets;
 using System.Net;
-using System.Threading;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Threading;
 
 namespace CSharpUtils.Fastcgi
 {
@@ -193,7 +189,7 @@ namespace CSharpUtils.Fastcgi
 			FastcgiHandler.Reader.ReadAllPackets();
 		}
 
-		virtual protected void HandleFascgiRequest(FastcgiRequest FastcgiRequest)
+		protected virtual void HandleFascgiRequest(FastcgiRequest FastcgiRequest)
 		{
 			using (var TextWriter = new StreamWriter(FastcgiRequest.StdoutStream))
 			{

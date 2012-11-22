@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace CSharpUtils.VirtualFileSystem
@@ -22,7 +19,7 @@ namespace CSharpUtils.VirtualFileSystem
 			this._LazyStream = LazyStream;
 		}
 
-		virtual public Stream Stream
+		public virtual Stream Stream
 		{
 			get
 			{
@@ -89,8 +86,8 @@ namespace CSharpUtils.VirtualFileSystem
 
 		public override void Close()
 		{
+			this.Stream.Close();
 			base.Close();
-			Stream.Close();
 		}
 	}
 }

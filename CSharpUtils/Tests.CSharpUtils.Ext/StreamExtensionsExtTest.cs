@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using CSharpUtils;
+﻿using System.IO;
 using CSharpUtils.SpaceAssigner;
 using CSharpUtils.Streams;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -1,6 +1,6 @@
-﻿using CSharpUtils.Factory;
+﻿using System;
+using CSharpUtils.Factory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace CSharpUtilsTests
 {
@@ -9,7 +9,7 @@ namespace CSharpUtilsTests
 	{
 		class A
 		{
-			virtual public String Value
+			public virtual String Value
 			{
 				get
 				{
@@ -20,7 +20,7 @@ namespace CSharpUtilsTests
 
 		class B : A
 		{
-			override public String Value
+			public override String Value
 			{
 				get
 				{
