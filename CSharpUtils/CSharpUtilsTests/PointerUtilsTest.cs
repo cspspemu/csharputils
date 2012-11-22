@@ -44,5 +44,62 @@ namespace CSPspEmu.Tests
 				Dst
 			);
 		}
+
+		[TestMethod]
+		public void TestMemcpy4()
+		{
+			int TotalSize = 12;
+			var Source = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+			var Dest = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+			foreach (var Set64 in new[] { false, true })
+			{
+				PointerUtils.Is64 = Set64;
+
+				fixed (byte* SourcePtr = Source)
+				fixed (byte* DestPtr = Dest)
+				{
+					for (int count = 0; count < TotalSize; count++)
+					{
+						for (int m = 0; m < TotalSize; m++) Dest[m] = 0;
+
+						PointerUtils.Memcpy(DestPtr, SourcePtr, count);
+
+						for (int m = 0; m < TotalSize; m++)
+						{
+							Assert.AreEqual((m < count) ? m : 0, Dest[m]);
+						}
+					}
+				}
+			}
+		}
+
+		[TestMethod]
+		public void TestMemset4()
+		{
+			int TotalSize = 65;
+			var Dest = new byte[TotalSize];
+
+			foreach (var Set64 in new[] { false, true })
+			{
+				PointerUtils.Is64 = Set64;
+
+				fixed (byte* DestPtr = Dest)
+				{
+					for (int count = 0; count < TotalSize; count++)
+					{
+						for (int m = 0; m < TotalSize; m++) Dest[m] = 0;
+
+						PointerUtils.Memset(DestPtr, 1, count);
+
+						for (int m = 0; m < TotalSize; m++)
+						{
+							Assert.AreEqual((m < count) ? 1 : 0, Dest[m]);
+						}
+					}
+				}
+			}
+		}
+
 	}
 }

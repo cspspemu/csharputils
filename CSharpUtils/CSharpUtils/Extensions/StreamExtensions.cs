@@ -563,6 +563,8 @@ static public class StreamExtensions
 	/// <returns></returns>
 	public static TType[] ReadStructVector<TType>(this Stream Stream, uint Count, int EntrySize = -1) where TType : struct
 	{
+		if (Count == 0) return new TType[0];
+
 		var ItemSize = Marshal.SizeOf(typeof(TType));
 		var SkipSize = (EntrySize == -1) ? (0) : (EntrySize - ItemSize);
 

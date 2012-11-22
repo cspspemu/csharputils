@@ -123,5 +123,24 @@ namespace CSharpUtils
 				);
 			}
 		}
+
+		public void TryCatch(Action Action)
+		{
+			if (Debugger.IsAttached)
+			{
+				Action();
+			}
+			else
+			{
+				try
+				{
+					Action();
+				}
+				catch (Exception Exception)
+				{
+					this.Error(Exception);
+				}
+			}
+		}
 	}
 }

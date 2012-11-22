@@ -58,7 +58,7 @@ namespace CSharpUtils
 			}
 		}
 
-		private static bool Is64;
+		public static bool Is64;
 
 		static PointerUtils()
 		{
@@ -176,7 +176,7 @@ namespace CSharpUtils
 			{
 				while (Size >= sizeof(uint))
 				{
-					*(ulong*)Destination = *(ulong*)Source;
+					*(uint*)Destination = *(uint*)Source;
 					Destination += sizeof(uint);
 					Source += sizeof(uint);
 					Size -= sizeof(uint);
