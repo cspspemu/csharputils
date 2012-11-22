@@ -11,6 +11,8 @@ public static class StructExtensions
 
 		var Ret = "";
 
+		//Console.WriteLine("{0}", StructType);
+
 		if (StructType.IsArray)
 		{
 			var ElementType = StructType.GetElementType();
@@ -25,6 +27,11 @@ public static class StructExtensions
 		{
 			return "\"" + (Struct as String).EscapeString() + "\"";
 		}
+		else if (StructType.IsEnum)
+		{
+			// @TODO: Check Flags
+			return Enum.GetName(StructType, Struct);
+		}
 		else if (StructType.IsPrimitive)
 		{
 			if (StructType == typeof(uint))
@@ -32,76 +39,85 @@ public static class StructExtensions
 				return String.Format("0x{0:X}", Struct);
 			}
 
-			return Struct.ToString();
+			return String.Format("{0}", Struct);
 		}
-
-		Ret += StructType.Name;
-		Ret += "(";
-		var MemberCount = 0;
-		bool AddedItem = false;
-
-		//FieldInfo fi;
-		//PropertyInfo pi;
-		foreach (var MemberInfo in StructType.GetMembers())
+		else if (StructType.IsClass || StructType.IsValueType)
 		{
-			bool ValueSet = false;
-			object Value = null;
+			Ret += StructType.Name;
+			Ret += "(";
+			var MemberCount = 0;
+			bool AddedItem = false;
 
-			try
+			//FieldInfo fi;
+			//PropertyInfo pi;
+			foreach (var MemberInfo in StructType.GetMembers())
 			{
-				if (MemberInfo is FieldInfo)
-				{
-					ValueSet = true;
-					Value = (MemberInfo as FieldInfo).GetValue(Struct);
-				}
-				else if (MemberInfo is PropertyInfo)
-				{
-					ValueSet = true;
-					Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
-				}
-			}
-			catch
-			{
-				ValueSet = false;
-				Value = null;
-			}
+				bool ValueSet = false;
+				object Value = null;
 
-			if (ValueSet)
-			{
-				if (AddedItem)
+				try
 				{
-					Ret += ",";
-					AddedItem = false;
+					if (MemberInfo is FieldInfo)
+					{
+						ValueSet = true;
+						Value = (MemberInfo as FieldInfo).GetValue(Struct);
+					}
+					else if (MemberInfo is PropertyInfo)
+					{
+						ValueSet = true;
+						Value = (MemberInfo as PropertyInfo).GetValue(Struct, null);
+					}
+				}
+				catch
+				{
+					ValueSet = false;
+					Value = null;
 				}
 
-				if (SimplifyBool && (Value is bool))
+				if (ValueSet)
 				{
-					if (((bool)Value) == true)
+					if (AddedItem)
+					{
+						Ret += ",";
+						AddedItem = false;
+					}
+
+					if (SimplifyBool && (Value is bool))
+					{
+						if (((bool)Value) == true)
+						{
+							Ret += MemberInfo.Name;
+							MemberCount++;
+							AddedItem = true;
+						}
+					}
+					else
 					{
 						Ret += MemberInfo.Name;
+						Ret += "=";
+
+						var ValueType = Value.GetType();
+
+						if (Value is uint)
+						{
+							Ret += String.Format("0x{0:X}", Value);
+						}
+						else
+						{
+							Ret += Value.ToStringDefault(SimplifyBool, ValueType);
+						}
 						MemberCount++;
 						AddedItem = true;
 					}
 				}
-				else
-				{
-					Ret += MemberInfo.Name;
-					Ret += "=";
-
-					if (Value is uint)
-					{
-						Ret += String.Format("0x{0:X}", Value);
-					}
-					else
-					{
-						Ret += Value.ToStringDefault(SimplifyBool, Value.GetType());
-					}
-					MemberCount++;
-					AddedItem = true;
-				}
 			}
+			Ret += ")";
+			return Ret;
 		}
-		Ret += ")";
-		return Ret;
+		else
+		{
+			return StructType.ToString();
+		}
+	
 	}
 }
