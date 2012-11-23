@@ -17,7 +17,7 @@ namespace CSharpUtilsTests
 		public void ToStringDefaultTest()
 		{
 			Assert.AreEqual(
-				"TestStruct(Field1=1,Field2=2,Field3=3,Field4=Hello World!)",
+				"TestStruct(Field1=1,Field2=2,Field3=3,Field4=\"Hello World!\")",
 				new TestStruct()
 				{
 					Field1 = 1,
