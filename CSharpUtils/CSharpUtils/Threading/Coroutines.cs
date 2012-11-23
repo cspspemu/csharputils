@@ -18,7 +18,7 @@ namespace CSharpUtils.Threading
 			return new Coroutine(Name, this, Action);
 		}
 
-		[DebuggerHidden]
+		
 		public void YieldInPool()
 		{
 			this.CurrentCoroutine.YieldInPool();
@@ -49,7 +49,7 @@ namespace CSharpUtils.Threading
 		}
 		Exception RethrowException = null;
 
-		[DebuggerHidden]
+		
 		private void CoroutineContinueEvent_WaitOne()
 		{
 			CoroutineContinueEvent.WaitOne();
@@ -57,7 +57,7 @@ namespace CSharpUtils.Threading
 			if (!IsAlive) throw (new InterruptException());
 		}
 
-		[DebuggerHidden]
+		
 		private void PoolCallerContinueEvent_WaitOne()
 		{
 			Pool.CallerContinueEvent.WaitOne();
@@ -101,7 +101,7 @@ namespace CSharpUtils.Threading
 			this.MustStart = true;
 		}
 
-		[DebuggerHidden]
+		
 		public void ExecuteStep()
 		{
 			if (this.MustStart)
@@ -135,7 +135,7 @@ namespace CSharpUtils.Threading
 			}
 		}
 
-		[DebuggerHidden]
+		
 		public void YieldInPool()
 		{
 			//Debug.WriteLine("YieldInPool");

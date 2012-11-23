@@ -34,7 +34,7 @@ namespace CSharpUtils.Streams
 		/// <summary>
 		/// 
 		/// </summary>
-		[DebuggerHidden]
+		
 		public long SliceLow
 		{
 			get
@@ -46,7 +46,7 @@ namespace CSharpUtils.Streams
 		/// <summary>
 		/// 
 		/// </summary>
-		[DebuggerHidden]
+		
 		public long SliceHigh
 		{
 			get
@@ -63,7 +63,7 @@ namespace CSharpUtils.Streams
 		/// <param name="ThisLength">Length of the Slice</param>
 		/// <param name="CanWrite">Determines if the Stream will be writtable.</param>
 		/// <returns>A SliceStream</returns>
-		[DebuggerHidden]
+		
 		static public SliceStream CreateWithLength(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null)
 		{
 			return new SliceStream(BaseStream, ThisStart, ThisLength, CanWrite);
@@ -77,7 +77,7 @@ namespace CSharpUtils.Streams
 		/// <param name="ThisLength">Length of the Slice</param>
 		/// <param name="CanWrite">Determines if the Stream will be writtable.</param>
 		/// <returns>A SliceStream</returns>
-		[DebuggerHidden]
+		
 		static public SliceStream CreateWithBounds(Stream BaseStream, long LowerBound, long UpperBound, bool? CanWrite = null)
 		{
 			return new SliceStream(BaseStream, LowerBound, UpperBound - LowerBound, CanWrite);
@@ -93,7 +93,7 @@ namespace CSharpUtils.Streams
 		/// <param name="ThisLength">Length of the Slice</param>
 		/// <param name="CanWrite">Determines if the Stream will be writtable.</param>
 		/// <returns>A SliceStream</returns>
-		[DebuggerHidden]
+		
 		protected SliceStream(Stream BaseStream, long ThisStart = 0, long ThisLength = -1, bool? CanWrite = null, bool AllowSliceOutsideHigh = true)
 			: base(BaseStream, CloseParent: false)
 		{
@@ -124,7 +124,7 @@ namespace CSharpUtils.Streams
 		/// <summary>
 		/// Gets the length of the SliceStream.
 		/// </summary>
-		[DebuggerHidden]
+		
 		public override long Length
 		{
 			get
@@ -136,7 +136,7 @@ namespace CSharpUtils.Streams
 		/// <summary>
 		/// Gets or sets the current cursor for this SliceStream.
 		/// </summary>
-		[DebuggerHidden]
+		
 		public override long Position
 		{
 			get
@@ -157,7 +157,7 @@ namespace CSharpUtils.Streams
 		/// <param name="offset">Offset to seek</param>
 		/// <param name="origin">Origin for the seeking</param>
 		/// <returns>Absolute offset after the operation</returns>
-		[DebuggerHidden]
+		
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			//Console.WriteLine("Seek(offset: {0}, origin: {1})", offset, origin);
@@ -186,7 +186,7 @@ namespace CSharpUtils.Streams
 		/// <param name="offset">Offset of the ByteArray to write to</param>
 		/// <param name="count">Number of bytes to read</param>
 		/// <returns>Number of bytes readed</returns>
-		[DebuggerHidden]
+		
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			lock (ParentStream)
@@ -218,7 +218,7 @@ namespace CSharpUtils.Streams
 		/// <param name="buffer">ByteArray to read from</param>
 		/// <param name="offset">Offset of the ByteArray to read from</param>
 		/// <param name="count">Number of bytes to write</param>
-		[DebuggerHidden]
+		
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			lock (ParentStream)
@@ -246,7 +246,7 @@ namespace CSharpUtils.Streams
 		/// Not implemented.
 		/// </summary>
 		/// <param name="value"></param>
-		[DebuggerHidden]
+		
 		public override void SetLength(long value)
 		{
 			throw (new NotImplementedException());
