@@ -305,7 +305,7 @@ namespace CSharpUtils.Streams
 				case SeekOrigin.Current: Position = Position + offset; break;
 				case SeekOrigin.End: Position = Length + offset; break;
 			}
-			return offset;
+			return Position;
 		}
 
 		/// <summary>
