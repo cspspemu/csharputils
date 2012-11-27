@@ -158,6 +158,15 @@ namespace CSharpUtils.Compression.Lz
 							Console.WriteLine();
 							Console.WriteLine("{0}, {1}, {2}, {3}: {4:X8}, {5:X8}, {6:X8}", MatchedLength, MinSize, MaxSize, LocalMaxSize, Hash, Hash1, Hash2);
 							*/
+
+							//Console.WriteLine("{0}, {1}, {2}", CompareOffset - _Offset, MatchedLength, CompareOffset - _Offset + MatchedLength);
+
+							if (!AllowOverlapping && (CompareOffset - _Offset + MatchedLength) > 0)
+							{
+								MatchedLength = _Offset - CompareOffset;
+								//continue;
+							}
+
 							if (MatchedLength >= MinSize)
 							{
 								if (FindSequenceResult.Size < MatchedLength)

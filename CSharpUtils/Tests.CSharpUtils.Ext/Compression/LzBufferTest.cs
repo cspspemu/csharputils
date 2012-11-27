@@ -66,7 +66,7 @@ namespace CSharpUtilsTests.Compression
 			);
 
 			Assert.AreEqual(
-				"PUT(97),PUT(98),PUT(99),PUT(99),PUT(99),REPEAT(-3,3),REPEAT(-6,6),REPEAT(-9,9),PUT(99),REPEAT(-24,3)",
+				"PUT(97),PUT(98),PUT(99),PUT(99),PUT(99),REPEAT(-3,3),REPEAT(-6,6),REPEAT(-12,9),PUT(99),REPEAT(-24,3)",
 				Results.ToStringArray()
 			);
 		}
