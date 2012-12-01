@@ -96,11 +96,32 @@ namespace CSharpUtils
 
 		public class Stopwatch
 		{
-			List<DateTime> DateTimeList = new List<DateTime>();
+			protected List<DateTime> DateTimeList = new List<DateTime>();
+			protected DateTime LastDateTime;
 
-			public void Tick()
+			public Stopwatch()
 			{
-				DateTimeList.Add(DateTime.UtcNow);
+				Start();
+			}
+
+			public Stopwatch Start()
+			{
+				LastDateTime = DateTime.UtcNow;
+				return this;
+			}
+
+			public TimeSpan Tick()
+			{
+				var Now = DateTime.UtcNow;
+				DateTimeList.Add(Now);
+				try
+				{
+					return Now - LastDateTime;
+				}
+				finally
+				{
+					LastDateTime = Now;
+				}
 			}
 
 			public override string ToString()
