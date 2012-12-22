@@ -107,7 +107,9 @@
     <Compile Include="LanguageUtils.cs" />
     <Compile Include="MathFloat.cs" />
     <Compile Include="Misc\Acme1\Acme1File.cs" />
+    <Compile Include="NumberUtils.cs" />
     <Compile Include="PointerUtils.cs" />
+    <Compile Include="Pool.cs" />
     <Compile Include="ProcessUtils.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
