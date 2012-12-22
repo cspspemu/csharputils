@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSharpUtils.Drawing;
+using System;
 using System.Drawing;
 
 namespace CSharpUtils

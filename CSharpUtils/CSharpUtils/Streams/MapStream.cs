@@ -205,7 +205,7 @@ namespace CSharpUtils.Streams
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		protected long GetAvailableBytesOnCurrentStream()
+		private long GetAvailableBytesOnCurrentStream()
 		{
 			return _CurrentStream.Length - _CurrentStreamPosition;
 		}
