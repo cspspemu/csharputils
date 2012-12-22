@@ -100,7 +100,18 @@ namespace CSharpUtils
 		
 		public void Print()
 		{
-			Console.WriteLine("{0}", this);
+			ConsoleColor Color;
+			switch (Action)
+			{
+				case ActionEnum.Keep: Color = ConsoleColor.White; break;
+				case ActionEnum.Delete: Color = ConsoleColor.Red; break;
+				case ActionEnum.Insert: Color = ConsoleColor.DarkRed; break;
+				default: throw(new NotImplementedException());
+			}
+			ConsoleUtils.SaveRestoreConsoleColor(Color, () =>
+			{
+				Console.WriteLine("{0}", this);
+			});
 		}
 
 		public override string ToString()
