@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using CSharpUtils.Fastcgi;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtils.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class FastcgiPacketReaderTest
 	{
-		[TestMethod]
+		[Test]
 		public void ReadVariableIntSingleByteTest()
 		{
 			var Stream = new MemoryStream();
@@ -16,7 +16,7 @@ namespace CSharpUtils.Tests
 			Assert.AreEqual(0x7F, FastcgiPacketReader.ReadVariableInt(Stream));
 		}
 
-		[TestMethod]
+		[Test]
 		public void ReadVariableIntMultipleByteTest()
 		{
 			var Stream = new MemoryStream();
@@ -28,7 +28,7 @@ namespace CSharpUtils.Tests
 			Assert.AreEqual(1, FastcgiPacketReader.ReadVariableInt(Stream));
 		}
 		
-		[TestMethod]
+		[Test]
 		public void ReadVariableIntMultipleByte2Test()
 		{
 			var Stream = new MemoryStream();

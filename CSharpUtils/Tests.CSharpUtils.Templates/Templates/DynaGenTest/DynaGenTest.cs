@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Threading;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -10,7 +10,7 @@ using System.Reflection.Emit;
 #if false
 namespace CSharpUtilsTests.Templates.DynaGenTest
 {
-	[TestClass]
+	[TestFixture]
 	public class DynaGenTest
 	{
 		public static Type DynamicPointTypeGen()
@@ -106,7 +106,7 @@ namespace CSharpUtilsTests.Templates.DynaGenTest
 
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestMethod1()
 		{
 			Type myDynamicType = DynamicPointTypeGen();

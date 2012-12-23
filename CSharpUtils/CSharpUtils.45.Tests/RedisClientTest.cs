@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using CSharpUtils._45.Redis;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtils._45.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class RedisClientTest
 	{
 		public async Task _CommandTestAsync()
@@ -17,7 +17,7 @@ namespace CSharpUtils._45.Tests
 			*/
 		}
 
-		[TestMethod]
+		[Test]
 		public void CommandTest()
 		{
 			var Task = _CommandTestAsync();

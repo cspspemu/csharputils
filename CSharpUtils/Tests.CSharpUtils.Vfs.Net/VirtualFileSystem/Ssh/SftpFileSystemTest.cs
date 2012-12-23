@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using CSharpUtils.VirtualFileSystem.Ssh;
 using System.Net;
 using System.IO;
@@ -10,7 +10,7 @@ using CSharpUtils;
 
 namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 {
-	[TestClass]
+	[TestFixture]
 	public class SftpFileSystemTest
 	{
         // @TODO: These should be Harness tests.
@@ -30,7 +30,7 @@ namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 			SftpFileSystem.Shutdown();
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindFilesTest()
 		{
 			var FilesQuery =
@@ -45,20 +45,20 @@ namespace CSharpUtilsTests.VirtualFileSystem.Ssh
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetFileTimeTest()
 		{
 			var time = SftpFileSystem.GetFileTime("/home/ubuntu/this is a test.txt");
 			Console.WriteLine(time);
 		}
 
-		[TestMethod]
+		[Test]
 		public void DownloadFileTest()
 		{
 			Assert.AreEqual("Hello World\n", SftpFileSystem.OpenFile("/home/ubuntu/this is a test.txt", FileMode.Open).ReadAllContentsAsString(Encoding.UTF8));
 		}
 
-		[TestMethod]
+		[Test]
 		public void ModifyFileTest()
 		{
 			//var fs = new FileStream(@"C:\projects\csharputils\temp.bin", FileMode.Create);

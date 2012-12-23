@@ -5,11 +5,11 @@ using System.Threading;
 using CSharpUtils.Http;
 using CSharpUtils.Net;
 using CSharpUtils.Scgi;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class ScgiServerTest
 	{
 		sealed class TestScgiServer : ScgiServer
@@ -26,7 +26,7 @@ namespace CSharpUtilsTests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void ScgiServerConstructorTest()
 		{
 			string BindIp = "127.0.0.1";

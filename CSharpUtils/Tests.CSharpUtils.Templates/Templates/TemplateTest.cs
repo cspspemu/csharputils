@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using CSharpUtils.Templates;
 using CSharpUtils.Templates.Runtime;
 using CSharpUtils.Templates.TemplateProvider;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests.Templates
 {
-	[TestClass]
+	[TestFixture]
 	public class TemplateTest
 	{
 		protected static TemplateCode CompileTemplateCodeByString(String Code) {
@@ -17,7 +17,7 @@ namespace CSharpUtilsTests.Templates
 			return TemplateCodeGen.GetTemplateCode();
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecVariableSimple()
 		{
 			Assert.AreEqual("Hello Test", CompileTemplateCodeByString("Hello {{ User }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
@@ -25,7 +25,7 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecFor()
 		{
 			Assert.AreEqual("1234", CompileTemplateCodeByString("{% for Item in List %}{{ Item }}{% endfor %}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
@@ -33,7 +33,7 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestTrueFalseNoneAreImmutableConstants()
 		{
 			var Scope = new TemplateScope(new Dictionary<String, object>() {
@@ -48,7 +48,7 @@ namespace CSharpUtilsTests.Templates
 		}
 
 		/*
-		[TestMethod]
+		[Test]
 		public void TestInvalidClosing()
 		{
 			// if / endfor
@@ -57,7 +57,7 @@ namespace CSharpUtilsTests.Templates
 		}
 		*/
 
-		[TestMethod]
+		[Test]
 		public void TestExecForCreateScope()
 		{
 			Assert.AreEqual("1234", CompileTemplateCodeByString("{{ Item }}{% for Item in List %}{{ Item }}{% endfor %}{{ Item }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
@@ -70,13 +70,13 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecPow()
 		{
 			Assert.AreEqual("256", CompileTemplateCodeByString("{{ 2 ** 8 }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecForInsideFor()
 		{
 			Assert.AreEqual("[1]1234[1][2]2468[2]", CompileTemplateCodeByString("{% for Item2 in List2 %}[{{ Item2 }}]{% for Item1 in List1 %}{{ Item1 * Item2 }}{% endfor %}[{{ Item2 }}]{% endfor %}{{ Item1 }}{{ Item2 }}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
@@ -90,7 +90,7 @@ namespace CSharpUtilsTests.Templates
 			public String Text;
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecForObjects()
 		{
 			Assert.AreEqual("HelloWorld", CompileTemplateCodeByString("{% for Post in Posts %}{{ Post.Text }}{% endfor %}").RenderToString(new TemplateScope(new Dictionary<String, object>() {
@@ -101,7 +101,7 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecForElse()
 		{
 			var Params1 = new TemplateScope(new Dictionary<String, object>() { { "List", new int[] { 1, 2, 3, 4, 5 } } });
@@ -110,73 +110,73 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual("Empty", CompileTemplateCodeByString("{% for Item in List %}{{ Item }}{% else %}Empty{% endfor %}").RenderToString(Params2));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecBlock()
 		{
 			Assert.AreEqual("1", CompileTemplateCodeByString("{% block Body %}1{% endblock %}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecForRange()
 		{
 			Assert.AreEqual("0123456789", CompileTemplateCodeByString("{% for Item in 0..9 %}{{ Item }}{% endfor %}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecWithOperator()
 		{
 			Assert.AreEqual("Hello 3 World", CompileTemplateCodeByString("Hello {{ 1 + 2 }} World").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecWithOperatorPrecedence()
 		{
 			Assert.AreEqual("Hello 5 World", CompileTemplateCodeByString("Hello {{ 1 + 2 * 2 }} World").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecIfElseCond0()
 		{
 			Assert.AreEqual("B", CompileTemplateCodeByString("{% if 0 %}A{% else %}B{% endif %}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecIfElseCond1()
 		{
 			Assert.AreEqual("A", CompileTemplateCodeByString("{% if 1 %}A{% else %}B{% endif %}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecTernaryTrue()
 		{
 			Assert.AreEqual("A", CompileTemplateCodeByString("{{ 1 ? 'A' : 'B' }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecTernaryFalse()
 		{
 			Assert.AreEqual("B", CompileTemplateCodeByString("{{ (1 - 1) ? 'A' : 'B' }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecUnary()
 		{
 			Assert.AreEqual("-6", CompileTemplateCodeByString("{{ -(1 + 2) + -3 }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecIfAnd()
 		{
 			Assert.AreEqual("A", CompileTemplateCodeByString("{% if 1 && 2 %}A{% endif %}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecIfOr()
 		{
 			Assert.AreEqual("A", CompileTemplateCodeByString("{% if 0 || 2 %}A{% endif %}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAccessSimple()
 		{
 			Assert.AreEqual("Value", CompileTemplateCodeByString("{{ Item.Key }}").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
@@ -187,7 +187,7 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAccessSimpleIndexer()
 		{
 			Assert.AreEqual("Value", CompileTemplateCodeByString("{{ Item['Key'] }}").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
@@ -198,7 +198,7 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAccess()
 		{
 			Assert.AreEqual("Value", CompileTemplateCodeByString("{{ Item.Key.SubKey }}").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
@@ -211,13 +211,13 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAccessInexistentKey()
 		{
 			Assert.AreEqual("", CompileTemplateCodeByString("{{ Item.InexistentKey }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAccessInexistentSubKey()
 		{
 			Assert.AreEqual("", CompileTemplateCodeByString("{{ Item.Key.InexistentKey }}").RenderToString(new TemplateScope(new Dictionary<String, dynamic>()
@@ -230,60 +230,60 @@ namespace CSharpUtilsTests.Templates
 			})));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecFilter()
 		{
 			Assert.AreEqual("Hello World", CompileTemplateCodeByString("{{ 'Hello {0}'|format('World') }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecFilterShouldEscape()
 		{
 			Assert.AreEqual("Hello &lt;World&gt;", CompileTemplateCodeByString("{{ 'Hello {0}'|format('<World>') }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecFilterCombinedRaw()
 		{
 			Assert.AreEqual("Hello <World>", CompileTemplateCodeByString("{{ 'Hello {0}'|format('<World>')|raw }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAutoescapeOff()
 		{
 			Assert.AreEqual("Hello <World>", CompileTemplateCodeByString("{% autoescape false %}{{ 'Hello <World>' }}{% endautoescape %}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAutoescapeOffEscape()
 		{
 			Assert.AreEqual("Hello &lt;World&gt;", CompileTemplateCodeByString("{% autoescape false %}{{ 'Hello <World>'|escape }}{% endautoescape %}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAutoescapeOnEscape()
 		{
 			Assert.AreEqual("Hello &lt;World&gt;", CompileTemplateCodeByString("{{ 'Hello <World>'|escape }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecAutoescapeOnEscapeShortcut()
 		{
 			Assert.AreEqual("Hello &lt;World&gt;", CompileTemplateCodeByString("{{ 'Hello <World>'|e }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecEscapeTwice()
 		{
 			Assert.AreEqual("Hello &amp;lt;World&amp;gt;", CompileTemplateCodeByString("{{ 'Hello <World>'|e|e }}").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecFunctionCall()
 		{
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecBasicInheritance()
 		{
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
@@ -295,7 +295,7 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual("TestExTest", TemplateFactory.GetTemplateCodeByFile("Test.html").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestExecInheritanceWithParent()
 		{
 			TemplateProviderMemory TemplateProvider = new TemplateProviderMemory();
@@ -307,7 +307,7 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual("Test1Base2Test", TemplateFactory.GetTemplateCodeByFile("Test.html").RenderToString());
 		}
 
-		[TestMethod]
+		[Test]
 		[ExpectedException(typeof(TemplateParentOutsideBlockException))]
 		public void TestExecInheritanceWithParentOutside()
 		{

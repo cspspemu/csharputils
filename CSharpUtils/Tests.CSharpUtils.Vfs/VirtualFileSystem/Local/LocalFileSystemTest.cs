@@ -2,23 +2,23 @@
 using System.IO;
 using CSharpUtils.VirtualFileSystem;
 using CSharpUtils.VirtualFileSystem.Local;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class LocalFileSystemTest
 	{
 		LocalFileSystem LocalFileSystem;
 
-		[TestInitialize]
+		[SetUp]
 		public void InitializeTest()
 		{
 			LocalFileSystem = new LocalFileSystem(Config.ProjectTestInputPath);
 			LocalFileSystem.Mount("/Mounted", new LocalFileSystem(Config.ProjectTestInputMountedPath));
 			LocalFileSystem.Mount("/NewMounted", new LocalFileSystem(Config.ProjectTestInputMountedPath), "/DirectoryOnMountedFileSystem");
 		}
-		[TestMethod]
+		[Test]
 		public void GetFileTimeExistsTest()
 		{
 			var FileTime = LocalFileSystem.GetFileTime("ExistentFolder");
@@ -28,31 +28,31 @@ namespace CSharpUtilsTests
 		}
 
 		[ExpectedException(typeof(FileNotFoundException))]
-		[TestMethod]
+		[Test]
 		public void GetFileTimeNotExistsTest()
 		{
 			LocalFileSystem.GetFileTime("ThisFilesDoesNotExists");
 		}
 
-		[TestMethod]
+		[Test]
 		public void MountedTest()
 		{
 			var FileTime = LocalFileSystem.GetFileTime("/Mounted/FileInMountedFileSystem.txt");
 		}
 
-		[TestMethod]
+		[Test]
 		public void Mounted2Test()
 		{
 			var FileTime = LocalFileSystem.GetFileTime("/NewMounted/3.txt");
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindFilesTest()
 		{
 			Assert.IsTrue(LocalFileSystem.FindFiles("/Mounted").ContainsFileName("DirectoryOnMountedFileSystem"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindFilesWildcardTest()
 		{
 			var FoundFiles = LocalFileSystem.FindFiles("/Mounted/DirectoryOnMountedFileSystem", "*.dat");
@@ -61,7 +61,7 @@ namespace CSharpUtilsTests
 			Assert.IsFalse(FoundFiles.ContainsFileName("1.txt"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void CopyFileTest()
 		{
 			var FoundFiles = LocalFileSystem.FindFiles("/Mounted/DirectoryOnMountedFileSystem", "*.dat");
@@ -87,7 +87,7 @@ namespace CSharpUtilsTests
 			LocalFileSystem.DeleteFile(DestinationPath);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MountedOpenFileTest()
 		{
 			var Stream = LocalFileSystem.OpenFile("/Mounted/FileInMountedFileSystem.txt", FileMode.Open);
@@ -97,7 +97,7 @@ namespace CSharpUtilsTests
 			Stream.Close();
 		}
 
-		[TestMethod]
+		[Test]
 		public void MountedRecursiveTest()
 		{
 			var FileSystem1 = new ImplFileSystem();

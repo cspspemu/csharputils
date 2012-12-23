@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using CSharpUtils.Threading;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class GreenThreadTest
 	{
-		[TestMethod]
+		[Test]
 		public void Test1Test()
 		{
 			var Values = new List<int>();

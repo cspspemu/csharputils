@@ -2,15 +2,15 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using CSharpUtils;
 
 namespace CSPspEmu.Tests
 {
-	[TestClass]
+	[TestFixture]
 	unsafe public class PointerUtilsTest
 	{
-		[TestMethod]
+		[Test]
 		public void TestMemset()
 		{
 			var Data = new byte[131];
@@ -22,7 +22,7 @@ namespace CSPspEmu.Tests
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestMemcpy()
 		{
 			int SizeStart = 17;
@@ -45,7 +45,7 @@ namespace CSPspEmu.Tests
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestMemcpy4()
 		{
 			int TotalSize = 12;
@@ -74,7 +74,7 @@ namespace CSPspEmu.Tests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestMemset4()
 		{
 			int TotalSize = 65;
@@ -101,7 +101,7 @@ namespace CSPspEmu.Tests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestMemcpyOverlapping()
 		{
 			var _Data = new byte[] { 1, 0, 0, 0, 0, 0 };
@@ -113,7 +113,7 @@ namespace CSPspEmu.Tests
 			CollectionAssert.AreEqual(Expected, _Data);
 		}
 
-		[TestMethod]
+		[Test]
 		public void FastHash()
 		{
 			var A = new byte[] { 1, 2, 3 };
@@ -125,7 +125,7 @@ namespace CSPspEmu.Tests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindLargestMatch0()
 		{
 			var A = new byte[] { 0, 2, 3, 4, 5, 6, 7 };
@@ -137,7 +137,7 @@ namespace CSPspEmu.Tests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindLargestMatch1()
 		{
 			var A = new byte[] { 1, 0, 3, 4, 5, 6, 7 };
@@ -149,7 +149,7 @@ namespace CSPspEmu.Tests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindLargestMatch5()
 		{
 			var A = new byte[] { 1, 2, 3, 4, 5, 0, 7 };
@@ -161,7 +161,7 @@ namespace CSPspEmu.Tests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindLargestMatchByte1()
 		{
 			var A = new byte[] { 1, 0, 2, 2, 2 };
@@ -171,7 +171,7 @@ namespace CSPspEmu.Tests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindLargestMatchByte13()
 		{
 			var A = new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2 };

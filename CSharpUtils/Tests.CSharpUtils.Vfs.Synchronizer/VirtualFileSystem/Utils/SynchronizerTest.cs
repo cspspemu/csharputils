@@ -1,20 +1,20 @@
 ﻿using CSharpUtils.VirtualFileSystem;
 using CSharpUtils.VirtualFileSystem.Local;
 using CSharpUtils.VirtualFileSystem.Utils;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class SynchronizerTest
 	{
-		[TestInitialize]
+		[SetUp]
 		public void TestInitialize()
 		{
 			RestoreFileSystem();
 		}
 
-		[TestCleanup]
+		[TearDown]
 		public void TestCleanup()
 		{
 			RestoreFileSystem();
@@ -25,7 +25,7 @@ namespace CSharpUtilsTests
 
 		}
 
-		[TestMethod]
+		[Test]
 		public void SynchronizeTest()
 		{
 			FileSystem SourceFileSystem = new LocalFileSystem(Config.ProjectTestInputPath);

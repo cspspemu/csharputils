@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using CSharpUtils.Templates.Runtime;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests.Templates
 {
-	[TestClass]
+	[TestFixture]
 	public class DynamicUtilsTest
 	{
-		[TestMethod]
+		[Test]
 		public void TestConvertToBool()
 		{
 			Assert.AreEqual(true, DynamicUtils.ConvertToBool((float)7.1));
@@ -24,7 +24,7 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual(false, DynamicUtils.ConvertToBool(null));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestAdd()
 		{
 			Assert.AreEqual("10a", DynamicUtils.BinaryOperation_Add(10, "a"));
@@ -34,7 +34,7 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual(21.5, DynamicUtils.BinaryOperation_Add(10, 11.5));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestAccess()
 		{
 			Assert.AreEqual("Value", DynamicUtils.Access(new Hashtable() { { "MyKey", "Value" } }, "MyKey"));
@@ -49,7 +49,7 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual(2, DynamicUtils.Access(new List<int>(new int[] { 0, 1, 2, 3, 4 }), 2));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestCountArray()
 		{
 			Assert.AreEqual(0, DynamicUtils.CountArray(null));
@@ -59,7 +59,7 @@ namespace CSharpUtilsTests.Templates
 			Assert.AreEqual(3, DynamicUtils.CountArray(new List<int>(new int[] { 1, 2, 3 })));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestCountArrayList()
 		{
 			Assert.AreEqual(3, DynamicUtils.CountArray(new List<Post> {
@@ -74,7 +74,7 @@ namespace CSharpUtilsTests.Templates
 			public string Title;
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestConvertToIEnumerable()
 		{
 			CollectionAssert.AreEquivalent(
@@ -91,7 +91,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestCall()
 		{
 			Assert.AreEqual("Hello World", DynamicUtils.Call(typeof(String), "Format", "Hello {0}", "World"));

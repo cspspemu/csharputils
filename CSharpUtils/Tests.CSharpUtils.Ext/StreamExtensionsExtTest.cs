@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using CSharpUtils.SpaceAssigner;
 using CSharpUtils.Streams;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests.Extensions
 {
-	[TestClass]
+	[TestFixture]
 	public class StreamExtensionsExtTest
 	{
-		[TestMethod]
+		[Test]
 		public void TestJoinWithThresold()
 		{
 			var Spaces = new SpaceAssigner1D.Space[]
@@ -24,7 +24,7 @@ namespace CSharpUtilsTests.Extensions
 			Assert.AreEqual("Space(Min=0, Max=16),Space(Min=60, Max=99)", JoinedSpaces.ToStringArray());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestConvertSpacesToMapStream()
 		{
 			var Stream = new MemoryStream(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });

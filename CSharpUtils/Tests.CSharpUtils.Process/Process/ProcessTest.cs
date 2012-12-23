@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using CSharpUtils.Process;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class ProcessTest
 	{
-		[TestMethod]
+		[Test]
 		public void ProcessToTest()
 		{
 			var Output = new LinkedList<string>();
