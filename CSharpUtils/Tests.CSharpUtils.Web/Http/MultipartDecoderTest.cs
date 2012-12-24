@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using CSharpUtils.Http;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests.Http
 {
-	[TestClass]
+	[TestFixture]
 	public class MultipartDecoderTest
 	{
 		static byte[] rawData = {
@@ -80,7 +80,7 @@ namespace CSharpUtilsTests.Http
 		};
 
 
-		[TestMethod]
+		[Test]
 		public void TestMultipartDecoder()
 		{
 			MultipartDecoder MultipartDecoder = new MultipartDecoder(new MemoryStream(rawData), "------WebKitFormBoundaryAGx5IxnXxZ0Paxm2");
@@ -100,7 +100,7 @@ namespace CSharpUtilsTests.Http
 			Assert.AreEqual(Parts[2].Stream.Length, 0);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestMultipartDecoder2()
 		{
 			MultipartDecoder MultipartDecoder = new MultipartDecoder(new MemoryStream(rawData2), "------WebKitFormBoundarywuvGGcAtDh75hfGF");

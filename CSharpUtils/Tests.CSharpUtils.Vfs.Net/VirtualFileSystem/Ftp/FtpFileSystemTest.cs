@@ -1,5 +1,5 @@
 ﻿using CSharpUtils.VirtualFileSystem.Ftp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Linq;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class FtpFileSystemTest
 	{
         /// @TODO: These should be Harness tests.
@@ -26,13 +26,13 @@ namespace CSharpUtilsTests
 			FtpFileSystem.Shutdown();
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetFileTimeTest()
 		{
 			Assert.IsTrue(FtpFileSystem.GetFileTime(".bashrc").LastWriteTime >= DateTime.Parse("01/01/2008"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void FindFilesTest()
 		{
 			Assert.AreEqual(
@@ -43,7 +43,7 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void OpenFileTest()
 		{
 			foreach (var Item in FtpFileSystem.FindFiles("/Desktop/temp")) {
@@ -54,7 +54,7 @@ namespace CSharpUtilsTests
 			Console.WriteLine(Text);
 		}
 
-		[TestMethod]
+		[Test]
 		public void DeleteFileTest()
 		{
 			String FileName = "/Desktop/1.txt";
@@ -78,7 +78,7 @@ namespace CSharpUtilsTests
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void WriteNewFileTest()
 		{
 			DateTime StartTime = DateTime.Now - TimeSpan.Parse("10");

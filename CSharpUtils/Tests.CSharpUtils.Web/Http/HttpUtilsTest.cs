@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using CSharpUtils.Http;
 
 namespace CSharpUtilsTests.Http
 {
-	[TestClass]
+	[TestFixture]
 	public class HttpUtilsTest
 	{
-		[TestMethod]
+		[Test]
 		public void TestParseUrlEncoded()
 		{
 			CollectionAssert.AreEquivalent(
@@ -28,7 +28,7 @@ namespace CSharpUtilsTests.Http
 
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestDecodeURIComponentUnicode()
 		{
 			Assert.AreEqual("Hello", HttpUtils.DecodeURIComponent("Hello"));

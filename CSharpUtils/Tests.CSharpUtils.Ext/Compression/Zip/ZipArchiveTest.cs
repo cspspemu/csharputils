@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using System.Text;
 using CSharpUtils.Compression.Zip;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class ZipArchiveTest
 	{
-		[TestMethod]
+		[Test]
 		public void LoadTest()
 		{
 			var ZipArchive = new ZipArchive();

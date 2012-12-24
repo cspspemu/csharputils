@@ -1,14 +1,14 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using CSharpUtils.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class NetworkUtilitiesTest
 	{
-		[TestMethod]
+		[Test]
 		public void GetAvailableTcpPortTest()
 		{
 			int Port = NetworkUtilities.GetAvailableTcpPort();

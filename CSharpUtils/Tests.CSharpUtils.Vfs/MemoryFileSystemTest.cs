@@ -2,14 +2,14 @@
 using System.Text;
 using System.Linq;
 using CSharpUtils.VirtualFileSystem.Memory;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class MemoryFileSystemTest
 	{
-		[TestMethod]
+		[Test]
 		public void AddFileTest()
 		{
 			var MemoryFileSystem = new MemoryFileSystem();

@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class FileSystemEntryTest
 	{
-		[TestMethod]
+		[Test]
 		public void OpenTest()
 		{
 			//Assert.Inconclusive("Verify the correctness of this test method.");

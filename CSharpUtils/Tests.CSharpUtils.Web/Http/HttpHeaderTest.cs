@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using CSharpUtils.Http;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests.Http
 {
-	[TestClass]
+	[TestFixture]
 	public class HttpHeaderTest
 	{
-		[TestMethod]
+		[Test]
 		public void TestMethod1()
 		{
 			HttpHeader ContentType = new HttpHeader("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundaryIMw3ByBOPx38V6Bd");

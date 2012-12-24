@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using CSharpUtils.Templates.Tokenizers;
 
 namespace CSharpUtilsTests.Templates
@@ -8,10 +8,10 @@ namespace CSharpUtilsTests.Templates
 	/// <summary>
 	/// Descripción resumida de TemplateTokenizeTest
 	/// </summary>
-	[TestClass]
+	[TestFixture]
 	public class TemplateTokenizeTest
 	{
-		[TestMethod]
+		[Test]
 		public void TokenizeTest()
 		{
 			TokenizerAssertEquals(
@@ -20,7 +20,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Tokenize2Test()
 		{
 			TokenizerAssertEquals(
@@ -29,7 +29,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeBinary()
 		{
 			TokenizerAssertEquals(
@@ -38,7 +38,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeTernary()
 		{
 			TokenizerAssertEquals(
@@ -47,7 +47,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeFilter()
 		{
 			TokenizerAssertEquals(
@@ -56,7 +56,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeEscapeStart()
 		{
 			TokenizerAssertEquals(
@@ -65,7 +65,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeEscapeEnd()
 		{
 			TokenizerAssertEquals(
@@ -74,7 +74,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeRange()
 		{
 			TokenizerAssertEquals(
@@ -83,7 +83,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeUnary()
 		{
 			TokenizerAssertEquals(
@@ -92,7 +92,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeAccessDot()
 		{
 			TokenizerAssertEquals(
@@ -101,7 +101,7 @@ namespace CSharpUtilsTests.Templates
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TokenizeComments()
 		{
 			TokenizerAssertEquals(

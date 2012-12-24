@@ -1,13 +1,13 @@
 ﻿using CSharpUtils.VirtualFileSystem;
 using CSharpUtils.VirtualFileSystem.Local;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests.VirtualFileSystem
 {
-	[TestClass]
+	[TestFixture]
 	public class FileSystemFromPathTest
 	{
-		[TestMethod]
+		[Test]
 		public void FileSystemFromPathConstructorTest()
 		{
 			var LocalFileSystem = new LocalFileSystem(Config.ProjectTestInputMountedPath);

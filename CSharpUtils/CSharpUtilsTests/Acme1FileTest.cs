@@ -1,15 +1,15 @@
 ﻿using System.IO;
 using System.Text;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using CSharpUtils.Misc;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class Acme1FileTest
 	{
-		[TestMethod]
+		[Test]
 		public void LoadTest()
 		{
 			var Acme1File = new Acme1File();

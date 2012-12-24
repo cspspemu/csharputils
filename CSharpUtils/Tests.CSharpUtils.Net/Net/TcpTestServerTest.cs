@@ -1,12 +1,12 @@
 ﻿using CSharpUtils.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class TcpTestServerTest
 	{
-		[TestMethod]
+		[Test]
 		public void CreateTest()
 		{
 			var TestTcpTestServer = TcpTestServer.Create();

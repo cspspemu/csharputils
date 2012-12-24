@@ -2,11 +2,11 @@
 using System.IO;
 using CSharpUtils.Fastcgi;
 using CSharpUtils.Streams;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class FastcgiHandlerTest
 	{
 		private static void WriteBeginRequest(Stream Stream)
@@ -23,7 +23,7 @@ namespace CSharpUtilsTests
 			});
 		}
 
-		[TestMethod]
+		[Test]
 		public void FastcgiHandlerConstructorTest()
 		{
 			var ConsumerMemoryStream = new ConsumerMemoryStream();

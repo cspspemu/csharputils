@@ -2,13 +2,13 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using CSharpUtils.Net;
 using CSharpUtils.Web._45.Fastcgi;
 
 namespace CSharpUtils._45.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class FastcgiServerAsyncTest
 	{
 		protected class TestFastcgiServerAsync : FastcgiServerAsync
@@ -66,7 +66,7 @@ namespace CSharpUtils._45.Tests
 			throw (new Exception("Socket not disconnected"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestSimpleConnection()
 		{
 			TestSimpleConnectionAsync().Wait();

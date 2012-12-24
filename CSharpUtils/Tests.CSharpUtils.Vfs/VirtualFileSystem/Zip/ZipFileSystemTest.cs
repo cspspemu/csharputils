@@ -1,13 +1,13 @@
 ﻿using CSharpUtilsTests;
 using CSharpUtils.VirtualFileSystem.Zip;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests.CSharpUtils.Vfs.VirtualFileSystem.Zip
 {
-	[TestClass]
+	[TestFixture]
 	public class ZipFileSystemTest
 	{
-		[TestMethod]
+		[Test]
 		public void TestMethod1()
 		{
 			var Vfs = new ZipFileSystem(Config.ProjectTestInputPath + @"\TestInputMounted.zip", ZipFileSystem.ZipArchiveMode.Read);

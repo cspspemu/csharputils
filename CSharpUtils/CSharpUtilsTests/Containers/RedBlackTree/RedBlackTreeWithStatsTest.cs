@@ -1,15 +1,15 @@
 ﻿using System.Linq;
 using CSharpUtils.Containers.RedBlackTree;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
+	[TestFixture]
 	public class RedBlackTreeWithStatsTest
 	{
 		RedBlackTreeWithStats<int> Stats;
 
-		[TestInitialize]
+		[SetUp]
 		public void Initialize1()
 		{
 			Stats = new RedBlackTreeWithStats<int>();
@@ -31,13 +31,13 @@ namespace CSharpUtilsTests
 			Stats.Add(0);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Test1()
 		{
 			Stats.DebugValidateTree();
 		}
 
-		[TestMethod]
+		[Test]
 		public void Test2()
 		{
 			Assert.AreEqual(5, Stats.RealRootNode.Value);
@@ -57,7 +57,7 @@ namespace CSharpUtilsTests
 			Assert.IsFalse(Stats.All.Contains(12));
 		}
 
-		[TestMethod]
+		[Test]
 		public void Test3()
 		{
 			var Slice1 = Stats.All.Slice(1, 4);
@@ -72,7 +72,7 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Test4()
 		{
 			var Slice1 = Stats.All.Slice(1, 6).Slice(2, 4);
@@ -87,14 +87,14 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Test5()
 		{
 			var Stats2 = new RedBlackTreeWithStats<int>();
 			Assert.AreEqual(0, Stats2.All.ToArray().Length);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CappedCollectionTest()
 		{
 			var Stats2 = new RedBlackTreeWithStats<int>();

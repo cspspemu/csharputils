@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using CSharpUtils.Html;
 
 namespace CSharpUtilsTests.Html
 {
-	[TestClass]
+	[TestFixture]
 	public class HtmlUtilsTest
 	{
-		[TestMethod]
+		[Test]
 		public void TestEscapeHtmlCharacters()
 		{
 			Assert.AreEqual("&lt;p&gt;&quot;test", HtmlUtils.EscapeHtmlCharacters("<p>\"test"));
