@@ -17,6 +17,25 @@ namespace CSharpUtils
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="TType"></typeparam>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		/// <param name="CopyToLeft"></param>
+		public static void Transfer<TType>(ref TType Left, ref TType Right, bool CopyToLeft)
+		{
+			if (CopyToLeft)
+			{
+				Left = Right;
+			}
+			else
+			{
+				Right = Left;
+			}
+		}
+
+		/// <summary>
 		/// Changes the value of a reference just while the execution of the LocalScope delegate.
 		/// </summary>
 		/// <typeparam name="TType"></typeparam>

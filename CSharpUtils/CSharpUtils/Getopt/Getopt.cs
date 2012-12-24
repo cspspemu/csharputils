@@ -56,6 +56,11 @@ namespace CSharpUtils.Getopt
 			return this.Items.Dequeue();
 		}
 
+		public string[] DequeueAllNext()
+		{
+			return this.Items.ToArray();
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
