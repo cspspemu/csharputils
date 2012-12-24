@@ -138,6 +138,7 @@
     <Compile Include="Arrays\IArray.cs" />
     <Compile Include="Streams\MapStream.cs" />
     <Compile Include="Streams\ProxyStream.cs" />
+    <Compile Include="Streams\RingBufferStream.cs" />
     <Compile Include="Streams\SerializerUtils.cs" />
     <Compile Include="Streams\SliceStream.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />

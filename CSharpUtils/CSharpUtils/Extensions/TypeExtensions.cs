@@ -13,4 +13,9 @@ public static class TypeExtensions
 	{
 		return Type.GetCustomAttributes(typeof(T), inherit).Cast<T>();
 	}
+
+	public static bool Implements(this Type Type, Type Interface)
+	{
+		return Type.GetInterfaces().Contains(Interface);
+	}
 }
