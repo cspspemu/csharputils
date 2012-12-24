@@ -18,6 +18,51 @@ namespace CSharpUtils
 			}
 		}
 
+		public struct CompareResult
+		{
+			public bool Equal;
+			public int PixelTotalDifference;
+			public int DifferentPixelCount;
+			public int TotalPixelCount;
+			public double PixelTotalDifferencePercentage;
+		}
+
+		public static CompareResult CompareBitmaps(Bitmap ReferenceBitmap, Bitmap OutputBitmap, double Threshold = 0.01)
+		{
+			var CompareResult = default(CompareResult);
+
+			if (ReferenceBitmap.Size == OutputBitmap.Size)
+			{
+				CompareResult.PixelTotalDifference = 0;
+				CompareResult.DifferentPixelCount = 0;
+				CompareResult.TotalPixelCount = 0;
+				for (int y = 0; y < ReferenceBitmap.Height; y++)
+				{
+					for (int x = 0; x < ReferenceBitmap.Width; x++)
+					{
+						Color ColorReference = ReferenceBitmap.GetPixel(x, y);
+						Color ColorOutput = OutputBitmap.GetPixel(x, y);
+						int Difference3 = (
+							Math.Abs((int)ColorOutput.R - (int)ColorReference.R) +
+							Math.Abs((int)ColorOutput.G - (int)ColorReference.G) +
+							Math.Abs((int)ColorOutput.B - (int)ColorReference.B)
+						);
+						CompareResult.PixelTotalDifference += Difference3;
+						if (Difference3 > 6)
+						{
+							CompareResult.DifferentPixelCount++;
+						}
+						CompareResult.TotalPixelCount++;
+					}
+				}
+
+				var PixelTotalDifferencePercentage = (double)CompareResult.DifferentPixelCount * 100 / (double)CompareResult.TotalPixelCount;
+				CompareResult.Equal = (PixelTotalDifferencePercentage < Threshold);
+			}
+
+			return CompareResult;
+		}
+
 		public static ColorPalette GetColorPalette(int nColors)
 		{
 			// Assume monochrome image.
