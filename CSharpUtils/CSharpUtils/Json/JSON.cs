@@ -36,7 +36,7 @@ namespace CSharpUtils.Json
 
 			if (ObjectToEncode is bool)
 			{
-				return (((dynamic)ObjectToEncode) == true) ? "true" : "false";
+				return (((bool)ObjectToEncode) == true) ? "true" : "false";
 			}
 
 			if (ObjectToEncode is IDictionary) {

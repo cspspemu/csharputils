@@ -514,10 +514,10 @@ namespace CSharpUtils
 	} // LCS()
 
 
-	/// <summary>Scan the tables of which lines are inserted and deleted,
+	/// <summary>
+	/// Scan the tables of which lines are inserted and deleted,
 	/// producing an edit script in forward order.  
 	/// </summary>
-	/// dynamic array
 	private static Item[] CreateDiffs(DiffData DataA, DiffData DataB) {
 	  ArrayList a = new ArrayList();
 	  Item aItem;

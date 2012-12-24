@@ -116,6 +116,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="RingBuffer.cs" />
     <Compile Include="StackTraceUtils.cs" />
     <Compile Include="Streams\ConcatStream.cs" />
     <Compile Include="Streams\ConsumerMemoryStream.cs" />
