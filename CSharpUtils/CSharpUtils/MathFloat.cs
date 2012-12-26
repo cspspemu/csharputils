@@ -284,9 +284,14 @@ namespace CSharpUtils
 #endif
 		public static float Sign(float Value)
 		{
-			if (Value > 0) return +1.0f;
-			if (Value < 0) return -1.0f;
-			return 0.0f;
+			if (Value == 0) return 0f;
+			var IValue = MathFloat.ReinterpretFloatAsUInt(Value);
+			return ((IValue & 0x80000000) != 0) ? -1f : +1f;
+			//if (float.IsNaN(Value)) return +1f;
+			//if (float.IsNaN(-Value)) return -1f;
+			//if (Value > 0) return +1.0f;
+			//if (Value < 0) return -1.0f;
+			//return 0.0f;
 		}
 
 		/// <summary>
@@ -300,6 +305,8 @@ namespace CSharpUtils
 #endif
 		public static float Min(float Left, float Right)
 		{
+			//var ILeft = MathFloat.ReinterpretFloatAsUInt(Left);
+			//var IRight = MathFloat.ReinterpretFloatAsUInt(Right);
 			return Math.Min(Left, Right);
 		}
 
