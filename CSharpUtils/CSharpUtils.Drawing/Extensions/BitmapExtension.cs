@@ -5,6 +5,30 @@ using System.Drawing.Imaging;
 using System.Linq;
 using CSharpUtils;
 
+/// <summary>
+/// 
+/// </summary>
+public class BitmapChannelTransfer
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	public Bitmap Bitmap;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public BitmapChannel From;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public BitmapChannel To;
+}
+
+/// <summary>
+/// 
+/// </summary>
 public static class BitmapExtension
 {
 	public static void SetPalette(this Bitmap Bitmap, IEnumerable<Color> Colors)
@@ -50,6 +74,14 @@ public static class BitmapExtension
 		var NewData = new byte[Rectangle.Width * Rectangle.Height * Channels.Length];
 		BitmapUtils.TransferChannelsDataLinear(Rectangle, Bitmap, NewData, BitmapUtils.Direction.FromBitmapToData, Channels);
 		return NewData;
+	}
+
+	public static void SetChannelsDataLinear(this Bitmap Bitmap, params BitmapChannelTransfer[] BitmapChannelTransfers)
+	{
+		foreach (var BitmapChannelTransfer in BitmapChannelTransfers)
+		{
+			Bitmap.SetChannelsDataLinear(BitmapChannelTransfer.Bitmap.GetChannelsDataLinear(BitmapChannelTransfer.From), BitmapChannelTransfer.To);
+		}
 	}
 
 	public static void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, params BitmapChannel[] Channels)
@@ -137,7 +169,7 @@ public static class BitmapExtension
 		return new Rectangle(0, 0, Bitmap.Width, Bitmap.Height);
 	}
 
-	public static Bitmap ConverToFormat(this Bitmap OldBitmap, PixelFormat NewPixelFormat)
+	public static Bitmap ConvertToFormat(this Bitmap OldBitmap, PixelFormat NewPixelFormat)
 	{
 		var NewBitmap = new Bitmap(OldBitmap.Width, OldBitmap.Height, NewPixelFormat);
 		Graphics.FromImage(NewBitmap).DrawImage(OldBitmap, Point.Empty);
