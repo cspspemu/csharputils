@@ -76,6 +76,11 @@ public static class BitmapExtension
 		return NewData;
 	}
 
+	public static Bitmap Duplicate(this Bitmap Bitmap)
+	{
+		return new Bitmap(Bitmap, Bitmap.Size);
+	}
+
 	public static void SetChannelsDataLinear(this Bitmap Bitmap, params BitmapChannelTransfer[] BitmapChannelTransfers)
 	{
 		foreach (var BitmapChannelTransfer in BitmapChannelTransfers)
