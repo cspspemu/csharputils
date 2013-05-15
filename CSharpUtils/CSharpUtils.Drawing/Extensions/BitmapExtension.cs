@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using CSharpUtils;
+using CSharpUtils.Drawing;
 
 /// <summary>
 /// 
@@ -155,6 +156,23 @@ public static class BitmapExtension
 				Delegate(Bitmap.GetPixel(x, y), x, y);
 			}
 		}
+	}
+
+	unsafe public static void Shader(this Bitmap Bitmap, Func<ARGB_Rev, int, int, ARGB_Rev> Delegate)
+	{
+		int Width = Bitmap.Width, Height = Bitmap.Height;
+		Bitmap.LockBitsUnlock(System.Drawing.Imaging.PixelFormat.Format32bppArgb, (BitmapData) =>
+		{
+			for (int y = 0; y < Height; y++)
+			{
+				var Ptr = (ARGB_Rev*)(((byte*)BitmapData.Scan0.ToPointer()) + BitmapData.Stride * y);
+				for (int x = 0; x < Width; x++)
+				{
+					*Ptr = Delegate(*Ptr, x, y);
+					Ptr++;
+				}
+			}
+		});
 	}
 
 	public static IEnumerable<Color> Colors(this Bitmap Bitmap)
