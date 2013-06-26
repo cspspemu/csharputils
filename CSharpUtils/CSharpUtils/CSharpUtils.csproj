@@ -11,7 +11,7 @@
     <RootNamespace>CSharpUtils</RootNamespace>
     <AssemblyName>CSharpUtils</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
   </PropertyGroup>
