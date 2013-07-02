@@ -13,6 +13,43 @@ namespace CSharpUtils
 			return Value;
 		}
 
+		public static float Lerp(float start, float end, float percent)
+		{
+			return (start + percent * (end - start));
+		}
+
+		public static float SmoothStep(float edge0, float edge1, float x) {
+			var t = Clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+			return t * t * (3.0f - 2.0f * t);
+		}
+
+		public static void NormalizeMax(ref float[] Items)
+		{
+			var Max = MathUtils.Max(Items);
+			for (int n = 0; n < Items.Length; n++) Items[n] /= Max;
+		}
+
+		public static void NormalizeMax(ref float a, ref float b)
+		{
+			var Div = Math.Max(a, b);
+			a /= Div;
+			b /= Div;
+		}
+
+		public static void NormalizeSum(ref float a, ref float b)
+		{
+			var Div = a + b;
+			a /= Div;
+			b /= Div;
+		}
+
+		public static float FastClamp(float Value, float Min, float Max)
+		{
+			if (Value < Min) return Min;
+			if (Value > Max) return Max;
+			return Value;
+		}
+
 		public static int FastClamp(int Value, int Min, int Max)
 		{
 			if (Value < Min) return Min;
@@ -146,6 +183,13 @@ namespace CSharpUtils
 			int NextPowerOfTwoValue = 1;
 			while (NextPowerOfTwoValue < BaseValue) NextPowerOfTwoValue <<= 1;
 			return NextPowerOfTwoValue;
+		}
+
+		public static float Max(params float[] Items)
+		{
+			var MaxValue = Items[0];
+			foreach (var Item in Items) if (MaxValue < Item) MaxValue = Item;
+			return MaxValue;
 		}
 
 		public static int Max(params int[] Items)

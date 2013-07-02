@@ -114,6 +114,19 @@ namespace CSharpUtils.Drawing
 		/// </summary>
 		public byte B, G, R, A;
 
+		public float Bf { get { return B / 255f; } }
+		public float Gf { get { return G / 255f; } }
+		public float Rf { get { return R / 255f; } }
+		public float Af { get { return A / 255f; } }
+
+		public ARGB_Rev(int A, int R, int G, int B)
+		{
+			this.A = (byte)MathUtils.FastClamp(A, 0, 255);
+			this.R = (byte)MathUtils.FastClamp(R, 0, 255);
+			this.G = (byte)MathUtils.FastClamp(G, 0, 255);
+			this.B = (byte)MathUtils.FastClamp(B, 0, 255);
+		}
+
 		public ARGB_Rev(byte A, byte R, byte G, byte B)
 		{
 			this.A = A;
@@ -122,6 +135,62 @@ namespace CSharpUtils.Drawing
 			this.B = B;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Color1"></param>
+		/// <param name="Color2"></param>
+		/// <param name="Offset"></param>
+		/// <returns></returns>
+		public static ARGB_Rev Interpolate(ARGB_Rev Color1, ARGB_Rev Color2, float Offset)
+		{
+			var Offset1A = MathUtils.FastClamp(Offset, 0, 1);
+			var Offset2A = 1 - Offset1A;
+
+			var Offset1C = Offset1A * (Color1.Af);
+			var Offset2C = Offset2A * (Color2.Af);
+
+			MathUtils.NormalizeSum(ref Offset1C, ref Offset2C);
+
+			return new ARGB_Rev(
+				(int)(Color1.A * Offset1A + Color2.A * Offset2A),
+				(int)(Color1.R * Offset1C + Color2.R * Offset2C),
+				(int)(Color1.G * Offset1C + Color2.G * Offset2C),
+				(int)(Color1.B * Offset1C + Color2.B * Offset2C)
+			);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Color1"></param>
+		/// <param name="Color2"></param>
+		/// <param name="Offset"></param>
+		/// <returns></returns>
+		public static ARGB_Rev Mix(ARGB_Rev Color1, ARGB_Rev Color2, float Offset = 0.5f)
+		{
+			var Offset1A = MathUtils.FastClamp(Offset, 0, 1);
+			var Offset2A = 1 - Offset1A;
+
+			var Offset1C = Offset1A * (Color1.Af);
+			var Offset2C = Offset2A * (Color2.Af);
+
+			MathUtils.NormalizeSum(ref Offset1C, ref Offset2C);
+
+			return new ARGB_Rev(
+				(int)(Color1.A + Color2.A),
+				(int)(Color1.R * Offset1C + Color2.R * Offset2C),
+				(int)(Color1.G * Offset1C + Color2.G * Offset2C),
+				(int)(Color1.B * Offset1C + Color2.B * Offset2C)
+			);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Color1"></param>
+		/// <param name="Color2"></param>
+		/// <returns></returns>
 		public static int DistanceRGB(ARGB_Rev Color1, ARGB_Rev Color2)
 		{
 			var R = Math.Abs(Color1.R - Color2.R);
