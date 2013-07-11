@@ -10,9 +10,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Size"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static uint CreateMask(int Size)
 		{
 			return (uint)((1 << Size) - 1);
@@ -26,9 +24,7 @@ namespace CSharpUtils
 	    /// <param name="Count"> </param>
 	    /// <param name="ValueToInsert"> </param>
 	    /// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static void Insert(ref uint Value, int Offset, int Count, uint ValueToInsert)
 		{
 			Value = Insert(Value, Offset, Count, ValueToInsert);
@@ -42,9 +38,7 @@ namespace CSharpUtils
 	    /// <param name="Count"> </param>
 	    /// <param name="ValueToInsert"> </param>
 	    /// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static uint Insert(uint InitialValue, int Offset, int Count, uint ValueToInsert)
 		{
 			uint Mask = CreateMask(Count);
@@ -60,9 +54,7 @@ namespace CSharpUtils
 	    /// <param name="Offset"> </param>
 	    /// <param name="Count"> </param>
 	    /// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static uint Extract(uint InitialValue, int Offset, int Count)
 		{
 			if (Count == 0) return 0;
@@ -77,9 +69,7 @@ namespace CSharpUtils
 	    /// <param name="Count"> </param>
 	    /// <param name="Scale"> </param>
 	    /// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static uint ExtractScaled(uint InitialValue, int Offset, int Count, int Scale)
 		{
 			if (Count == 0) return 0;
@@ -92,9 +82,7 @@ namespace CSharpUtils
 	    /// <param name="InitialValue"> </param>
 	    /// <param name="Offset"> </param>
 	    /// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static bool ExtractBool(uint InitialValue, int Offset)
 		{
 			return Extract(InitialValue, Offset, 1) != 0;
@@ -107,9 +95,7 @@ namespace CSharpUtils
 	    /// <param name="Offset"> </param>
 	    /// <param name="Count"> </param>
 	    /// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static int ExtractSigned(uint InitialValue, int Offset, int Count)
 		{
 			var Mask = CreateMask(Count);
@@ -130,9 +116,7 @@ namespace CSharpUtils
 	    /// <param name="Count"> </param>
 	    /// <param name="Scale"> </param>
 	    /// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float ExtractUnsignedScaled(uint Value, int Offset, int Count, float Scale = 1.0f)
 		{
 			return ((float)Extract(Value, Offset, Count) / (float)CreateMask(Count)) * Scale;

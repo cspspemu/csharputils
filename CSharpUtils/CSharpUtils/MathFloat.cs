@@ -10,9 +10,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Abs(float Value)
 		{
 			return (Value > 0) ? Value : -Value;
@@ -23,9 +21,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static int Cast(float Value)
 		{
 			return (int)Value;
@@ -36,9 +32,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static int Floor(float Value)
 		{
 			return (int)Math.Floor((double)Value);
@@ -49,9 +43,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static int Ceil(float Value)
 		{
 			return (int)Math.Ceiling((double)Value);
@@ -62,9 +54,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static int Round(float Value)
 		{
 			return (int)Math.Round((double)Value);
@@ -77,9 +67,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Rint(float Value)
 		{
 			return MathFloat.Round(Value);
@@ -90,9 +78,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static uint ReinterpretFloatAsUInt(float Value)
 		{
 			//Console.WriteLine("ReinterpretFloatAsUInt:{0}", Value);
@@ -109,9 +95,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float ReinterpretUIntAsFloat(uint Value)
 		{
 			//Console.WriteLine("ReinterpretUIntAsFloat:{0}", Value);
@@ -128,9 +112,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static int ReinterpretFloatAsInt(float Value)
 		{
 			//Console.WriteLine("ReinterpretFloatAsUInt:{0}", Value);
@@ -147,9 +129,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float ReinterpretIntAsFloat(int Value)
 		{
 			//Console.WriteLine("ReinterpretUIntAsFloat:{0}", Value);
@@ -166,9 +146,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Angle"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Cos(float Angle)
 		{
 			return (float)Math.Cos(Angle);
@@ -179,9 +157,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Angle"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Sin(float Angle)
 		{
 			return (float)Math.Sin(Angle);
@@ -192,9 +168,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="AngleV1"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float CosV1(float AngleV1)
 		{
 			return Cos((float)(AngleV1 * Math.PI * 0.5f));
@@ -205,9 +179,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="AngleV1"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float SinV1(float AngleV1)
 		{
 			return Sin((float)(AngleV1 * Math.PI * 0.5f));
@@ -220,9 +192,7 @@ namespace CSharpUtils
 		/// <param name="Min"></param>
 		/// <param name="Max"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Clamp(float Value, float Min, float Max)
 		{
 			if (Value < Min) Value = Min;
@@ -237,9 +207,7 @@ namespace CSharpUtils
 		/// <param name="Min"></param>
 		/// <param name="Max"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static int ClampInt(int Value, int Min, int Max)
 		{
 			if (Value < Min) Value = Min;
@@ -252,9 +220,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Sqrt(float Value)
 		{
 			return (float)Math.Sqrt((double)Value);
@@ -266,9 +232,7 @@ namespace CSharpUtils
 		/// <param name="Value"></param>
 		/// <param name="Count"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Scalb(float Value, int Count)
 		{
 			return (float)(Value * Math.Pow(2.0f, Count));
@@ -279,9 +243,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Sign(float Value)
 		{
 			if (Value == 0) return 0f;
@@ -300,9 +262,7 @@ namespace CSharpUtils
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Min(float Left, float Right)
 		{
 			//var ILeft = MathFloat.ReinterpretFloatAsUInt(Left);
@@ -316,9 +276,7 @@ namespace CSharpUtils
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Max(float Left, float Right)
 		{
 			return Math.Max(Left, Right);
@@ -329,9 +287,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static bool IsNan(float Value)
 		{
 			return float.IsNaN(Value);
@@ -342,9 +298,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static bool IsInfinity(float Value)
 		{
 			return float.IsInfinity(Value);
@@ -355,9 +309,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float RSqrt(float Value)
 		{
 			return 1.0f / Sqrt(Value);
@@ -368,9 +320,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Asin(float Value)
 		{
 			return (float)Math.Asin((double)Value);
@@ -381,9 +331,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float AsinV1(float Value)
 		{
 			return Asin(Value) / (float)(Math.PI * 0.5f);
@@ -394,9 +342,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Vsat0(float Value)
 		{
 			return MathFloat.Clamp(Value, 0.0f, 1.0f);
@@ -407,9 +353,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Vsat1(float Value)
 		{
 			return MathFloat.Clamp(Value, -1.0f, 1.0f);
@@ -420,9 +364,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Log2(float Value)
 		{
 			return (float)(Math.Log(Value) / Math.Log(2.0f));
@@ -433,9 +375,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-#if NET_45
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
 		public static float Exp2(float Value)
 		{
 			return (float)Math.Pow(2.0, Value);
