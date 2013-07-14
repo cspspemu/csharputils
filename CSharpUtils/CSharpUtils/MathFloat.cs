@@ -13,7 +13,7 @@ namespace CSharpUtils
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Abs(float Value)
 		{
-			return (Value > 0) ? Value : -Value;
+			return (Value >= 0) ? Value : -Value;
 		}
 
 		/// <summary>
@@ -24,6 +24,8 @@ namespace CSharpUtils
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Cast(float Value)
 		{
+			if (float.IsNegativeInfinity(Value)) return int.MinValue;
+			if (float.IsInfinity(Value) || float.IsNaN(Value)) return int.MaxValue;
 			return (int)Value;
 		}
 
@@ -35,6 +37,8 @@ namespace CSharpUtils
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Floor(float Value)
 		{
+			if (float.IsNegativeInfinity(Value)) return int.MinValue;
+			if (float.IsInfinity(Value) || float.IsNaN(Value)) return int.MaxValue;
 			return (int)Math.Floor((double)Value);
 		}
 
@@ -46,6 +50,8 @@ namespace CSharpUtils
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Ceil(float Value)
 		{
+			if (float.IsNegativeInfinity(Value)) return int.MinValue;
+			if (float.IsInfinity(Value) || float.IsNaN(Value)) return int.MaxValue;
 			return (int)Math.Ceiling((double)Value);
 		}
 
@@ -57,6 +63,8 @@ namespace CSharpUtils
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Round(float Value)
 		{
+			if (float.IsNegativeInfinity(Value)) return int.MinValue;
+			if (float.IsInfinity(Value) || float.IsNaN(Value)) return int.MaxValue;
 			return (int)Math.Round((double)Value);
 		}
 
@@ -70,6 +78,8 @@ namespace CSharpUtils
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Rint(float Value)
 		{
+			if (float.IsNegativeInfinity(Value)) return int.MinValue;
+			if (float.IsInfinity(Value) || float.IsNaN(Value)) return int.MaxValue;
 			return MathFloat.Round(Value);
 		}
 
@@ -379,6 +389,49 @@ namespace CSharpUtils
 		public static float Exp2(float Value)
 		{
 			return (float)Math.Pow(2.0, Value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float NRcp(float Value)
+		{
+			return -(1.0f / Value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float NSinV1(float Value)
+		{
+			return -(float)Math.Sin(0.5 * Math.PI * Value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float RExp2(float Value)
+		{
+			return (float)(1.0 / Math.Pow(2.0, Value));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		public static bool IsNanInfinity(float Value)
+		{
+			return float.IsNaN(Math.Abs(Value)) || float.IsInfinity(Value);
 		}
 	}
 }
