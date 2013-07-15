@@ -685,9 +685,9 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Structs"></param>
 	/// <returns></returns>
-	public static Stream WriteStructVector<T>(this Stream Stream, T[] Structs) where T : struct
+	public static Stream WriteStructVector<T>(this Stream Stream, T[] Structs, int Count = -1) where T : struct
 	{
-		Stream.WriteBytes(StructUtils.StructArrayToBytes(Structs));
+		Stream.WriteBytes(StructUtils.StructArrayToBytes(Structs, Count));
 		return Stream;
 	}
 

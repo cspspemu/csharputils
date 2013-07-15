@@ -117,15 +117,16 @@ namespace CSharpUtils
 		/// <typeparam name="T"></typeparam>
 		/// <param name="DataArray"></param>
 		/// <returns></returns>
-		public unsafe static byte[] StructArrayToBytes<T>(T[] DataArray) where T : struct
+		public unsafe static byte[] StructArrayToBytes<T>(T[] DataArray, int Count = -1) where T : struct
 		{
+			if (Count == -1) Count = DataArray.Length;
 			int ElementSize = Marshal.SizeOf(DataArray[0]);
-			byte[] RawData = new byte[ElementSize * DataArray.Length];
+			byte[] RawData = new byte[ElementSize * Count];
 
 #if true
 			fixed (byte* RawDataPointer = RawData)
 			{
-				for (int n = 0; n < DataArray.Length; n++)
+				for (int n = 0; n < Count; n++)
 				{
 					Marshal.StructureToPtr(DataArray[n], new IntPtr(RawDataPointer + ElementSize * n), false);
 				}
@@ -134,7 +135,7 @@ namespace CSharpUtils
 			GCHandle handle = GCHandle.Alloc(RawData, GCHandleType.Pinned);
 			try
 			{
-				for (int n = 0; n < DataArray.Length; n++)
+				for (int n = 0; n < Count; n++)
 				{
 					IntPtr RawDataPointer = handle.AddrOfPinnedObject() + ElementSize * n;
 					Marshal.StructureToPtr(DataArray[n], RawDataPointer, false);
