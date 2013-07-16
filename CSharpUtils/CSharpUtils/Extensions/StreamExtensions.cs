@@ -209,7 +209,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="ToRead"></param>
 	/// <returns></returns>
-	static public Stream ReadStream(this Stream Stream, long ToRead = -1)
+	static public SliceStream ReadStream(this Stream Stream, long ToRead = -1)
 	{
 		if (ToRead == -1) ToRead = Stream.Available();
 		var ReadedStream = SliceStream.CreateWithLength(Stream, Stream.Position, ToRead);

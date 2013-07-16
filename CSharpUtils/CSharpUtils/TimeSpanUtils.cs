@@ -14,7 +14,7 @@ namespace CSharpUtils
 		/// 
 		/// </summary>
 		/// <param name="Action"></param>
-		public static void InfiniteLoopDetector(Action Action)
+		public static void InfiniteLoopDetector(string Description, Action Action)
 		{
 			using (var Timer = new Timer(4.0 * 1000))
 			{
@@ -23,7 +23,7 @@ namespace CSharpUtils
 				{
 					if (!Cancel)
 					{
-						Console.WriteLine("InfiniteLoop Detected! : {0}", e.SignalTime);
+						Console.WriteLine("InfiniteLoop Detected! : {0} : {1}", Description, e.SignalTime);
 					}
 				};
 				Timer.AutoReset = false;

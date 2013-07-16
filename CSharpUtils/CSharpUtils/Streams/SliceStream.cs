@@ -31,6 +31,18 @@ namespace CSharpUtils.Streams
 		/// </summary>
 		protected long ThisLength;
 
+		//public long SliceBoundLow { get { return ThisStart; } }
+		//public long SliceLength { get { return ThisLength; } }
+		//public long SliceBoundHigh { get { return ThisStart + ThisLength; } }
+
+		public long SliceLength
+		{
+			get
+			{
+				return ThisLength;
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
