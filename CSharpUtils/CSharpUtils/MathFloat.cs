@@ -3,7 +3,10 @@ using System.Runtime.CompilerServices;
 
 namespace CSharpUtils
 {
-	public unsafe class MathFloat
+	/// <summary>
+	/// 
+	/// </summary>
+	public unsafe sealed class MathFloat
 	{
 		/// <summary>
 		/// 
@@ -13,6 +16,7 @@ namespace CSharpUtils
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Abs(float Value)
 		{
+			if (Value == -0f) return 0f;
 			return (Value >= 0) ? Value : -Value;
 		}
 
@@ -205,6 +209,7 @@ namespace CSharpUtils
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Clamp(float Value, float Min, float Max)
 		{
+			if (Min == 0 && Value == -0) return 0;
 			if (Value < Min) Value = Min;
 			else if (Value > Max) Value = Max;
 			return Value;
