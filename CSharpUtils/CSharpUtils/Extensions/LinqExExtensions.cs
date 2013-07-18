@@ -26,6 +26,29 @@ public static class LinqExExtensions
 		return Dictionary;
 	}
 
+	public static Dictionary<TDictionaryKey, TDictionaryValue> CreateDictionary<TValue, TDictionaryKey, TDictionaryValue>(this IEnumerable<TValue> ListItems, Func<TValue, TDictionaryKey> KeySelector, Func<TValue, TDictionaryValue> ValueSelector)
+	{
+		var Dictionary = new Dictionary<TDictionaryKey, TDictionaryValue>();
+		foreach (var Item in ListItems) Dictionary.Add(KeySelector(Item), ValueSelector(Item));
+		return Dictionary;
+	}
+
+	public static T[] Compact<T>(this T[,] In)
+	{
+		int Length0 = In.GetLength(0);
+		int Length1 = In.GetLength(1);
+		T[] Out = new T[Length0 * Length1];
+		int OutOffset = 0;
+		for (int InOffset0 = 0; InOffset0 < Length0; InOffset0++)
+		{
+			for (int InOffset1 = 0; InOffset1 < Length1; InOffset1++)
+			{
+				Out[OutOffset++] = In[InOffset0, InOffset1];
+			}
+		}
+		return Out;
+	}
+
 	public static IEnumerable<TSource> OrderByNatural<TSource, TString>(this IEnumerable<TSource> Items, Func<TSource, TString> selector)
 	{
 		Func<string, object> convert = str =>
