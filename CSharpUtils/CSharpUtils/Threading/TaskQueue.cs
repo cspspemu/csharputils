@@ -61,24 +61,24 @@ namespace CSharpUtils.Threading
 			Event.WaitOne();
 		}
 
-		//public void EnqueueAndWaitStarted(Action Action, TimeSpan Timeout, Action ActionTimeout = null)
-		//{
-		//	var Event = new AutoResetEvent(false);
-		//
-		//	Enqueue(() =>
-		//	{
-		//		Event.Set();
-		//		Action();
-		//	});
-		//
-		//	EnqueuedEvent.Set();
-		//
-		//	if (!Event.WaitOne(Timeout))
-		//	{
-		//		Console.WriteLine("Timeout!");
-		//		if (ActionTimeout != null) ActionTimeout();
-		//	}
-		//}
+		public void EnqueueAndWaitStarted(Action Action, TimeSpan Timeout, Action ActionTimeout = null)
+		{
+			var Event = new AutoResetEvent(false);
+		
+			Enqueue(() =>
+			{
+				Event.Set();
+				Action();
+			});
+		
+			EnqueuedEvent.Set();
+		
+			if (!Event.WaitOne(Timeout))
+			{
+				Console.WriteLine("Timeout!");
+				if (ActionTimeout != null) ActionTimeout();
+			}
+		}
 
 		public void EnqueueAndWaitCompleted(Action Action)
 		{
