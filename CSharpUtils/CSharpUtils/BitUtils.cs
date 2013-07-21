@@ -57,7 +57,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="InitialValue"></param>
 		/// <param name="Offset"></param>
-		/// <param name="Masks"></param>
+		/// <param name="Mask"></param>
 		/// <param name="ValueToInsert"></param>
 		/// <returns></returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
