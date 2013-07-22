@@ -155,6 +155,7 @@
     <Compile Include="Threading\GreenThread.cs" />
     <Compile Include="Threading\GreenThreadException.cs" />
     <Compile Include="Threading\TaskQueue.cs" />
+    <Compile Include="ThreadUtils.cs" />
     <Compile Include="TimeSampler.cs" />
     <Compile Include="TimeSpanUtils.cs" />
     <Compile Include="TypeUtils.cs" />
