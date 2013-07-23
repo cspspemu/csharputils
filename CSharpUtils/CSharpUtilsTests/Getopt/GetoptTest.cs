@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using CSharpUtils.Getopt;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class GetoptTest
 	{
-		[Test]
+		[TestMethod]
 		public void AddRuleTest()
 		{
 			bool BooleanValue = false;
@@ -21,7 +21,7 @@ namespace CSharpUtilsTests
 			Assert.AreEqual(50, IntegerValue);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AddRule2Test()
 		{
 			bool BooleanValue = false;
@@ -47,7 +47,7 @@ namespace CSharpUtilsTests
 			Assert.AreEqual("hello_world", StringValue);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AddRule3Test()
 		{
 			var Values = new List<int>();
@@ -60,7 +60,7 @@ namespace CSharpUtilsTests
 			Assert.AreEqual("50,25", Values.ToStringArray());
 		}
 
-		[Test]
+		[TestMethod]
 		public void AddRule4Test()
 		{
 			int ExecutedCount = 0;

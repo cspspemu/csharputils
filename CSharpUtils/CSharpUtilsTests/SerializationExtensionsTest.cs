@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class SerializationExtensionsTest
 	{
-		[Test]
+		[TestMethod]
 		public void ToJsonTest()
 		{
 			Assert.AreEqual(
@@ -25,7 +25,7 @@ namespace CSharpUtilsTests
 			public int[] Values;
 		}
 
-		[Test]
+		[TestMethod]
 		public void ToXmlStringTest()
 		{
 			Assert.AreEqual(
@@ -47,7 +47,7 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[Test]
+		[TestMethod]
 		public void FromXmlStringTest()
 		{
 			var SampleStruct = new SampleStruct()

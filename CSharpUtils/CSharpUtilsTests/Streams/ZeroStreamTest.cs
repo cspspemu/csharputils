@@ -1,18 +1,18 @@
 ﻿using CSharpUtils.Streams;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests.Streams
 {
     /// <summary>
     /// 
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class ZeroStreamTest
     {
         /// <summary>
         /// 
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestRead()
         {
             var Stream = new ZeroStream(7, 0x11);

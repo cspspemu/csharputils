@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.IO;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests.Extensions
 {
-	[TestFixture]
+	[TestClass]
 	public class StreamExtensionsTest
 	{
 		struct Test
@@ -14,7 +14,7 @@ namespace CSharpUtilsTests.Extensions
 			public string String;
 		}
 
-		[Test]
+		[TestMethod]
 		public void TestReadManagedStruct()
 		{
 			var MemoryStream = new MemoryStream();
@@ -42,7 +42,7 @@ namespace CSharpUtilsTests.Extensions
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void ReadStructVectorTest()
 		{
 			var Data = new byte[] {
@@ -56,7 +56,7 @@ namespace CSharpUtilsTests.Extensions
 			Assert.AreEqual("TestShorts(0x0201, 0x0202, 0x0203)", TestShorts[2].ToString());
 		}
 
-		[Test]
+		[TestMethod]
 		public void ReadStructVectorEmptyTest()
 		{
 			var Data = new byte[] {
@@ -69,7 +69,7 @@ namespace CSharpUtilsTests.Extensions
 		}
 
 
-		[Test]
+		[TestMethod]
 		public void WriteStructVectorTest()
 		{
 			var Data = new byte[] {
@@ -90,7 +90,7 @@ namespace CSharpUtilsTests.Extensions
 			);
 		}
 
-		[Test]
+		[TestMethod]
 		public void CountStringzBytesTest()
 		{
 			var Stream1 = new MemoryStream(new [] { 'H', 'e', 'l', 'l', 'o', (char)0, 'W', 'o', 'r', 'l', 'd' }.Select(Item => (byte)Item).ToArray());

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class LinqExExtensionsTest
 	{
 		public struct TestStruct
@@ -24,7 +24,7 @@ namespace CSharpUtilsTests
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void OrderByNaturalTest()
 		{
 			var Items = new TestStruct[] {

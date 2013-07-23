@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class StreamExtensionsTest
 	{
-		[Test]
+		[TestMethod]
 		public void CopyToFastTest()
 		{
 			var Input = new MemoryStream();
@@ -27,7 +27,7 @@ namespace CSharpUtilsTests
 			CollectionAssert.AreEqual(Input.ToArray(), Output2.ToArray());
 		}
 
-		[Test]
+		[TestMethod]
 		public void SliceStreamTest()
 		{
 			MemoryStream MemoryStream = new MemoryStream(Encoding.ASCII.GetBytes("Hello World"));
@@ -40,7 +40,7 @@ namespace CSharpUtilsTests
 			Assert.AreEqual(0, SliceStream2.Available());
 		}
 
-		[Test]
+		[TestMethod]
 		public void PreservePositionAndLockWithNewMemoryStreamTest()
 		{
 			Assert.AreEqual(

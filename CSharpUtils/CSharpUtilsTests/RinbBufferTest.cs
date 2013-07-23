@@ -1,25 +1,26 @@
 ﻿using System.IO;
 using System.Linq;
 using CSharpUtils.Streams;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpUtils;
 using System;
 using System.Collections;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-    [TestFixture]
+    [TestClass]
     public class RingBufferTest
     {
 		RingBuffer<byte> RingBuffer;
 
-        [SetUp]
+       [TestInitialize]
         public void InitializeTest()
         {
 			RingBuffer = new RingBuffer<byte>(32);
         }
 
-        [Test]
+        [TestMethod]
         public void TestInitialState()
         {
 			Assert.AreEqual(32, RingBuffer.Capacity);
@@ -27,14 +28,14 @@ namespace CSharpUtilsTests
 			Assert.AreEqual(0, RingBuffer.ReadAvailable);
         }
 	
-		[Test]
+		[TestMethod]
 		[ExpectedException(typeof(OverflowException))]
 		public void ReadEmpty()
 		{
 			RingBuffer.Read();
 		}
 
-		[Test]
+		[TestMethod]
 		public void WriteReadSingle()
 		{
 			Assert.AreEqual(32, RingBuffer.Capacity);
@@ -50,13 +51,13 @@ namespace CSharpUtilsTests
 			Assert.AreEqual(1, RingBuffer.Read());
 		}
 
-		[Test]
+		[TestMethod]
 		public void WriteFull()
 		{
 			foreach (var n in Enumerable.Range(0, RingBuffer.Capacity)) RingBuffer.Write(0);
 		}
 
-		[Test]
+		[TestMethod]
 		[ExpectedException(typeof(OverflowException))]
 		public void WriteFullPlus1()
 		{

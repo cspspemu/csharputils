@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Diagnostics;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class ReaderWriterLockExtensionsTest
 	{
-		[Test]
+		[TestMethod]
 		public void ReaderLockTest()
 		{
 			var ReaderWriterLock  = new ReaderWriterLock();
@@ -46,7 +46,7 @@ namespace CSharpUtilsTests
 			Assert.IsTrue(TestStopwatch.ElapsedMilliseconds < 110);
 		}
 
-		[Test]
+		[TestMethod]
 		public void WriterLockTest()
 		{
 			var ReaderWriterLock = new ReaderWriterLock();

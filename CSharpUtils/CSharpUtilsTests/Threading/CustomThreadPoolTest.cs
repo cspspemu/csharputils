@@ -1,21 +1,21 @@
 ﻿using CSharpUtils.Threading;
-using NUnit.Framework;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class CustomThreadPoolTest
 	{
-		[Test]
+		[TestMethod]
 		public void TestStop()
 		{
 			var CustomThreadPool = new CustomThreadPool(2);
 			CustomThreadPool.Stop();
 		}
 
-		[Test]
+		[TestMethod]
 		public void Test()
 		{
 			var CustomThreadPool = new CustomThreadPool(2);
