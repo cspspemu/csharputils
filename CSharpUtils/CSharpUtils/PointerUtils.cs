@@ -42,10 +42,15 @@ namespace CSharpUtils
 
 		static public void StoreStringOnPtr(string String, Encoding Encoding, byte* Pointer, int PointerMaxLength = 0x10000)
 		{
-			var Bytes = Encoding.GetBytes(String);
-			foreach (var Byte in Bytes)
+			if (Pointer == null) return;
+			//if (String == null) return;
+			if (String != null)
 			{
-				*Pointer++ = Byte;
+				var Bytes = Encoding.GetBytes(String);
+				foreach (var Byte in Bytes)
+				{
+					*Pointer++ = Byte;
+				}
 			}
 			*Pointer++ = 0;
 		}
@@ -408,5 +413,29 @@ namespace CSharpUtils
 					return Hash;
 			}
 		}
+
+		public static unsafe void SafeFixed<TType>(TType Object, Action<IntPtr> Callback)
+		{
+			var Handle = GCHandle.Alloc(Object, GCHandleType.Pinned);
+			try
+			{
+				Callback(Handle.AddrOfPinnedObject());
+			}
+			finally
+			{
+				Handle.Free();
+			}
+		}
+
+		//public static unsafe void CopyStructWithSize<TType>(ref TType Destination, ref TType Source, int Size)
+		//{
+		//	SafeFixed(ref Destination, (DestinationPtr) =>
+		//	{
+		//		SafeFixed(ref Source, (SourcePtr) =>
+		//		{
+		//		});
+		//	});
+		//	//Destination = Source;
+		//}
 	}
 }
