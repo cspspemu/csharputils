@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpUtils.Compression;
 
 namespace CSharpUtilsTest
 {
-	[TestFixture]
+	[TestClass]
 	public class HuffmanTest
 	{
-		[Test]
+		[TestMethod]
 		public void HuffmanCompressUncompressTest()
 		{
 			var ThisEncoding = Encoding.UTF8;

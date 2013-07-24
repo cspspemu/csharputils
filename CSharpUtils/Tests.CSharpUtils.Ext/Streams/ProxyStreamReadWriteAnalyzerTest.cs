@@ -1,12 +1,12 @@
 ﻿using CSharpUtils.Streams;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests.Streams
 {
-    [TestFixture]
+    [TestClass]
     public class ProxyStreamReadWriteAnalyzerTest
     {
-        [Test]
+        [TestMethod]
         public void TestReadAnalyzing()
         {
             var ZeroStream = new ZeroStream(0x1000000);

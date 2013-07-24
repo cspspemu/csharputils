@@ -1,22 +1,22 @@
 ﻿using System;
-using NUnit.Framework;
 using CSharpUtils;
 using System.IO;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-    [TestFixture]
+    [TestClass]
     public class HashingTest
     {
-        [Test]
+        [TestMethod]
         public void TestSmallMd5()
         {
             var Stream = new MemoryStream(new[] { 'H', 'e', 'l', 'l', 'o' }.Select(Item => (byte)Item).ToArray());
             Assert.AreEqual("8b1a9953c4611296a827abf8c47804d7", Hashing.GetMd5Hash(Stream));
         }
 
-        [Test]
+        [TestMethod]
         public void TestBigMd5()
         {
             var Stream = new MemoryStream();

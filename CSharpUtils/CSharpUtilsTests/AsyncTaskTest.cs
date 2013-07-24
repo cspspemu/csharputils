@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using CSharpUtils;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class AsyncTaskTest
 	{
-		[Test]
+		[TestMethod]
 		public void SimpleTest()
 		{
 			var Result = new AsyncTask<String>(delegate()
@@ -18,7 +18,7 @@ namespace CSharpUtilsTests
 			Assert.AreEqual("Hello", Result.Result);
 		}
 
-		[Test]
+		[TestMethod]
 		public void Complex1Test()
 		{
 			var Result = new AsyncTask<String>(delegate()
@@ -31,7 +31,7 @@ namespace CSharpUtilsTests
 			Assert.IsTrue(Result.Ready);
 		}
 
-		[Test]
+		[TestMethod]
 		public void Complex2Test()
 		{
 			var Result = new AsyncTask<String>(delegate()

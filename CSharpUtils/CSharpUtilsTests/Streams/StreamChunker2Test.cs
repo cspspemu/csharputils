@@ -2,12 +2,12 @@
 using System.IO;
 using System.Text;
 using System.Linq;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpUtils.Streams;
 
 namespace CSharpUtilsTests.Streams
 {
-	[TestFixture]
+	[TestClass]
 	public class StreamChunker2Test
 	{
 		protected string BList(params string[] strings)
@@ -23,7 +23,7 @@ namespace CSharpUtilsTests.Streams
 			).Select((Item) => Encoding.ASCII.GetString(Item)).ToArray());
 		}
 
-		[Test]
+		[TestMethod]
 		public void TestMethod1()
 		{
 			Assert.AreEqual(BList("A", "A"), ChunkStr("A*******A", "*******"));

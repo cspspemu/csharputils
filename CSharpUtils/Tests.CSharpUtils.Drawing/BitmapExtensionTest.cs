@@ -1,14 +1,14 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using CSharpUtils;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class BitmapExtensionTest
 	{
-		[Test]
+		[TestMethod]
 		public void GetChannelsDataLinearTest()
 		{
 			Bitmap Bitmap = new Bitmap(2, 2);
@@ -22,7 +22,7 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SetPaletteTest()
 		{
 			Bitmap Bitmap = new Bitmap(2, 2, PixelFormat.Format8bppIndexed);
@@ -38,7 +38,7 @@ namespace CSharpUtilsTests
 		}
 
 
-		[Test]
+		[TestMethod]
 		public unsafe void GetIndexedDataLinearTest()
 		{
 			Bitmap Bitmap = new Bitmap(3, 3, PixelFormat.Format8bppIndexed);
@@ -55,7 +55,7 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetIndexedDataLinearRectangleTest()
 		{
 			Bitmap Bitmap = new Bitmap(3, 3, PixelFormat.Format8bppIndexed);
@@ -68,7 +68,7 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SetIndexedDataLinearTest()
 		{
 			Bitmap Bitmap = new Bitmap(3, 3, PixelFormat.Format8bppIndexed);
@@ -81,7 +81,7 @@ namespace CSharpUtilsTests
 			);
 		}
 
-		[Test]
+		[TestMethod]
 		public void SetChannelsDataLinearTest()
 		{
 			Bitmap Bitmap = new Bitmap(2, 2);

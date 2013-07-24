@@ -1,14 +1,14 @@
 ﻿using System;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpUtils.Ext.Compression.Lz;
 using System.Text;
 
 namespace Tests.CSharpUtils.Ext.Compression
 {
-	[TestFixture]
+	[TestClass]
 	public class MatcherTest
 	{
-		[Test]
+		[TestMethod]
 		public void TestMethod1()
 		{
 			var Bytes = "aaaaaaaaaaaabcdefffffabc".GetBytes();

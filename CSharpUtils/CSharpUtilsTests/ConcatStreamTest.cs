@@ -1,17 +1,17 @@
 ﻿using System.IO;
 using CSharpUtils.Streams;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestFixture]
+	[TestClass]
 	public class ConcatStreamTest
 	{
 		Stream Stream1;
 		Stream Stream2;
 		Stream Stream;
 
-		[SetUp]
+		[TestInitialize]
 		public void MyTestInitialize()
 		{
 			this.Stream1 = new MemoryStream(new byte[] { 1, 2, 3 });
@@ -19,19 +19,19 @@ namespace CSharpUtilsTests
 			this.Stream = new ConcatStream(Stream1, Stream2);
 		}
 
-		[Test]
+		[TestMethod]
 		public void LengthTest()
 		{
 			Assert.AreEqual(8, this.Stream.Length);
 		}
 
-		[Test]
+		[TestMethod]
 		public void ReadAllTest()
 		{
 			Assert.AreEqual("0102030405060708", this.Stream.ReadAll().ToHexString());
 		}
 
-		[Test]
+		[TestMethod]
 		public void ReadExactChunksTest()
 		{
 			Assert.AreEqual("010203", this.Stream.ReadBytes(3).ToHexString());
@@ -40,7 +40,7 @@ namespace CSharpUtilsTests
 			Assert.AreEqual(true, this.Stream.Eof());
 		}
 
-		[Test]
+		[TestMethod]
 		public void SeekTest()
 		{
 			Assert.AreEqual(6, this.Stream.Seek(-2, SeekOrigin.End));
