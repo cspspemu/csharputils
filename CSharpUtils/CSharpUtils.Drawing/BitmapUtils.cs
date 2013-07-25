@@ -111,8 +111,8 @@ namespace CSharpUtils
 		{
 			int WidthHeight = Bitmap.Width * Bitmap.Height;
 			var FullRectangle = Bitmap.GetFullRectangle();
-			if (!FullRectangle.Contains(Rectangle.Location)) throw(new InvalidProgramException());
-			if (!FullRectangle.Contains(Rectangle.Location + Rectangle.Size - new Size(1, 1))) throw (new InvalidProgramException());
+			if (!FullRectangle.Contains(Rectangle.Location)) throw (new InvalidOperationException("TransferChannelsDataLinear"));
+			if (!FullRectangle.Contains(Rectangle.Location + Rectangle.Size - new Size(1, 1))) throw (new InvalidOperationException("TransferChannelsDataLinear"));
 
 			int NumberOfChannels = 1;
 			foreach (var Channel in Channels)
