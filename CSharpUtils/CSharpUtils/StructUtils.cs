@@ -151,5 +151,16 @@ namespace CSharpUtils
 
 			return RawData;
 		}
+
+		public static ulong GetULongFrom2UInt(ref uint Low, ref uint High)
+		{
+			return ((ulong)Low) | (((ulong)High) << 32);
+		}
+
+		public static void ConvertULongTo2UInt(ulong Value, ref uint Low, ref uint High)
+		{
+			Low = ((uint)(Value >> 0) & uint.MaxValue);
+			High = ((uint)(Value >> 32) & uint.MaxValue);
+		}
 	}
 }

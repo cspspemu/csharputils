@@ -8,7 +8,7 @@ namespace CSharpUtils.Streams
 {
 	public class RingBufferStream : Stream
 	{
-		public RingBuffer<byte> RingBuffer;
+		public readonly RingBuffer<byte> RingBuffer;
 
 		public RingBufferStream(RingBuffer<byte> RingBuffer)
 		{

@@ -217,6 +217,12 @@ static public class StreamExtensions
 		return ReadedStream;
 	}
 
+	static public MemoryStream ReadStreamCopy(this Stream Stream, long ToRead = -1)
+	{
+		if (ToRead == -1) ToRead = Stream.Available();
+		return new MemoryStream(Stream.ReadBytes((int)ToRead));
+	}
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -266,7 +272,7 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Bytes"></param>
 	/// <returns></returns>
-	static public Stream WriteBytes(this Stream Stream, byte[] Bytes)
+	static public TStream WriteBytes<TStream>(this TStream Stream, byte[] Bytes) where TStream : Stream
 	{
 		Stream.Write(Bytes, 0, Bytes.Length);
 		return Stream;
@@ -685,7 +691,9 @@ static public class StreamExtensions
 	/// <param name="Stream"></param>
 	/// <param name="Structs"></param>
 	/// <returns></returns>
-	public static Stream WriteStructVector<T>(this Stream Stream, T[] Structs, int Count = -1) where T : struct
+	public static TStream WriteStructVector<T, TStream>(this TStream Stream, T[] Structs, int Count = -1)
+		where T : struct
+		where TStream : Stream
 	{
 		Stream.WriteBytes(StructUtils.StructArrayToBytes(Structs, Count));
 		return Stream;
@@ -711,7 +719,18 @@ static public class StreamExtensions
 	/// <returns></returns>
 	public static Stream Skip(this Stream Stream, long Count)
 	{
-		Stream.Seek(Count, SeekOrigin.Current);
+		if (Count != 0)
+		{
+			if (!Stream.CanSeek)
+			{
+				if (Count < 0) throw(new NotImplementedException("Can't go back"));
+				Stream.ReadBytes((int)Count);
+			}
+			else
+			{
+				Stream.Seek(Count, SeekOrigin.Current);
+			}
+		}
 		return Stream;
 	}
 
@@ -757,7 +776,7 @@ static public class StreamExtensions
 	{
 		/// ::TODO: Create a buffer and reuse it once for each thread.
 		if (ActionReport == null) ActionReport = (Current, Max) => { };
-		long TotalBytes = FromStream.Length - FromStream.Position;
+		long TotalBytes = FromStream.Available();
 		long CurrentBytes = 0;
 		ActionReport(CurrentBytes, TotalBytes);
 		while (true)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace CSharpUtils
@@ -35,5 +36,23 @@ namespace CSharpUtils
         {
             return System.IO.Path.GetDirectoryName(GetExecutableFilePath());
         }
+
+		static private readonly HashSet<string> _AppendStreams = new HashSet<string>();
+
+		public static void CreateAndAppendStream(string Path, Stream InputStream)
+		{
+			if (!_AppendStreams.Contains(Path))
+			{
+				try { File.Delete(Path); } catch { }
+				_AppendStreams.Add(Path);
+			}
+
+			using (var OutputStream = File.OpenWrite(Path))
+			{
+				OutputStream.Position = OutputStream.Length;
+				InputStream.Slice().CopyToFast(OutputStream);
+			}
+			//throw new NotImplementedException();
+		}
 	}
 }
