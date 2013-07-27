@@ -55,6 +55,36 @@ namespace CSharpUtils
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="InitialValue"> </param>
+		/// <param name="Offset"> </param>
+		/// <param name="Count"> </param>
+		/// <param name="ValueToInsert"> </param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static void InsertScaled(ref uint InitialValue, int Offset, int Count, uint ValueToInsert, uint MaxValue)
+		{
+			InitialValue = InsertScaled(InitialValue, Offset, Count, ValueToInsert, MaxValue);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="InitialValue"> </param>
+		/// <param name="Offset"> </param>
+		/// <param name="Count"> </param>
+		/// <param name="ValueToInsert"> </param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static uint InsertScaled(uint InitialValue, int Offset, int Count, uint ValueToInsert, uint MaxValue)
+		{
+			return InsertWithMask(InitialValue, Offset, CreateMask(Count), ValueToInsert * CreateMask(Count) / MaxValue);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="InitialValue"></param>
 		/// <param name="Offset"></param>
 		/// <param name="Mask"></param>
