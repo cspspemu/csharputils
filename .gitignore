@@ -68,3 +68,5 @@
 /CSharpUtils/Tests.CSharpUtils.Vfs.Synchronizer/bin
 /CSharpUtils/Tests.CSharpUtils.Web/obj
 /CSharpUtils/Tests.CSharpUtils.Web/bin
+
+/.DS_Store
