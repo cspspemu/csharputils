@@ -62,10 +62,13 @@ namespace CSharpUtils
 
 		static public void Memset(byte[] Array, byte Value, int Offset, int Count)
 		{
-			if (Offset + Count > Array.Length) throw(new InvalidOperationException(String.Format("Array out of bounts")));
-			fixed (byte* ArrayPointer = &Array[Offset])
+			if (Count > 0)
 			{
-				Memset(ArrayPointer, Value, Count);
+				if (Offset + Count > Array.Length) throw (new InvalidOperationException(String.Format("Array out of bounts")));
+				fixed (byte* ArrayPointer = &Array[Offset])
+				{
+					Memset(ArrayPointer, Value, Count);
+				}
 			}
 		}
 
@@ -137,9 +140,12 @@ namespace CSharpUtils
 
 		public static void Memcpy(byte* Destination, ArraySegment<byte> Source)
 		{
-			fixed (byte* SourcePtr = &Source.Array[Source.Offset])
+			if (Source.Count > 0)
 			{
-				Memcpy(Destination, SourcePtr, Source.Count);
+				fixed (byte* SourcePtr = &Source.Array[Source.Offset])
+				{
+					Memcpy(Destination, SourcePtr, Source.Count);
+				}
 			}
 		}
 
@@ -155,10 +161,13 @@ namespace CSharpUtils
 		{
 			//var Pin = GCHandle.Alloc(Destination.Array, GCHandleType.Pinned);
 			//Pin.Free();
-			fixed (byte* DestinationPtr = &Destination.Array[Destination.Offset])
+			if (Destination.Count > 0)
 			{
-				//Marshal.UnsafeAddrOfPinnedArrayElement(
-				Memcpy(DestinationPtr, Source, Destination.Count);
+				fixed (byte* DestinationPtr = &Destination.Array[Destination.Offset])
+				{
+					//Marshal.UnsafeAddrOfPinnedArrayElement(
+					Memcpy(DestinationPtr, Source, Destination.Count);
+				}
 			}
 		}
 
