@@ -94,7 +94,15 @@ namespace CSharpUtils
 
 		public static int MixComponent(int Color1, int Color2, int WeightSum, int Weight1, int Weight2)
 		{
-			return (Color1 * Weight1 + Color2 * Weight2) / WeightSum;
+			return MathUtils.FastClamp((Color1 * Weight1 + Color2 * Weight2) / WeightSum, 0, 255);
+		}
+
+		public static Color Mix(Color Color1, Color Color2, double Step)
+		{
+			var WeightSum = (int)ushort.MaxValue;
+			var Weight2 = (int)(WeightSum * Step);
+			var Weight1 = WeightSum - Weight2;
+			return Mix(Color1, Color2, WeightSum, Weight1, Weight2);
 		}
 
 		public static Color Mix(Color Color1, Color Color2, int WeightSum, int Weight1, int Weight2)

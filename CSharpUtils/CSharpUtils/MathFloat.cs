@@ -175,8 +175,10 @@ namespace CSharpUtils
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static float CosV1(float AngleV1)
 		{
-			return Cos((float)(AngleV1 * Math.PI * 0.5f));
+			return Cos(AngleV1 * PI_2);
 		}
+
+		private const float PI_2 = (float)(Math.PI / 2f);
 
 		/// <summary>
 		/// 
@@ -187,7 +189,7 @@ namespace CSharpUtils
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static float SinV1(float AngleV1)
 		{
-			return Sin((float)(AngleV1 * Math.PI * 0.5f));
+			return Sin(AngleV1 * PI_2);
 		}
 
 		/// <summary>
@@ -304,7 +306,8 @@ namespace CSharpUtils
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static bool IsNan(float Value)
 		{
-			return float.IsNaN(Value);
+			//return float.IsNaN(Value);
+			return float.IsNaN(Math.Abs(Value));
 		}
 
 		/// <summary>
@@ -352,7 +355,7 @@ namespace CSharpUtils
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static float AsinV1(float Value)
 		{
-			return Asin(Value) / (float)(Math.PI * 0.5f);
+			return Asin(Value) / PI_2;
 		}
 
 		/// <summary>
@@ -376,6 +379,7 @@ namespace CSharpUtils
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static float Vsat1(float Value)
 		{
+			if (float.IsNaN(Value)) return Value;
 			return MathFloat.Clamp(Value, -1.0f, 1.0f);
 		}
 
@@ -418,13 +422,15 @@ namespace CSharpUtils
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="Value"></param>
+		/// <param name="Angle"></param>
 		/// <returns></returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-		public static float NSinV1(float Value)
+		public static float NSinV1(float Angle)
 		{
-			return -(float)Math.Sin(0.5 * Math.PI * Value);
+			var Value = SinV1(Angle);
+			if (Value == 0f) return -0f;
+			return -Value;
 		}
 
 		/// <summary>
@@ -446,9 +452,92 @@ namespace CSharpUtils
 		/// <returns></returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-		public static bool IsNanInfinity(float Value)
+		public static bool IsNanOrInfinity(float Value)
 		{
-			return float.IsNaN(Math.Abs(Value)) || float.IsInfinity(Value);
+			return IsNan(Value) || float.IsInfinity(Value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static bool IsZero(float Value)
+		{
+			if (IsNan(Value)) return false;
+			return (Value == 0f || Value == -0f);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static bool IsEquals(float Left, float Right)
+		{
+			if (IsNan(Left) || IsNan(Right)) return false;
+			return Left == Right;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static bool IsLessThan(float Left, float Right)
+		{
+			if (IsNan(Left) || IsNan(Right)) return false;
+			return Left < Right;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static bool IsLessOrEqualsThan(float Left, float Right)
+		{
+			if (IsNan(Left) || IsNan(Right)) return false;
+			return Left <= Right;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static bool IsGreatOrEqualsThan(float Left, float Right)
+		{
+			if (IsNan(Left) || IsNan(Right)) return false;
+			return Left >= Right;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static float Sign2(float Left, float Right)
+		{
+			float a = Left - Right;
+			return (float)(((0.0 < a) ? 1 : 0) - ((a < 0.0) ? 1 : 0));
 		}
 	}
 }
