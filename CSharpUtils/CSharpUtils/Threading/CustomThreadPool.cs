@@ -41,15 +41,23 @@ namespace CSharpUtils.Threading
 
 			protected void ThreadBody()
 			{
-				this.LoopIterCount = 0;
-				while (this.Running)
+				Console.WriteLine("CustomThreadPool.ThreadBody.Start()");
+				try
 				{
-					this.MoreTasksEvent.WaitOne();
-					this.LoopIterCount++;
-					while (this.Tasks.Count > 0)
+					this.LoopIterCount = 0;
+					while (this.Running)
 					{
-						this.Tasks.Dequeue()();
+						this.MoreTasksEvent.WaitOne();
+						this.LoopIterCount++;
+						while (this.Tasks.Count > 0)
+						{
+							this.Tasks.Dequeue()();
+						}
 					}
+				}
+				finally
+				{
+					Console.WriteLine("CustomThreadPool.ThreadBody.End()");
 				}
 			}
 		}

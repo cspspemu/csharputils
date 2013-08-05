@@ -264,6 +264,7 @@ namespace CSharpUtils.Threading
 
 			this.CurrentThread = new Thread(() =>
 			{
+				Console.WriteLine("GreenThread.Start()");
 				ThisGreenThreadList.Value = This;
 				ThisSemaphoreWaitOrParentThreadStopped();
 				try
@@ -290,6 +291,7 @@ namespace CSharpUtils.Threading
 					catch
 					{
 					}
+					Console.WriteLine("GreenThread.End()");
 				}
 
 				//Console.WriteLine("GreenThread.Running: {0}", Running);

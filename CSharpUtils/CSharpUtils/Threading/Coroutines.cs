@@ -75,6 +75,7 @@ namespace CSharpUtils.Threading
 			IsAlive = true;
 			Thread = new Thread(() =>
 			{
+				Console.WriteLine("Coroutine.Start()");
 				try
 				{
 					CoroutineContinueEvent_WaitOne();
@@ -89,6 +90,7 @@ namespace CSharpUtils.Threading
 				}
 				finally
 				{
+					Console.WriteLine("Coroutine.End()");
 					IsAlive = false;
 					Pool.CallerContinueEvent.Set();
 				}
