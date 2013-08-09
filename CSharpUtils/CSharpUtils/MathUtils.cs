@@ -8,7 +8,7 @@ namespace CSharpUtils
 	{
 		// http://www.lambda-computing.com/publications/articles/generics2/
 		// http://www.codeproject.com/KB/cs/genericoperators.aspx
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static T Clamp<T>(T Value, T Min, T Max) where T : IComparable
 		{
@@ -17,14 +17,14 @@ namespace CSharpUtils
 			return Value;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static float Lerp(float start, float end, float percent)
 		{
 			return (start + percent * (end - start));
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static float SmoothStep(float edge0, float edge1, float x)
 		{
@@ -32,7 +32,7 @@ namespace CSharpUtils
 			return t * t * (3.0f - 2.0f * t);
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static void NormalizeMax(ref float[] Items)
 		{
@@ -40,7 +40,7 @@ namespace CSharpUtils
 			for (int n = 0; n < Items.Length; n++) Items[n] /= Max;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static void NormalizeMax(ref float a, ref float b)
 		{
@@ -49,7 +49,7 @@ namespace CSharpUtils
 			b /= Div;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static void NormalizeSum(ref float a, ref float b)
 		{
@@ -58,7 +58,7 @@ namespace CSharpUtils
 			b /= Div;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static float FastClamp(float Value, float Min, float Max)
 		{
@@ -67,7 +67,7 @@ namespace CSharpUtils
 			return Value;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static int FastClamp(int Value, int Min, int Max)
 		{
@@ -76,7 +76,7 @@ namespace CSharpUtils
 			return Value;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static void Swap<Type>(ref Type A, ref Type B)
 		{
@@ -88,7 +88,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static ushort ByteSwap(ushort Value)
 		{
@@ -100,7 +100,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint ByteSwap(uint Value)
 		{
@@ -115,7 +115,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static ulong ByteSwap(ulong Value)
 		{
@@ -130,7 +130,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Value"></param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		unsafe public static float ByteSwap(float Value)
 		{
@@ -147,7 +147,7 @@ namespace CSharpUtils
 		/// <param name="Value"></param>
 		/// <param name="AlignValue"></param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static long Align(long Value, long AlignValue)
 		{
@@ -158,7 +158,7 @@ namespace CSharpUtils
 			return Value;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static long RequiredBlocks(long Size, long BlockSize)
 		{
@@ -172,7 +172,7 @@ namespace CSharpUtils
 			}
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint PrevAligned(uint Value, int Alignment)
 		{
@@ -196,14 +196,14 @@ namespace CSharpUtils
 		}
 		*/
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint NextAligned(uint Value, int Alignment)
 		{
 			return (uint)NextAligned((long)Value, (long)Alignment);
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static long NextAligned(long Value, long Alignment)
 		{
@@ -217,7 +217,7 @@ namespace CSharpUtils
 			return Value;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static int NextPowerOfTwo(int BaseValue)
 		{
@@ -226,7 +226,7 @@ namespace CSharpUtils
 			return NextPowerOfTwoValue;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static float Max(params float[] Items)
 		{
@@ -235,7 +235,7 @@ namespace CSharpUtils
 			return MaxValue;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static int Max(params int[] Items)
 		{
@@ -244,7 +244,7 @@ namespace CSharpUtils
 			return MaxValue;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint Max(params uint[] Items)
 		{

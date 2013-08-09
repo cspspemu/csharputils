@@ -15,7 +15,7 @@ namespace CSharpUtils
 		/// </summary>
 		/// <param name="Size"></param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint CreateMask(int Size)
 		{
@@ -30,7 +30,7 @@ namespace CSharpUtils
 	    /// <param name="Count"> </param>
 	    /// <param name="ValueToInsert"> </param>
 	    /// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static void Insert(ref uint Value, int Offset, int Count, uint ValueToInsert)
 		{
@@ -45,7 +45,7 @@ namespace CSharpUtils
 	    /// <param name="Count"> </param>
 	    /// <param name="ValueToInsert"> </param>
 	    /// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint Insert(uint InitialValue, int Offset, int Count, uint ValueToInsert)
 		{
@@ -60,7 +60,7 @@ namespace CSharpUtils
 		/// <param name="Count"> </param>
 		/// <param name="ValueToInsert"> </param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static void InsertScaled(ref uint InitialValue, int Offset, int Count, uint ValueToInsert, uint MaxValue)
 		{
@@ -75,7 +75,7 @@ namespace CSharpUtils
 		/// <param name="Count"> </param>
 		/// <param name="ValueToInsert"> </param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint InsertScaled(uint InitialValue, int Offset, int Count, uint ValueToInsert, uint MaxValue)
 		{
@@ -90,7 +90,7 @@ namespace CSharpUtils
 		/// <param name="Mask"></param>
 		/// <param name="ValueToInsert"></param>
 		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		private static uint InsertWithMask(uint InitialValue, int Offset, uint Mask, uint ValueToInsert)
 		{
@@ -104,7 +104,7 @@ namespace CSharpUtils
 	    /// <param name="Offset"> </param>
 	    /// <param name="Count"> </param>
 	    /// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint Extract(uint InitialValue, int Offset, int Count)
 		{
@@ -119,7 +119,7 @@ namespace CSharpUtils
 	    /// <param name="Count"> </param>
 	    /// <param name="Scale"> </param>
 	    /// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static uint ExtractScaled(uint InitialValue, int Offset, int Count, int Scale)
 		{
@@ -132,7 +132,7 @@ namespace CSharpUtils
 	    /// <param name="InitialValue"> </param>
 	    /// <param name="Offset"> </param>
 	    /// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static bool ExtractBool(uint InitialValue, int Offset)
 		{
@@ -146,7 +146,7 @@ namespace CSharpUtils
 	    /// <param name="Offset"> </param>
 	    /// <param name="Count"> </param>
 	    /// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static int ExtractSigned(uint InitialValue, int Offset, int Count)
 		{
@@ -168,7 +168,7 @@ namespace CSharpUtils
 	    /// <param name="Count"> </param>
 	    /// <param name="Scale"> </param>
 	    /// <returns></returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ExtractUnsignedScaled(uint Value, int Offset, int Count, float Scale = 1.0f)
 		{
 			return ((float)Extract(Value, Offset, Count) / (float)CreateMask(Count)) * Scale;
