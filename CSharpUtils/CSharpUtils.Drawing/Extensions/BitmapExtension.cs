@@ -82,22 +82,25 @@ public static class BitmapExtension
 		return new Bitmap(Bitmap, Bitmap.Size);
 	}
 
-	public static void SetChannelsDataLinear(this Bitmap Bitmap, params BitmapChannelTransfer[] BitmapChannelTransfers)
+	public static Bitmap SetChannelsDataLinear(this Bitmap Bitmap, params BitmapChannelTransfer[] BitmapChannelTransfers)
 	{
 		foreach (var BitmapChannelTransfer in BitmapChannelTransfers)
 		{
 			Bitmap.SetChannelsDataLinear(BitmapChannelTransfer.Bitmap.GetChannelsDataLinear(BitmapChannelTransfer.From), BitmapChannelTransfer.To);
 		}
+		return Bitmap;
 	}
 
-	public static void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, params BitmapChannel[] Channels)
+	public static Bitmap SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, params BitmapChannel[] Channels)
 	{
 		Bitmap.SetChannelsDataLinear(NewData, Bitmap.GetFullRectangle(), Channels);
+		return Bitmap;
 	}
 
-	public static void SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, Rectangle Rectangle, params BitmapChannel[] Channels)
+	public static Bitmap SetChannelsDataLinear(this Bitmap Bitmap, byte[] NewData, Rectangle Rectangle, params BitmapChannel[] Channels)
 	{
 		BitmapUtils.TransferChannelsDataLinear(Rectangle, Bitmap, NewData, BitmapUtils.Direction.FromDataToBitmap, Channels);
+		return Bitmap;
 	}
 
 	public unsafe static byte[] GetChannelsDataInterleaved(this Bitmap Bitmap, params BitmapChannel[] Channels)
@@ -125,6 +128,32 @@ public static class BitmapExtension
 			}
 		});
 		return Buffer;
+	}
+
+	public unsafe static Bitmap SetChannelsDataInterleaved(this Bitmap Bitmap, byte[] Buffer, params BitmapChannel[] Channels)
+	{
+		int NChannels = Channels.Length;
+		int PixelCount = Bitmap.Width * Bitmap.Height;
+		int BufferSize = PixelCount * NChannels;
+		Bitmap.LockBitsUnlock(PixelFormat.Format32bppArgb, (BitmapData) =>
+		{
+			var StartPtr = ((byte*)BitmapData.Scan0.ToPointer());
+			fixed (byte* StartBufferPtr = &Buffer[0])
+			{
+				int CurrentChannel = 0;
+				foreach (var Channel in Channels)
+				{
+					var Ptr = StartPtr + (int)Channel;
+					var BufferPtr = StartBufferPtr + CurrentChannel;
+					for (int n = CurrentChannel; n < BufferSize; n += NChannels, BufferPtr += NChannels, Ptr += 4)
+					{
+						*Ptr = * BufferPtr;
+					}
+					CurrentChannel++;
+				}
+			}
+		});
+		return Bitmap;
 	}
 
 	public static void LockBitsUnlock(this Bitmap Bitmap, Rectangle Rectangle, PixelFormat PixelFormat, Action<BitmapData> Callback)
