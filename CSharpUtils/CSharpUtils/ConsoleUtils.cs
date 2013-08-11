@@ -1,5 +1,17 @@
-﻿using System;
+﻿using CSharpUtils;
+using System;
 using System.IO;
+
+static public class TextWriterExtensions
+{
+	public static void WriteLineColored(this TextWriter TextWriter, ConsoleColor ConsoleColor, string Format, params Object[] Args)
+	{
+		ConsoleUtils.SaveRestoreConsoleColor(ConsoleColor, () =>
+		{
+			TextWriter.WriteLine(Format, Args);
+		});
+	}
+}
 
 namespace CSharpUtils
 {
