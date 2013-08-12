@@ -18,8 +18,8 @@ namespace CSharpUtils
 		}
 
 		public string Name { get; private set; }
-		public bool Enabled;
-		static Dictionary<string, Logger> Loggers = new Dictionary<string, Logger>();
+		private bool Enabled;
+		private static readonly Dictionary<string, Logger> Loggers = new Dictionary<string, Logger>();
 
 		internal Logger()
 		{

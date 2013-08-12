@@ -76,6 +76,14 @@ namespace CSharpUtils
 			return Value;
 		}
 
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static byte FastClampToByte(int Value)
+		{
+			if (Value < 0) return 0;
+			if (Value > 255) return 255;
+			return (byte)Value;
+		}
+
 		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
 		public static void Swap<Type>(ref Type A, ref Type B)

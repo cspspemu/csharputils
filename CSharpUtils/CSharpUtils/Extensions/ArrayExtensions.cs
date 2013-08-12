@@ -35,6 +35,13 @@ static public class ArrayExtensions
 		return ConcatBytes(new[] { First }.Union(Others).ToArray());
 	}
 
+	static public T[] ResizedCopy<T>(this T[] This, int NewSize)
+	{
+		var That = new T[NewSize];
+		Array.Copy(This, That, Math.Min(This.Length, NewSize));
+		return That;
+	}
+
 	static public T[] Concat<T>(this T[] Left, T[] Right, int RightOffset, int RightLength)
 	{
 		var Return = new T[Left.Length + RightLength];
