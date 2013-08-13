@@ -55,5 +55,20 @@ namespace CSharpUtils
 				Variable = OldValue;
 			}
 		}
+
+		public static void PropertyLocalSet(object Object, string PropertyName, object LocalValue, Action LocalScope)
+		{
+			var Property = Object.GetType().GetProperty(PropertyName);
+			var OldValue = Property.GetValue(Object);
+			Property.SetValue(Object, LocalValue);
+			try
+			{
+				LocalScope();
+			}
+			finally
+			{
+				Property.SetValue(Object, OldValue);
+			}
+		}
 	}
 }
