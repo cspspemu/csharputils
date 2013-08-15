@@ -1,9 +1,11 @@
-﻿using System;
+﻿using CSharpUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
-static public class ArrayExtensions
+unsafe static public class ArrayExtensions
 {
 	static public T[] Concat<T>(this T[] Left, T[] Right)
 	{
@@ -16,6 +18,33 @@ static public class ArrayExtensions
 		Left.CopyTo(Return, 0);
 		Right.CopyTo(Return, Left.Length);
 		return Return;
+	}
+
+	static public TTo[] CastToStructArray<TTo>(this byte[] Array)
+	{
+		return Array.CastToStructArray<byte, TTo>();
+	}
+
+	static public TTo[] CastToStructArray<TFrom, TTo>(this TFrom[] Input)
+	{
+		int TotalBytes = (Marshal.SizeOf(typeof(TFrom)) * Input.Length);
+		var Output = new TTo[TotalBytes / Marshal.SizeOf(typeof(TTo))];
+		var InputHandle = GCHandle.Alloc(Input, GCHandleType.Pinned);
+		var OutputHandle = GCHandle.Alloc(Output, GCHandleType.Pinned);
+		try
+		{
+			PointerUtils.Memcpy(
+				(byte*)OutputHandle.AddrOfPinnedObject().ToPointer(),
+				(byte*)InputHandle.AddrOfPinnedObject().ToPointer(),
+				TotalBytes
+			);
+		}
+		finally
+		{
+			InputHandle.Free();
+			OutputHandle.Free();
+		}
+		return Output;
 	}
 
 	static public byte[] ConcatBytes(params byte[][] Arrays)
