@@ -1,48 +1,88 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace CSharpUtils.Threading
 {
-	public class TaskQueue
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class TaskQueue
 	{
-		public AutoResetEvent EnqueuedEvent { get; protected set; }
-		protected Queue<Action> Tasks = new Queue<Action>();
+		/// <summary>
+		/// 
+		/// </summary>
+		public readonly AutoResetEvent EnqueuedEvent;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private Queue<Action> Tasks = new Queue<Action>();
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public TaskQueue()
 		{
 			EnqueuedEvent = new AutoResetEvent(false);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public void WaitAndHandleEnqueued()
 		{
+			//Console.WriteLine("WaitEnqueued");
 			WaitEnqueued();
+			//Console.WriteLine("HandleEnqueued");
 			HandleEnqueued();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public void WaitEnqueued()
 		{
-			EnqueuedEvent.WaitOne();
+			int TasksCount;
+			lock (Tasks) TasksCount = Tasks.Count;
+
+			if (TasksCount == 0)
+			{
+				EnqueuedEvent.WaitOne();
+			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public void HandleEnqueued()
 		{
-			while (Tasks.Count > 0)
+			while (true)
 			{
 				Action Action;
+
 				lock (Tasks)
 				{
+					if (Tasks.Count == 0) break;
 					Action = Tasks.Dequeue();
 				}
+
 				Action();
 			}
 		}
 
-		public void Enqueue(Action Action)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Action"></param>
+		public void EnqueueWithoutWaiting(Action Action)
 		{
 			lock (Tasks)
 			{
 				Tasks.Enqueue(Action);
+				EnqueuedEvent.Set();
 			}
 		}
 
@@ -50,13 +90,11 @@ namespace CSharpUtils.Threading
 		{
 			var Event = new AutoResetEvent(false);
 
-			Enqueue(() =>
+			EnqueueWithoutWaiting(() =>
 			{
 				Event.Set();
 				Action();
 			});
-
-			EnqueuedEvent.Set();
 
 			Event.WaitOne();
 		}
@@ -65,14 +103,12 @@ namespace CSharpUtils.Threading
 		{
 			var Event = new AutoResetEvent(false);
 		
-			Enqueue(() =>
+			EnqueueWithoutWaiting(() =>
 			{
 				Event.Set();
 				Action();
 			});
-		
-			EnqueuedEvent.Set();
-		
+				
 			if (!Event.WaitOne(Timeout))
 			{
 				Console.WriteLine("Timeout!");
@@ -84,13 +120,11 @@ namespace CSharpUtils.Threading
 		{
 			var Event = new AutoResetEvent(false);
 
-			Enqueue(() =>
+			EnqueueWithoutWaiting(() =>
 			{
 				Action();
 				Event.Set();
 			});
-
-			EnqueuedEvent.Set();
 
 			Event.WaitOne();
 		}

@@ -7,33 +7,19 @@ using System.Threading.Tasks;
 
 namespace CSharpUtils.Threading
 {
-	//public class MessageBusItemDone
-	//{
-	//	static public readonly MessageBusItemDone Done = new MessageBusItemDone(true);
-	//
-	//	private readonly ManualResetEvent Event;
-	//
-	//	internal MessageBusItemDone(bool Initial = false)
-	//	{
-	//		Event = new ManualResetEvent(Initial);
-	//	}
-	//
-	//	internal void Set()
-	//	{
-	//		Event.Set();
-	//	}
-	//
-	//	public void Wait()
-	//	{
-	//		Event.WaitOne();
-	//	}
-	//}
-
-	public class MessageBus<T>
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class ThreadMessageBus<T>
 	{
 		private LinkedList<T> Queue = new LinkedList<T>();
 		private ManualResetEvent HasItems = new ManualResetEvent(false);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Item"></param>
 		public void AddFirst(T Item)
 		{
 			lock (this)
@@ -43,6 +29,10 @@ namespace CSharpUtils.Threading
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Item"></param>
 		public void AddLast(T Item)
 		{
 			lock (this)
@@ -52,6 +42,10 @@ namespace CSharpUtils.Threading
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public T ReadOne()
 		{
 			HasItems.WaitOne();
