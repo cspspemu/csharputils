@@ -112,6 +112,12 @@ public static class LinqExExtensions
 		return ListItems.ToArray();
 	}
 
+	public static T FirstOrDefault<T>(this IEnumerable<T> Items, T Default)
+	{
+		if (Items.Any()) return Items.First();
+		return Default;
+	}
+
 	public static T BinarySearch<T, TKey>(this IList<T> list, Func<T, TKey> keySelector, TKey key)
 			where TKey : IComparable<TKey>
 	{

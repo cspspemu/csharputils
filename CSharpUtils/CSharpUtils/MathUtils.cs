@@ -260,5 +260,20 @@ namespace CSharpUtils
 			foreach (var Item in Items) if (MaxValue < Item) MaxValue = Item;
 			return MaxValue;
 		}
+
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static uint NumberOfSetBits(uint i)
+		{
+			i = i - ((i >> 1) & 0x55555555);
+			i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+			return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+		}
+
+		[TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+		public static bool IsPowerOfTwo(uint Value)
+		{
+			return (Value & (Value - 1)) == 0;
+			//return NumberOfSetBits(Value) == 1;
+		}
 	}
 }
