@@ -57,7 +57,7 @@ End of the file.
 			);
 			Assert.AreEqual(
 				"0,2,3,43,571",
-				Acme1File.Select(Entry => Entry.Id).ToStringArray()
+				Acme1File.Select(entry => entry.Id).ToStringArray()
 			);
 		}
 	}

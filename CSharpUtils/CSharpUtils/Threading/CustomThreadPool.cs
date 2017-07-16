@@ -20,8 +20,11 @@ namespace CSharpUtils.Threading
 				this.LoopIterCount = 0;
 				this.MoreTasksEvent = new AutoResetEvent(false);
 				this.Tasks = new Queue<Action>();
-				this.Thread = new Thread(ThreadBody);
-				this.Thread.IsBackground = true;
+				this.Thread = new Thread(ThreadBody)
+				{
+					Name = "CustomThreadPool.WorkerThread",
+					IsBackground = true
+				};
 				this.Thread.Start();
 			}
 

@@ -24,7 +24,10 @@ namespace CSharpUtilsTests
 					Thread.Sleep(60);
 				});
 				EndEvent.Signal(1);
-			}).Start();
+			})
+			{
+				Name = "ReaderWriterLockExtensionsTest.ReaderLockTest[1]"
+			}.Start();
 			new Thread(() =>
 			{
 				StartEvent.Signal(1);
@@ -35,7 +38,10 @@ namespace CSharpUtilsTests
 					Thread.Sleep(60);
 				});
 				EndEvent.Signal(1);
-			}).Start();
+			})
+			{
+				Name = "ReaderWriterLockExtensionsTest.ReaderLockTest[2]"
+			}.Start();
 			StartedEvent.Wait();
 
 			var TestStopwatch = new Stopwatch();
@@ -63,7 +69,9 @@ namespace CSharpUtilsTests
 					Thread.Sleep(60);
 				});
 				EndEvent.Signal(1);
-			}).Start();
+			}){
+				Name = "ReaderWriterLockExtensionsTest.WriterLockTest[1]"
+			}.Start();
 			new Thread(() =>
 			{
 				StartEvent.Signal(1);
@@ -74,7 +82,9 @@ namespace CSharpUtilsTests
 					Thread.Sleep(60);
 				});
 				EndEvent.Signal(1);
-			}).Start();
+			}){
+				Name = "ReaderWriterLockExtensionsTest.WriterLockTest[2]"
+			}.Start();
 			StartedEvent.Wait();
 
 			var TestStopwatch = new Stopwatch();

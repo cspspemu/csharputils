@@ -4,73 +4,58 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CSharpUtilsTests
 {
-	[TestClass]
-	public class GetoptTest
-	{
-		[TestMethod]
-		public void AddRuleTest()
-		{
-			bool BooleanValue = false;
-			int IntegerValue = 0;
-			var Getopt = new Getopt(new string[] { "-b", "-i", "50" });
-			Getopt.AddRule("-b", ref BooleanValue);
-			Getopt.AddRule("-i", ref IntegerValue);
-			Getopt.Process();
+    [TestClass]
+    public class GetoptTest
+    {
+        [TestMethod]
+        public void AddRuleTest()
+        {
+            var booleanValue = false;
+            var integerValue = 0;
+            var getopt = new Getopt(new string[] {"-b", "-i", "50"});
+            getopt.AddRule("-b", ref booleanValue);
+            getopt.AddRule("-i", ref integerValue);
+            getopt.Process();
 
-			Assert.AreEqual(true, BooleanValue);
-			Assert.AreEqual(50, IntegerValue);
-		}
+            Assert.AreEqual(true, booleanValue);
+            Assert.AreEqual(50, integerValue);
+        }
 
-		[TestMethod]
-		public void AddRule2Test()
-		{
-			bool BooleanValue = false;
-			int IntegerValue = 0;
-			string StringValue = "";
-			var Getopt = new Getopt(new string[] { "-b", "-i", "50", "-s", "hello_world" });
-			Getopt.AddRule("-b", (bool _Value) =>
-			{
-				BooleanValue = _Value;
-			});
-			Getopt.AddRule("-i", (int _Value) =>
-			{
-				IntegerValue = _Value;
-			});
-			Getopt.AddRule("-s", (string _Value) =>
-			{
-				StringValue = _Value;
-			});
-			Getopt.Process();
+        [TestMethod]
+        public void AddRule2Test()
+        {
+            var booleanValue = false;
+            var integerValue = 0;
+            var stringValue = "";
+            var getopt = new Getopt(new string[] {"-b", "-i", "50", "-s", "hello_world"});
+            getopt.AddRule("-b", (bool value) => { booleanValue = value; });
+            getopt.AddRule("-i", (int value) => { integerValue = value; });
+            getopt.AddRule("-s", (string value) => { stringValue = value; });
+            getopt.Process();
 
-			Assert.AreEqual(true, BooleanValue);
-			Assert.AreEqual(50, IntegerValue);
-			Assert.AreEqual("hello_world", StringValue);
-		}
+            Assert.AreEqual(true, booleanValue);
+            Assert.AreEqual(50, integerValue);
+            Assert.AreEqual("hello_world", stringValue);
+        }
 
-		[TestMethod]
-		public void AddRule3Test()
-		{
-			var Values = new List<int>();
-			var Getopt = new Getopt(new string[] { "-i=50", "-i=25" });
-			Getopt.AddRule("-i", (int Value) =>
-			{
-				Values.Add(Value);
-			});
-			Getopt.Process();
-			Assert.AreEqual("50,25", Values.ToStringArray());
-		}
+        [TestMethod]
+        public void AddRule3Test()
+        {
+            var values = new List<int>();
+            var getopt = new Getopt(new[] {"-i=50", "-i=25"});
+            getopt.AddRule("-i", (int value) => { values.Add(value); });
+            getopt.Process();
+            Assert.AreEqual("50,25", values.ToStringArray());
+        }
 
-		[TestMethod]
-		public void AddRule4Test()
-		{
-			int ExecutedCount = 0;
-			var Getopt = new Getopt(new string[] { "-a", "-a" });
-			Getopt.AddRule("-a", () =>
-			{
-				ExecutedCount++;
-			});
-			Getopt.Process();
-			Assert.AreEqual(2, ExecutedCount);
-		}
-	}
+        [TestMethod]
+        public void AddRule4Test()
+        {
+            var executedCount = 0;
+            var getopt = new Getopt(new[] {"-a", "-a"});
+            getopt.AddRule("-a", () => { executedCount++; });
+            getopt.Process();
+            Assert.AreEqual(2, executedCount);
+        }
+    }
 }

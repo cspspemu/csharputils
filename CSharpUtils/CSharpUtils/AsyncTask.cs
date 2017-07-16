@@ -25,12 +25,14 @@ namespace CSharpUtils
 		public AsyncTask(Func<T> Getter)
 		{
 			Semaphore = new Semaphore(0, 1);
-			new Thread(delegate()
+			var thread = new Thread(delegate()
 			{
 				_Result = Getter();
 				Ready = true;
 				Semaphore.Release(1);
-			}).Start();
+			});
+			thread.Name = "AsyncTask";
+			thread.Start();
 			Thread.Yield();
 		}
 
